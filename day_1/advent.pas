@@ -70,6 +70,8 @@ var
 begin
 if OpenDialog1.Execute then
   begin
+  //the entries in the file have a newline character at the end which
+  //anywhere else would be \n but here in Pascal land is linefeed #$0A
   numbers:= openFileAsArray(opendialog1.FileName,#$0A);
   for i:= 0 to length(numbers)-1 do
     begin
