@@ -1,23 +1,15 @@
-const express = require('express')
 const fs = require('fs')
-const app = express()
-const port = 3000
 
-app.get('/', (req, res) => {
-  //read the file and do the calculation
+function run() {
   fs.readFile('data.txt', 'utf-8', (err, data) => {
     if (err) throw err;
-    var answer1 = processTheData(data, 1);
-    var answer2 = processTheData(data, 2);
-    res.send('answer to part one is '+ answer1+' and answer to part two is '+answer2);
+    var answer1 = process(data, 1);
+    var answer2 = process(data, 2);
+    console.log('answer to part one is '+ answer1+' and answer to part two is '+answer2);
   })
-})
+}
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
-
-function processTheData(data, part) {
+function process(data, part) {
   //split into array
   var array = data.split("\n");
   //separate each item into three parts
@@ -54,3 +46,5 @@ function processTheData(data, part) {
   })
   return validPasswords1;
 }
+
+run();
