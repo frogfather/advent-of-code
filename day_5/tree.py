@@ -39,20 +39,32 @@ class Node:
             node.AddNodes(newRight)
 
     def FindTheRow(self, input):
-        rowData = input.strip("LR");
+        rowData = input[:7]
         print('Input is '+rowData)
         currentNode = self
         for letter in rowData:
             if letter == "F":
-                print('Selecting node '+currentNode.left.name) 
                 currentNode = currentNode.left
             else:
-                print('Selecting node '+currentNode.right.name)
                 currentNode = currentNode.right            
         print('Input corresponds to row '+str(currentNode.low))        
 
+    def ReadTheFile(self, filename):
+        file = open(filename)
+        fileList = file.readlines()
+        print('List contains '+str(len(fileList))+' items')
+        return fileList
+
+    def FindTheRows(self, fileList):
+       results = []
+       for row in fileList:
+           results.append(root.FindTheRow(row))
+       print('there are '+str(len(results))+' results')
+       return results
 
 root = Node('root', 0, 127)
 root.AddNodes(root)
 # root.PrintTree()
-root.FindTheRow("FBFBBFFRLR")
+fileList = root.ReadTheFile("data.txt")
+rowsFound = root.FindTheRows(fileList)
+
