@@ -17,8 +17,6 @@ class Node:
         self.right = Node(name, low, high)
         return self.right
 
-
-# Print the tree
     def PrintTree(self):
         print('Node: '+self.name+' has range: '+str(self.low)+ ':' + str(self.high))
         if self.left:
@@ -26,8 +24,6 @@ class Node:
         # print('Node: '+self.name+' has range: '+str(self.low)+ ':' + str(self.high)),
         if self.right:
             self.right.PrintTree()
-
-# Use the insert method to add nodes
 
     def AddNodes(self, node):
         if  node.high != node.low:
@@ -42,6 +38,21 @@ class Node:
             newRight = node.insertRight(rightName, rightLow, rightHigh)
             node.AddNodes(newRight)
 
+    def FindTheRow(self, input):
+        rowData = input.strip("LR");
+        print('Input is '+rowData)
+        currentNode = self
+        for letter in rowData:
+            if letter == "F":
+                print('Selecting node '+currentNode.left.name) 
+                currentNode = currentNode.left
+            else:
+                print('Selecting node '+currentNode.right.name)
+                currentNode = currentNode.right            
+        print('Input corresponds to row '+str(currentNode.low))        
+
+
 root = Node('root', 0, 127)
 root.AddNodes(root)
-root.PrintTree()
+# root.PrintTree()
+root.FindTheRow("FBFBBFFRLR")
