@@ -8,13 +8,15 @@ import (
 )
 
 
-func unique(strSlice []string) []string {
-    keys := make(map[string]bool)
+func unique(strSlice []string, groupSize int) []string {
+    keys := make(map[string]int)
     list := []string{}
     for _, entry := range strSlice {
-        if _, value := keys[entry]; !value {
-            keys[entry] = true
-            list = append(list, entry)
+        //we want to count the number of occurrences of each letter
+        //if that matches the number in the group the letter is included
+        keys[entry] += 1
+        if keys[entry] == groupSize {
+        list = append(list, entry)  
         }
     }
     return list
@@ -44,6 +46,7 @@ func main() {
   str := string(bs)
   parts := strings.Split(str,"\n")
   sumOfResults := 0
+  groupSize := 0
   //slice to hold results
   results := []string{}
   for i := range parts {
@@ -54,11 +57,13 @@ func main() {
       //if its length is 0 it's a blank Line
       if len(sLine) == 0 {
         //run the results through the unique function
-        sumOfResults = sumOfResults + len(unique(results))
+        sumOfResults = sumOfResults + len(unique(results, groupSize))
         //empty the results slice
         results = nil
+        groupSize = 0
       } else {
         //append it to the results
+        groupSize = groupSize + 1
         results = append(results, answers...)
       }
   }
