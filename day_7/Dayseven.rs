@@ -4,41 +4,18 @@ use std::collections::HashMap;
 fn
 main(){
   //String containing all the data
+  let mut bags_and_contents: HashMap<String,String> = HashMap::new();
   let file_content:String = read_file("data.txt");
-  let bags_and_contents = file_content
-                        .split("\n")
-                        .map(|line| line.split("contain"))
-                        .map(|mut line| (line.next().unwrap().into(), line.next().unwrap().into()))
-                        .collect::<HashMap<String, String>>();
-
-
-
-
-  // let lines: Vec<&str> = file_content.split("\n").collect();
-  //
-  // let bags_and_contents = lines.split("contain")
-  //                   .map(|mut line| (line.next().unwrap().into(), line.next().unwrap().into()))
-  //                   .collect::<HashMap<String, String>>();
-
-
-  // for line in lines.iter() {
-  //     let bags_and_contents: Vec<&str> = line.split("contain").collect();
-  //     for (index, element) in bags_and_contents.iter().enumerate() {
-  //         print!(" index {} is {}", index.to_string(), element);
-  //     }
-  // }
-
-
-
-  // let bags_and_contents = file_content
-  //                       .split("\n")
-  //                       .map(|line| line.split("contain"))
-  //                       .map(|mut line| (line.next().unwrap().into(), line.next().unwrap().into()))
-  //                       .collect::<HashMap<String, String>>();
-
-  let item_count = file_content.len();
-  print!("{}", item_count.to_string());
-
+  let lines: Vec<&str> = file_content.trim().split("\n").collect();
+  for line in lines.iter() {
+     let bag_with_contents = line.trim().split("contain");
+     let word: Vec<&str> = bag_with_contents.collect();
+     let bag: String = word[0].to_string();
+     let contents: String = word[1].to_string();
+     bags_and_contents.insert(bag, contents);
+  }
+  let hash_len = bags_and_contents.len();
+  println!("hash length {}", hash_len.to_string())
 }
 
 fn
