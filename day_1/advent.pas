@@ -8,7 +8,8 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, strutils;
 
 type
-  TNumbers = Array of string;
+  TStringArray = Array of string;
+  TIntArray = Array of integer;
   { TForm1 }
   TForm1 = class(TForm)
     bExecute: TButton;
@@ -18,12 +19,15 @@ type
     procedure bExecuteClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
-    function openFileAsArray(fnam: string; separator: char): TNumbers;
+    function openFileAsArray(fnam: string; separator: char): TStringArray;
     function readstream (fnam: string): string;
     procedure writestream (fnam: string; txt: string);
-    function foundInArray(inputArray: TNumbers; required, startat: integer): boolean;
+    function foundInArray(inputArray: TStringArray; required, startat: integer): boolean;
     procedure day1part1;
     procedure day1part2;
+    procedure day8part1;
+    procedure day8part2;
+
   public
 
   end;
@@ -45,6 +49,8 @@ begin
   case cbselect.ItemIndex of
    0: day1part1;
    1: day1part2;
+   14: day8part1;
+   15: day8part2;
   end;
 
 end;
@@ -64,7 +70,7 @@ end;
 //The puzzles
 procedure TForm1.day1part1;
 var
-  numbers: TNumbers;
+  numbers: TStringArray;
   i: integer;
   currentNumber, requiredNumber : integer;
 begin
@@ -90,7 +96,7 @@ end;
 //https://adventofcode.com/2020/day/1#part2
 procedure TForm1.day1part2;
 var
-  numbers: TNumbers;
+  numbers: TStringArray;
   i,j: integer;
   firstNumber, secondNumber, requiredNumber : integer;
 begin
@@ -123,7 +129,109 @@ if OpenDialog1.Execute then
   end;
 end;
 
+procedure TForm1.day8part1;
+var
+  instructions: TStringArray;
+  visited: TIntArray;
+  command, instruction:String;
+  splitInstruction: TStringArray;
+  pos, acc, i, moveBy, commandAmount: integer;
+  done: boolean;
+begin
+if OpenDialog1.Execute then
+  begin
+  instructions:= openfileasArray(opendialog1.FileName, #$0A);
+  setlength(visited, length(instructions));
+  lbresults.items.add('lines '+inttostr(length(visited)));
+  for i:= 0 to length(visited)-1 do visited[i]:=0;
+  //need a counter and some method of recording what line we've visited
+  done:=false;
+  acc:=0;
+  pos:=0;
+  moveBy:=1;
+    while not done do
+      begin
+      //check value of visited[pos] If it is already 1 quit and log acc
+      //look at the instruction. Inc value of visited[pos] by 1
+      //If nop do nothing
+      //If acc increase acc by specified amount
+      //If jmp we need to find how much by and set moveBy to that amount
+      //Adjust pos by moveBy
+      done:=(visited[pos]= 1) or (pos > length(visited) -1);
+      if done then lbresults.items.add('Previously been at pos '+intToStr(pos)+' '+inttostr(acc));
+      instruction:=instructions[pos];
+      visited[pos]:=visited[pos]+1;
+      splitInstruction:=instruction.Split(' ');
+      command:=splitInstruction[0];
+      commandAmount:=StrToInt(splitInstruction[1]);
+      case command of
+       'jmp':
+         moveBy:=commandAmount;
+       'acc':
+         begin
+         moveBy:=1;
+         acc:=acc + commandAmount;
+         end;
+       'nop':
+         moveBy:=1;
+      end;
+      lbresults.Items.add('pos: '+inttostr(pos)+' acc: '+inttostr(acc)+' cmd: '+command+ ' cmd amount: '+inttostr(commandAmount));
+      pos:=pos + moveBy;
+    end;
+  end;
+end;
 
+procedure TForm1.day8part2;
+var
+  instructions: TStringArray;
+  visited: TIntArray;
+  command, instruction:String;
+  splitInstruction: TStringArray;
+  pos, acc, i, moveBy, commandAmount: integer;
+  done: boolean;
+begin
+if OpenDialog1.Execute then
+  begin
+  instructions:= openfileasArray(opendialog1.FileName, #$0A);
+  setlength(visited, length(instructions));
+  lbresults.items.add('lines '+inttostr(length(visited)));
+  for i:= 0 to length(visited)-1 do visited[i]:=0;
+  //need a counter and some method of recording what line we've visited
+  done:=false;
+  acc:=0;
+  pos:=0;
+  moveBy:=1;
+    while not done do
+      begin
+      //check value of visited[pos] If it is already 1 quit and log acc
+      //look at the instruction. Inc value of visited[pos] by 1
+      //If nop do nothing
+      //If acc increase acc by specified amount
+      //If jmp we need to find how much by and set moveBy to that amount
+      //Adjust pos by moveBy
+      done:=visited[pos]= 1;
+      if done then lbresults.items.add('Previously been here '+inttostr(acc));
+      instruction:=instructions[pos];
+      visited[pos]:=visited[pos]+1;
+      splitInstruction:=instruction.Split(' ');
+      command:=splitInstruction[0];
+      commandAmount:=StrToInt(splitInstruction[1]);
+      case command of
+       'jmp':
+         moveBy:=commandAmount;
+       'acc':
+         begin
+         moveBy:=1;
+         acc:=acc + commandAmount;
+         end;
+       'nop':
+         moveBy:=1;
+      end;
+      lbresults.Items.add('pos: '+inttostr(pos)+' acc: '+inttostr(acc)+' cmd: '+command+ ' cmd amount: '+inttostr(commandAmount));
+      pos:=pos + moveBy;
+    end;
+  end;
+end;
 //Some useful methods that should be in a separate unit
 
 function TForm1.readstream(fnam: string): string;
@@ -159,7 +267,7 @@ begin
   end;
 end;
 
-function TForm1.foundInArray(inputArray: TNumbers; required, startat: integer): boolean;
+function TForm1.foundInArray(inputArray: TStringArray; required, startat: integer): boolean;
 var
   i:integer;
 begin
@@ -174,16 +282,16 @@ begin
     end;
 end;
 
-function TForm1.openFileAsArray(fnam: string; separator: char): TNumbers;
+function TForm1.openFileAsArray(fnam: string; separator: char): TStringArray;
 var
   contents: string;
-  numbers: TNumbers;
+  lines: TStringArray;
 begin
 if FileExists(OpenDialog1.FileName) then
   begin
   contents := readStream(OpenDialog1.FileName);
-  numbers := contents.Split(separator);
-  result:=numbers;
+  lines := contents.Split(separator);
+  result:=lines;
   end;
 end;
 
