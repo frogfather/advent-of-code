@@ -30,7 +30,6 @@ type
     property uncalled: integer read fUncalledSum;
     property lastCalled: integer read fLastCalled;
     property id: integer read fId;
-    property winning: boolean read fWinning;
   end;
 
 implementation

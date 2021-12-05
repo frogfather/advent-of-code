@@ -30,7 +30,7 @@ type
     property uncalled: integer read fUncalledSum;
     property lastCalled: integer read fLastCalled;
     property id: integer read fId;
-    property winning: boolean read fWinning;
+    //
   end;
 
 implementation
@@ -137,7 +137,7 @@ begin
     for col:=0 to pred(fColCount) do
       if (fCard[row][col][0] = sNumber) then fCard[row][col][1]:='1';
     end;
-  if checkWin then
+  if not fWinning and checkWin then
     begin
     fLastCalled:=number;
     fWinning:=true;

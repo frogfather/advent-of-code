@@ -10,28 +10,28 @@ uses
 type
   AVentMap = array of array of integer;
 
-  RCoord = record
+  RPath = record
     start: TPoint;
     finish: TPoint;
   end;
 
-  ACoordArray = array of RCoord;
+  APathArray = array of RPath;
 
   { TVentMap }
 
   TVentMap = class(TInterfacedObject)
     private
       fVentMap: AVentMap;
-      fCoords: ACoordArray;
-      function getStraightLines(input:ACoordArray):ACoordArray;
-      function getStraightAndDiagonalLines(input:ACoordArray):ACoordArray;
-      function convertInputToCoordList(input:TStringArray):ACoordArray;
+      fPathArray: APathArray;
+      function getStraightLines(input:APathArray):APathArray;
+      function getStraightAndDiagonalLines(input:APathArray):APathArray;
+      function convertInputToPathList(input:TStringArray):APathArray;
       function coordToPoint(coord:String):TPoint;
-      procedure addCoord(var input:ACoordArray;coord:RCoord);
+      procedure addPath(var input:APathArray;path:RPath);
       procedure resetMap;
       function getMaxValue(width:boolean=true):integer;
-      function lineIs45Degrees(coord:RCoord):boolean;
-      function calculateMove(coord:RCoord):TPoint;
+      function lineIs45Degrees(coord:RPath):boolean;
+      function calculateMove(coord:RPath):TPoint;
     public
       constructor create(input:TStringArray);
       procedure calculateVents(noDiagonal:boolean=true);
@@ -42,26 +42,27 @@ implementation
 
 { TVentMap }
 
-function TVentMap.getStraightLines(input: ACoordArray): ACoordArray;
+function TVentMap.getStraightLines(input: APathArray): APathArray;
 var
-  output:ACoordArray;
+  output:APathArray;
   index:integer;
 begin
-  output:=ACoordArray.create;
+  //returns coordinates
+  output:=APathArray.create;
   for index := 0 to pred(length(input)) do
     begin
     if (input[index].start.X = input[index].finish.X)
       or (input[index].start.Y = input[index].finish.Y)
-      then addCoord(output,input[index]);
+      then addPath(output,input[index]);
     end;
   result:=output;
 end;
 
-function TVentMap.getStraightAndDiagonalLines(input: ACoordArray): ACoordArray;
+function TVentMap.getStraightAndDiagonalLines(input: APathArray): APathArray;
 var
-  output:ACoordArray;
+  output:APathArray;
   index:integer;
-  currentCoord:RCoord;
+  currentCoord:RPath;
 begin
   //here we want to include straight lines and lines at 45 degrees
   //we can get the straight lines from the method above
@@ -70,19 +71,19 @@ begin
     begin
     currentCoord:=input[index];
     if lineIs45Degrees(currentCoord)
-      then addCoord(output,currentcoord);
+      then addPath(output,currentcoord);
     end;
   result:=output;
 end;
 
-function TVentMap.convertInputToCoordList(input: TStringArray): ACoordArray;
+function TVentMap.convertInputToPathList(input: TStringArray): APathArray;
 var
   lineNumber:Integer;
   coordPair:TStringArray;
-  output:ACoordArray;
-  coord:RCoord;
+  output:APathArray;
+  coord:RPath;
 begin
-  output:=ACoordArray.create;
+  output:=APathArray.create;
   for lineNumber:= 0 to pred(length(input)) do
     begin
     coordPair:=fileUtilities.removeBlankLinesFromStringArray(input[lineNumber].Split('->'));
@@ -90,7 +91,7 @@ begin
       begin
        coord.start:=coordToPoint(coordPair[0]);
        coord.finish:=coordToPoint(coordPair[1]);
-       addCoord(output,coord);
+       addPath(output,coord);
       end;
     end;
   result:=output;
@@ -112,10 +113,10 @@ begin
   result:=TPoint.Create(x,y);
 end;
 
-procedure TVentMap.addCoord(var input: ACoordArray; coord:RCoord);
+procedure TVentMap.addPath(var input: APathArray; path:RPath);
 begin
   setLength(input, length(input)+1);
-  input[pred(length(input))]:=coord;
+  input[pred(length(input))]:=path;
 end;
 
 procedure TVentMap.resetMap;
@@ -137,12 +138,12 @@ function TVentMap.getMaxValue(width: boolean): integer;
 var
   index:integer;
   coordValue,maxValue:integer;
-  currentCoord: RCoord;
+  currentCoord: RPath;
 begin
   maxValue:=0;
-  for index:=0 to pred(length(fCoords)) do
+  for index:=0 to pred(length(fPathArray)) do
     begin
-    currentCoord:=fCoords[index];
+    currentCoord:=fPathArray[index];
     if width then
       begin
       coordValue:=currentCoord.start.X;
@@ -159,13 +160,13 @@ begin
   result:=maxValue;
 end;
 
-function TVentMap.lineIs45Degrees(coord: RCoord): boolean;
+function TVentMap.lineIs45Degrees(coord: RPath): boolean;
 begin
   //is the absolute distance between start and finish the same for x and y?
   result:= abs(coord.start.X - coord.finish.X)=abs(coord.start.Y - coord.finish.Y);
 end;
 
-function TVentMap.calculateMove(coord: RCoord): TPoint;
+function TVentMap.calculateMove(coord: RPath): TPoint;
 var
   intervalX,intervalY:integer;
 begin
@@ -179,7 +180,7 @@ end;
 
 constructor TVentMap.create(input: TStringArray);
 begin
- fCoords:=convertInputToCoordList(input);
+ fPathArray:=convertInputToPathList(input);
  fVentMap:=AVentMap.create;
  setLength(fVentMap,getMaxValue+1,getMaxValue(false)+1);
  resetMap;
@@ -187,15 +188,15 @@ end;
 
 procedure TVentMap.calculateVents(noDiagonal: boolean);
 var
-  puzzleInput:ACoordArray;
+  puzzleInput:APathArray;
   coordsLength,coord:integer;
   startPoint,currentPoint,finishPoint,move:TPoint;
-  currentCoord:RCoord;
+  currentCoord:RPath;
   rangeY,maxRange:integer;
   done:boolean;
 begin
-  if noDiagonal then puzzleInput:=getStraightLines(fCoords)
-    else puzzleInput:=fCoords;
+  if noDiagonal then puzzleInput:=getStraightLines(fPathArray)
+    else puzzleInput:=fPathArray;
   coordsLength:=length(puzzleInput);
   //we have an array of coordinates
   //for each entry in the array we need to work out

@@ -115,8 +115,9 @@ begin
   result:=round(output);
 end;
 
-//https://adventofcode.com/2021/day/1
+{ day 1 }
 procedure TmainForm.day1part1;
+//https://adventofcode.com/2021/day/1
 var
   puzzleInput:TStringArray;
   index, increasingCount:integer;
@@ -131,8 +132,8 @@ begin
   lbResults.Items.add(inttostr(increasingCount)+' entries are larger than the previous');
 end;
 
-//Similar to part 1 but compare the average of three samples
 procedure TmainForm.day1part2;
+//Similar to part 1 but compare the average of three samples
 var
   puzzleInput: TStringArray;
   index, firstSetIndex,secondSetIndex, increasingCount,avg1,avg2:integer;
@@ -153,8 +154,10 @@ begin
     end;
   lbResults.Items.add(inttostr(increasingCount)+' entries are larger than the previous');
 end;
-//https://adventofcode.com/2021/day/2
+
+{ day 2 }
 procedure TmainForm.day2part1;
+//https://adventofcode.com/2021/day/2
 var
   puzzleInput: TStringArray;
   elements:TStringArray;
@@ -177,10 +180,10 @@ begin
      end;
     end;
   lbresults.Items.add('depth * distance = '+inttostr(horPos * depth));
-
 end;
-//similar to part 1 but with additional parameter and more calculations
+
 procedure TmainForm.day2part2;
+//similar to part 1 but with additional parameter and more calculations
  var
   puzzleInput: TStringArray;
   elements:TStringArray;
@@ -214,12 +217,11 @@ begin
      end;
     end;
   lbresults.Items.add('depth * distance = '+inttostr(horPos * depth));
-
 end;
 
-{ Day three }
-
+{ day 3 }
 function TmainForm.calculateCommonestValue(input: TStringArray; reverse:Boolean=false): TBits;
+//used in day 3
 type
   TintArray = array of integer;
  var
@@ -254,6 +256,7 @@ begin
       end;
     result:= bBits;
 end;
+
 procedure TmainForm.day3part1;
  var
    puzzleInput: TStringArray;
@@ -275,40 +278,45 @@ begin
     lbResults.Items.add('gamma and epsilon: '+formatFloat('0',gamma)+' and '+formatFloat('0',epsilon));
     lbResults.Items.add('their product is '+formatFloat('0',gamma*epsilon));
 end;
+
 procedure TmainForm.day3part2;
 var
   oxygen,co2: TStringArray;
   sOxygen,sCo2: string;
 
-  { Nested function to find a unique entry that matches the requirements}
   function getUniqueEntry(input: TStringArray;reverse:boolean=false):String;
+  //This nested method is only visible from the procedure day3part2
+  //It deletes any entries from the input that don't match the pattern of
+  //1s and 0s
+  //The method calculateCommonestValues could also be nested as it's only
+  //used by day3part2
   var
    entry,entryLength,element:integer;
    mostOnesAt: TBits;
    keepValue: integer;
   begin
-    if length(input) = 0 then exit;
-    entryLength:=length(input[0]);
-    for element:=0 to pred(entryLength) do
+  if length(input) = 0 then exit;
+  entryLength:=length(input[0]);
+  for element:=0 to pred(entryLength) do
+    begin
+    //Get the TBits object which tells us if 1
+    //is the most common value at each index for the current set
+    mostOnesAt:=calculateCommonestValue(input,reverse);
+    if (mostOnesAt[element] = true) then keepValue:=1 else keepValue:=0;
+    for entry:=pred(length(input)) downto 0 do
       begin
-      //Get the TBits object which tells us if 1
-      //is the most common value at each index for the current set
-      mostOnesAt:=calculateCommonestValue(input,reverse);
-      if (mostOnesAt[element] = true) then keepValue:=1 else keepValue:=0;
-      for entry:=pred(length(input)) downto 0 do
+      if (strToInt(input[entry][element+1]) <> keepValue)
+        then fileUtilities.deleteFromArray(input,entry);
+      if (length(input)=1) then
         begin
-        if (strToInt(input[entry][element+1]) <> keepValue)
-          then fileUtilities.deleteFromArray(input,entry);
-        if (length(input)=1) then
-          begin
-            result:=input[0];
-            exit;
-          end;
+        result:=input[0];
+        exit;
         end;
       end;
     end;
+  end;
 
-begin
+  begin
   oxygen:=getPuzzleInputAsStringArray('day_3_1.txt');
   co2:=copy(oxygen,0);
   sOxygen:=getUniqueEntry(oxygen);
@@ -316,11 +324,14 @@ begin
   lbResults.items.add('oxygen '+sOxygen);
   lbResults.items.add('co2 '+sCo2);
   lbResults.items.add('life support rating '+inttostr(stringOfBinaryToInteger(sOxygen)*stringOfBinaryToInteger(sCo2)));
+  end;
 
-end;
-
-//This is the method that any winning bingo card will call
+{ day 4 }
 procedure TmainForm.CardNotifyWinHandler(Sender: TObject);
+//The constructor for the bingo cards gets passed a pointer to this method
+//as their fNotifyCardWin property. If a card calculates that
+//it has won it calls the event handler(this method) passing itself
+//as the sender parameter
 var
  winningCardIndex:integer;
  found:boolean;
@@ -405,6 +416,7 @@ begin
   lbresults.items.add('included in day 4 part 1');
 end;
 
+{ day 5 }
 procedure TmainForm.day5part1;
 var
  ventMap:TVentMap;
