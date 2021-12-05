@@ -81,7 +81,7 @@ var
   lineNumber:Integer;
   coordPair:TStringArray;
   output:APathArray;
-  coord:RPath;
+  path:RPath;
 begin
   output:=APathArray.create;
   for lineNumber:= 0 to pred(length(input)) do
@@ -89,9 +89,9 @@ begin
     coordPair:=fileUtilities.removeBlankLinesFromStringArray(input[lineNumber].Split('->'));
     if (length(coordPair)=2) then
       begin
-       coord.start:=coordToPoint(coordPair[0]);
-       coord.finish:=coordToPoint(coordPair[1]);
-       addPath(output,coord);
+       path.start:=coordToPoint(coordPair[0]);
+       path.finish:=coordToPoint(coordPair[1]);
+       addPath(output,path);
       end;
     end;
   result:=output;
@@ -137,25 +137,25 @@ end;
 function TVentMap.getMaxValue(width: boolean): integer;
 var
   index:integer;
-  coordValue,maxValue:integer;
-  currentCoord: RPath;
+  pathValue,maxValue:integer;
+  currentPath: RPath;
 begin
   maxValue:=0;
   for index:=0 to pred(length(fPathArray)) do
     begin
-    currentCoord:=fPathArray[index];
+    currentPath:=fPathArray[index];
     if width then
       begin
-      coordValue:=currentCoord.start.X;
-      if currentCoord.finish.X > coordValue
-        then coordValue:=currentCoord.finish.X;
+      pathValue:=currentPath.start.X;
+      if currentPath.finish.X > pathValue
+        then pathValue:=currentPath.finish.X;
       end else
       begin
-      coordValue:=currentCoord.start.Y;
-      if currentCoord.finish.Y > coordValue
-        then coordValue:=currentCoord.finish.Y;
+      pathValue:=currentPath.start.Y;
+      if currentPath.finish.Y > pathValue
+        then pathValue:=currentPath.finish.Y;
       end;
-    if (coordValue > maxValue) then maxValue:=coordValue;
+    if (pathValue > maxValue) then maxValue:=pathValue;
     end;
   result:=maxValue;
 end;
@@ -196,7 +196,7 @@ var
   done:boolean;
 begin
   if noDiagonal then puzzleInput:=getStraightLines(fPathArray)
-    else puzzleInput:=fPathArray;
+    else puzzleInput:=getStraightAndDiagonalLines(fPathArray);
   coordsLength:=length(puzzleInput);
   //we have an array of coordinates
   //for each entry in the array we need to work out
