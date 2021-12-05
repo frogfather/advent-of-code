@@ -11,10 +11,9 @@ uses
 type
   TStringArray = Array of string;
   TIntArray = Array of integer;
-  { TForm1 }
-  TForm1 = class(TForm)
+  { TmainForm }
+  TmainForm = class(TForm)
     bExecute: TButton;
-    Button1: TButton;
     cbSelect: TComboBox;
     lbResults: TListBox;
     OpenDialog1: TOpenDialog;
@@ -50,7 +49,7 @@ const dataDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/input/';
 type
   TbingoCards = array of TbingoCard;
 var
-  Form1: TForm1;
+  mainForm: TmainForm;
   //Used in day 4 part 2. Because a card signals that it has won
   //by firing the event handler, and because the main method (day4part1)
   //doesn't know anything about which cards have won, we need to
@@ -61,9 +60,9 @@ implementation
 
 {$R *.lfm}
 
-{ TForm1 }
+{ TmainForm }
 
-procedure TForm1.bExecuteClick(Sender: TObject);
+procedure TmainForm.bExecuteClick(Sender: TObject);
 
 begin
   lbresults.Clear;
@@ -84,7 +83,7 @@ begin
 
 end;
 
-procedure TForm1.FormShow(Sender: TObject);
+procedure TmainForm.FormShow(Sender: TObject);
 var
   i:integer;
 begin
@@ -96,12 +95,12 @@ begin
     end;
 end;
 
-function TForm1.getPuzzleInputAsStringArray(fileName: String; removeBlankLines: boolean=true): TStringArray;
+function TmainForm.getPuzzleInputAsStringArray(fileName: String; removeBlankLines: boolean=true): TStringArray;
 begin
   result:= fileUtilities.openFileAsArray(datadir+filename,#$0A,removeBlankLines);
 end;
 
-function TForm1.stringOfBinaryToInteger(input: String): integer;
+function TmainForm.stringOfBinaryToInteger(input: String): integer;
 var
  index,powerOf,elementLength:Integer;
  output:double;
@@ -117,7 +116,7 @@ begin
 end;
 
 //https://adventofcode.com/2021/day/1
-procedure TForm1.day1part1;
+procedure TmainForm.day1part1;
 var
   puzzleInput:TStringArray;
   index, increasingCount:integer;
@@ -133,7 +132,7 @@ begin
 end;
 
 //Similar to part 1 but compare the average of three samples
-procedure TForm1.day1part2;
+procedure TmainForm.day1part2;
 var
   puzzleInput: TStringArray;
   index, firstSetIndex,secondSetIndex, increasingCount,avg1,avg2:integer;
@@ -155,7 +154,7 @@ begin
   lbResults.Items.add(inttostr(increasingCount)+' entries are larger than the previous');
 end;
 //https://adventofcode.com/2021/day/2
-procedure TForm1.day2part1;
+procedure TmainForm.day2part1;
 var
   puzzleInput: TStringArray;
   elements:TStringArray;
@@ -181,7 +180,7 @@ begin
 
 end;
 //similar to part 1 but with additional parameter and more calculations
-procedure TForm1.day2part2;
+procedure TmainForm.day2part2;
  var
   puzzleInput: TStringArray;
   elements:TStringArray;
@@ -220,7 +219,7 @@ end;
 
 { Day three }
 
-function TForm1.calculateCommonestValue(input: TStringArray; reverse:Boolean=false): TBits;
+function TmainForm.calculateCommonestValue(input: TStringArray; reverse:Boolean=false): TBits;
 type
   TintArray = array of integer;
  var
@@ -255,7 +254,7 @@ begin
       end;
     result:= bBits;
 end;
-procedure TForm1.day3part1;
+procedure TmainForm.day3part1;
  var
    puzzleInput: TStringArray;
    index, powerOf:integer;
@@ -276,7 +275,7 @@ begin
     lbResults.Items.add('gamma and epsilon: '+formatFloat('0',gamma)+' and '+formatFloat('0',epsilon));
     lbResults.Items.add('their product is '+formatFloat('0',gamma*epsilon));
 end;
-procedure TForm1.day3part2;
+procedure TmainForm.day3part2;
 var
   oxygen,co2: TStringArray;
   sOxygen,sCo2: string;
@@ -321,7 +320,7 @@ begin
 end;
 
 //This is the method that any winning bingo card will call
-procedure TForm1.CardNotifyWinHandler(Sender: TObject);
+procedure TmainForm.CardNotifyWinHandler(Sender: TObject);
 var
  winningCardIndex:integer;
  found:boolean;
@@ -345,7 +344,7 @@ begin
     end;
 end;
 
-procedure TForm1.day4part1;
+procedure TmainForm.day4part1;
 var
  puzzleInput,numbersToCall:TStringArray;
  currentLine:string;
@@ -401,12 +400,12 @@ begin
 
 end;
 
-procedure TForm1.day4part2;
+procedure TmainForm.day4part2;
 begin
   lbresults.items.add('included in day 4 part 1');
 end;
 
-procedure TForm1.day5part1;
+procedure TmainForm.day5part1;
 var
  ventMap:TVentMap;
 begin
@@ -415,7 +414,7 @@ begin
  lbResults.items.add(ventMap.getOverlapCount.ToString+' overlaps');
 end;
 
-procedure TForm1.day5part2;
+procedure TmainForm.day5part2;
 var
  ventMap:TVentMap;
 begin
@@ -424,32 +423,32 @@ begin
  lbResults.items.add(ventMap.getOverlapCount.ToString+' overlaps');
 end;
 
-procedure TForm1.day6part1;
+procedure TmainForm.day6part1;
 begin
   lbresults.items.add('not done yet');
 end;
 
-procedure TForm1.day6part2;
+procedure TmainForm.day6part2;
 begin
   lbresults.items.add('not done yet');
 end;
 
-procedure TForm1.day7part1;
+procedure TmainForm.day7part1;
 begin
   lbresults.items.add('not done yet');
 end;
 
-procedure TForm1.day7part2;
+procedure TmainForm.day7part2;
 begin
   lbresults.items.add('not done yet');
 end;
 
-procedure TForm1.day8part1;
+procedure TmainForm.day8part1;
 begin
   lbresults.items.add('not done yet');
 end;
 
-procedure TForm1.day8part2;
+procedure TmainForm.day8part2;
 begin
   lbresults.items.add('not done yet');
 end;

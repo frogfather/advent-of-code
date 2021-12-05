@@ -410,7 +410,7 @@ procedure TForm1.day5part1;
 var
  ventMap:TVentMap;
 begin
- ventMap:=TVentMap.create(getPuzzleInputAsStringArray('day_5_test.txt'));
+ ventMap:=TVentMap.create(getPuzzleInputAsStringArray('day_5_1.txt'));
  ventMap.calculateVents;
  lbResults.items.add(ventMap.getOverlapCount.ToString+' overlaps');
 end;
