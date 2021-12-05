@@ -19,8 +19,9 @@
         <ComponentName Value="mainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="134"/>
-        <CursorPos X="37" Y="358"/>
+        <TopLine Value="57"/>
+        <CursorPos X="3" Y="50"/>
+        <FoldState Value=" T3iL0J6 pigjY0Z312 TM HpM112A"/>
         <UsageCount Value="98"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -50,8 +51,8 @@
         <UnitName Value="ventMap"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="183"/>
-        <CursorPos X="62" Y="199"/>
+        <TopLine Value="170"/>
+        <CursorPos X="33" Y="180"/>
         <UsageCount Value="59"/>
         <Loaded Value="True"/>
       </Unit4>
@@ -121,127 +122,119 @@
         <UsageCount Value="6"/>
       </Unit13>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="25">
+    <JumpHistory Count="28" HistoryIndex="27">
       <Position1>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="225" TopLine="209"/>
+        <Caret Line="205" TopLine="196"/>
       </Position1>
       <Position2>
-        <Filename Value="ventmap.pas"/>
-        <Caret Line="205" TopLine="196"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="413" Column="63" TopLine="403"/>
       </Position2>
       <Position3>
         <Filename Value="advent.pas"/>
-        <Caret Line="413" Column="63" TopLine="403"/>
+        <Caret Line="412" Column="63" TopLine="402"/>
       </Position3>
       <Position4>
         <Filename Value="advent.pas"/>
-        <Caret Line="412" Column="63" TopLine="402"/>
+        <Caret Line="334" Column="22" TopLine="322"/>
       </Position4>
       <Position5>
-        <Filename Value="advent.pas"/>
-        <Caret Line="334" Column="22" TopLine="322"/>
+        <Filename Value="ventmap.pas"/>
+        <Caret Line="13" Column="8" TopLine="3"/>
       </Position5>
       <Position6>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="13" Column="8" TopLine="3"/>
+        <Caret Line="18" Column="13" TopLine="8"/>
       </Position6>
       <Position7>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="18" Column="13" TopLine="8"/>
+        <Caret Line="25" Column="12" TopLine="8"/>
       </Position7>
       <Position8>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="25" Column="12" TopLine="8"/>
+        <Caret Line="28" Column="34" TopLine="19"/>
       </Position8>
       <Position9>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="28" Column="34" TopLine="19"/>
+        <Caret Line="79" Column="37" TopLine="69"/>
       </Position9>
       <Position10>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="79" Column="37" TopLine="69"/>
+        <Caret Line="30" Column="50" TopLine="19"/>
       </Position10>
       <Position11>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="30" Column="50" TopLine="19"/>
+        <Caret Line="56" Column="19" TopLine="47"/>
       </Position11>
       <Position12>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="56" Column="19" TopLine="47"/>
+        <Caret Line="74" Column="19" TopLine="66"/>
       </Position12>
       <Position13>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="74" Column="19" TopLine="66"/>
+        <Caret Line="94" Column="15" TopLine="86"/>
       </Position13>
       <Position14>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="94" Column="15" TopLine="86"/>
+        <Caret Line="116" Column="55" TopLine="107"/>
       </Position14>
       <Position15>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="116" Column="55" TopLine="107"/>
+        <Caret Line="25" Column="10" TopLine="20"/>
       </Position15>
       <Position16>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="25" Column="10" TopLine="20"/>
+        <Caret Line="29" Column="23" TopLine="19"/>
       </Position16>
       <Position17>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="29" Column="23" TopLine="19"/>
+        <Caret Line="141" Column="14" TopLine="131"/>
       </Position17>
       <Position18>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="141" Column="14" TopLine="131"/>
+        <Caret Line="140" Column="12" TopLine="130"/>
       </Position18>
       <Position19>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="140" Column="12" TopLine="130"/>
+        <Caret Line="84" Column="7" TopLine="74"/>
       </Position19>
       <Position20>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="84" Column="7" TopLine="74"/>
+        <Caret Line="92" Column="27" TopLine="78"/>
       </Position20>
       <Position21>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="92" Column="27" TopLine="78"/>
+        <Caret Line="29" Column="21" TopLine="19"/>
       </Position21>
       <Position22>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="29" Column="21" TopLine="19"/>
+        <Caret Line="37" Column="31" TopLine="27"/>
       </Position22>
       <Position23>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="37" Column="31" TopLine="27"/>
+        <Caret Line="36" Column="19" TopLine="27"/>
       </Position23>
       <Position24>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="36" Column="19" TopLine="27"/>
+        <Caret Line="183" Column="22" TopLine="181"/>
       </Position24>
       <Position25>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="183" Column="22" TopLine="181"/>
+        <Caret Line="189" Column="27" TopLine="181"/>
       </Position25>
       <Position26>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="189" Column="27" TopLine="181"/>
+        <Caret Line="218" Column="18" TopLine="207"/>
       </Position26>
       <Position27>
-        <Filename Value="ventmap.pas"/>
-        <Caret Line="37" Column="22" TopLine="28"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="363" Column="16" TopLine="223"/>
       </Position27>
       <Position28>
         <Filename Value="ventmap.pas"/>
-        <Caret Line="66" Column="44" TopLine="57"/>
+        <Caret Line="27" Column="7" TopLine="20"/>
       </Position28>
-      <Position29>
-        <Filename Value="ventmap.pas"/>
-        <Caret Line="27" Column="16" TopLine="17"/>
-      </Position29>
-      <Position30>
-        <Filename Value="ventmap.pas"/>
-        <Caret Line="61" Column="19" TopLine="69"/>
-      </Position30>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>

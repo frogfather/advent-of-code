@@ -24,7 +24,6 @@ type
       fVentMap: AVentMap;
       fPathArray: APathArray;
       function getStraightLines(input:APathArray):APathArray;
-      function getStraightAndDiagonalLines(input:APathArray):APathArray;
       function convertInputToPathList(input:TStringArray):APathArray;
       function coordToPoint(coord:String):TPoint;
       procedure addPath(var input:APathArray;path:RPath);
@@ -54,24 +53,6 @@ begin
     if (input[index].start.X = input[index].finish.X)
       or (input[index].start.Y = input[index].finish.Y)
       then addPath(output,input[index]);
-    end;
-  result:=output;
-end;
-
-function TVentMap.getStraightAndDiagonalLines(input: APathArray): APathArray;
-var
-  output:APathArray;
-  index:integer;
-  currentCoord:RPath;
-begin
-  //here we want to include straight lines and lines at 45 degrees
-  //we can get the straight lines from the method above
-  output:=getStraightLines(input);
-  for index := 0 to pred(length(input)) do
-    begin
-    currentCoord:=input[index];
-    if lineIs45Degrees(currentCoord)
-      then addPath(output,currentcoord);
     end;
   result:=output;
 end;
@@ -196,7 +177,7 @@ var
   done:boolean;
 begin
   if noDiagonal then puzzleInput:=getStraightLines(fPathArray)
-    else puzzleInput:=getStraightAndDiagonalLines(fPathArray);
+    else puzzleInput:=fPathArray;
   coordsLength:=length(puzzleInput);
   //we have an array of coordinates
   //for each entry in the array we need to work out
