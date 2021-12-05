@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics,
-  Dialogs, StdCtrls, fileUtilities, math,bingoCard;
+  Dialogs, StdCtrls, fileUtilities, math,bingoCard,ventMap;
 
 type
   TStringArray = Array of string;
@@ -75,6 +75,9 @@ begin
    4: day3part1;
    5: day3part2;
    6: day4part1;
+   7: day4part2;
+   8: day5part1;
+   9: day5part2;
    14: day8part1;
    15: day8part2;
   end;
@@ -350,7 +353,6 @@ var
  bingoCards: TBingoCards;
  cardNumber:integer;
  lineNumber,numberOfLines,callNumber:integer;
- firstWinning,lastWinning:TBingoCard;
 begin
  //Get the puzzle input without removing blank lines as we need these
  puzzleInput:= getPuzzleInputAsStringArray('day_4_1.txt',false);
@@ -394,25 +396,32 @@ begin
      end;
    end;
  //now examine the winning cards array to see what the first and last objects are
-
- lbresults.items.add('First answer '+(winningCards[0].uncalled * winningCards[0].lastCalled).ToString);
+ lbresults.items.add('First winning card: '+winningCards[0].id.ToString+' '+(winningCards[0].uncalled * winningCards[0].lastCalled).ToString);
  lbresults.items.add('Last answer '+(winningCards[pred(length(winningCards))].uncalled * winningCards[pred(length(winningCards))].lastCalled).ToString);
 
 end;
 
 procedure TForm1.day4part2;
 begin
-  lbresults.items.add('not done yet');
+  lbresults.items.add('included in day 4 part 1');
 end;
 
 procedure TForm1.day5part1;
+var
+ ventMap:TVentMap;
 begin
-  lbresults.items.add('not done yet');
+ ventMap:=TVentMap.create(getPuzzleInputAsStringArray('day_5_test.txt'));
+ ventMap.calculateVents;
+ lbResults.items.add(ventMap.getOverlapCount.ToString+' overlaps');
 end;
 
 procedure TForm1.day5part2;
+var
+ ventMap:TVentMap;
 begin
-
+ ventMap:=TVentMap.create(getPuzzleInputAsStringArray('day_5_1.txt'));
+ ventMap.calculateVents(false);
+ lbResults.items.add(ventMap.getOverlapCount.ToString+' overlaps');
 end;
 
 procedure TForm1.day6part1;
