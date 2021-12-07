@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics,
-  Dialogs, StdCtrls, fileUtilities, math,bingoCard,ventMap,fgl,DateUtils;
+  Dialogs, StdCtrls, fileUtilities, math,bingoCard,
+  ventMap,fgl,DateUtils,aocUtils;
 
 type
 
@@ -112,8 +113,26 @@ begin
 end;
 
 procedure TmainForm.day1part2;
+//Similar to part 1 but compare the average of three samples
+var
+  puzzleInput: TStringArray;
+  index, firstSetIndex,secondSetIndex, increasingCount,avg1,avg2:integer;
 begin
-  lbresults.items.add('not done yet');
+  puzzleInput:= getPuzzleInputAsStringArray('day_1_1.txt');
+  increasingCount:=0;
+  //we start at 3 because we need to compare the first three entries to
+  //the second three entries (i.e. comparing 0,1,2 to 1,2,3)
+  for index:=3 to pred(length(puzzleInput)) do
+    begin
+    avg1:=0;
+    avg2:=0;
+     for firstSetIndex:=index-1 downto index-3 do
+       avg1:=avg1+strToInt(puzzleInput[firstSetIndex]);
+     for secondSetIndex:=index downto index - 2 do
+       avg2:=avg2+strToInt(puzzleInput[secondSetIndex]);
+     if (avg2 > avg1) then increasingCount:=increasingCount + 1;
+    end;
+  lbResults.Items.add(inttostr(increasingCount)+' entries are larger than the previous');
 end;
 
 { day 2 }
