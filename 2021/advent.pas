@@ -16,10 +16,13 @@ type
     bExecute: TButton;
     cbSelect: TComboBox;
     lbResults: TListBox;
+    Memo1: TMemo;
     OpenDialog1: TOpenDialog;
     procedure bExecuteClick(Sender: TObject);
+    procedure cbSelectSelect(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
+    procedure loadText(fileName:String);
     procedure day1part1;
     procedure day1part2;
     procedure day2part1;
@@ -88,6 +91,16 @@ begin
  lbResults.Items.Add('Time: '+inttostr(millisecondsBetween(endTime,startTime))+' ms');
 end;
 
+procedure TmainForm.cbSelectSelect(Sender: TObject);
+var
+  descriptionFile:String;
+  day,part:integer;
+begin
+  divMod(cbSelect.ItemIndex,2,day,part);
+  descriptionFile:='puzzle_'+(1+day).ToString+'_'+(1+part).ToString+'.txt';
+  loadText(descriptionFile);
+end;
+
 procedure TmainForm.FormShow(Sender: TObject);
 var
   i:integer;
@@ -100,10 +113,14 @@ begin
     end;
 end;
 
+procedure TmainForm.loadText(fileName: String);
+begin
+  memo1.Text:=getDescription(fileName);
+end;
+
 { day 1 }
 //https://adventofcode.com/2021/day/1
 procedure TmainForm.day1part1;
-
 var
   puzzleInput:TStringArray;
   index, increasingCount:integer;
@@ -386,16 +403,16 @@ procedure TmainForm.day6part2;
 type
   TInt64List = specialize TFPGList<int64>;
 var
- fishInput,fishValues:TStringArray;
+ crabInput,fishValues:TStringArray;
  daysList: TInt64List;
  fishNo,i,index:integer;
  total,spawningFish:int64;
 begin
- fishInput:= getPuzzleInputAsStringArray('day_6_1.txt');
- if (length(fishInput) = 1) then
+ crabInput:= getPuzzleInputAsStringArray('day_6_1.txt');
+ if (length(crabInput) = 1) then
    begin
    //split on comma to get an array of the values
-   fishValues:=removeBlankLinesFromArray(fishInput[0].Split(','));
+   fishValues:=removeBlankLinesFromArray(crabInput[0].Split(','));
    //create the map and add entries with keys 0-8 and values 0
    daysList:=TInt64List.Create;
    for i:=0 to 8 do daysList.Add(0);

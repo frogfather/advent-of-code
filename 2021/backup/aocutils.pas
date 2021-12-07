@@ -13,19 +13,27 @@ function stringOfBinaryToInteger(input: String): integer;
 function calculateCommonestValue(input: TStringArray; reverse:Boolean=false): TBits;
 function getUniqueEntry(input: TStringArray;reverse:boolean=false):String;
 function getMaxValue(input:TIntArray):integer;
+function getDescription(fileName:String):String;
 implementation
-const dataDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/input/';
 
+const dataDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/input/';
+const descriptionDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/puzzle_description/';
 
 //For where the puzzle input is lines separated by linefeed (#$0A)
 function getPuzzleInputAsStringArray(fileName: String; removeBlankLines: boolean=true): TStringArray;
 begin
-  result:= openFileAsArray(datadir+filename,#$0A,removeBlankLines);
+  try
+    result:= openFileAsArray(datadir+filename,#$0A,removeBlankLines);
+  except
+    result:='No description for this puzzle'
+  end;
+
 end;
 
 //For where the puzzle input is a single line of comma separated numbers
-function getPuzzleInputAsIntArray(fileName: String; removeBlankLines: boolean
-  ): TIntArray;
+function getPuzzleInputAsIntArray(
+  fileName:String;
+  removeBlankLines: boolean): TIntArray;
 var
  fileLines:TStringArray;
 begin
@@ -34,7 +42,6 @@ begin
  result:= toIntArray(fileLines[0].Split(','));
 end;
 
-//
 function stringOfBinaryToInteger(input: String): integer;
 var
  index,powerOf,elementLength:Integer;
@@ -50,8 +57,8 @@ begin
   result:=round(output);
 end;
 
-function calculateCommonestValue(input: TStringArray; reverse:Boolean=false): TBits;
 //used in day 3
+function calculateCommonestValue(input: TStringArray; reverse:Boolean=false): TBits;
 type
   TintArray = array of integer;
  var
@@ -88,46 +95,50 @@ begin
 end;
 
 function getUniqueEntry(input: TStringArray;reverse:boolean=false):String;
-  //This nested method is only visible from the procedure day3part2
-  //It deletes any entries from the input that don't match the pattern of
-  //1s and 0s
-  //The method calculateCommonestValues could also be nested as it's only
-  //used by day3part2
-  var
-   entry,entryLength,element:integer;
-   mostOnesAt: TBits;
-   keepValue: integer;
+//Deletes entries from the input that don't match the pattern of
+//1s and 0s
+var
+  entry,entryLength,element:integer;
+  mostOnesAt: TBits;
+  keepValue: integer;
+begin
+if length(input) = 0 then exit;
+entryLength:=length(input[0]);
+for element:=0 to pred(entryLength) do
   begin
-  if length(input) = 0 then exit;
-  entryLength:=length(input[0]);
-  for element:=0 to pred(entryLength) do
+  //Get the TBits object which tells us if 1
+  //is the most common value at each index for the current set
+  mostOnesAt:=calculateCommonestValue(input,reverse);
+  if (mostOnesAt[element] = true) then keepValue:=1 else keepValue:=0;
+  for entry:=pred(length(input)) downto 0 do
     begin
-    //Get the TBits object which tells us if 1
-    //is the most common value at each index for the current set
-    mostOnesAt:=calculateCommonestValue(input,reverse);
-    if (mostOnesAt[element] = true) then keepValue:=1 else keepValue:=0;
-    for entry:=pred(length(input)) downto 0 do
+    if (strToInt(input[entry][element+1]) <> keepValue)
+    then deleteFromArray(input,entry);
+    if (length(input)=1) then
       begin
-      if (strToInt(input[entry][element+1]) <> keepValue)
-        then deleteFromArray(input,entry);
-      if (length(input)=1) then
-        begin
-        result:=input[0];
-        exit;
-        end;
+      result:=input[0];
+      exit;
       end;
     end;
   end;
+end;
 
+//Used in Day 7
 function getMaxValue(input:TIntArray):integer;
- var
- index:integer;
- begin
- result:=0;
- for index:=0 to pred(length(input)) do
-   begin
-   if (input[index] > result) then result:=input[index];
-   end;
- end;
+var
+   index:integer;
+begin
+result:=0;
+for index:=0 to pred(length(input)) do
+  begin
+  if (input[index] > result) then result:=input[index];
+  end;
+end;
+
+function getDescription(fileName: String): String;
+begin
+  result:=readStream(descriptionDir+fileName);
+end;
+
 end.
 

@@ -16,10 +16,13 @@ type
     bExecute: TButton;
     cbSelect: TComboBox;
     lbResults: TListBox;
+    Memo1: TMemo;
     OpenDialog1: TOpenDialog;
     procedure bExecuteClick(Sender: TObject);
+    procedure cbSelectSelect(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
+    procedure loadText(fileName:String);
     procedure day1part1;
     procedure day1part2;
     procedure day2part1;
@@ -88,6 +91,31 @@ begin
  lbResults.Items.Add('Time: '+inttostr(millisecondsBetween(endTime,startTime))+' ms');
 end;
 
+procedure TmainForm.cbSelectSelect(Sender: TObject);
+var
+  descriptionFile:String;
+begin
+case cbselect.ItemIndex of
+   0: descriptionFile:='puzzle_1_1.txt';
+   1: descriptionFile:='puzzle_1_2.txt';
+   2: day2part1;
+   3: day2part2;
+   4: day3part1;
+   5: day3part2;
+   6: day4part1;
+   7: day4part2;
+   8: day5part1;
+   9: day5part2;
+   10: day6part1;
+   11: day6part2;
+   12: day7part1;
+   13: day7part2;
+   14: day8part1;
+   15: day8part2;
+  end;
+loadText(descriptionFile);
+end;
+
 procedure TmainForm.FormShow(Sender: TObject);
 var
   i:integer;
@@ -100,10 +128,14 @@ begin
     end;
 end;
 
+procedure TmainForm.loadText(fileName: String);
+begin
+  memo1.Text:=getDescription(fileName);
+end;
+
 { day 1 }
 //https://adventofcode.com/2021/day/1
 procedure TmainForm.day1part1;
-
 var
   puzzleInput:TStringArray;
   index, increasingCount:integer;
@@ -386,16 +418,16 @@ procedure TmainForm.day6part2;
 type
   TInt64List = specialize TFPGList<int64>;
 var
- fishInput,fishValues:TStringArray;
+ crabInput,fishValues:TStringArray;
  daysList: TInt64List;
  fishNo,i,index:integer;
  total,spawningFish:int64;
 begin
- fishInput:= getPuzzleInputAsStringArray('day_6_1.txt');
- if (length(fishInput) = 1) then
+ crabInput:= getPuzzleInputAsStringArray('day_6_1.txt');
+ if (length(crabInput) = 1) then
    begin
    //split on comma to get an array of the values
-   fishValues:=removeBlankLinesFromArray(fishInput[0].Split(','));
+   fishValues:=removeBlankLinesFromArray(crabInput[0].Split(','));
    //create the map and add entries with keys 0-8 and values 0
    daysList:=TInt64List.Create;
    for i:=0 to 8 do daysList.Add(0);
@@ -435,120 +467,103 @@ end;
 procedure TmainForm.day7part1;
 var
  puzzleInput:TStringArray;
- fishPositions:TIntArray;
+ crabPositions:TIntArray;
  maxValue,totalValue,averageValue,index:integer;
  startPoint,endPoint,fuelAtThisPoint,leastFuel:integer;
 
+  function calculateFuel(input:TIntArray;position:integer):integer;
+  var
+  index:integer;
+  output:integer;
+    begin
+    //sum the difference between each fish and the desired position
+    output:=0;
+    for index:=0 to pred(length(input)) do
+      begin
+      output:=output + (abs(input[index] - position));
+      end;
+    result:=output;
+    end;
 
- function calculateFuel(input:TIntArray;position:integer):integer;
- var
- index:integer;
- output:integer;
- begin
- //sum the difference between each fish and the desired position
- output:=0;
- for index:=0 to pred(length(input)) do
-   begin
-   output:=output + (abs(input[index] - position));
-   end;
- result:=output;
- end;
+  begin
+  puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
+  if length(puzzleInput)= 1 then
+    begin
+    crabPositions:=toIntArray(puzzleInput[0].Split(','));
+    maxValue:=getMaxValue(crabPositions);
+    totalValue:=0;
+    for index := 0 to pred(length(crabPositions)) do
+      begin
+      totalValue:=totalValue + crabPositions[index];
+      end;
+    averageValue:=totalValue div maxValue;
 
-begin
- puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
- if length(puzzleInput)= 1 then
-   begin
-   fishPositions:=toIntArray(puzzleInput[0].Split(','));
-   //we need to find out the minimum number of moves
-   //that will get all the fish to the same position
-   //Let's work out a distribution of where the fish are
-   maxValue:=getMaxValue(fishPositions);
-   totalValue:=0;
-   for index := 0 to pred(length(fishPositions)) do
-     begin
-     totalValue:=totalValue + fishPositions[index];
-     end;
-   averageValue:=totalValue div maxValue;
-   //Does this help?
-   //try values between (say) average - 20% and average + 20%
-   startPoint:=averageValue - (length(fishPositions) div 5);
-   endPoint:=averageValue + (length(fishPositions) div 5);
-   leastFuel:=calculateFuel(fishPositions,startPoint);//set initial value
-   for index:=startPoint to endPoint do
-     begin
-     fuelAtThisPoint:=calculateFuel(fishPositions,index);
-     if fuelAtThisPoint < leastFuel then leastFuel:=fuelAtThisPoint;
-     end;
-   lbResults.items.add('Min fuel in this range: '+leastFuel.ToString);
-   end;
-end;
+    startPoint:=averageValue - (length(crabPositions) div 5);
+    endPoint:=averageValue + (length(crabPositions) div 5);
+    leastFuel:=calculateFuel(crabPositions,startPoint);//set initial value
+    for index:=startPoint to endPoint do
+      begin
+      fuelAtThisPoint:=calculateFuel(crabPositions,index);
+      if fuelAtThisPoint < leastFuel then leastFuel:=fuelAtThisPoint;
+      end;
+    lbResults.items.add('Min fuel in this range: '+leastFuel.ToString);
+    end;
+  end;
 procedure TmainForm.day7part2;
-var
- puzzleInput:TStringArray;
- fishPositions:TIntArray;
- totalValue,averageValue,index:integer;
- startPoint,endPoint,fuelAtThisPoint,leastFuel:integer;
+  var
+  puzzleInput:TStringArray;
+  fishPositions:TIntArray;
+  totalValue,averageValue,index:integer;
+  startPoint,endPoint,fuelAtThisPoint,leastFuel:integer;
 
- function getMaxValue(input:TIntArray):integer;
- var
- index:integer;
- begin
- result:=0;
- for index:=0 to pred(length(input)) do
-   begin
-   if (input[index] > result) then result:=input[index];
-   end;
- end;
-
- function calculateFuel(input:TIntArray;position:integer):integer;
- var
- index,diff:integer;
- output:integer;
- begin
- //This time, we need to calculate the fuel differently
- //moving 1 costs 1 fuel
- //moving 2 costs 2 + 1 = 3
- //moving 3 costs 3 + 2 + 1 = 6
- //moving n costs n + n-1 + n-2 ... 1
- output:=0;
- for index:=0 to pred(length(input)) do
-   begin
-   diff:=abs(input[index] - position);
-   while diff > 0 do
-     begin
-     output:=output + diff;
-     diff:=pred(diff);
-     end;
-   end;
- result:=output;
- end;
+  function calculateFuel(input:TIntArray;position:integer):integer;
+  var
+  index,diff:integer;
+  output:integer;
+  begin
+  //This time, we need to calculate the fuel differently
+  //moving 1 costs 1 fuel
+  //moving 2 costs 2 + 1 = 3
+  //moving 3 costs 3 + 2 + 1 = 6
+  //moving n costs n + n-1 + n-2 ... 1
+  output:=0;
+  for index:=0 to pred(length(input)) do
+    begin
+    diff:=abs(input[index] - position);
+    while diff > 0 do
+      begin
+      output:=output + diff;
+      diff:=pred(diff);
+      end;
+    end;
+  result:=output;
+  end;
 
 begin
- puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
- if length(puzzleInput)= 1 then
-   begin
-   fishPositions:=toIntArray(puzzleInput[0].Split(','));
-   //we need to find out the minimum number of moves
-   //that will get all the fish to the same position
-   //Let's work out a distribution of where the fish are
-   totalValue:=0;
-   for index := 0 to pred(length(fishPositions)) do
-     begin
-     totalValue:=totalValue + fishPositions[index];
-     end;
-   averageValue:=totalValue div length(fishPositions);
-   //Does this help?
-   //try values between (say) average - 20% and average + 20%
-   startPoint:=averageValue - (length(fishPositions) div 5);
-   endPoint:=averageValue + (length(fishPositions) div 5);
-   leastFuel:=calculateFuel(fishPositions,startPoint);//set initial value
-   for index:=startPoint to endPoint do
-     begin
-     fuelAtThisPoint:=calculateFuel(fishPositions,index);
-     if fuelAtThisPoint < leastFuel then leastFuel:=fuelAtThisPoint;
-     end;
-   lbResults.items.add('Min fuel in this range: '+leastFuel.ToString);
-   end;
+puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
+if length(puzzleInput)= 1 then
+  begin
+  fishPositions:=toIntArray(puzzleInput[0].Split(','));
+  //we need to find out the minimum number of moves
+  //that will get all the fish to the same position
+  //Let's work out a distribution of where the fish are
+  totalValue:=0;
+  for index := 0 to pred(length(fishPositions)) do
+    begin
+    totalValue:=totalValue + fishPositions[index];
+    end;
+  averageValue:=totalValue div length(fishPositions);
+  //try values between (say) average - 20% and average + 20%
+  startPoint:=averageValue - (length(fishPositions) div 5);
+  endPoint:=averageValue + (length(fishPositions) div 5);
+  leastFuel:=calculateFuel(fishPositions,startPoint);//set initial value
+  for index:=startPoint to endPoint do
+    begin
+    fuelAtThisPoint:=calculateFuel(fishPositions,index);
+    if fuelAtThisPoint < leastFuel then leastFuel:=fuelAtThisPoint;
+    end;
+  lbResults.items.add('Min fuel in this range: '+leastFuel.ToString);
+  end;
 end;
 
 procedure TmainForm.day8part1;
