@@ -446,97 +446,13 @@ end;
 
 { day 6 }
 procedure TmainForm.day6part1;
-var
- fishInput,fishValues:TStringArray;
- fishes,newFishes:TIntArray;
- fishNo,newFishNo,dayNo:integer;
 begin
- //Retrieve the lines from the file. In this case there's only one
- fishInput:= getPuzzleInputAsStringArray('day_6_1.txt');
- if (length(fishInput) = 1) then
-   begin
-   //split on comma to get an array of the values
-   fishValues:=fileUtilities.removeBlankLinesFromStringArray(fishInput[0].Split(','));
-   //easier to work with integers
-   fishes:=fileUtilities.toIntArray(fishValues);
-   newFishes:=TIntArray.create;
-   for dayNo:=0 to 79 do
-     begin
-      setLength(newFishes,0);
-      for fishNo:=0 to pred(length(fishes)) do
-        begin
-        fishes[fishNo]:=fishes[fishNo]-1;
-        if (fishes[fishNo] < 0) then
-          begin
-          //create a new one
-          fishes[fishNo]:=6;
-          setLength(newFishes,length(newFishes)+1);
-          newFishes[pred(length(newFishes))]:=8;
-          end;
-        end;
-       //now add the new fishes to the existing ones
-     for newFishNo := 0 to pred(length(newFishes)) do
-       begin
-       fileutilities.addToArray(fishes,newFishes[newFishNo]);
-       end;
-     end;
-   lbResults.items.add('number of fish '+length(fishes).ToString);
-   end;
-
+  lbresults.items.add('not done yet');
 end;
 
-//The approach above won't work for the second part because it'll take
-//far too long. The solution below was based on a mixture of this explanation
-//https://zonito.medium.com/lantern-fish-day-6-advent-of-code-2021-python-solution-4444387a8380
-//and this video https://www.youtube.com/watch?v=yJjpXJm7x0o
-//I used a generic list so that the entries could be int64
 procedure TmainForm.day6part2;
-type
-  TInt64List = specialize TFPGList<int64>;
-var
- fishInput,fishValues:TStringArray;
- daysList: TInt64List;
- fishNo,i,index:integer;
- total,spawningFish:int64;
 begin
- fishInput:= getPuzzleInputAsStringArray('day_6_1.txt');
- if (length(fishInput) = 1) then
-   begin
-   //split on comma to get an array of the values
-   fishValues:=fileUtilities.removeBlankLinesFromStringArray(fishInput[0].Split(','));
-   //create the map and add entries with keys 0-8 and values 0
-   daysList:=TInt64List.Create;
-   for i:=0 to 8 do daysList.Add(0);
-   //Set the initial values
-   for fishNo:=0 to pred(length(fishValues)) do
-     begin
-     daysList.Items[fishValues[fishNo].ToInteger]
-       :=daysList.Items[fishValues[fishNo].ToInteger] +1;
-     end;
-   //our array now holds the distribution of days to spawn
-   //e.g. position 3 holds the number of fish with 3 days to spawn
-   //Now for each day we want to move the values in the array down one
-   //So the value in position 5 moves to position 4.
-   //For values in position 0 we want to add that number to position 6 (7 days to spawn)
-   //and add the same number to position 8 (the babies take longer to spawn)
-   for i:=0 to 255 do
-     begin
-     //fish that are in position 0 are ready to spawn
-     spawningFish:=daysList.Items[0];
-     //move all the other entries down one
-     for index:=0 to daysList.Count - 2 do
-       begin
-       daysList.Items[index]:=daysList.items[index+1];
-       end;
-     //now add the spawningFish to both 6 and 8
-     daysList.Items[6]:=daysList[6]+spawningFish;
-     daysList.Items[8]:=spawningFish;
-     end;
-   total:=0;
-   for index:=0 to pred(daysList.Count) do
-   total:=total + daysList.Items[index];
-   lbResults.Items.add('Total fish '+total.ToString);
-   end;
+ lbresults.items.add('not done yet');
 end;
 
 

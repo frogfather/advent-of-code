@@ -20,9 +20,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="544"/>
-        <CursorPos X="40" Y="575"/>
-        <FoldState Value=" T3jf0E3 pibjI0Z2122]Dj6oC0Q("/>
+        <TopLine Value="431"/>
+        <CursorPos X="3" Y="450"/>
+        <FoldState Value=" T3jf0E3 pibjI0Z2122112."/>
         <UsageCount Value="137"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -270,7 +270,7 @@
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="advent.pas"/>
-        <Line Value="635"/>
+        <Line Value="551"/>
       </Item1>
     </BreakPoints>
     <Watches Count="2">
