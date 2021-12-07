@@ -230,40 +230,8 @@ end;
 
 { day 3 }
 function TmainForm.calculateCommonestValue(input: TStringArray; reverse:Boolean=false): TBits;
-//used in day 3
-type
-  TintArray = array of integer;
- var
-   element, index, elementLength:integer;
-   intArray: TintArray;
-   bBits:TBits;
 begin
-  elementLength:=length(input[0]);
-  //Initialize array with all zeros
-  intArray:=TintArray.create;
-  setLength(intArray,elementLength);
-  bBits:=TBits.create(elementLength);
-  for index:= 0 to pred(length(intArray)) do
-    begin
-    intArray[index]:=0;
-    end;
-  for element:=0 to pred(length(input)) do
-    begin
-    for index:=0 to pred(length(intArray)) do
-      //NB strings are indexed from 1!
-      begin
-      if (input[element][index+1] = '1')
-        then intArray[index]:=intArray[index]+1;
-      end;
-    end;
-    for index:= 0 to pred(elementLength) do
-      begin
-      //are more than half the entries 1s?
-      if ((intArray[index] * 2) >= length(input))
-        then bBits[index]:=true else bBits[index]:=false;
-      if reverse then bBits[index]:=not bBits[index];
-      end;
-    result:= bBits;
+  lbresults.items.add('not done yet');
 end;
 
 procedure TmainForm.day3part1;

@@ -192,40 +192,8 @@ begin
 end;
 
 procedure TmainForm.day2part2;
-//similar to part 1 but with additional parameter and more calculations
- var
-  puzzleInput: TStringArray;
-  elements:TStringArray;
-  command: string;
-  index,value: integer;
-  horPos,depth,aim:integer;
 begin
-  puzzleInput:=getPuzzleInputAsStringArray('day_2_1.txt');
-  horPos:=0;
-  depth:=0;
-  aim:=0;
-  for index:=0 to pred(length(puzzleinput)) do
-    begin
-    elements:=puzzleInput[index].Split(' ');
-    command:=elements[0];
-    value:=strToInt(elements[1]);
-    case command of
-     'forward':
-       begin
-       horPos:=horPos+value;
-       depth:=depth+(aim * value);
-       end;
-     'down':
-       begin
-       aim:=aim + value;
-       end;
-     'up':
-       begin
-       aim:=aim - value;
-       end;
-     end;
-    end;
-  lbresults.Items.add('depth * distance = '+inttostr(horPos * depth));
+ lbresults.items.add('not done yet');
 end;
 
 { day 3 }
