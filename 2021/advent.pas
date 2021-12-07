@@ -17,13 +17,8 @@ type
     lbResults: TListBox;
     OpenDialog1: TOpenDialog;
     procedure bExecuteClick(Sender: TObject);
-    procedure CardNotifyWinHandler(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
-    function getPuzzleInputAsStringArray(fileName: String; removeBlankLines:boolean=true):TStringArray;
-    function stringOfBinaryToInteger(input:String):integer;
-    function calculateCommonestValue(input: TStringArray; reverse:Boolean=false):TBits;
-    function calculateLimitsForFuelCalc(input: TIntArray):TPoint;
     procedure day1part1;
     procedure day1part2;
     procedure day2part1;
@@ -45,16 +40,10 @@ type
 
   end;
 
-const dataDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/input/';
 type
   TbingoCards = array of TbingoCard;
 var
   mainForm: TmainForm;
-  //Used in day 4 part 2. Because a card signals that it has won
-  //by firing the event handler, and because the main method (day4part1)
-  //doesn't know anything about which cards have won, we need to
-  //keep a global list of these.
-  winningCards: TBingoCards;
 
 implementation
 
@@ -104,25 +93,6 @@ begin
     end;
 end;
 
-function TmainForm.getPuzzleInputAsStringArray(fileName: String; removeBlankLines: boolean=true): TStringArray;
-begin
-  result:= fileUtilities.openFileAsArray(datadir+filename,#$0A,removeBlankLines);
-end;
-
-function TmainForm.stringOfBinaryToInteger(input: String): integer;
-var
- index,powerOf,elementLength:Integer;
- output:double;
-begin
-  elementLength:=length(input);
-  output:=0;
-  for index:= 1 to elementLength do
-      begin
-      powerOf:=elementLength - index;
-      if (input[index]='1') then output:=output + power(2,powerOf);
-      end;
-  result:=round(output);
-end;
 
 { day 1 }
 procedure TmainForm.day1part1;
@@ -147,11 +117,6 @@ begin
 end;
 
 { day 3 }
-function TmainForm.calculateCommonestValue(input: TStringArray; reverse:Boolean=false): TBits;
-begin
-  lbresults.items.add('not done yet');
-end;
-
 procedure TmainForm.day3part1;
 begin
   lbresults.items.add('not done yet');
@@ -195,36 +160,7 @@ begin
  lbresults.items.add('not done yet');
 end;
 
-
 { day 7 }
-
-function TMainForm.calculateLimitsForFuelCalc(input: TIntArray):TPoint;
-var
-maxValue,totalValue,averageValue,index:integer;
-
-  function getMaxValue(input:TIntArray):integer;
-   var
-   index:integer;
-     begin
-     result:=0;
-     for index:=0 to pred(length(input)) do
-       begin
-       if (input[index] > result) then result:=input[index];
-       end;
-     end;
-
-  begin
-  maxValue:=getMaxValue(input);
-  totalValue:=0;
-  for index := 0 to pred(length(input)) do
-    begin
-    totalValue:=totalValue + input[index];
-    end;
-  averageValue:=totalValue div maxValue;
-  //try values between average - 20% and average + 20%
-  result.X:=averageValue - (length(input) div 5);
-  result.Y:=averageValue + (length(input) div 5);
-end;
 
 procedure TmainForm.day7part1;
 begin
