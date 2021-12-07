@@ -289,81 +289,11 @@ begin
 end;
 
 procedure TmainForm.day3part2;
-var
-  oxygen,co2: TStringArray;
-  sOxygen,sCo2: string;
-
-  function getUniqueEntry(input: TStringArray;reverse:boolean=false):String;
-  //This nested method is only visible from the procedure day3part2
-  //It deletes any entries from the input that don't match the pattern of
-  //1s and 0s
-  //The method calculateCommonestValues could also be nested as it's only
-  //used by day3part2
-  var
-   entry,entryLength,element:integer;
-   mostOnesAt: TBits;
-   keepValue: integer;
-  begin
-  if length(input) = 0 then exit;
-  entryLength:=length(input[0]);
-  for element:=0 to pred(entryLength) do
-    begin
-    //Get the TBits object which tells us if 1
-    //is the most common value at each index for the current set
-    mostOnesAt:=calculateCommonestValue(input,reverse);
-    if (mostOnesAt[element] = true) then keepValue:=1 else keepValue:=0;
-    for entry:=pred(length(input)) downto 0 do
-      begin
-      if (strToInt(input[entry][element+1]) <> keepValue)
-        then fileUtilities.deleteFromArray(input,entry);
-      if (length(input)=1) then
-        begin
-        result:=input[0];
-        exit;
-        end;
-      end;
-    end;
-  end;
-
-  begin
-  oxygen:=getPuzzleInputAsStringArray('day_3_1.txt');
-  co2:=copy(oxygen,0);
-  sOxygen:=getUniqueEntry(oxygen);
-  sCo2:=getUniqueEntry(co2,true);
-  lbResults.items.add('oxygen '+sOxygen);
-  lbResults.items.add('co2 '+sCo2);
-  lbResults.items.add('life support rating '+inttostr(stringOfBinaryToInteger(sOxygen)*stringOfBinaryToInteger(sCo2)));
-  end;
-
-{ day 4 }
-procedure TmainForm.CardNotifyWinHandler(Sender: TObject);
-//The constructor for the bingo cards gets passed a pointer to this method
-//as their fNotifyCardWin property. If a card calculates that
-//it has won it calls the event handler(this method) passing itself
-//as the sender parameter
-var
- winningCardIndex:integer;
- found:boolean;
 begin
-  with Sender as TBingoCard do
-    begin
-    //add the winning card to the winningCards list if it isn't there
-
-    found:=false;
-    for winningCardIndex:=0 to pred(length(winningCards)) do
-      begin
-      if (winningCards[winningCardIndex] = sender as TBingoCard) then found:=true;
-      end;
-
-    if not found then
-      begin
-      lbResults.items.add('Card '+id.ToString+' added to winning cards list');
-      setLength(winningCards, length(winningCards)+1);
-      winningCards[pred(length(winningCards))]:=sender as TBingoCard;
-      end;
-    end;
+ lbresults.items.add('not done yet');
 end;
 
+{ day 4 }
 procedure TmainForm.day4part1;
 begin
  lbresults.items.add('not done yet');
