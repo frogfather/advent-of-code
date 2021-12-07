@@ -422,7 +422,7 @@ end;
 
 procedure TmainForm.day4part2;
 begin
-  lbresults.items.add('included in day 4 part 1');
+  lbresults.items.add('not done yet');
 end;
 
 { day 5 }

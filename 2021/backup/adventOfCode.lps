@@ -21,7 +21,7 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <TopLine Value="425"/>
-        <CursorPos X="31" Y="438"/>
+        <CursorPos X="39" Y="431"/>
         <FoldState Value=" T3jf0E3 pibjI0Z21242n"/>
         <UsageCount Value="137"/>
         <Loaded Value="True"/>
@@ -270,7 +270,7 @@
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="advent.pas"/>
-        <Line Value="547"/>
+        <Line Value="543"/>
       </Item1>
     </BreakPoints>
     <Watches Count="2">
