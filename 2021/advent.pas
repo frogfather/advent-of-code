@@ -101,8 +101,9 @@ begin
 end;
 
 { day 1 }
-procedure TmainForm.day1part1;
 //https://adventofcode.com/2021/day/1
+procedure TmainForm.day1part1;
+
 var
   puzzleInput:TStringArray;
   index, increasingCount:integer;
@@ -116,9 +117,7 @@ begin
     end;
   lbResults.Items.add(inttostr(increasingCount)+' entries are larger than the previous');
 end;
-
 procedure TmainForm.day1part2;
-//Similar to part 1 but compare the average of three samples
 var
   puzzleInput: TStringArray;
   index, firstSetIndex,secondSetIndex, increasingCount,avg1,avg2:integer;
@@ -141,8 +140,8 @@ begin
 end;
 
 { day 2 }
-procedure TmainForm.day2part1;
 //https://adventofcode.com/2021/day/2
+procedure TmainForm.day2part1;
 var
   puzzleInput: TStringArray;
   elements:TStringArray;
@@ -166,9 +165,7 @@ begin
     end;
   lbresults.Items.add('depth * distance = '+inttostr(horPos * depth));
 end;
-
 procedure TmainForm.day2part2;
-//similar to part 1 but with additional parameter and more calculations
  var
   puzzleInput: TStringArray;
   elements:TStringArray;
@@ -205,7 +202,6 @@ begin
 end;
 
 { day 3 }
-
 procedure TmainForm.day3part1;
  var
    puzzleInput: TStringArray;
@@ -227,44 +223,10 @@ begin
     lbResults.Items.add('gamma and epsilon: '+formatFloat('0',gamma)+' and '+formatFloat('0',epsilon));
     lbResults.Items.add('their product is '+formatFloat('0',gamma*epsilon));
 end;
-
 procedure TmainForm.day3part2;
 var
   oxygen,co2: TStringArray;
   sOxygen,sCo2: string;
-
-  function getUniqueEntry(input: TStringArray;reverse:boolean=false):String;
-  //This nested method is only visible from the procedure day3part2
-  //It deletes any entries from the input that don't match the pattern of
-  //1s and 0s
-  //The method calculateCommonestValues could also be nested as it's only
-  //used by day3part2
-  var
-   entry,entryLength,element:integer;
-   mostOnesAt: TBits;
-   keepValue: integer;
-  begin
-  if length(input) = 0 then exit;
-  entryLength:=length(input[0]);
-  for element:=0 to pred(entryLength) do
-    begin
-    //Get the TBits object which tells us if 1
-    //is the most common value at each index for the current set
-    mostOnesAt:=calculateCommonestValue(input,reverse);
-    if (mostOnesAt[element] = true) then keepValue:=1 else keepValue:=0;
-    for entry:=pred(length(input)) downto 0 do
-      begin
-      if (strToInt(input[entry][element+1]) <> keepValue)
-        then deleteFromArray(input,entry);
-      if (length(input)=1) then
-        begin
-        result:=input[0];
-        exit;
-        end;
-      end;
-    end;
-  end;
-
   begin
   oxygen:=getPuzzleInputAsStringArray('day_3_1.txt');
   co2:=copy(oxygen,0);
@@ -285,25 +247,23 @@ var
  winningCardIndex:integer;
  found:boolean;
 begin
-  with Sender as TBingoCard do
+if Sender is TBingoCard then
+with Sender as TBingoCard do
+  begin
+  //add the winning card to the winningCards list if it isn't there
+  found:=false;
+  for winningCardIndex:=0 to pred(length(winningCards)) do
     begin
-    //add the winning card to the winningCards list if it isn't there
-
-    found:=false;
-    for winningCardIndex:=0 to pred(length(winningCards)) do
-      begin
-      if (winningCards[winningCardIndex] = sender as TBingoCard) then found:=true;
-      end;
-
-    if not found then
-      begin
-      lbResults.items.add('Card '+id.ToString+' added to winning cards list');
-      setLength(winningCards, length(winningCards)+1);
-      winningCards[pred(length(winningCards))]:=sender as TBingoCard;
-      end;
+    if (winningCards[winningCardIndex] = sender as TBingoCard) then found:=true;
     end;
+  if not found then
+    begin
+    lbResults.items.add('Card '+id.ToString+' added to winning cards list');
+    setLength(winningCards, length(winningCards)+1);
+    winningCards[pred(length(winningCards))]:=sender as TBingoCard;
+    end;
+  end;
 end;
-
 procedure TmainForm.day4part1;
 var
  puzzleInput,numbersToCall:TStringArray;
@@ -359,7 +319,6 @@ begin
  lbresults.items.add('Last answer '+(winningCards[pred(length(winningCards))].uncalled * winningCards[pred(length(winningCards))].lastCalled).ToString);
 
 end;
-
 procedure TmainForm.day4part2;
 begin
   lbresults.items.add('included in day 4 part 1');
@@ -374,7 +333,6 @@ begin
  ventMap.calculateVents;
  lbResults.items.add(ventMap.getOverlapCount.ToString+' overlaps');
 end;
-
 procedure TmainForm.day5part2;
 var
  ventMap:TVentMap;
@@ -384,6 +342,7 @@ begin
  lbResults.items.add(ventMap.getOverlapCount.ToString+' overlaps');
 end;
 
+{ day 6 }
 procedure TmainForm.day6part1;
 var
  fishInput,fishValues:TStringArray;
@@ -423,12 +382,6 @@ begin
    end;
 
 end;
-
-//The approach above won't work for the second part because it'll take
-//far too long. The solution below was based on a mixture of this explanation
-//https://zonito.medium.com/lantern-fish-day-6-advent-of-code-2021-python-solution-4444387a8380
-//and this video https://www.youtube.com/watch?v=yJjpXJm7x0o
-//I used a generic list so that the entries could be int64
 procedure TmainForm.day6part2;
 type
   TInt64List = specialize TFPGList<int64>;
@@ -478,138 +431,107 @@ begin
    end;
 end;
 
-
 {Day 7}
-
-
 procedure TmainForm.day7part1;
 var
  puzzleInput:TStringArray;
- fishPositions:TIntArray;
+ crabPositions:TIntArray;
  maxValue,totalValue,averageValue,index:integer;
  startPoint,endPoint,fuelAtThisPoint,leastFuel:integer;
 
- function getMaxValue(input:TIntArray):integer;
- var
- index:integer;
- begin
- result:=0;
- for index:=0 to pred(length(input)) do
-   begin
-   if (input[index] > result) then result:=input[index];
-   end;
- end;
+  function calculateFuel(input:TIntArray;position:integer):integer;
+  var
+  index:integer;
+  output:integer;
+    begin
+    //sum the difference between each fish and the desired position
+    output:=0;
+    for index:=0 to pred(length(input)) do
+      begin
+      output:=output + (abs(input[index] - position));
+      end;
+    result:=output;
+    end;
 
- function calculateFuel(input:TIntArray;position:integer):integer;
- var
- index:integer;
- output:integer;
- begin
- //sum the difference between each fish and the desired position
- output:=0;
- for index:=0 to pred(length(input)) do
-   begin
-   output:=output + (abs(input[index] - position));
-   end;
- result:=output;
- end;
+  begin
+  puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
+  if length(puzzleInput)= 1 then
+    begin
+    crabPositions:=toIntArray(puzzleInput[0].Split(','));
+    maxValue:=getMaxValue(crabPositions);
+    totalValue:=0;
+    for index := 0 to pred(length(crabPositions)) do
+      begin
+      totalValue:=totalValue + crabPositions[index];
+      end;
+    averageValue:=totalValue div maxValue;
 
-begin
- puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
- if length(puzzleInput)= 1 then
-   begin
-   fishPositions:=toIntArray(puzzleInput[0].Split(','));
-   //we need to find out the minimum number of moves
-   //that will get all the fish to the same position
-   //Let's work out a distribution of where the fish are
-   maxValue:=getMaxValue(fishPositions);
-   totalValue:=0;
-   for index := 0 to pred(length(fishPositions)) do
-     begin
-     totalValue:=totalValue + fishPositions[index];
-     end;
-   averageValue:=totalValue div maxValue;
-   //Does this help?
-   //try values between (say) average - 20% and average + 20%
-   startPoint:=averageValue - (length(fishPositions) div 5);
-   endPoint:=averageValue + (length(fishPositions) div 5);
-   leastFuel:=calculateFuel(fishPositions,startPoint);//set initial value
-   for index:=startPoint to endPoint do
-     begin
-     fuelAtThisPoint:=calculateFuel(fishPositions,index);
-     if fuelAtThisPoint < leastFuel then leastFuel:=fuelAtThisPoint;
-     end;
-   lbResults.items.add('Min fuel in this range: '+leastFuel.ToString);
-   end;
-end;
-
+    startPoint:=averageValue - (length(crabPositions) div 5);
+    endPoint:=averageValue + (length(crabPositions) div 5);
+    leastFuel:=calculateFuel(crabPositions,startPoint);//set initial value
+    for index:=startPoint to endPoint do
+      begin
+      fuelAtThisPoint:=calculateFuel(crabPositions,index);
+      if fuelAtThisPoint < leastFuel then leastFuel:=fuelAtThisPoint;
+      end;
+    lbResults.items.add('Min fuel in this range: '+leastFuel.ToString);
+    end;
+  end;
 procedure TmainForm.day7part2;
-var
- puzzleInput:TStringArray;
- fishPositions:TIntArray;
- totalValue,averageValue,index:integer;
- startPoint,endPoint,fuelAtThisPoint,leastFuel:integer;
+  var
+  puzzleInput:TStringArray;
+  fishPositions:TIntArray;
+  totalValue,averageValue,index:integer;
+  startPoint,endPoint,fuelAtThisPoint,leastFuel:integer;
 
- function getMaxValue(input:TIntArray):integer;
- var
- index:integer;
- begin
- result:=0;
- for index:=0 to pred(length(input)) do
-   begin
-   if (input[index] > result) then result:=input[index];
-   end;
- end;
-
- function calculateFuel(input:TIntArray;position:integer):integer;
- var
- index,diff:integer;
- output:integer;
- begin
- //This time, we need to calculate the fuel differently
- //moving 1 costs 1 fuel
- //moving 2 costs 2 + 1 = 3
- //moving 3 costs 3 + 2 + 1 = 6
- //moving n costs n + n-1 + n-2 ... 1
- output:=0;
- for index:=0 to pred(length(input)) do
-   begin
-   diff:=abs(input[index] - position);
-   while diff > 0 do
-     begin
-     output:=output + diff;
-     diff:=pred(diff);
-     end;
-   end;
- result:=output;
- end;
+  function calculateFuel(input:TIntArray;position:integer):integer;
+  var
+  index,diff:integer;
+  output:integer;
+  begin
+  //This time, we need to calculate the fuel differently
+  //moving 1 costs 1 fuel
+  //moving 2 costs 2 + 1 = 3
+  //moving 3 costs 3 + 2 + 1 = 6
+  //moving n costs n + n-1 + n-2 ... 1
+  output:=0;
+  for index:=0 to pred(length(input)) do
+    begin
+    diff:=abs(input[index] - position);
+    while diff > 0 do
+      begin
+      output:=output + diff;
+      diff:=pred(diff);
+      end;
+    end;
+  result:=output;
+  end;
 
 begin
- puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
- if length(puzzleInput)= 1 then
-   begin
-   fishPositions:=toIntArray(puzzleInput[0].Split(','));
-   //we need to find out the minimum number of moves
-   //that will get all the fish to the same position
-   //Let's work out a distribution of where the fish are
-   totalValue:=0;
-   for index := 0 to pred(length(fishPositions)) do
-     begin
-     totalValue:=totalValue + fishPositions[index];
-     end;
-   averageValue:=totalValue div length(fishPositions);
-   //Does this help?
-   //try values between (say) average - 20% and average + 20%
-   startPoint:=averageValue - (length(fishPositions) div 5);
-   endPoint:=averageValue + (length(fishPositions) div 5);
-   leastFuel:=calculateFuel(fishPositions,startPoint);//set initial value
-   for index:=startPoint to endPoint do
-     begin
-     fuelAtThisPoint:=calculateFuel(fishPositions,index);
-     if fuelAtThisPoint < leastFuel then leastFuel:=fuelAtThisPoint;
-     end;
-   lbResults.items.add('Min fuel in this range: '+leastFuel.ToString);
-   end;
+puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
+if length(puzzleInput)= 1 then
+  begin
+  fishPositions:=toIntArray(puzzleInput[0].Split(','));
+  //we need to find out the minimum number of moves
+  //that will get all the fish to the same position
+  //Let's work out a distribution of where the fish are
+  totalValue:=0;
+  for index := 0 to pred(length(fishPositions)) do
+    begin
+    totalValue:=totalValue + fishPositions[index];
+    end;
+  averageValue:=totalValue div length(fishPositions);
+  //try values between (say) average - 20% and average + 20%
+  startPoint:=averageValue - (length(fishPositions) div 5);
+  endPoint:=averageValue + (length(fishPositions) div 5);
+  leastFuel:=calculateFuel(fishPositions,startPoint);//set initial value
+  for index:=startPoint to endPoint do
+    begin
+    fuelAtThisPoint:=calculateFuel(fishPositions,index);
+    if fuelAtThisPoint < leastFuel then leastFuel:=fuelAtThisPoint;
+    end;
+  lbResults.items.add('Min fuel in this range: '+leastFuel.ToString);
+  end;
 end;
 
 procedure TmainForm.day8part1;
