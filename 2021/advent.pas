@@ -267,25 +267,8 @@ begin
 end;
 
 procedure TmainForm.day3part1;
- var
-   puzzleInput: TStringArray;
-   index, powerOf:integer;
-   gamma,epsilon:double;
-   bBits:TBits;
 begin
-  puzzleInput:=getPuzzleInputAsStringArray('day_3_1.txt');
-  bBits:= calculateCommonestValue(puzzleInput);
-  gamma:=0;
-  epsilon:=0;
-
-  for index:= 0 to pred(bBits.Size) do
-    begin
-    powerOf:=bBits.Size - (index + 1);
-    if bBits[index]=true then gamma:=gamma + power(2,powerOf)
-      else epsilon:=epsilon + power(2,powerOf);
-    end;
-    lbResults.Items.add('gamma and epsilon: '+formatFloat('0',gamma)+' and '+formatFloat('0',epsilon));
-    lbResults.Items.add('their product is '+formatFloat('0',gamma*epsilon));
+  lbresults.items.add('not done yet');
 end;
 
 procedure TmainForm.day3part2;

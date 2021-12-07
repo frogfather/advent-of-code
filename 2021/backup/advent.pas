@@ -289,51 +289,9 @@ begin
 end;
 
 procedure TmainForm.day3part2;
-var
-  oxygen,co2: TStringArray;
-  sOxygen,sCo2: string;
-
-  function getUniqueEntry(input: TStringArray;reverse:boolean=false):String;
-  //This nested method is only visible from the procedure day3part2
-  //It deletes any entries from the input that don't match the pattern of
-  //1s and 0s
-  //The method calculateCommonestValues could also be nested as it's only
-  //used by day3part2
-  var
-   entry,entryLength,element:integer;
-   mostOnesAt: TBits;
-   keepValue: integer;
-  begin
-  if length(input) = 0 then exit;
-  entryLength:=length(input[0]);
-  for element:=0 to pred(entryLength) do
-    begin
-    //Get the TBits object which tells us if 1
-    //is the most common value at each index for the current set
-    mostOnesAt:=calculateCommonestValue(input,reverse);
-    if (mostOnesAt[element] = true) then keepValue:=1 else keepValue:=0;
-    for entry:=pred(length(input)) downto 0 do
-      begin
-      if (strToInt(input[entry][element+1]) <> keepValue)
-        then fileUtilities.deleteFromArray(input,entry);
-      if (length(input)=1) then
-        begin
-        result:=input[0];
-        exit;
-        end;
-      end;
-    end;
-  end;
-
-  begin
-  oxygen:=getPuzzleInputAsStringArray('day_3_1.txt');
-  co2:=copy(oxygen,0);
-  sOxygen:=getUniqueEntry(oxygen);
-  sCo2:=getUniqueEntry(co2,true);
-  lbResults.items.add('oxygen '+sOxygen);
-  lbResults.items.add('co2 '+sCo2);
-  lbResults.items.add('life support rating '+inttostr(stringOfBinaryToInteger(sOxygen)*stringOfBinaryToInteger(sCo2)));
-  end;
+begin
+ lbresults.items.add('not done yet');
+end;
 
 { day 4 }
 procedure TmainForm.day4part1;
