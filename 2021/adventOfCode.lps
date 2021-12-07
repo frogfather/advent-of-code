@@ -19,8 +19,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="143"/>
-        <CursorPos X="20" Y="145"/>
+        <TopLine Value="184"/>
+        <CursorPos X="74" Y="200"/>
         <UsageCount Value="138"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -143,7 +143,7 @@
         <UsageCount Value="12"/>
       </Unit16>
     </Units>
-    <JumpHistory Count="29" HistoryIndex="28">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="advent.pas"/>
         <Caret Line="549" Column="2" TopLine="486"/>
@@ -260,6 +260,10 @@
         <Filename Value="advent.pas"/>
         <Caret Line="121" Column="17" TopLine="102"/>
       </Position29>
+      <Position30>
+        <Filename Value="advent.pas"/>
+        <Caret Line="199" Column="74" TopLine="171"/>
+      </Position30>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
