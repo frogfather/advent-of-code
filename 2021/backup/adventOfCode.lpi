@@ -30,7 +30,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="6">
+    <Units Count="7">
       <Unit0>
         <Filename Value="adventOfCode.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -61,6 +61,11 @@
         <Filename Value="lanternfish.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit5>
+      <Unit6>
+        <Filename Value="aocutils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="aocUtils"/>
+      </Unit6>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
