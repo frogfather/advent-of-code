@@ -137,9 +137,29 @@ end;
 
 { day 2 }
 procedure TmainForm.day2part1;
+//https://adventofcode.com/2021/day/2
+var
+  puzzleInput: TStringArray;
+  elements:TStringArray;
+  command: string;
+  index,value: integer;
+  horPos,depth:integer;
 begin
- lbresults.items.add('not done yet');
-end;
+  puzzleInput:=getPuzzleInputAsStringArray('day_2_1.txt');
+  horPos:=0;
+  depth:=0;
+  for index:=0 to pred(length(puzzleinput)) do
+    begin
+    elements:=puzzleInput[index].Split(' ');
+    command:=elements[0];
+    value:=strToInt(elements[1]);
+    case command of
+     'forward': horPos:=horPos+value;
+     'down': depth:= depth + value;
+     'up': depth:= depth - value;
+     end;
+    end;
+  lbresults.Items.add('depth * distance = '+inttostr(horPos * depth));
 
 procedure TmainForm.day2part2;
 begin

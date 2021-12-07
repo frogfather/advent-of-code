@@ -66,7 +66,8 @@
         <UnitName Value="aocUtils"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="12" Y="19"/>
+        <TopLine Value="4"/>
+        <CursorPos X="14" Y="28"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit6>

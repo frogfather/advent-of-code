@@ -102,7 +102,7 @@ var
   puzzleInput:TStringArray;
   index, increasingCount:integer;
 begin
-  puzzleInput:= aocUtils.getPuzzleInputAsStringArray('day_1_1.txt');
+  puzzleInput:= getPuzzleInputAsStringArray('day_1_1.txt');
   increasingCount:=0;
   for index := 1 to length(puzzleInput) - 1 do
     begin
