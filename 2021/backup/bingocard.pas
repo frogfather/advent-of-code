@@ -5,7 +5,7 @@ unit bingoCard;
 interface
 
 uses
-  Classes, SysUtils,fileUtilities;
+  Classes, SysUtils,fileUtilities,arrayUtils;
 type
   ABingoCard = array of array of array of string;
   { TBingoCard }
@@ -30,7 +30,6 @@ type
     property uncalled: integer read fUncalledSum;
     property lastCalled: integer read fLastCalled;
     property id: integer read fId;
-    //
   end;
 
 implementation
@@ -153,7 +152,7 @@ var
 
 begin
 fRowCount:=length(input);
-if (fRowCount > 0) then currElements:= fileUtilities.removeBlankLinesFromStringArray(input[0].Split(' ')) else currElements:=TStringArray.Create;
+if (fRowCount > 0) then currElements:= removeBlankLinesFromArray(input[0].Split(' ')) else currElements:=TStringArray.Create;
 fcolCount:=length(currElements);
 fWinning:=false;
 fCard:=ABingoCard.create;
@@ -163,7 +162,7 @@ fId:=cardId;//we need this to identify which card has won
 setLength(fCard,fRowCount,fColCount,2);
 for currLine:=0 to pred(fRowCount) do
   begin
-  currElements:=fileUtilities.removeBlankLinesFromStringArray(input[currLine].Split(' '));
+  currElements:=fileUtilities.removeBlankLinesFromArray(input[currLine].Split(' '));
   for currCol:=0 to pred(fColCount) do
     begin
     fCard[currLine][currCol][0]:=currElements[currCol];

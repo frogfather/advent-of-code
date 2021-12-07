@@ -3,7 +3,7 @@
   <ProjectSession>
     <Version Value="11"/>
     <BuildModes Active="Default"/>
-    <Units Count="17">
+    <Units Count="18">
       <Unit0>
         <Filename Value="adventOfCode.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -18,8 +18,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="12"/>
-        <CursorPos X="4" Y="24"/>
+        <TopLine Value="580"/>
+        <CursorPos X="19" Y="591"/>
         <UsageCount Value="138"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -29,8 +29,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="fileUtilities"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="3"/>
-        <CursorPos X="18" Y="135"/>
+        <CursorPos X="15" Y="16"/>
         <UsageCount Value="133"/>
         <Loaded Value="True"/>
       </Unit2>
@@ -38,19 +37,21 @@
         <Filename Value="bingocard.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="bingoCard"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="128"/>
-        <CursorPos X="10" Y="28"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="152"/>
+        <CursorPos X="17" Y="165"/>
         <UsageCount Value="112"/>
+        <Loaded Value="True"/>
       </Unit3>
       <Unit4>
         <Filename Value="ventmap.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ventMap"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="170"/>
-        <CursorPos X="33" Y="180"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="76"/>
+        <CursorPos X="8" Y="88"/>
         <UsageCount Value="99"/>
+        <Loaded Value="True"/>
       </Unit4>
       <Unit5>
         <Filename Value="lanternfish.pas"/>
@@ -65,204 +66,212 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="aocUtils"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="4"/>
-        <CursorPos X="50" Y="26"/>
+        <CursorPos X="50" Y="8"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit6>
       <Unit7>
+        <Filename Value="arrayutils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="arrayUtils"/>
+        <EditorIndex Value="3"/>
+        <CursorPos X="15" Y="130"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit7>
+      <Unit8>
         <Filename Value="/usr/local/share/fpcsrc/rtl/objpas/sysutils/syshelph.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="142"/>
         <CursorPos X="14" Y="155"/>
         <UsageCount Value="10"/>
-      </Unit7>
-      <Unit8>
+      </Unit8>
+      <Unit9>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/classes/classesh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="110"/>
         <CursorPos X="27" Y="118"/>
         <UsageCount Value="2"/>
-      </Unit8>
-      <Unit9>
+      </Unit9>
+      <Unit10>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/classes/streams.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="613"/>
         <CursorPos Y="617"/>
         <UsageCount Value="10"/>
-      </Unit9>
-      <Unit10>
+      </Unit10>
+      <Unit11>
         <Filename Value="/Applications/Lazarus/lcl/include/control.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2900"/>
         <CursorPos X="13" Y="2900"/>
         <UsageCount Value="2"/>
-      </Unit10>
-      <Unit11>
+      </Unit11>
+      <Unit12>
         <Filename Value="../../exobrain/notemgr.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="265"/>
         <CursorPos X="41" Y="19"/>
         <UsageCount Value="2"/>
-      </Unit11>
-      <Unit12>
+      </Unit12>
+      <Unit13>
         <Filename Value="/Applications/Lazarus/lcl/stdctrls.pp"/>
         <UnitName Value="StdCtrls"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1138"/>
         <CursorPos X="15" Y="1147"/>
         <UsageCount Value="2"/>
-      </Unit12>
-      <Unit13>
+      </Unit13>
+      <Unit14>
         <Filename Value="/Applications/Lazarus/lcl/include/buttons.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="153"/>
         <CursorPos X="23" Y="169"/>
         <UsageCount Value="2"/>
-      </Unit13>
-      <Unit14>
+      </Unit14>
+      <Unit15>
         <Filename Value="/Applications/Lazarus/lcl/include/buttoncontrol.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="52"/>
         <CursorPos X="11" Y="55"/>
         <UsageCount Value="2"/>
-      </Unit14>
-      <Unit15>
+      </Unit15>
+      <Unit16>
         <Filename Value="/Applications/Lazarus/lcl/controls.pp"/>
         <UnitName Value="Controls"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1140"/>
         <CursorPos X="5" Y="1149"/>
         <UsageCount Value="2"/>
-      </Unit15>
-      <Unit16>
+      </Unit16>
+      <Unit17>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/objpas.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="39"/>
         <CursorPos X="8" Y="48"/>
         <UsageCount Value="12"/>
-      </Unit16>
+      </Unit17>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="advent.pas"/>
-        <Caret Line="605" Column="4" TopLine="582"/>
+        <Caret Line="121" Column="17" TopLine="102"/>
       </Position1>
       <Position2>
         <Filename Value="advent.pas"/>
-        <Caret Line="611" Column="15" TopLine="598"/>
+        <Caret Line="199" Column="74" TopLine="171"/>
       </Position2>
       <Position3>
         <Filename Value="advent.pas"/>
-        <Caret Line="610" Column="2" TopLine="603"/>
+        <Caret Line="223" Column="25" TopLine="192"/>
       </Position3>
       <Position4>
         <Filename Value="advent.pas"/>
-        <Caret Line="605" Column="41" TopLine="589"/>
+        <Caret Line="231" Column="10" TopLine="214"/>
       </Position4>
       <Position5>
         <Filename Value="advent.pas"/>
-        <Caret Line="561" Column="30" TopLine="548"/>
+        <Caret Line="25" Column="5" TopLine="13"/>
       </Position5>
       <Position6>
-        <Filename Value="advent.pas"/>
-        <Caret Line="563" Column="38" TopLine="543"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="12" Column="86"/>
       </Position6>
       <Position7>
         <Filename Value="advent.pas"/>
-        <Caret Line="547" Column="26" TopLine="490"/>
+        <Caret Line="238" Column="20" TopLine="227"/>
       </Position7>
       <Position8>
         <Filename Value="advent.pas"/>
-        <Caret Line="568" Column="55" TopLine="560"/>
+        <Caret Line="104" Column="5" TopLine="104"/>
       </Position8>
       <Position9>
         <Filename Value="advent.pas"/>
-        <Caret Line="570" Column="41" TopLine="570"/>
+        <Caret Line="39" Column="54" TopLine="20"/>
       </Position9>
       <Position10>
-        <Filename Value="advent.pas"/>
-        <Caret Line="603" Column="56" TopLine="592"/>
+        <Filename Value="fileutilities.pas"/>
+        <Caret Line="86" Column="30" TopLine="79"/>
       </Position10>
       <Position11>
-        <Filename Value="advent.pas"/>
-        <Caret Line="620" Column="16" TopLine="607"/>
+        <Filename Value="fileutilities.pas"/>
+        <Caret Line="204" Column="33" TopLine="192"/>
       </Position11>
       <Position12>
         <Filename Value="advent.pas"/>
-        <Caret Line="664" Column="54" TopLine="653"/>
+        <Caret Line="398" Column="50" TopLine="395"/>
       </Position12>
       <Position13>
-        <Filename Value="advent.pas"/>
-        <Caret Line="23" Column="5" TopLine="17"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="35" Column="3" TopLine="31"/>
       </Position13>
       <Position14>
-        <Filename Value="advent.pas"/>
-        <Caret Line="19" Column="46" TopLine="7"/>
+        <Filename Value="fileutilities.pas"/>
+        <Caret Line="8" Column="40"/>
       </Position14>
       <Position15>
-        <Filename Value="advent.pas"/>
-        <Caret Line="167" TopLine="151"/>
+        <Filename Value="arrayutils.pas"/>
+        <Caret Line="78" Column="6" TopLine="55"/>
       </Position15>
       <Position16>
-        <Filename Value="advent.pas"/>
-        <Caret Line="111" Column="90" TopLine="98"/>
+        <Filename Value="arrayutils.pas"/>
+        <Caret Line="130" Column="15" TopLine="107"/>
       </Position16>
       <Position17>
-        <Filename Value="advent.pas"/>
-        <Caret Line="104" Column="26" TopLine="92"/>
+        <Filename Value="bingocard.pas"/>
+        <Caret Line="8" Column="45"/>
       </Position17>
       <Position18>
-        <Filename Value="advent.pas"/>
-        <Caret Line="10" Column="33"/>
+        <Filename Value="bingocard.pas"/>
+        <Caret Line="165" Column="17" TopLine="152"/>
       </Position18>
       <Position19>
-        <Filename Value="advent.pas"/>
-        <Caret Line="105" Column="24" TopLine="93"/>
+        <Filename Value="ventmap.pas"/>
+        <Caret Line="70" Column="16" TopLine="58"/>
       </Position19>
       <Position20>
-        <Filename Value="advent.pas"/>
-        <Caret Line="10" Column="25" TopLine="6"/>
+        <Filename Value="ventmap.pas"/>
+        <Caret Line="8" Column="46"/>
       </Position20>
       <Position21>
-        <Filename Value="advent.pas"/>
-        <Caret Line="142" Column="7" TopLine="119"/>
+        <Filename Value="ventmap.pas"/>
+        <Caret Line="88" Column="8" TopLine="76"/>
       </Position21>
       <Position22>
-        <Filename Value="advent.pas"/>
-        <Caret Line="113" Column="5" TopLine="110"/>
+        <Filename Value="arrayutils.pas"/>
+        <Caret Line="130" Column="15"/>
       </Position22>
       <Position23>
-        <Filename Value="advent.pas"/>
-        <Caret Line="121" Column="17" TopLine="102"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="8" Column="50"/>
       </Position23>
       <Position24>
         <Filename Value="advent.pas"/>
-        <Caret Line="199" Column="74" TopLine="171"/>
+        <Caret Line="258" Column="14" TopLine="248"/>
       </Position24>
       <Position25>
         <Filename Value="advent.pas"/>
-        <Caret Line="223" Column="25" TopLine="192"/>
+        <Caret Line="10" Column="44"/>
       </Position25>
       <Position26>
         <Filename Value="advent.pas"/>
-        <Caret Line="231" Column="10" TopLine="214"/>
+        <Caret Line="332" Column="11" TopLine="320"/>
       </Position26>
       <Position27>
         <Filename Value="advent.pas"/>
-        <Caret Line="25" Column="5" TopLine="13"/>
+        <Caret Line="398" Column="16" TopLine="387"/>
       </Position27>
       <Position28>
-        <Filename Value="aocutils.pas"/>
-        <Caret Line="12" Column="86"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="400" Column="12" TopLine="389"/>
       </Position28>
       <Position29>
         <Filename Value="advent.pas"/>
-        <Caret Line="238" Column="20" TopLine="227"/>
+        <Caret Line="419" Column="8" TopLine="408"/>
       </Position29>
       <Position30>
         <Filename Value="advent.pas"/>
-        <Caret Line="104" Column="5" TopLine="104"/>
+        <Caret Line="521" Column="19" TopLine="510"/>
       </Position30>
     </JumpHistory>
     <RunParams>

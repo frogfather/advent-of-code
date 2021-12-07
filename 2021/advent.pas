@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics,
   Dialogs, StdCtrls, fileUtilities, math, bingoCard,
-  ventMap,fgl,DateUtils,aocUtils;
+  ventMap,fgl,DateUtils,aocUtils,arrayUtils;
 
 type
 
@@ -18,7 +18,6 @@ type
     lbResults: TListBox;
     OpenDialog1: TOpenDialog;
     procedure bExecuteClick(Sender: TObject);
-    procedure CardNotifyWinHandler(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
     procedure day1part1;
@@ -37,7 +36,7 @@ type
     procedure day7part2;
     procedure day8part1;
     procedure day8part2;
-
+    procedure CardNotifyWinHandler(Sender: TObject);
   public
 
   end;
@@ -256,7 +255,7 @@ var
     for entry:=pred(length(input)) downto 0 do
       begin
       if (strToInt(input[entry][element+1]) <> keepValue)
-        then fileUtilities.deleteFromArray(input,entry);
+        then deleteFromArray(input,entry);
       if (length(input)=1) then
         begin
         result:=input[0];
@@ -330,7 +329,7 @@ begin
    begin
    currentLine:=puzzleInput[lineNumber];
    if length(currentLine)> 0
-     then fileUtilities.addToArray(currentCardData,currentLine) else
+     then addToArray(currentCardData,currentLine) else
        begin
          //The current line is blank
          //if the currentCardData is not empty then create a bingo card from it
@@ -396,9 +395,9 @@ begin
  if (length(fishInput) = 1) then
    begin
    //split on comma to get an array of the values
-   fishValues:=fileUtilities.removeBlankLinesFromStringArray(fishInput[0].Split(','));
+   fishValues:=removeBlankLinesFromArray(fishInput[0].Split(','));
    //easier to work with integers
-   fishes:=fileUtilities.toIntArray(fishValues);
+   fishes:=toIntArray(fishValues);
    newFishes:=TIntArray.create;
    for dayNo:=0 to 79 do
      begin
@@ -417,7 +416,7 @@ begin
        //now add the new fishes to the existing ones
      for newFishNo := 0 to pred(length(newFishes)) do
        begin
-       fileutilities.addToArray(fishes,newFishes[newFishNo]);
+       addToArray(fishes,newFishes[newFishNo]);
        end;
      end;
    lbResults.items.add('number of fish '+length(fishes).ToString);
@@ -443,7 +442,7 @@ begin
  if (length(fishInput) = 1) then
    begin
    //split on comma to get an array of the values
-   fishValues:=fileUtilities.removeBlankLinesFromStringArray(fishInput[0].Split(','));
+   fishValues:=removeBlankLinesFromArray(fishInput[0].Split(','));
    //create the map and add entries with keys 0-8 and values 0
    daysList:=TInt64List.Create;
    for i:=0 to 8 do daysList.Add(0);
@@ -519,7 +518,7 @@ begin
  puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
  if length(puzzleInput)= 1 then
    begin
-   fishPositions:=fileUtilities.toIntArray(puzzleInput[0].Split(','));
+   fishPositions:=toIntArray(puzzleInput[0].Split(','));
    //we need to find out the minimum number of moves
    //that will get all the fish to the same position
    //Let's work out a distribution of where the fish are
@@ -589,7 +588,7 @@ begin
  puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
  if length(puzzleInput)= 1 then
    begin
-   fishPositions:=fileUtilities.toIntArray(puzzleInput[0].Split(','));
+   fishPositions:=toIntArray(puzzleInput[0].Split(','));
    //we need to find out the minimum number of moves
    //that will get all the fish to the same position
    //Let's work out a distribution of where the fish are

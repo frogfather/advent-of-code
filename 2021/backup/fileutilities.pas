@@ -5,85 +5,17 @@ unit fileUtilities;
 interface
 
 uses
-  Classes, SysUtils, fpjson;
-type
-  //Looks like the built in TintegerArray is a static array
-  //so let's define our own dynamic integer array
-  TIntArray = Array of integer;
+  Classes, SysUtils, fpjson,arrayUtils;
 
 function readStream(fnam: string): string;
 procedure writeStream(fnam: string; txt: string);
 function foundInArray(inputArray: TStringArray; required, startat: integer): boolean;
 function openFileAsArray(fnam: string; separator: char;removeBlankLines:Boolean=true): TStringArray;
-procedure addToArray(var arrInput:TStringArray; item:string;index:integer=-1);
-procedure addToArray(var arrInput:TIntArray;item:integer;index:integer=-1);
-procedure deleteFromArray(var arrInput:TStringArray; index: integer);
-procedure deleteFromArray(var arrInput:TIntArray; index: integer);
-function removeBlankLinesFromStringArray(arrInput: TStringArray):TStringArray;
-function removeBlankLinesFromArray(arrInput: TIntArray):TIntArray;
-function toIntArray(arrInput: TStringArray):TIntArray;
 function getUserDir: string;
 function findDirectories(path:string):TStringlist;
 implementation
 
-procedure addToArray(var arrInput: TStringArray; item: string; index: integer);
-var
-  pos,lastItemIndex:integer;
-begin
-  //if index is -1 add at the end
-  setLength(arrInput,length(arrInput)+1);
-  lastItemIndex:= pred(length(arrInput));
-  if (index = -1) then index:=lastItemIndex; //insert at end
-  for pos:=lastItemIndex downto index do
-    begin
-    if (pos > 0) then arrInput[pos]:=arrInput[pos-1];
-    end;
-  arrInput[index]:=item;
-end;
-
-procedure addToArray(var arrInput: TIntArray; item: integer; index: integer
-  );
-var
-  pos,lastItemIndex:integer;
-begin
-  //if index is -1 add at the end
-  setLength(arrInput,length(arrInput)+1);
-  lastItemIndex:= pred(length(arrInput));
-  if (index = -1) then index:=lastItemIndex; //insert at end
-  for pos:=lastItemIndex downto index do
-    begin
-    if (pos > 0) then arrInput[pos]:=arrInput[pos-1];
-    end;
-  arrInput[index]:=item;
-end;
-
-procedure deleteFromArray(var arrInput: TStringArray; index: integer);
-var
-  position:integer;
-begin
-  if (index < 0) or (index >= length(arrInput)) then exit;
-  for position:=index to length(arrInput) - 1 do
-    begin
-      if (position+1 < length(arrInput))
-        then arrInput[position]:=arrInput[position + 1];
-    end;
-  setLength(arrInput, length(arrInput) -1);
-end;
-
-procedure deleteFromArray(var arrInput: TIntArray; index: integer);
-var
-  position:integer;
-begin
- if (index < 0) or (index >= length(arrInput)) then exit;
-  for position:=index to length(arrInput) - 1 do
-    begin
-      if (position+1 < length(arrInput))
-        then arrInput[position]:=arrInput[position + 1];
-    end;
-  setLength(arrInput, length(arrInput) -1);
-end;
-
-function removeBlankLinesFromStringArray(arrInput: TStringArray): TStringArray;
+function removeBlankLinesFromArray(arrInput: TStringArray): TStringArray;
 var
   index: integer;
 begin
@@ -132,6 +64,7 @@ begin
       //do nothing atm
       end;
     end;
+  result:=output;
 end;
 
 //This complete mess is required because getUserDir on MacOS Catalina returns '/'
@@ -200,7 +133,7 @@ begin
 if FileExists(fNam) then
   begin
   if removeBlankLines then
-  result := removeBlankLinesFromStringArray(readStream(fNam).Split(separator))
+  result := removeBlankLinesFromArray(readStream(fNam).Split(separator))
   else result := readStream(fNam).Split(separator);
   end;
 end;

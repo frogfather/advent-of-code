@@ -5,7 +5,7 @@ unit ventMap;
 interface
 
 uses
-  Classes, SysUtils, fileUtilities;
+  Classes, SysUtils, fileUtilities,arrayUtils;
 
 type
   AVentMap = array of array of integer;
@@ -67,7 +67,7 @@ begin
   output:=APathArray.create;
   for lineNumber:= 0 to pred(length(input)) do
     begin
-    coordPair:=fileUtilities.removeBlankLinesFromStringArray(input[lineNumber].Split('->'));
+    coordPair:= removeBlankLinesFromArray(input[lineNumber].Split('->'));
     if (length(coordPair)=2) then
       begin
        path.start:=coordToPoint(coordPair[0]);
@@ -85,7 +85,7 @@ var
 begin
   x:=0;
   y:=0;
-  xy:=fileUtilities.removeBlankLinesFromStringArray(coord.split(','));
+  xy:=fileUtilities.removeBlankLinesFromArray(coord.split(','));
   if (length(xy) = 2) then
     begin
      x:=xy[0].Trim(' ').ToInteger;
@@ -177,7 +177,7 @@ var
   done:boolean;
 begin
   if noDiagonal then puzzleInput:=getStraightLines(fPathArray)
-    else puzzleInput:=getStraightAndDiagonalLines(fPathArray);
+    else puzzleInput:=fPathArray;
   coordsLength:=length(puzzleInput);
   //we have an array of coordinates
   //for each entry in the array we need to work out
