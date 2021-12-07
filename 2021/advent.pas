@@ -21,8 +21,6 @@ type
     procedure CardNotifyWinHandler(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
-    function getPuzzleInputAsStringArray(fileName: String; removeBlankLines:boolean=true):TStringArray;
-    function stringOfBinaryToInteger(input:String):integer;
     procedure day1part1;
     procedure day1part2;
     procedure day2part1;
@@ -101,26 +99,6 @@ begin
       cbSelect.Items.Add('Advent of code day '+inttostr(i)+' part 1');
       cbSelect.Items.Add('Advent of code day '+inttostr(i)+' part 2');
     end;
-end;
-
-function TmainForm.getPuzzleInputAsStringArray(fileName: String; removeBlankLines: boolean=true): TStringArray;
-begin
-  result:= fileUtilities.openFileAsArray(datadir+filename,#$0A,removeBlankLines);
-end;
-
-function TmainForm.stringOfBinaryToInteger(input: String): integer;
-var
- index,powerOf,elementLength:Integer;
- output:double;
-begin
-  elementLength:=length(input);
-  output:=0;
-  for index:= 1 to elementLength do
-      begin
-      powerOf:=elementLength - index;
-      if (input[index]='1') then output:=output + power(2,powerOf);
-      end;
-  result:=round(output);
 end;
 
 { day 1 }

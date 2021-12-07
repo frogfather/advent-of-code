@@ -7,10 +7,9 @@
       <Unit0>
         <Filename Value="adventOfCode.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="33"/>
         <UsageCount Value="138"/>
-        <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="advent.pas"/>
@@ -19,7 +18,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <CursorPos X="33" Y="10"/>
+        <TopLine Value="104"/>
+        <CursorPos X="5" Y="104"/>
         <UsageCount Value="138"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -28,7 +28,7 @@
         <Filename Value="fileutilities.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="fileUtilities"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="2"/>
         <TopLine Value="3"/>
         <CursorPos X="18" Y="135"/>
         <UsageCount Value="133"/>
@@ -65,7 +65,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="aocUtils"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="86" Y="12"/>
+        <TopLine Value="4"/>
+        <CursorPos X="50" Y="26"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit6>
