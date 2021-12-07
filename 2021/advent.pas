@@ -365,59 +365,8 @@ begin
 end;
 
 procedure TmainForm.day4part1;
-var
- puzzleInput,numbersToCall:TStringArray;
- currentLine:string;
- currentCardData:TStringArray; //The block of numbers to passed to the card constructor
- bingoCards: TBingoCards;
- cardNumber:integer;
- lineNumber,numberOfLines,callNumber:integer;
 begin
- //Get the puzzle input without removing blank lines as we need these
- puzzleInput:= getPuzzleInputAsStringArray('day_4_1.txt',false);
- numberOfLines:=length(puzzleInput);
- //The first line is the numbers that will be called.
- numbersToCall:=puzzleInput[0].Split(',');
- //For the rest of the input we need to create a bingo card for each block
- //The blocks are separated by a blank line.
- bingoCards:=TBingoCards.create;
- winningCards:=TBingoCards.create;
- currentCardData:=TStringArray.Create;
- setLength(currentCardData,0); //clear the array
- cardNumber:=0;
- for lineNumber:= 1 to pred(numberOfLines) do
-   begin
-   currentLine:=puzzleInput[lineNumber];
-   if length(currentLine)> 0
-     then fileUtilities.addToArray(currentCardData,currentLine) else
-       begin
-         //The current line is blank
-         //if the currentCardData is not empty then create a bingo card from it
-         if (length(currentCardData)> 0) then
-           begin
-           setLength(bingoCards,length(bingoCards)+1);
-           bingoCards[pred(length(bingoCards))]:=TBingoCard.create(currentCardData,cardNumber,@CardNotifyWinHandler);
-           setLength(currentCardData,0);
-           cardNumber:=cardnumber+1;
-           end;
-       end;
-   end;
- //now we have our cards set up. We can feed numbers into them
- //If a card has won it will fire the event handler above
- for callNumber := 0 to pred(length(numbersToCall)) do
-   begin
-   //Pass each number into each card. A winning card will fire the event handler
-   //Unfortunately it won't stop this loop. However, we can look at the first result
-   //This also is useful in part 2
-   for cardNumber := 0 to pred(length(bingoCards)) do
-     begin
-     bingoCards[cardNumber].call(strToInt(numbersToCall[callNumber]));
-     end;
-   end;
- //now examine the winning cards array to see what the first and last objects are
- lbresults.items.add('First winning card: '+winningCards[0].id.ToString+' '+(winningCards[0].uncalled * winningCards[0].lastCalled).ToString);
- lbresults.items.add('Last answer '+(winningCards[pred(length(winningCards))].uncalled * winningCards[pred(length(winningCards))].lastCalled).ToString);
-
+ lbresults.items.add('not done yet');
 end;
 
 procedure TmainForm.day4part2;
