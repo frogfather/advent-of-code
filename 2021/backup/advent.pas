@@ -96,8 +96,19 @@ end;
 
 { day 1 }
 procedure TmainForm.day1part1;
+  //https://adventofcode.com/2021/day/1
+var
+  puzzleInput:TStringArray;
+  index, increasingCount:integer;
 begin
-  lbresults.items.add('not done yet');
+  puzzleInput:= aocUtils.getPuzzleInputAsStringArray('day_1_1.txt');
+  increasingCount:=0;
+  for index := 1 to length(puzzleInput) - 1 do
+    begin
+    if (strToInt(puzzleInput[index]) > strToInt(puzzleInput[index - 1]))
+      then increasingCount := increasingCount +1;
+    end;
+  lbResults.Items.add(inttostr(increasingCount)+' entries are larger than the previous');
 end;
 
 procedure TmainForm.day1part2;
@@ -117,11 +128,6 @@ begin
 end;
 
 { day 3 }
-function TmainForm.calculateCommonestValue(input: TStringArray; reverse:Boolean=false): TBits;
-begin
-  lbresults.items.add('not done yet');
-end;
-
 procedure TmainForm.day3part1;
 begin
   lbresults.items.add('not done yet');
