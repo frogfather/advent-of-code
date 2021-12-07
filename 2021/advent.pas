@@ -133,9 +133,9 @@ var
 begin
   puzzleInput:= getPuzzleInputAsStringArray('day_1_1.txt');
   increasingCount:=0;
-  for index := 1 to length(puzzleInput) - 1 do
+  for index := 1 to pred(length(puzzleInput)) do
     begin
-    if (strToInt(puzzleInput[index]) > strToInt(puzzleInput[index - 1]))
+    if (strToInt(puzzleInput[index]) > strToInt(puzzleInput[pred(index)]))
       then increasingCount := increasingCount +1;
     end;
   lbResults.Items.add(inttostr(increasingCount)+' entries are larger than the previous');
@@ -612,64 +612,8 @@ var
 end;
 
 procedure TmainForm.day7part2;
-var
- puzzleInput:TStringArray;
- fishPositions:TIntArray;
- index:integer;
- fuelAtThisPoint,leastFuel:integer;
- limits:TPoint;
-
- function getMaxValue(input:TIntArray):integer;
- var
- index:integer;
- begin
- result:=0;
- for index:=0 to pred(length(input)) do
-   begin
-   if (input[index] > result) then result:=input[index];
-   end;
- end;
-
- function calculateFuel(input:TIntArray;position:integer):integer;
- var
- index,diff:integer;
- output:integer;
- begin
- //This time, we need to calculate the fuel differently
- //moving 1 costs 1 fuel
- //moving 2 costs 2 + 1 = 3
- //moving 3 costs 3 + 2 + 1 = 6
- //moving n costs n + n-1 + n-2 ... 1
- output:=0;
- for index:=0 to pred(length(input)) do
-   begin
-   diff:=abs(input[index] - position);
-   while diff > 0 do
-     begin
-     output:=output + diff;
-     diff:=pred(diff);
-     end;
-   end;
- result:=output;
- end;
-
 begin
- puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
- if length(puzzleInput)= 1 then
-   begin
-   fishPositions:=fileUtilities.toIntArray(puzzleInput[0].Split(','));
-   //we need to find out the minimum number of moves
-   //that will get all the fish to the same position
-   //Let's work out a distribution of where the fish are
-   limits:=calculateLimitsForFuelCalc(fishPositions);
-   leastFuel:=calculateFuel(fishPositions,limits.X);//set initial value
-   for index:=limits.X to limits.Y do
-     begin
-     fuelAtThisPoint:=calculateFuel(fishPositions,index);
-     if fuelAtThisPoint < leastFuel then leastFuel:=fuelAtThisPoint;
-     end;
-   lbResults.items.add('Min fuel in this range: '+leastFuel.ToString);
-   end;
+  lbresults.items.add('not done yet');
 end;
 
 procedure TmainForm.day8part1;

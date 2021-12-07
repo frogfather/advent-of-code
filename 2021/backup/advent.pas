@@ -662,8 +662,8 @@ begin
    //that will get all the fish to the same position
    //Let's work out a distribution of where the fish are
    limits:=calculateLimitsForFuelCalc(fishPositions);
-   leastFuel:=calculateFuel(fishPositions,startPoint);//set initial value
-   for index:=startPoint to endPoint do
+   leastFuel:=calculateFuel(fishPositions,limits.X);//set initial value
+   for index:=limits.X to limits.Y do
      begin
      fuelAtThisPoint:=calculateFuel(fishPositions,index);
      if fuelAtThisPoint < leastFuel then leastFuel:=fuelAtThisPoint;
