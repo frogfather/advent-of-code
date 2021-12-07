@@ -436,12 +436,8 @@ begin
 end;
 
 procedure TmainForm.day5part2;
-var
- ventMap:TVentMap;
 begin
- ventMap:=TVentMap.create(getPuzzleInputAsStringArray('day_5_1.txt'));
- ventMap.calculateVents(false);
- lbResults.items.add(ventMap.getOverlapCount.ToString+' overlaps');
+ lbresults.items.add('not done yet');
 end;
 
 { day 6 }

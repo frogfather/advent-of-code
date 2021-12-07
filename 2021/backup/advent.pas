@@ -446,43 +446,8 @@ end;
 
 { day 6 }
 procedure TmainForm.day6part1;
-var
- fishInput,fishValues:TStringArray;
- fishes,newFishes:TIntArray;
- fishNo,newFishNo,dayNo:integer;
 begin
- //Retrieve the lines from the file. In this case there's only one
- fishInput:= getPuzzleInputAsStringArray('day_6_1.txt');
- if (length(fishInput) = 1) then
-   begin
-   //split on comma to get an array of the values
-   fishValues:=fileUtilities.removeBlankLinesFromStringArray(fishInput[0].Split(','));
-   //easier to work with integers
-   fishes:=fileUtilities.toIntArray(fishValues);
-   newFishes:=TIntArray.create;
-   for dayNo:=0 to 79 do
-     begin
-      setLength(newFishes,0);
-      for fishNo:=0 to pred(length(fishes)) do
-        begin
-        fishes[fishNo]:=fishes[fishNo]-1;
-        if (fishes[fishNo] < 0) then
-          begin
-          //create a new one
-          fishes[fishNo]:=6;
-          setLength(newFishes,length(newFishes)+1);
-          newFishes[pred(length(newFishes))]:=8;
-          end;
-        end;
-       //now add the new fishes to the existing ones
-     for newFishNo := 0 to pred(length(newFishes)) do
-       begin
-       fileutilities.addToArray(fishes,newFishes[newFishNo]);
-       end;
-     end;
-   lbResults.items.add('number of fish '+length(fishes).ToString);
-   end;
-
+  lbresults.items.add('not done yet');
 end;
 
 procedure TmainForm.day6part2;
