@@ -6,11 +6,10 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics,
-  Dialogs, StdCtrls, fileUtilities, math,bingoCard,ventMap;
+  Dialogs, StdCtrls, fileUtilities, math,bingoCard,ventMap,fgl,DateUtils;
 
 type
-  TStringArray = Array of string;
-  TIntArray = Array of integer;
+
   { TmainForm }
   TmainForm = class(TForm)
     bExecute: TButton;
@@ -63,9 +62,12 @@ implementation
 { TmainForm }
 
 procedure TmainForm.bExecuteClick(Sender: TObject);
-
+var
+  startTime,endTime:TDateTime;
 begin
   lbresults.Clear;
+  startTime:=now;
+  lbResults.items.add('start '+formatDateTime('hh:mm:ss:zz',startTime));
   case cbselect.ItemIndex of
    0: day1part1;
    1: day1part2;
@@ -77,10 +79,16 @@ begin
    7: day4part2;
    8: day5part1;
    9: day5part2;
+   10: day6part1;
+   11: day6part2;
+   12: day7part1;
+   13: day7part2;
    14: day8part1;
    15: day8part2;
   end;
-
+ endTime:=now;
+ lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
+ lbResults.Items.Add('Time: '+inttostr(millisecondsBetween(endTime,startTime))+' ms');
 end;
 
 procedure TmainForm.FormShow(Sender: TObject);
@@ -436,23 +444,231 @@ begin
 end;
 
 procedure TmainForm.day6part1;
+var
+ fishInput,fishValues:TStringArray;
+ fishes,newFishes:TIntArray;
+ fishNo,newFishNo,dayNo:integer;
 begin
-  lbresults.items.add('not done yet');
+ //Retrieve the lines from the file. In this case there's only one
+ fishInput:= getPuzzleInputAsStringArray('day_6_1.txt');
+ if (length(fishInput) = 1) then
+   begin
+   //split on comma to get an array of the values
+   fishValues:=fileUtilities.removeBlankLinesFromStringArray(fishInput[0].Split(','));
+   //easier to work with integers
+   fishes:=fileUtilities.toIntArray(fishValues);
+   newFishes:=TIntArray.create;
+   for dayNo:=0 to 79 do
+     begin
+      setLength(newFishes,0);
+      for fishNo:=0 to pred(length(fishes)) do
+        begin
+        fishes[fishNo]:=fishes[fishNo]-1;
+        if (fishes[fishNo] < 0) then
+          begin
+          //create a new one
+          fishes[fishNo]:=6;
+          setLength(newFishes,length(newFishes)+1);
+          newFishes[pred(length(newFishes))]:=8;
+          end;
+        end;
+       //now add the new fishes to the existing ones
+     for newFishNo := 0 to pred(length(newFishes)) do
+       begin
+       fileutilities.addToArray(fishes,newFishes[newFishNo]);
+       end;
+     end;
+   lbResults.items.add('number of fish '+length(fishes).ToString);
+   end;
+
 end;
 
+//The approach above won't work for the second part because it'll take
+//far too long. The solution below was based on a mixture of this explanation
+//https://zonito.medium.com/lantern-fish-day-6-advent-of-code-2021-python-solution-4444387a8380
+//and this video https://www.youtube.com/watch?v=yJjpXJm7x0o
+//I used a generic list so that the entries could be int64
 procedure TmainForm.day6part2;
+type
+  TInt64List = specialize TFPGList<int64>;
+var
+ fishInput,fishValues:TStringArray;
+ daysList: TInt64List;
+ fishNo,i,index:integer;
+ total,spawningFish:int64;
 begin
-  lbresults.items.add('not done yet');
+ fishInput:= getPuzzleInputAsStringArray('day_6_1.txt');
+ if (length(fishInput) = 1) then
+   begin
+   //split on comma to get an array of the values
+   fishValues:=fileUtilities.removeBlankLinesFromStringArray(fishInput[0].Split(','));
+   //create the map and add entries with keys 0-8 and values 0
+   daysList:=TInt64List.Create;
+   for i:=0 to 8 do daysList.Add(0);
+   //Set the initial values
+   for fishNo:=0 to pred(length(fishValues)) do
+     begin
+     daysList.Items[fishValues[fishNo].ToInteger]
+       :=daysList.Items[fishValues[fishNo].ToInteger] +1;
+     end;
+   //our array now holds the distribution of days to spawn
+   //e.g. position 3 holds the number of fish with 3 days to spawn
+   //Now for each day we want to move the values in the array down one
+   //So the value in position 5 moves to position 4.
+   //For values in position 0 we want to add that number to position 6 (7 days to spawn)
+   //and add the same number to position 8 (the babies take longer to spawn)
+   for i:=0 to 255 do
+     begin
+     //fish that are in position 0 are ready to spawn
+     spawningFish:=daysList.Items[0];
+     //move all the other entries down one
+     for index:=0 to daysList.Count - 2 do
+       begin
+       daysList.Items[index]:=daysList.items[index+1];
+       end;
+     //now add the spawningFish to both 6 and 8
+     daysList.Items[6]:=daysList[6]+spawningFish;
+     daysList.Items[8]:=spawningFish;
+     end;
+   total:=0;
+   for index:=0 to pred(daysList.Count) do
+   total:=total + daysList.Items[index];
+   lbResults.Items.add('Total fish '+total.ToString);
+   end;
 end;
+
+
+{Day 7}
+
 
 procedure TmainForm.day7part1;
+var
+ puzzleInput:TStringArray;
+ fishPositions:TIntArray;
+ maxValue,totalValue,averageValue,index:integer;
+ startPoint,endPoint,fuelAtThisPoint,leastFuel:integer;
+
+ function getMaxValue(input:TIntArray):integer;
+ var
+ index:integer;
+ begin
+ result:=0;
+ for index:=0 to pred(length(input)) do
+   begin
+   if (input[index] > result) then result:=input[index];
+   end;
+ end;
+
+ function calculateFuel(input:TIntArray;position:integer):integer;
+ var
+ index:integer;
+ output:integer;
+ begin
+ //sum the difference between each fish and the desired position
+ output:=0;
+ for index:=0 to pred(length(input)) do
+   begin
+   output:=output + (abs(input[index] - position));
+   end;
+ result:=output;
+ end;
+
 begin
-  lbresults.items.add('not done yet');
+ puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
+ if length(puzzleInput)= 1 then
+   begin
+   fishPositions:=fileUtilities.toIntArray(puzzleInput[0].Split(','));
+   //we need to find out the minimum number of moves
+   //that will get all the fish to the same position
+   //Let's work out a distribution of where the fish are
+   maxValue:=getMaxValue(fishPositions);
+   totalValue:=0;
+   for index := 0 to pred(length(fishPositions)) do
+     begin
+     totalValue:=totalValue + fishPositions[index];
+     end;
+   averageValue:=totalValue div maxValue;
+   //Does this help?
+   //try values between (say) average - 20% and average + 20%
+   startPoint:=averageValue - (length(fishPositions) div 5);
+   endPoint:=averageValue + (length(fishPositions) div 5);
+   leastFuel:=calculateFuel(fishPositions,startPoint);//set initial value
+   for index:=startPoint to endPoint do
+     begin
+     fuelAtThisPoint:=calculateFuel(fishPositions,index);
+     if fuelAtThisPoint < leastFuel then leastFuel:=fuelAtThisPoint;
+     end;
+   lbResults.items.add('Min fuel in this range: '+leastFuel.ToString);
+   end;
 end;
 
 procedure TmainForm.day7part2;
+var
+ puzzleInput:TStringArray;
+ fishPositions:TIntArray;
+ totalValue,averageValue,index:integer;
+ startPoint,endPoint,fuelAtThisPoint,leastFuel:integer;
+
+ function getMaxValue(input:TIntArray):integer;
+ var
+ index:integer;
+ begin
+ result:=0;
+ for index:=0 to pred(length(input)) do
+   begin
+   if (input[index] > result) then result:=input[index];
+   end;
+ end;
+
+ function calculateFuel(input:TIntArray;position:integer):integer;
+ var
+ index,diff:integer;
+ output:integer;
+ begin
+ //This time, we need to calculate the fuel differently
+ //moving 1 costs 1 fuel
+ //moving 2 costs 2 + 1 = 3
+ //moving 3 costs 3 + 2 + 1 = 6
+ //moving n costs n + n-1 + n-2 ... 1
+ output:=0;
+ for index:=0 to pred(length(input)) do
+   begin
+   diff:=abs(input[index] - position);
+   while diff > 0 do
+     begin
+     output:=output + diff;
+     diff:=pred(diff);
+     end;
+   end;
+ result:=output;
+ end;
+
 begin
-  lbresults.items.add('not done yet');
+ puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
+ if length(puzzleInput)= 1 then
+   begin
+   fishPositions:=fileUtilities.toIntArray(puzzleInput[0].Split(','));
+   //we need to find out the minimum number of moves
+   //that will get all the fish to the same position
+   //Let's work out a distribution of where the fish are
+   totalValue:=0;
+   for index := 0 to pred(length(fishPositions)) do
+     begin
+     totalValue:=totalValue + fishPositions[index];
+     end;
+   averageValue:=totalValue div length(fishPositions);
+   //Does this help?
+   //try values between (say) average - 20% and average + 20%
+   startPoint:=averageValue - (length(fishPositions) div 5);
+   endPoint:=averageValue + (length(fishPositions) div 5);
+   leastFuel:=calculateFuel(fishPositions,startPoint);//set initial value
+   for index:=startPoint to endPoint do
+     begin
+     fuelAtThisPoint:=calculateFuel(fishPositions,index);
+     if fuelAtThisPoint < leastFuel then leastFuel:=fuelAtThisPoint;
+     end;
+   lbResults.items.add('Min fuel in this range: '+leastFuel.ToString);
+   end;
 end;
 
 procedure TmainForm.day8part1;
