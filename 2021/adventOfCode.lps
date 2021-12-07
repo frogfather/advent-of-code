@@ -20,9 +20,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="652"/>
-        <CursorPos X="6" Y="668"/>
-        <FoldState Value=" T3je0E3 pibjI0Z21241f"/>
+        <TopLine Value="653"/>
+        <CursorPos X="35" Y="666"/>
+        <FoldState Value=" T3jf0E3 pibjI0Z21223'"/>
         <UsageCount Value="137"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -139,123 +139,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="advent.pas"/>
-        <Caret Line="517" TopLine="505"/>
+        <Caret Line="522" TopLine="505"/>
       </Position1>
       <Position2>
         <Filename Value="advent.pas"/>
-        <Caret Line="519" TopLine="505"/>
+        <Caret Line="523" TopLine="505"/>
       </Position2>
       <Position3>
         <Filename Value="advent.pas"/>
-        <Caret Line="517" TopLine="505"/>
+        <Caret Line="512" TopLine="505"/>
       </Position3>
       <Position4>
         <Filename Value="advent.pas"/>
-        <Caret Line="519" TopLine="505"/>
+        <Caret Line="533" Column="33" TopLine="522"/>
       </Position4>
       <Position5>
         <Filename Value="advent.pas"/>
-        <Caret Line="517" TopLine="505"/>
+        <Caret Line="534" Column="57" TopLine="522"/>
       </Position5>
       <Position6>
         <Filename Value="advent.pas"/>
-        <Caret Line="519" TopLine="505"/>
+        <Caret Line="82" Column="18" TopLine="66"/>
       </Position6>
       <Position7>
         <Filename Value="advent.pas"/>
-        <Caret Line="517" TopLine="505"/>
+        <Caret Line="38" Column="15" TopLine="27"/>
       </Position7>
       <Position8>
         <Filename Value="advent.pas"/>
-        <Caret Line="519" TopLine="505"/>
+        <Caret Line="485" Column="27" TopLine="483"/>
       </Position8>
       <Position9>
         <Filename Value="advent.pas"/>
-        <Caret Line="517" TopLine="505"/>
+        <Caret Line="548" TopLine="483"/>
       </Position9>
       <Position10>
         <Filename Value="advent.pas"/>
-        <Caret Line="522" TopLine="505"/>
+        <Caret Line="488" Column="13" TopLine="441"/>
       </Position10>
       <Position11>
         <Filename Value="advent.pas"/>
-        <Caret Line="523" TopLine="505"/>
+        <Caret Line="568" Column="42" TopLine="552"/>
       </Position11>
       <Position12>
         <Filename Value="advent.pas"/>
-        <Caret Line="512" TopLine="505"/>
+        <Caret Line="549" Column="2" TopLine="486"/>
       </Position12>
       <Position13>
         <Filename Value="advent.pas"/>
-        <Caret Line="533" Column="33" TopLine="522"/>
+        <Caret Line="572" Column="89" TopLine="557"/>
       </Position13>
       <Position14>
         <Filename Value="advent.pas"/>
-        <Caret Line="534" Column="57" TopLine="522"/>
+        <Caret Line="570" Column="80" TopLine="558"/>
       </Position14>
       <Position15>
         <Filename Value="advent.pas"/>
-        <Caret Line="82" Column="18" TopLine="66"/>
+        <Caret Line="589" Column="59" TopLine="572"/>
       </Position15>
       <Position16>
         <Filename Value="advent.pas"/>
-        <Caret Line="38" Column="15" TopLine="27"/>
+        <Caret Line="588" Column="59" TopLine="574"/>
       </Position16>
       <Position17>
         <Filename Value="advent.pas"/>
-        <Caret Line="485" Column="27" TopLine="483"/>
+        <Caret Line="609" Column="80" TopLine="597"/>
       </Position17>
       <Position18>
         <Filename Value="advent.pas"/>
-        <Caret Line="548" TopLine="483"/>
+        <Caret Line="605" Column="4" TopLine="582"/>
       </Position18>
       <Position19>
         <Filename Value="advent.pas"/>
-        <Caret Line="488" Column="13" TopLine="441"/>
+        <Caret Line="611" Column="15" TopLine="598"/>
       </Position19>
       <Position20>
         <Filename Value="advent.pas"/>
-        <Caret Line="568" Column="42" TopLine="552"/>
+        <Caret Line="491" TopLine="548"/>
       </Position20>
       <Position21>
         <Filename Value="advent.pas"/>
-        <Caret Line="549" Column="2" TopLine="486"/>
+        <Caret Line="610" Column="2" TopLine="603"/>
       </Position21>
       <Position22>
         <Filename Value="advent.pas"/>
-        <Caret Line="572" Column="89" TopLine="557"/>
+        <Caret Line="605" Column="41" TopLine="589"/>
       </Position22>
       <Position23>
         <Filename Value="advent.pas"/>
-        <Caret Line="570" Column="80" TopLine="558"/>
+        <Caret Line="561" Column="30" TopLine="548"/>
       </Position23>
       <Position24>
         <Filename Value="advent.pas"/>
-        <Caret Line="589" Column="59" TopLine="572"/>
+        <Caret Line="563" Column="38" TopLine="543"/>
       </Position24>
       <Position25>
         <Filename Value="advent.pas"/>
-        <Caret Line="588" Column="59" TopLine="574"/>
+        <Caret Line="547" Column="26" TopLine="490"/>
       </Position25>
       <Position26>
         <Filename Value="advent.pas"/>
-        <Caret Line="609" Column="80" TopLine="597"/>
+        <Caret Line="568" Column="55" TopLine="560"/>
       </Position26>
       <Position27>
         <Filename Value="advent.pas"/>
-        <Caret Line="605" Column="4" TopLine="582"/>
+        <Caret Line="570" Column="41" TopLine="570"/>
       </Position27>
       <Position28>
         <Filename Value="advent.pas"/>
-        <Caret Line="611" Column="15" TopLine="598"/>
+        <Caret Line="603" Column="56" TopLine="592"/>
       </Position28>
       <Position29>
         <Filename Value="advent.pas"/>
-        <Caret Line="491" TopLine="548"/>
+        <Caret Line="620" Column="16" TopLine="607"/>
       </Position29>
       <Position30>
         <Filename Value="advent.pas"/>
-        <Caret Line="610" Column="2" TopLine="603"/>
+        <Caret Line="664" Column="54" TopLine="653"/>
       </Position30>
     </JumpHistory>
     <RunParams>
@@ -270,7 +270,7 @@
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="advent.pas"/>
-        <Line Value="726"/>
+        <Line Value="727"/>
       </Item1>
     </BreakPoints>
     <Watches Count="2">

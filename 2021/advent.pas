@@ -23,6 +23,7 @@ type
     function getPuzzleInputAsStringArray(fileName: String; removeBlankLines:boolean=true):TStringArray;
     function stringOfBinaryToInteger(input:String):integer;
     function calculateCommonestValue(input: TStringArray; reverse:Boolean=false):TBits;
+    function calculateLimitsForFuelCalc(input: TIntArray):TPoint;
     procedure day1part1;
     procedure day1part2;
     procedure day2part1;
@@ -443,6 +444,7 @@ begin
  lbResults.items.add(ventMap.getOverlapCount.ToString+' overlaps');
 end;
 
+{ day 6 }
 procedure TmainForm.day6part1;
 var
  fishInput,fishValues:TStringArray;
@@ -538,62 +540,69 @@ begin
 end;
 
 
-{Day 7}
+{ day 7 }
 
+function TMainForm.calculateLimitsForFuelCalc(input: TIntArray):TPoint;
+var
+maxValue,totalValue,averageValue,index:integer;
+
+  function getMaxValue(input:TIntArray):integer;
+   var
+   index:integer;
+     begin
+     result:=0;
+     for index:=0 to pred(length(input)) do
+       begin
+       if (input[index] > result) then result:=input[index];
+       end;
+     end;
+
+  begin
+  maxValue:=getMaxValue(input);
+  totalValue:=0;
+  for index := 0 to pred(length(input)) do
+    begin
+    totalValue:=totalValue + input[index];
+    end;
+  averageValue:=totalValue div maxValue;
+  //try values between average - 20% and average + 20%
+  result.X:=averageValue - (length(input) div 5);
+  result.Y:=averageValue + (length(input) div 5);
+end;
 
 procedure TmainForm.day7part1;
 var
  puzzleInput:TStringArray;
  fishPositions:TIntArray;
- maxValue,totalValue,averageValue,index:integer;
- startPoint,endPoint,fuelAtThisPoint,leastFuel:integer;
-
- function getMaxValue(input:TIntArray):integer;
- var
  index:integer;
- begin
- result:=0;
- for index:=0 to pred(length(input)) do
-   begin
-   if (input[index] > result) then result:=input[index];
-   end;
- end;
+ fuelAtThisPoint,leastFuel:integer;
+ limits:TPoint;
 
  function calculateFuel(input:TIntArray;position:integer):integer;
  var
  index:integer;
  output:integer;
- begin
- //sum the difference between each fish and the desired position
- output:=0;
- for index:=0 to pred(length(input)) do
    begin
-   output:=output + (abs(input[index] - position));
-   end;
- result:=output;
- end;
-
-begin
- puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
- if length(puzzleInput)= 1 then
-   begin
-   fishPositions:=fileUtilities.toIntArray(puzzleInput[0].Split(','));
-   //we need to find out the minimum number of moves
-   //that will get all the fish to the same position
-   //Let's work out a distribution of where the fish are
-   maxValue:=getMaxValue(fishPositions);
-   totalValue:=0;
-   for index := 0 to pred(length(fishPositions)) do
+   //sum the difference between each fish and the desired position
+   output:=0;
+   for index:=0 to pred(length(input)) do
      begin
-     totalValue:=totalValue + fishPositions[index];
+     output:=output + (abs(input[index] - position));
      end;
-   averageValue:=totalValue div maxValue;
-   //Does this help?
-   //try values between (say) average - 20% and average + 20%
-   startPoint:=averageValue - (length(fishPositions) div 5);
-   endPoint:=averageValue + (length(fishPositions) div 5);
-   leastFuel:=calculateFuel(fishPositions,startPoint);//set initial value
-   for index:=startPoint to endPoint do
+   result:=output;
+   end;
+
+   begin
+   puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
+   if length(puzzleInput)= 1 then
+     begin
+     fishPositions:=fileUtilities.toIntArray(puzzleInput[0].Split(','));
+     //we need to find out the minimum number of moves
+     //that will get all the fish to the same position
+     //Let's work out a distribution of where the fish are
+     limits:=calculateLimitsForFuelCalc(fishPositions);
+     leastFuel:=calculateFuel(fishPositions,limits.X);//set initial value
+   for index:=limits.x to limits.Y do
      begin
      fuelAtThisPoint:=calculateFuel(fishPositions,index);
      if fuelAtThisPoint < leastFuel then leastFuel:=fuelAtThisPoint;
@@ -606,8 +615,9 @@ procedure TmainForm.day7part2;
 var
  puzzleInput:TStringArray;
  fishPositions:TIntArray;
- totalValue,averageValue,index:integer;
- startPoint,endPoint,fuelAtThisPoint,leastFuel:integer;
+ index:integer;
+ fuelAtThisPoint,leastFuel:integer;
+ limits:TPoint;
 
  function getMaxValue(input:TIntArray):integer;
  var
@@ -651,18 +661,9 @@ begin
    //we need to find out the minimum number of moves
    //that will get all the fish to the same position
    //Let's work out a distribution of where the fish are
-   totalValue:=0;
-   for index := 0 to pred(length(fishPositions)) do
-     begin
-     totalValue:=totalValue + fishPositions[index];
-     end;
-   averageValue:=totalValue div length(fishPositions);
-   //Does this help?
-   //try values between (say) average - 20% and average + 20%
-   startPoint:=averageValue - (length(fishPositions) div 5);
-   endPoint:=averageValue + (length(fishPositions) div 5);
-   leastFuel:=calculateFuel(fishPositions,startPoint);//set initial value
-   for index:=startPoint to endPoint do
+   limits:=calculateLimitsForFuelCalc(fishPositions);
+   leastFuel:=calculateFuel(fishPositions,limits.X);//set initial value
+   for index:=limits.X to limits.Y do
      begin
      fuelAtThisPoint:=calculateFuel(fishPositions,index);
      if fuelAtThisPoint < leastFuel then leastFuel:=fuelAtThisPoint;
