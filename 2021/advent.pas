@@ -571,44 +571,8 @@ maxValue,totalValue,averageValue,index:integer;
 end;
 
 procedure TmainForm.day7part1;
-var
- puzzleInput:TStringArray;
- fishPositions:TIntArray;
- index:integer;
- fuelAtThisPoint,leastFuel:integer;
- limits:TPoint;
-
- function calculateFuel(input:TIntArray;position:integer):integer;
- var
- index:integer;
- output:integer;
-   begin
-   //sum the difference between each fish and the desired position
-   output:=0;
-   for index:=0 to pred(length(input)) do
-     begin
-     output:=output + (abs(input[index] - position));
-     end;
-   result:=output;
-   end;
-
-   begin
-   puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
-   if length(puzzleInput)= 1 then
-     begin
-     fishPositions:=fileUtilities.toIntArray(puzzleInput[0].Split(','));
-     //we need to find out the minimum number of moves
-     //that will get all the fish to the same position
-     //Let's work out a distribution of where the fish are
-     limits:=calculateLimitsForFuelCalc(fishPositions);
-     leastFuel:=calculateFuel(fishPositions,limits.X);//set initial value
-   for index:=limits.x to limits.Y do
-     begin
-     fuelAtThisPoint:=calculateFuel(fishPositions,index);
-     if fuelAtThisPoint < leastFuel then leastFuel:=fuelAtThisPoint;
-     end;
-   lbResults.items.add('Min fuel in this range: '+leastFuel.ToString);
-   end;
+begin
+  lbresults.items.add('not done yet');
 end;
 
 procedure TmainForm.day7part2;
