@@ -85,7 +85,7 @@ var
 begin
   x:=0;
   y:=0;
-  xy:=fileUtilities.removeBlankLinesFromArray(coord.split(','));
+  xy:= removeBlankLinesFromArray(coord.split(','));
   if (length(xy) = 2) then
     begin
      x:=xy[0].Trim(' ').ToInteger;

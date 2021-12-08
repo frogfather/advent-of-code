@@ -15,58 +15,6 @@ function getUserDir: string;
 function findDirectories(path:string):TStringlist;
 implementation
 
-function removeBlankLinesFromArray(arrInput: TStringArray): TStringArray;
-var
-  index: integer;
-begin
-  index:=length(arrInput);
-  for index:= pred(length(arrInput)) downto 0 do
-    begin
-      if (length(arrInput[index]) = 0) then
-        deleteFromArray(arrInput,index);
-    end;
-  result:=arrInput;
-end;
-
-function removeBlankLinesFromArray(arrInput: TIntArray): TIntArray;
-var
-  index: integer;
-begin
-  index:=length(arrInput);
-  for index:= pred(length(arrInput)) downto 0 do
-    try
-     arrInput[index].ToString;
-    except
-     deleteFromArray(arrInput,index);
-    end;
-  result:=arrInput;
-end;
-
-function toIntArray(arrInput: TStringArray): TIntArray;
-//converts the elements of the array to integers if possible
-//probably should throw
-var
-  index:integer;
-  output:TIntArray;
-begin
-  output:=TIntArray.create;
-  setLength(output,length(arrInput));
-  if length(arrInput) = 0 then
-    begin
-    result:=output;
-    exit;
-    end;
-  for index:=0 to pred(length(arrInput)) do
-    begin
-      try
-      output[index]:=strToInt(arrInput[index]);
-      except
-      //do nothing atm
-      end;
-    end;
-  result:=output;
-end;
-
 //This complete mess is required because getUserDir on MacOS Catalina returns '/'
 function getUserDir: string;
 var

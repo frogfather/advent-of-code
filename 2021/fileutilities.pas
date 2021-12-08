@@ -81,7 +81,7 @@ begin
 if FileExists(fNam) then
   begin
   if removeBlankLines then
-  result := removeBlankLinesFromArray(readStream(fNam).Split(separator))
+  result := removeBlankEntriesFromArray(readStream(fNam).Split(separator))
   else result := readStream(fNam).Split(separator);
   end;
 end;

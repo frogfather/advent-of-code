@@ -18,6 +18,7 @@ procedure deleteFromArray(var arrInput:TIntArray; index: integer);
 function removeBlankLinesFromArray(arrInput: TStringArray):TStringArray;
 function removeBlankLinesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
+function arrPos(arrInput:TIntArray; element:integer):integer;
 implementation
 
 procedure addToArray(var arrInput: TStringArray; item: string; index: integer);
@@ -76,5 +77,74 @@ begin
     end;
   setLength(arrInput, length(arrInput) -1);
 end;
+
+function removeBlankLinesFromArray(arrInput: TStringArray): TStringArray;
+var
+  index: integer;
+begin
+  index:=length(arrInput);
+  for index:= pred(length(arrInput)) downto 0 do
+    begin
+      if (length(arrInput[index]) = 0) then
+        deleteFromArray(arrInput,index);
+    end;
+  result:=arrInput;
+end;
+
+function removeBlankLinesFromArray(arrInput: TIntArray): TIntArray;
+var
+  index: integer;
+begin
+  index:=length(arrInput);
+  for index:= pred(length(arrInput)) downto 0 do
+    try
+     arrInput[index].ToString;
+    except
+     deleteFromArray(arrInput,index);
+    end;
+  result:=arrInput;
+end;
+
+function toIntArray(arrInput: TStringArray): TIntArray;
+//converts the elements of the array to integers if possible
+//probably should throw
+var
+  index:integer;
+  output:TIntArray;
+begin
+  output:=TIntArray.create;
+  setLength(output,length(arrInput));
+  if length(arrInput) = 0 then
+    begin
+    result:=output;
+    exit;
+    end;
+  for index:=0 to pred(length(arrInput)) do
+    begin
+      try
+      output[index]:=strToInt(arrInput[index]);
+      except
+      //do nothing atm
+      end;
+    end;
+  result:=output;
+end;
+
+function arrPos(arrInput: TIntArray; element: integer): integer;
+var
+  index:integer;
+begin
+  result:=-1;
+  if length(arrInput) = 0 then exit;
+  for index:=0 to pred(length(arrInput)) do
+    begin
+    if (arrInput[index] = element) then
+      begin
+      result:=index;
+      exit;
+      end;
+    end;
+end;
+
 end.
 

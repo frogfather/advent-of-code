@@ -15,9 +15,10 @@ procedure addToArray(var arrInput:TStringArray; item:string;index:integer=-1);
 procedure addToArray(var arrInput:TIntArray;item:integer;index:integer=-1);
 procedure deleteFromArray(var arrInput:TStringArray; index: integer);
 procedure deleteFromArray(var arrInput:TIntArray; index: integer);
-function removeBlankLinesFromArray(arrInput: TStringArray):TStringArray;
-function removeBlankLinesFromArray(arrInput: TIntArray):TIntArray;
+function removeBlankEntriesFromArray(arrInput: TStringArray):TStringArray;
+function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
+function arrPos(arrInput:TIntArray; element:integer):integer;
 implementation
 
 procedure addToArray(var arrInput: TStringArray; item: string; index: integer);
@@ -77,7 +78,7 @@ begin
   setLength(arrInput, length(arrInput) -1);
 end;
 
-function removeBlankLinesFromArray(arrInput: TStringArray): TStringArray;
+function removeBlankEntriesFromArray(arrInput: TStringArray): TStringArray;
 var
   index: integer;
 begin
@@ -90,7 +91,7 @@ begin
   result:=arrInput;
 end;
 
-function removeBlankLinesFromArray(arrInput: TIntArray): TIntArray;
+function removeBlankEntriesFromArray(arrInput: TIntArray): TIntArray;
 var
   index: integer;
 begin
@@ -127,6 +128,22 @@ begin
       end;
     end;
   result:=output;
+end;
+
+function arrPos(arrInput: TIntArray; element: integer): integer;
+var
+  index:integer;
+begin
+  result:=-1;
+  if length(arrInput) = 0 then exit;
+  for index:=0 to pred(length(arrInput)) do
+    begin
+    if (arrInput[index] = element) then
+      begin
+      result:=index;
+      exit;
+      end;
+    end;
 end;
 
 end.

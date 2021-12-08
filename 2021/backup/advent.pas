@@ -94,26 +94,11 @@ end;
 procedure TmainForm.cbSelectSelect(Sender: TObject);
 var
   descriptionFile:String;
+  day,part:integer;
 begin
-case cbselect.ItemIndex of
-   0: descriptionFile:='puzzle_1_1.txt';
-   1: descriptionFile:='puzzle_1_2.txt';
-   2: day2part1;
-   3: day2part2;
-   4: day3part1;
-   5: day3part2;
-   6: day4part1;
-   7: day4part2;
-   8: day5part1;
-   9: day5part2;
-   10: day6part1;
-   11: day6part2;
-   12: day7part1;
-   13: day7part2;
-   14: day8part1;
-   15: day8part2;
-  end;
-loadText(descriptionFile);
+  divMod(cbSelect.ItemIndex,2,day,part);
+  descriptionFile:='puzzle_'+(1+day).ToString+'_'+(1+part).ToString+'.txt';
+  loadText(descriptionFile);
 end;
 
 procedure TmainForm.FormShow(Sender: TObject);
@@ -386,7 +371,7 @@ begin
  if (length(fishInput) = 1) then
    begin
    //split on comma to get an array of the values
-   fishValues:=removeBlankLinesFromArray(fishInput[0].Split(','));
+   fishValues:=removeBlankEntriesFromArray(fishInput[0].Split(','));
    //easier to work with integers
    fishes:=toIntArray(fishValues);
    newFishes:=TIntArray.create;
@@ -427,7 +412,7 @@ begin
  if (length(crabInput) = 1) then
    begin
    //split on comma to get an array of the values
-   fishValues:=removeBlankLinesFromArray(crabInput[0].Split(','));
+   fishValues:=removeBlankEntriesFromArray(crabInput[0].Split(','));
    //create the map and add entries with keys 0-8 and values 0
    daysList:=TInt64List.Create;
    for i:=0 to 8 do daysList.Add(0);
@@ -567,8 +552,27 @@ if length(puzzleInput)= 1 then
 end;
 
 procedure TmainForm.day8part1;
+var
+requiredOutputs:TIntArray;
+puzzleInput,outputSeq:TStringArray;
+lineNo,elementNo:Integer;
+matchingOutputs:integer;
 begin
-  lbresults.items.add('not done yet');
+ requiredOutputs:=TIntArray.create(2,3,4,7);
+ puzzleInput:=getPuzzleInputAsStringArray('day_8_test.txt');
+ matchingOutputs:=0;
+ for lineNo:=0 to pred(length(puzzleInput)) do
+   begin
+   //split on pipe
+   outputSeq:=puzzleInput[lineNo].Split('|')[1].Split(' ');
+   //now find out how many entries have length 2,3,4,7
+   for elementNo:=0 to pred(length(outputSeq)) do
+     begin
+     if (arrPos(requiredOutputs,length(outputSeq[elementNo]))> -1)
+       then matchingOutputs := matchingOutputs+1;
+     end;
+   end;
+ lbResults.items.add('Number of entries that are 2,3,4 or 7: '+matchingOutputs.ToString);
 end;
 
 procedure TmainForm.day8part2;

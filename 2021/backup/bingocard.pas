@@ -162,7 +162,7 @@ fId:=cardId;//we need this to identify which card has won
 setLength(fCard,fRowCount,fColCount,2);
 for currLine:=0 to pred(fRowCount) do
   begin
-  currElements:=fileUtilities.removeBlankLinesFromArray(input[currLine].Split(' '));
+  currElements:=removeBlankLinesFromArray(input[currLine].Split(' '));
   for currCol:=0 to pred(fColCount) do
     begin
     fCard[currLine][currCol][0]:=currElements[currCol];

@@ -1,17 +1,17 @@
 object mainForm: TmainForm
   Left = 292
-  Height = 537
+  Height = 535
   Top = 117
-  Width = 857
+  Width = 1008
   Caption = 'mainForm'
-  ClientHeight = 537
-  ClientWidth = 857
+  ClientHeight = 535
+  ClientWidth = 1008
   OnShow = FormShow
   LCLVersion = '2.0.12.0'
   object bExecute: TButton
-    Left = 736
+    Left = 24
     Height = 25
-    Top = 472
+    Top = 464
     Width = 96
     Caption = 'Run'
     OnClick = bExecuteClick
@@ -21,7 +21,8 @@ object mainForm: TmainForm
     Left = 560
     Height = 404
     Top = 56
-    Width = 275
+    Width = 426
+    Anchors = [akTop, akLeft, akRight]
     ItemHeight = 0
     TabOrder = 1
   end

@@ -371,7 +371,7 @@ begin
  if (length(fishInput) = 1) then
    begin
    //split on comma to get an array of the values
-   fishValues:=removeBlankLinesFromArray(fishInput[0].Split(','));
+   fishValues:=removeBlankEntriesFromArray(fishInput[0].Split(','));
    //easier to work with integers
    fishes:=toIntArray(fishValues);
    newFishes:=TIntArray.create;
@@ -412,7 +412,7 @@ begin
  if (length(crabInput) = 1) then
    begin
    //split on comma to get an array of the values
-   fishValues:=removeBlankLinesFromArray(crabInput[0].Split(','));
+   fishValues:=removeBlankEntriesFromArray(crabInput[0].Split(','));
    //create the map and add entries with keys 0-8 and values 0
    daysList:=TInt64List.Create;
    for i:=0 to 8 do daysList.Add(0);
@@ -552,8 +552,27 @@ if length(puzzleInput)= 1 then
 end;
 
 procedure TmainForm.day8part1;
+var
+requiredOutputs:TIntArray;
+puzzleInput,outputSeq:TStringArray;
+lineNo,elementNo:Integer;
+matchingOutputs:integer;
 begin
-  lbresults.items.add('not done yet');
+ requiredOutputs:=TIntArray.create(2,3,4,7);
+ puzzleInput:=getPuzzleInputAsStringArray('day_8_1.txt');
+ matchingOutputs:=0;
+ for lineNo:=0 to pred(length(puzzleInput)) do
+   begin
+   //split on pipe
+   outputSeq:=puzzleInput[lineNo].Split('|')[1].Split(' ');
+   //now find out how many entries have length 2,3,4,7
+   for elementNo:=0 to pred(length(outputSeq)) do
+     begin
+     if (arrPos(requiredOutputs,length(outputSeq[elementNo]))> -1)
+       then matchingOutputs := matchingOutputs+1;
+     end;
+   end;
+ lbResults.items.add('Number of entries that are 2,3,4 or 7: '+matchingOutputs.ToString);
 end;
 
 procedure TmainForm.day8part2;
