@@ -5,7 +5,7 @@ unit arrayUtils;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils,anysort;
 type
   //Looks like the built in TintegerArray is a static array
   //so let's define our own dynamic integer array
@@ -20,7 +20,11 @@ function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
 function arrPos(arrInput:TIntArray; element:integer):integer;
 function containsCharacters(toSearch,toFind:String):boolean;
+procedure sort(var arr: array of Integer; count: Integer; ascending:boolean=true);
+procedure sort(var str: string; count: Integer;ascending:boolean=true);
 implementation
+
+const strChars: string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 procedure addToArray(var arrInput: TStringArray; item: string; index: integer);
 var
@@ -159,9 +163,97 @@ begin
     begin
       thisChar:=tofind[index];
       if not toSearch.Contains(thisChar) then
-      result:=false;
-      exit;
+        begin
+        result:=false;
+        exit;
+        end;
     end;
+end;
+
+//Comparator functions for integers
+
+function CompareIntAsc(const d1,d2): integer;
+var
+  i1 : integer absolute d1;
+  i2 : integer absolute d2;
+begin
+  if i1=i2 then Result:=0
+  else if i1<i2 then Result:=-1
+  else Result:=1;
+end;
+function CompareIntDesc(const d1,d2): integer;
+var
+  i1 : integer absolute d1;
+  i2 : integer absolute d2;
+begin
+  if i1=i2 then Result:=0
+  else if i1>i2 then Result:=-1
+  else Result:=1;
+end;
+
+//Comparator functions for strings: need to test behaviour
+
+function CompareStrAsc(const d1,d2): integer;
+var
+  s1 : string absolute d1;
+  s2 : string absolute d2;
+  i1,i2:integer;
+begin
+  i1:=strChars.IndexOf(s1);
+  i2:=strChars.indexOf(s2);
+  if i1=i2 then Result:=0
+  else if i1<i2 then Result:=-1
+  else Result:=1;
+end;
+
+function CompareStrDesc(const d1,d2): integer;
+var
+  s1 : string absolute d1;
+  s2 : string absolute d2;
+  i1,i2:integer;
+begin
+  i1:=strChars.IndexOf(s1);
+  i2:=strChars.indexOf(s2);
+  if i1=i2 then Result:=0
+  else if i1>i2 then Result:=-1
+  else Result:=1;
+end;
+
+procedure sort(var arr: array of Integer; count: Integer;ascending:boolean=true);
+begin
+  if ascending then
+    anysort.AnySort(arr, Count, sizeof(Integer), @CompareIntAsc)
+  else
+    anysort.AnySort(arr, Count, sizeof(Integer), @CompareIntDesc)
+end;
+
+procedure sort(var str: string; count: Integer; ascending: boolean);
+var
+  index,swapIndex:integer;
+  swap:char;
+  i1,i2:integer;
+  doSwap:boolean;
+begin
+  //TODO - misses last element
+  if (count <=1) then exit;
+  //start at 1. for each following item, if it's less than that element then swap
+  index:=1;
+  repeat
+
+  for swapIndex:=index+1 to length(str)do
+    begin
+    i1:=strChars.IndexOf(str[index]);
+    i2:=strChars.IndexOf(str[swapIndex]);
+    doSwap:= (ascending and(i2 < i1)) or (not ascending and (i2>i1));
+    if doSwap then
+      begin
+      swap:=str[index];
+      str[index]:=str[swapIndex];
+      str[swapIndex]:=swap;
+      end;
+    end;
+  index:=index + 1;
+  until index >= length(str)-1;
 end;
 
 end.

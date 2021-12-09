@@ -584,7 +584,7 @@ var
   output:TSegmentMap;
   index:integer;
   code1,code3,code4,code6:string;
-  thisElement:string;
+  inputItem:string;
 begin
   //We can find 1,7,4 and 8 by their length
   //3 is the only one of the 5 segment values that uses the segments in 1
@@ -592,8 +592,13 @@ begin
   //0 is the other 6 segment value
   //all the segments in 5 are also in 6
   output:=TSegmentMap.create;
-  //Start by putting the items into the map
-  for index:=0 to pred(length(input)) do output.Add(input[index],'?');
+  //Start by sorting the entries and putting them into the map
+  for index:=0 to pred(length(input)) do
+    begin
+    inputItem:=input[index];
+    sort(inputItem,length(inputItem));
+    output.Add(inputItem,'?');
+    end;
   //First pass: identify items 1,7,4,8
   for index:=0 to pred(output.Count)do
     begin
@@ -631,7 +636,6 @@ begin
     begin
     if (length(output.Keys[index])=6) then
       begin
-      thisElement:=output.Keys[index];
       //9 contains all the segments in 3 and all the segments in 4
       if containsCharacters(output.Keys[index],code3)
       and containsCharacters(output.Keys[index],code4)
@@ -664,13 +668,12 @@ procedure TmainForm.day8part2;
 var
   segmentMap: TSegmentMap;
   puzzleInput,inputSeq,outputSeq:TStringArray;
-  lineNo,outputItem:integer;
-  sLineValue: string;
+  lineNo,outputIndex:integer;
+  sOutput,sLineValue: string;
   lineSum,totalSum:integer;
-
   i:integer;
 begin
-  puzzleInput:=getPuzzleInputAsStringArray('day_8_test.txt');
+  puzzleInput:=getPuzzleInputAsStringArray('day_8_1.txt');
   totalSum:=0;
   for lineNo:=0 to pred(length(puzzleInput)) do
    begin
@@ -679,21 +682,16 @@ begin
    outputSeq:=removeBlankEntriesFromArray(puzzleInput[lineNo].Split('|')[1].Split(' '));
    //TODO Sort both input and output
    segmentMap:=identifySegmentValues(inputSeq);
-   for outputItem:=0 to pred(length(outputSeq)) do
+   for outputIndex:=0 to pred(length(outputSeq)) do
      begin
-     sLineValue:=sLineValue+segmentMap.KeyData[outputSeq[outputItem]];
+     sOutput:=outputSeq[outputIndex];
+     sort(sOutput,length(sOutput));
+     sLineValue:=sLineValue+segmentMap.KeyData[sOutput];
      end;
-
-   //lbResults.items.add('Line '+lineNo.ToString+' '+segmentMap.Count.ToString+' items');
-   for i:=0 to pred(segmentMap.Count) do
-     begin
-     lbresults.items.add('key at pos '+i.ToString+' '+segmentMap.Keys[i]+' -> '+segmentMap.KeyData[segmentMap.Keys[i]])
-     end
-
-   //lineSum:=sLineValue.ToInteger;
-   //totalSum:=totalSum+lineSum;
+   lineSum:=sLineValue.ToInteger;
+   totalSum:=totalSum+lineSum;
    end;
- //lbResults.items.add('Sum of all entries '+totalSum.ToString);
+ lbResults.items.add('Sum of all entries '+totalSum.ToString);
 end;
 
 

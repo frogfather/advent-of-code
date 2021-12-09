@@ -7,7 +7,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, advent, bingoCard, ventMap, arrayUtils
+  Forms, advent, bingoCard, ventMap, arrayUtils, anysort
   { you can add units after this };
 
 {$R *.res}
