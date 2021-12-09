@@ -15,10 +15,11 @@ procedure addToArray(var arrInput:TStringArray; item:string;index:integer=-1);
 procedure addToArray(var arrInput:TIntArray;item:integer;index:integer=-1);
 procedure deleteFromArray(var arrInput:TStringArray; index: integer);
 procedure deleteFromArray(var arrInput:TIntArray; index: integer);
-function removeBlankLinesFromArray(arrInput: TStringArray):TStringArray;
-function removeBlankLinesFromArray(arrInput: TIntArray):TIntArray;
+function removeBlankEntriesFromArray(arrInput: TStringArray):TStringArray;
+function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
 function arrPos(arrInput:TIntArray; element:integer):integer;
+function containsCharacters(toSearch,toFind:String):boolean;
 implementation
 
 procedure addToArray(var arrInput: TStringArray; item: string; index: integer);
@@ -78,7 +79,7 @@ begin
   setLength(arrInput, length(arrInput) -1);
 end;
 
-function removeBlankLinesFromArray(arrInput: TStringArray): TStringArray;
+function removeBlankEntriesFromArray(arrInput: TStringArray): TStringArray;
 var
   index: integer;
 begin
@@ -91,7 +92,7 @@ begin
   result:=arrInput;
 end;
 
-function removeBlankLinesFromArray(arrInput: TIntArray): TIntArray;
+function removeBlankEntriesFromArray(arrInput: TIntArray): TIntArray;
 var
   index: integer;
 begin
@@ -143,6 +144,23 @@ begin
       result:=index;
       exit;
       end;
+    end;
+end;
+//used in day 8 part 2. String has a .contains method but we
+//can't assume the characters in the substring will be in the
+//same order in the string we're searching
+function containsCharacters(toSearch, toFind: String): boolean;
+var
+  index:integer;
+  thisChar:string;
+begin
+  result:=true;
+  for index:=1 to length(toFind)do
+    begin
+      thisChar:=tofind[index];
+      if not toSearch.Contains(thisChar) then
+      result:=false;
+      exit;
     end;
 end;
 

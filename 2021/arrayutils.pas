@@ -19,6 +19,7 @@ function removeBlankEntriesFromArray(arrInput: TStringArray):TStringArray;
 function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
 function arrPos(arrInput:TIntArray; element:integer):integer;
+function containsCharacters(toSearch,toFind:String):boolean;
 implementation
 
 procedure addToArray(var arrInput: TStringArray; item: string; index: integer);
@@ -143,6 +144,25 @@ begin
       result:=index;
       exit;
       end;
+    end;
+end;
+//used in day 8 part 2. String has a .contains method but we
+//can't assume the characters in the substring will be in the
+//same order in the string we're searching
+function containsCharacters(toSearch, toFind: String): boolean;
+var
+  index:integer;
+  thisChar:string;
+begin
+  result:=true;
+  for index:=1 to length(toFind)do
+    begin
+      thisChar:=tofind[index];
+      if not toSearch.Contains(thisChar) then
+        begin
+        result:=false;
+        exit;
+        end;
     end;
 end;
 

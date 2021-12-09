@@ -10,6 +10,8 @@ uses
   ventMap,fgl,DateUtils,aocUtils,arrayUtils;
 
 type
+  TbingoCards = array of TbingoCard;
+  TSegmentMap = specialize TFPGMap<String,String>;
 
   { TmainForm }
   TmainForm = class(TForm)
@@ -40,13 +42,12 @@ type
     procedure day8part1;
     procedure day8part2;
     procedure CardNotifyWinHandler(Sender: TObject);
+    function identifySegmentValues(input:TStringArray):TSegmentMap;
   public
 
   end;
 
 const dataDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/input/';
-type
-  TbingoCards = array of TbingoCard;
 var
   mainForm: TmainForm;
   //Used in day 4 part 2. Because a card signals that it has won
@@ -281,6 +282,7 @@ with Sender as TBingoCard do
     end;
   end;
 end;
+
 procedure TmainForm.day4part1;
 var
  puzzleInput,numbersToCall:TStringArray;
@@ -448,7 +450,7 @@ begin
    end;
 end;
 
-{Day 7}
+{ day 7}
 procedure TmainForm.day7part1;
 var
  puzzleInput:TStringArray;
@@ -551,6 +553,7 @@ if length(puzzleInput)= 1 then
   end;
 end;
 
+{ day 8 }
 procedure TmainForm.day8part1;
 var
 requiredOutputs:TIntArray;
@@ -575,9 +578,122 @@ begin
  lbResults.items.add('Number of entries that are 2,3,4 or 7: '+matchingOutputs.ToString);
 end;
 
-procedure TmainForm.day8part2;
+//A method to determine what number each sequence of letters corresponds to
+function TmainForm.identifySegmentValues(input: TStringArray): TSegmentMap;
+var
+  output:TSegmentMap;
+  index:integer;
+  code1,code3,code4,code6:string;
+  thisElement:string;
 begin
-  lbresults.items.add('not done yet');
+  //We can find 1,7,4 and 8 by their length
+  //3 is the only one of the 5 segment values that uses the segments in 1
+  //6 doesn't have the segments in 1
+  //0 is the other 6 segment value
+  //all the segments in 5 are also in 6
+  output:=TSegmentMap.create;
+  //Start by putting the items into the map
+  for index:=0 to pred(length(input)) do output.Add(input[index],'?');
+  //First pass: identify items 1,7,4,8
+  for index:=0 to pred(output.Count)do
+    begin
+    case length(output.Keys[index]) of
+     2:
+       begin
+       code1:=output.Keys[index];
+       output.AddOrSetData(code1,'1');
+       end;
+     3: output.AddOrSetData(output.Keys[index],'7');
+     4:
+       begin
+       code4:=output.Keys[index];
+       output.AddOrSetData(code4,'4');
+       end;
+     7: output.AddOrSetData(output.Keys[index],'8');
+    end;
+  end;
+
+  //Second pass: identify 3
+  for index:=0 to pred(output.Count)do
+    begin
+    if (length(output.Keys[index])=5)
+      and (containsCharacters(output.Keys[index],code1))
+    then
+      begin
+      code3:=output.Keys[index];
+      output.AddOrSetData(code3,'3');
+      break;
+      end;
+    end;
+
+  //identify the six segment entries now
+  for index:=0 to pred(output.Count)do
+    begin
+    if (length(output.Keys[index])=6) then
+      begin
+      thisElement:=output.Keys[index];
+      //9 contains all the segments in 3 and all the segments in 4
+      if containsCharacters(output.Keys[index],code3)
+      and containsCharacters(output.Keys[index],code4)
+        then
+        output.AddOrSetData(output.Keys[index],'9')
+      else
+      //6 doesn't contain the segments in 1
+      if not containsCharacters(output.Keys[index],code1) then
+        begin
+        code6:=output.Keys[index];
+        output.AddOrSetData(code6,'6');
+        end else output.AddOrSetData(output.Keys[index],'0');
+      end;
+    end;
+  //finally identify 5 and 2. All the characters in 5 are found in 6
+  for index:=0 to pred(output.Count)do
+    begin
+    if (length(output.Keys[index])=5) then
+      begin
+      if containsCharacters(code6,output.Keys[index])
+      then output.AddOrSetData(output.Keys[index],'5')
+      else if (output.Keys[index] <> code3)
+        then output.AddOrSetData(output.Keys[index],'2')
+      end;
+    end;
+  result:=output;
+end;
+
+procedure TmainForm.day8part2;
+var
+  segmentMap: TSegmentMap;
+  puzzleInput,inputSeq,outputSeq:TStringArray;
+  lineNo,outputItem:integer;
+  sLineValue: string;
+  lineSum,totalSum:integer;
+
+  i:integer;
+begin
+  puzzleInput:=getPuzzleInputAsStringArray('day_8_test.txt');
+  totalSum:=0;
+  for lineNo:=0 to pred(length(puzzleInput)) do
+   begin
+   sLineValue:='';
+   inputSeq:=removeBlankEntriesFromArray(puzzleInput[lineNo].Split('|')[0].Split(' '));
+   outputSeq:=removeBlankEntriesFromArray(puzzleInput[lineNo].Split('|')[1].Split(' '));
+   //TODO Sort both input and output
+   segmentMap:=identifySegmentValues(inputSeq);
+   for outputItem:=0 to pred(length(outputSeq)) do
+     begin
+     sLineValue:=sLineValue+segmentMap.KeyData[outputSeq[outputItem]];
+     end;
+
+   //lbResults.items.add('Line '+lineNo.ToString+' '+segmentMap.Count.ToString+' items');
+   for i:=0 to pred(segmentMap.Count) do
+     begin
+     lbresults.items.add('key at pos '+i.ToString+' '+segmentMap.Keys[i]+' -> '+segmentMap.KeyData[segmentMap.Keys[i]])
+     end
+
+   //lineSum:=sLineValue.ToInteger;
+   //totalSum:=totalSum+lineSum;
+   end;
+ //lbResults.items.add('Sum of all entries '+totalSum.ToString);
 end;
 
 
