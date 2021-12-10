@@ -44,6 +44,8 @@ type
     procedure day8part2;
     procedure day9part1;
     procedure day9part2;
+    procedure day10part1;
+    procedure day10part2;
     procedure CardNotifyWinHandler(Sender: TObject);
     function identifySegmentValues(input:TStringArray):TSegmentMap;
   public
@@ -91,6 +93,8 @@ begin
    15: day8part2;
    16: day9part1;
    17: day9part2;
+   18: day10part1;
+   19: day10part2;
   end;
  endTime:=now;
  lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
@@ -699,7 +703,7 @@ begin
    end;
  lbResults.items.add('Sum of all entries '+totalSum.ToString);
 end;
-
+ { day 9 }
 procedure TmainForm.day9part1;
 var
   puzzleInput:TStringArray;
@@ -844,7 +848,7 @@ begin
 
 end;
 
-procedure TMainForm.paintMap(map:T3DIntMap;basinSizes:TIntArray);
+procedure TmainForm.paintMap(map: T3DIntMap; basinSizes: TIntArray);
 var
 basinColors: TColours;
 basinindex,basinSize:integer;
@@ -874,7 +878,76 @@ paintboxForm.map:=map;
 paintboxForm.showModal;
 end;
 
+{ day 10 }
+procedure TmainForm.day10part1;
+const
+ openingTags: array [0..3] of string = ('(','[','{','<');
+ closingTags: array [0..3] of string = (')',']','}','>');
+ tagScore: array[0..3] of integer = (3,57,1197,25137);
+var
+  puzzleInput:TStringArray;
+  lineNo:integer;
+  incomplete:boolean;
+  firstIllegal:string;
+  illegalIndex,tagValue,totalScore:integer;
 
+  function firstIllegalSymbol(input:string; out incomplete: boolean):string;
+  var
+    expectedClosingTags: TStringArray;
+    index:integer;
+    currentTag,expectedClosingTag:string;
+    openingTagIndex:integer;
+    begin
+    expectedClosingTags:=TStringArray.create;
+    for index := 0 to pred(length(input)) do
+      begin
+      currentTag:=input.Substring(index,1);
+      openingTagIndex := arrPos(openingTags,currentTag);
+      //if an opening tag, add the matching closing tag to the array
+      if (openingTagIndex > -1)
+        then addToArray(expectedClosingTags,closingTags[openingTagIndex])
+      else
+        begin
+        if (length(expectedClosingTags)=0)
+           then expectedClosingTag:=''
+        else
+          begin
+          expectedClosingTag:=deleteFromArray(expectedClosingTags,pred(length(expectedClosingTags)));
+          if expectedClosingTag <> currentTag then
+            begin
+            result:=currentTag;
+            incomplete:=false;
+            exit;
+            end;
+          end;
+        end;
+      end;
+    incomplete:= length(expectedClosingTags) > 0;
+    result:='';
+    end;
+
+begin
+  totalScore:=0;
+  puzzleInput:=getPuzzleInputAsStringArray('day_10_1.txt');
+  for lineNo:= 0 to pred(length(puzzleInput)) do
+    begin
+    firstIllegal:=firstIllegalSymbol(puzzleInput[lineNo],incomplete);
+    if incomplete then
+      //do nothing for now
+    else if (firstIllegal <> '') then
+      begin
+      illegalIndex:=arrPos(closingTags,firstIllegal);
+      tagValue:=tagScore[illegalIndex];
+      totalScore:=totalScore + tagValue;
+      end;
+    end;
+  lbResults.Items.Add('Total score of illegal tags '+totalScore.ToString);
+end;
+
+procedure TmainForm.day10part2;
+begin
+
+end;
 
 
 end.

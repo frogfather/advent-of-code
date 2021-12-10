@@ -79,6 +79,7 @@
         <Filename Value="paintbox.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="paintboxForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit9>
     </Units>

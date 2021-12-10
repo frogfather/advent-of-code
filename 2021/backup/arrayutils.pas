@@ -12,7 +12,7 @@ type
   TIntArray = array of integer;
   //used in day 9 part two
   T3DIntMap = array of array of array of integer;
-  TColors = array of TColor;
+  TColours = array of TColor;
 procedure addToArray(var arrInput:TStringArray; item:string;index:integer=-1);
 procedure addToArray(var arrInput:TIntArray;item:integer;index:integer=-1);
 procedure deleteFromArray(var arrInput:TStringArray; index: integer);
@@ -21,6 +21,7 @@ function removeBlankEntriesFromArray(arrInput: TStringArray):TStringArray;
 function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
 function arrPos(arrInput:TIntArray; element:integer):integer;
+function arrPos(arrInput:TStringArray; element:string):integer;
 function containsCharacters(toSearch,toFind:String):boolean;
 procedure sort(var arr: array of Integer; count: Integer; ascending:boolean=true);
 procedure sort(var str: string; count: Integer;ascending:boolean=true);
@@ -152,6 +153,23 @@ begin
       end;
     end;
 end;
+
+function arrPos(arrInput: TStringArray; element: string): integer;
+var
+  index:integer;
+begin
+  result:=-1;
+  if length(arrInput) = 0 then exit;
+  for index:=0 to pred(length(arrInput)) do
+    begin
+    if (arrInput[index] = element) then
+      begin
+      result:=index;
+      exit;
+      end;
+    end;
+end;
+
 //used in day 8 part 2. String has a .contains method but we
 //can't assume the characters in the substring will be in the
 //same order in the string we're searching
