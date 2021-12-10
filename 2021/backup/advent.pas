@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics,
-  Dialogs, StdCtrls, fileUtilities, math, bingoCard,
+  Dialogs, StdCtrls, math, bingoCard,
   ventMap,fgl,DateUtils,aocUtils,arrayUtils;
 
 type
@@ -41,6 +41,8 @@ type
     procedure day7part2;
     procedure day8part1;
     procedure day8part2;
+    procedure day9part1;
+    procedure day9part2;
     procedure CardNotifyWinHandler(Sender: TObject);
     function identifySegmentValues(input:TStringArray):TSegmentMap;
   public
@@ -86,6 +88,8 @@ begin
    13: day7part2;
    14: day8part1;
    15: day8part2;
+   16: day9part1;
+   17: day9part2;
   end;
  endTime:=now;
  lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
@@ -671,9 +675,9 @@ var
   lineNo,outputIndex:integer;
   sOutput,sLineValue: string;
   lineSum,totalSum:integer;
-  i:integer;
+
 begin
-  puzzleInput:=getPuzzleInputAsStringArray('day_8_test.txt');
+  puzzleInput:=getPuzzleInputAsStringArray('day_8_1.txt');
   totalSum:=0;
   for lineNo:=0 to pred(length(puzzleInput)) do
    begin
@@ -692,6 +696,177 @@ begin
    totalSum:=totalSum+lineSum;
    end;
  lbResults.items.add('Sum of all entries '+totalSum.ToString);
+end;
+
+procedure TmainForm.day9part1;
+var
+  puzzleInput:TStringArray;
+  lineNo,index:integer;
+  currentLine,previousLine,nextLine:String;
+  centre,north,south,east,west:integer;
+  totalRiskLevel:integer;
+begin
+  puzzleInput:=getPuzzleInputAsStringArray('day_9_1.txt');
+  //find points that are lower than all those around them
+  //start at the second line and stop at the second last line
+  totalRiskLevel:=0;
+  for lineNo:=0 to pred(length(puzzleInput)) do
+    begin
+    currentLine:=puzzleInput[lineNo];
+    if (lineNo > 0) then previousLine:=puzzleInput[lineNo-1];
+    if (lineNo < pred(length(puzzleInput))) then nextLine:=puzzleInput[lineNo+1];
+    for index:=0 to pred(length(currentLine)) do
+      begin
+      centre:=currentLine.Substring(index,1).ToInteger;
+      if (lineNo > 0)
+         then North:=previousLine.Substring(index,1).ToInteger
+         else North:=10; //makes logic easier
+      if (lineNo < pred(length(puzzleInput)))
+         then South:=nextLine.Substring(index,1).ToInteger
+         else South:=10;
+      if (index > 0)
+         then West:=currentLine.Substring(index-1,1).ToInteger
+         else West:=10;
+      if (index < pred(length(currentLine)))
+         then East:=currentLine.Substring(index+1,1).ToInteger
+         else East:=10;
+      //is centre lower than all the other values?
+      if (centre < North)and(centre < South)and(centre < West)and(centre < East)then
+        begin
+        totalRiskLevel:=totalRiskLevel + centre + 1;
+        end;
+      end;
+    end;
+  lbResults.items.add('Total risk level '+totalRiskLevel.ToString);
+end;
+
+procedure TmainForm.day9part2;
+type ABasinMap = array of array of array of integer;
+var
+  puzzleInput:TStringArray;
+  basinMap:ABasinMap;
+  mapMaxX,mapMaxY:integer;
+  currentLine:string;
+  y,elementNo,basinNo,currentBasin:integer;
+  blockStart,blockEnd:integer;
+  currentElement,overlapsBasin:integer;
+  basinSizes:TIntArray;
+
+  //temp
+  sMapLine:string;
+
+  procedure markBlock(line,start,finish,blockNo:integer);
+  var
+    index:integer;
+    begin
+    for index:= start to finish do
+      begin
+      basinMap[index][line][1]:=blockNo;
+      end;
+    end;
+
+  function basinOverlap(lineNo,start,finish:integer):integer;
+  var
+  index:integer;
+  blockAbove,firstBlock:integer;
+  begin
+  if (lineNo=0)then
+    begin
+    result:=-1;
+    exit;
+    end;
+  //do the provided coordinates overlap with any blocks in the line above?
+  firstBlock:=-1;
+  for index:=start to finish do
+    begin
+    blockAbove:=basinMap[index][lineNo-1][1];
+    if (blockAbove > -1)then
+      begin
+      if (firstBlock = -1)//first overlapping block we've encountered
+        then firstBlock:=blockAbove
+      else if (blockAbove <> firstBlock)//overlaps multiple blocks
+        then basinMap[index][lineNo-1][1]:=firstBlock;
+      basinMap[index][lineNo][1]:=firstBlock;
+      end;
+    end;
+  result:=firstBlock;
+  end;
+
+begin
+  //load the puzzle input into the array
+  basinNo:=0;
+  basinSizes:=TIntArray.create;
+  puzzleInput:=getPuzzleInputAsStringArray('day_9_1.txt');
+  if (length(puzzleInput)=0) then exit;
+  basinMap:=ABasinMap.create;
+  mapMaxX:=length(puzzleInput[0]);
+  mapMaxY:=length(puzzleInput);
+  setLength(basinMap,mapMaxX,mapMaxY,2);
+  for y:=0 to pred(length(puzzleInput)) do
+    begin
+    currentLine:=puzzleInput[y];
+    //find start and end point of blocks on this line
+    //if the blocks don't overlap with a block above
+    //or it's the first line, then they're new blocks
+    blockStart:=-1;
+    blockEnd:=-1;
+    //need to know when we have gone beyond the end of the line
+    for elementNo:=0 to currentline.length do
+      begin
+      if (elementNo < currentline.Length) then
+        begin
+        currentElement:=currentLine.Substring(elementNo,1).ToInteger;
+        basinMap[elementNo][y][0]:=currentElement;
+        basinMap[elementNo][y][1]:=-1;
+        end;
+      if (currentElement <> 9)and (elementNo < currentline.Length) then
+        begin
+        if (blockStart = -1)then blockStart:=elementNo;
+        end else
+        begin //it is 9
+        if (blockStart > -1)then
+          begin
+          blockEnd:=elementNo-1;
+          overlapsBasin:=basinOverlap(y,blockstart,blockend);
+          if (overlapsBasin = -1) then
+            begin
+            overlapsBasin:=basinNo;
+            basinNo:=basinNo+1;
+            end;
+          markBlock(y,blockStart,blockEnd,overlapsBasin);
+          blockStart:=-1;
+          blockEnd:=-1;
+          end;
+        end;
+      end;
+    end;
+
+  setLength(basinSizes,basinNo+1);
+  //check the output
+  for y:= 0 to pred(mapMaxY) do
+    begin
+    sMapLine:='';
+    for elementNo:= 0 to pred(mapMaxX) do
+      begin
+      currentBasin:=basinMap[elementNo][y][1];
+      if (basinMap[elementNo][y][0] <> 9)then
+        begin
+        if currentBasin < 10 then sMapline:=sMapLine+'0';
+        sMapLine:=sMapLine+currentBasin.ToString+'|';
+        end else
+      sMapLine:=sMapLine+'NN|';
+      if (currentBasin <> -1) then basinSizes[currentBasin]:=basinSizes[currentBasin]+1;
+      end;
+    lbResults.items.add(sMapLine);
+    end;
+
+
+  sort(basinSizes,length(basinSizes),false);
+  lbResults.items.add('largest basins '+(basinSizes[0]*basinSizes[1]*basinSizes[2]).ToString);
+  for y:=0 to pred(length(basinSizes)) do
+    begin
+    lbResults.items.add(basinSizes[y].ToString+' ');
+    end;
 end;
 
 
