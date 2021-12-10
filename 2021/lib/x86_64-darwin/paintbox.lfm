@@ -1,0 +1,39 @@
+object paintboxForm: TpaintboxForm
+  Left = 102
+  Height = 527
+  Top = 119
+  Width = 1072
+  Caption = 'paintboxForm'
+  ClientHeight = 527
+  ClientWidth = 1072
+  LCLVersion = '2.0.12.0'
+  object Panel1: TPanel
+    Left = 0
+    Height = 527
+    Top = 0
+    Width = 1072
+    Align = alClient
+    ClientHeight = 527
+    ClientWidth = 1072
+    TabOrder = 0
+    object Button1: TButton
+      Left = 983
+      Height = 25
+      Top = 485
+      Width = 75
+      Anchors = [akRight, akBottom]
+      Caption = 'Close'
+      ModalResult = 1
+      TabOrder = 0
+    end
+    object PaintBox1: TPaintBox
+      Left = 1
+      Height = 473
+      Top = 1
+      Width = 1070
+      Align = alTop
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      OnPaint = PaintBox1Paint
+    end
+  end
+end

@@ -7,7 +7,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, advent, bingoCard, ventMap, arrayUtils, anysort
+  Forms, advent, bingoCard, ventMap, arrayUtils, anysort, paintbox
   { you can add units after this };
 
 {$R *.res}
@@ -17,6 +17,7 @@ begin
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TmainForm, mainForm);
+  Application.CreateForm(TpaintboxForm, paintboxForm);
   Application.Run;
 end.
 

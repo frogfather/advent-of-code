@@ -5,12 +5,14 @@ unit arrayUtils;
 interface
 
 uses
-  Classes, SysUtils,anysort;
+  Classes, SysUtils,anysort,graphics;
 type
   //Looks like the built in TintegerArray is a static array
   //so let's define our own dynamic integer array
-  TIntArray = Array of integer;
-
+  TIntArray = array of integer;
+  //used in day 9 part two
+  T3DIntMap = array of array of array of integer;
+  TColors = array of TColor;
 procedure addToArray(var arrInput:TStringArray; item:string;index:integer=-1);
 procedure addToArray(var arrInput:TIntArray;item:integer;index:integer=-1);
 procedure deleteFromArray(var arrInput:TStringArray; index: integer);
@@ -234,12 +236,10 @@ var
   i1,i2:integer;
   doSwap:boolean;
 begin
-  //TODO - misses last element
   if (count <=1) then exit;
   //start at 1. for each following item, if it's less than that element then swap
   index:=1;
   repeat
-
   for swapIndex:=index+1 to length(str)do
     begin
     i1:=strChars.IndexOf(str[index]);
@@ -253,7 +253,7 @@ begin
       end;
     end;
   index:=index + 1;
-  until index >= length(str)-1;
+  until index > length(str)-1;
 end;
 
 end.

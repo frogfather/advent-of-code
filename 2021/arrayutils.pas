@@ -5,12 +5,14 @@ unit arrayUtils;
 interface
 
 uses
-  Classes, SysUtils,anysort;
+  Classes, SysUtils,anysort,graphics;
 type
   //Looks like the built in TintegerArray is a static array
   //so let's define our own dynamic integer array
-  TIntArray = Array of integer;
-
+  TIntArray = array of integer;
+  //used in day 9 part two
+  T3DIntMap = array of array of array of integer;
+  TColours = array of TColor;
 procedure addToArray(var arrInput:TStringArray; item:string;index:integer=-1);
 procedure addToArray(var arrInput:TIntArray;item:integer;index:integer=-1);
 procedure deleteFromArray(var arrInput:TStringArray; index: integer);
