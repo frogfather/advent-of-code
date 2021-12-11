@@ -6,9 +6,9 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics,
-  Dialogs, StdCtrls, math, bingoCard,
+  Dialogs, StdCtrls, Menus, math, bingoCard,
   ventMap,fgl,DateUtils,aocUtils,arrayUtils,paintbox,
-  octopus;
+  octopus,clipbrd;
 
 type
   TbingoCards = array of TbingoCard;
@@ -22,9 +22,15 @@ type
     lbResults: TListBox;
     Memo1: TMemo;
     OpenDialog1: TOpenDialog;
+    clipboard:TClipboard;
     procedure bExecuteClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
     procedure cbSelectSelect(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure lbResultsSelectionChange(Sender: TObject; User: boolean);
+    procedure Memo1Change(Sender: TObject);
   private
     procedure paintMap(map:T3DIntMap;basinSizes:TIntArray);
     procedure loadText(fileName:String);
@@ -50,6 +56,8 @@ type
     procedure day10part2;
     procedure day11part1;
     procedure day11part2;
+    procedure day12part1;
+    procedure day12part2;
     procedure CardNotifyWinHandler(Sender: TObject);
     procedure OctopusFlashHandler(Sender: TObject);
     function identifySegmentValues(input:TStringArray):TSegmentMap;
@@ -109,10 +117,17 @@ begin
    19: day10part2;
    20: day11part1;
    21: day11part2;
+   22: day12part1;
+   23: day12part2;
   end;
  endTime:=now;
  lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
  lbResults.Items.Add('Time: '+inttostr(millisecondsBetween(endTime,startTime))+' ms');
+end;
+
+procedure TmainForm.Button1Click(Sender: TObject);
+begin
+  lbResults.SelectAll;
 end;
 
 procedure TmainForm.cbSelectSelect(Sender: TObject);
@@ -123,6 +138,16 @@ begin
   divMod(cbSelect.ItemIndex,2,day,part);
   descriptionFile:='puzzle_'+(1+day).ToString+'_'+(1+part).ToString+'.txt';
   loadText(descriptionFile);
+end;
+
+procedure TmainForm.FormCreate(Sender: TObject);
+begin
+  clipboard:=TClipboard.Create;
+end;
+
+procedure TmainForm.FormDestroy(Sender: TObject);
+begin
+  clipboard.Free;
 end;
 
 procedure TmainForm.FormShow(Sender: TObject);
@@ -137,6 +162,26 @@ begin
     end;
 end;
 
+procedure TmainForm.lbResultsSelectionChange(Sender: TObject; User: boolean);
+var
+  lineNo:integer;
+  copiedLines:String;
+begin
+  if (lbResults.Items.Count = 0) or (lbResults.SelCount = 0) then exit;
+  clipboard.Clear;
+  copiedLines:='';
+  for lineNo:=0 to pred(lbResults.Items.Count) do
+    begin
+    if (lbResults.Selected[lineNo])
+       then copiedLines:= copiedLines + lbResults.Items[lineNo] + #$0A;
+    end;
+  clipboard.AsText:=copiedLines;
+end;
+
+procedure TmainForm.Memo1Change(Sender: TObject);
+begin
+
+end;
 
 procedure TmainForm.loadText(fileName: String);
 begin
@@ -1177,9 +1222,19 @@ begin
   runOctopuses(mapDimensions);
   steps:=steps+1;
   done:=allHaveFlashed;
-  resetOctopuses;
+  resetOctopuses(mapDimensions);
   until done;
 lbresults.items.add('All octopuses flash on step '+steps.ToString);
+end;
+
+procedure TmainForm.day12part1;
+begin
+ lbResults.Items.add('Not done this yet');
+end;
+
+procedure TmainForm.day12part2;
+begin
+ lbResults.Items.add('Not done this yet');
 end;
 
 

@@ -26,8 +26,10 @@ function arrPos(arrInput:TIntArray; element:integer):integer;
 function arrPos(arrInput:TStringArray; element:string):integer;
 function containsCharacters(toSearch,toFind:String):boolean;
 procedure sort(var arr: array of Integer; count: Integer; ascending:boolean=true);
-procedure sort(var str: string; count: Integer;ascending:boolean=true);
 procedure sort(var arr: array of int64; count: Integer; ascending:boolean=true);
+procedure sort(var arr: array of string; count: Integer; ascending:boolean=true);
+procedure sort(var str: string; count: Integer;ascending:boolean=true);
+procedure sort(var arr: array of char; count: Integer; ascending:boolean=true);
 implementation
 
 const strChars: string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -70,11 +72,11 @@ begin
   //if index is -1 add at the end
   setLength(arrInput,length(arrInput)+1);
   lastItemIndex:= pred(length(arrInput));
-  //if (index = -1) then index:=lastItemIndex; //insert at end
-  //for pos:=lastItemIndex downto index do
-  //  begin
-  //  if (pos > 0) then arrInput[pos]:=arrInput[pos-1];
-  //  end;
+  if (index = -1) then index:=lastItemIndex; //insert at end
+  for pos:=lastItemIndex downto index do
+    begin
+    if (pos > 0) then arrInput[pos]:=arrInput[pos-1];
+    end;
   arrInput[lastItemIndex]:=item;
 end;
 
@@ -191,9 +193,6 @@ begin
     end;
 end;
 
-//used in day 8 part 2. String has a .contains method but we
-//can't assume the characters in the substring will be in the
-//same order in the string we're searching
 function containsCharacters(toSearch, toFind: String): boolean;
 var
   index:integer;
@@ -211,9 +210,7 @@ begin
     end;
 end;
 
-//Comparator functions for integers
-
-function CompareInt64Asc(const d1,d2): int64;
+function CompareInt64Asc(const d1,d2): integer;
 var
   i1 : int64 absolute d1;
   i2 : int64 absolute d2;
@@ -222,7 +219,7 @@ begin
   else if i1<i2 then Result:=-1
   else Result:=1;
 end;
-function CompareInt64Desc(const d1,d2): int64;
+function CompareInt64Desc(const d1,d2): integer;
 var
   i1 : int64 absolute d1;
   i2 : int64 absolute d2;
@@ -232,32 +229,68 @@ begin
   else Result:=1;
 end;
 
-//Comparator functions for strings: need to test behaviour
-
 function CompareStrAsc(const d1,d2): integer;
 var
   s1 : string absolute d1;
   s2 : string absolute d2;
-  i1,i2:integer;
+  shortestStringLength,strIndex:integer;
+  comparison:integer;
+  done:boolean;
 begin
-  i1:=strChars.IndexOf(s1);
-  i2:=strChars.indexOf(s2);
-  if i1=i2 then Result:=0
-  else if i1<i2 then Result:=-1
-  else Result:=1;
+  shortestStringLength:=length(s1);
+  if (length(s2)<length(s1))then shortestStringLength:=length(s2);
+  strIndex:=0;
+    repeat
+    comparison:= strChars.IndexOf(s2.Substring(strIndex,1))
+    - strChars.indexOf(s1.Substring(strIndex,1));
+    strIndex:=strIndex+1;
+    done:=(strIndex > pred(shortestStringLength)) or (comparison <> 0);
+    until done;
+    if (comparison = 0)then result:=0
+      else result:=comparison div abs(comparison);
 end;
 
 function CompareStrDesc(const d1,d2): integer;
 var
   s1 : string absolute d1;
   s2 : string absolute d2;
-  i1,i2:integer;
+  shortestStringLength,strIndex:integer;
+  comparison:integer;
+  done:boolean;
 begin
-  i1:=strChars.IndexOf(s1);
-  i2:=strChars.indexOf(s2);
-  if i1=i2 then Result:=0
-  else if i1>i2 then Result:=-1
-  else Result:=1;
+  shortestStringLength:=length(s1);
+  if (length(s2)<length(s1))then shortestStringLength:=length(s2);
+  strIndex:=0;
+    repeat
+    comparison:= strChars.IndexOf(s1.Substring(strIndex,1))
+    - strChars.indexOf(s2.Substring(strIndex,1));
+    strIndex:=strIndex+1;
+    done:=(strIndex > pred(shortestStringLength)) or (comparison <> 0);
+    until done;
+    if (comparison = 0)then result:=0
+      else result:=comparison div abs(comparison);
+end;
+
+function CompareCharAsc(const d1,d2): integer;
+var
+  s1 : char absolute d1;
+  s2 : char absolute d2;
+  comparison:integer;
+begin
+  comparison:= strChars.IndexOf(s1) - strChars.indexOf(s2);
+  if (comparison = 0)then result:=0
+    else result:=comparison div abs(comparison);
+end;
+
+function CompareCharDesc(const d1,d2): integer;
+var
+  s1 : char absolute d1;
+  s2 : char absolute d2;
+  comparison:integer;
+begin
+  comparison:= strChars.IndexOf(s2) - strChars.indexOf(s1);
+  if (comparison = 0)then result:=0
+    else result:=comparison div abs(comparison);
 end;
 
 procedure sort(var arr: array of Integer; count: Integer;ascending:boolean=true);
@@ -268,39 +301,43 @@ begin
     anysort.AnySort(arr, Count, sizeof(Integer), @CompareInt64Desc)
 end;
 
-procedure sort(var str: string; count: Integer; ascending: boolean);
-var
-  index,swapIndex:integer;
-  swap:char;
-  i1,i2:integer;
-  doSwap:boolean;
-begin
-  if (count <=1) then exit;
-  //start at 1. for each following item, if it's less than that element then swap
-  index:=1;
-  repeat
-  for swapIndex:=index+1 to length(str)do
-    begin
-    i1:=strChars.IndexOf(str[index]);
-    i2:=strChars.IndexOf(str[swapIndex]);
-    doSwap:= (ascending and(i2 < i1)) or (not ascending and (i2>i1));
-    if doSwap then
-      begin
-      swap:=str[index];
-      str[index]:=str[swapIndex];
-      str[swapIndex]:=swap;
-      end;
-    end;
-  index:=index + 1;
-  until index > length(str)-1;
-end;
-
 procedure sort(var arr: array of int64; count: Integer; ascending: boolean);
 begin
  if ascending then
     anysort.AnySort(arr, Count, sizeof(Int64), @CompareInt64Asc)
   else
     anysort.AnySort(arr, Count, sizeof(Int64), @CompareInt64Desc)
+end;
+
+procedure sort(var arr: array of string; count: Integer; ascending: boolean);
+begin
+ if ascending then
+    anysort.AnySort(arr, Count, sizeof(string), @CompareStrAsc)
+  else
+    anysort.AnySort(arr, Count, sizeof(string), @CompareStrDesc)
+end;
+
+procedure sort(var arr: array of char; count: Integer; ascending: boolean);
+begin
+ if ascending then
+    anysort.AnySort(arr, Count, sizeof(char), @CompareCharAsc)
+  else
+    anysort.AnySort(arr, Count, sizeof(char), @CompareCharDesc)
+end;
+
+procedure sort(var str: string; count: Integer; ascending: boolean);
+var
+  charArray:TCharArray;
+  index:integer;
+  output:string;
+begin
+  charArray:=str.ToCharArray;
+  sort(charArray,count,ascending);
+  //convert it back to a string. If there's a method for this I can't find it.
+  output:='';
+  for index:=0 to pred(length(charArray)) do
+    output:=output+charArray[index];
+  str:=output;
 end;
 
 end.

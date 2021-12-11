@@ -5,7 +5,7 @@ unit anysort;
 interface
 
 type
-  TCompareFunc = function (const elem1, elem2): Int64;
+  TCompareFunc = function (const elem1, elem2): integer;
 
 procedure AnySort(var Arr; Count: Integer; Stride: Integer; CompareFunc: TCompareFunc; start:integer=0);
 

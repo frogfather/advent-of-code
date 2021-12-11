@@ -6,6 +6,8 @@ object mainForm: TmainForm
   Caption = 'mainForm'
   ClientHeight = 535
   ClientWidth = 1008
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
   OnShow = FormShow
   LCLVersion = '2.0.12.0'
   object bExecute: TButton
@@ -25,6 +27,8 @@ object mainForm: TmainForm
     Anchors = [akTop, akLeft, akRight]
     Font.Pitch = fpFixed
     ItemHeight = 0
+    MultiSelect = True
+    OnSelectionChange = lbResultsSelectionChange
     ParentFont = False
     TabOrder = 1
   end
@@ -43,9 +47,7 @@ object mainForm: TmainForm
     Height = 404
     Top = 56
     Width = 528
-    Lines.Strings = (
-      'Memo1'
-    )
+    Lines.Strings = (    )
     TabOrder = 3
   end
   object OpenDialog1: TOpenDialog
