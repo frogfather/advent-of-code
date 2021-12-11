@@ -53,6 +53,10 @@ type
     procedure CardNotifyWinHandler(Sender: TObject);
     procedure OctopusFlashHandler(Sender: TObject);
     function identifySegmentValues(input:TStringArray):TSegmentMap;
+    procedure setupOctopuses(puzzleInput:TStringArray; mapDimensions:TPoint);
+    procedure runOctopuses(mapDimensions:TPoint);
+    procedure resetOctopuses(mapDimensions:TPoint);
+    function getDimensionsOfPuzzleInput(input:TStringArray):TPoint;
   public
 
   end;
@@ -139,16 +143,30 @@ begin
   memo1.Text:=getDescription(fileName);
 end;
 
+function TmainForm.getDimensionsOfPuzzleInput(input: TStringArray): TPoint;
+begin
+  result.X:=0;
+  result.Y:=0;
+  if length(input) = 0 then exit;
+  with result do
+    begin
+    Y:= length(input);
+    X:= length(input[0]);
+    end;
+end;
+
 { day 1 }
 //https://adventofcode.com/2021/day/1
 procedure TmainForm.day1part1;
 var
   puzzleInput:TStringArray;
+  puzzleDimensions:TPoint;
   index, increasingCount:integer;
 begin
   puzzleInput:= getPuzzleInputAsStringArray('day_1_1.txt');
+  puzzleDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
   increasingCount:=0;
-  for index := 1 to length(puzzleInput) - 1 do
+  for index := 1 to pred(puzzleDimensions.Y) do
     begin
     if (strToInt(puzzleInput[index]) > strToInt(puzzleInput[index - 1]))
       then increasingCount := increasingCount +1;
@@ -158,13 +176,15 @@ end;
 procedure TmainForm.day1part2;
 var
   puzzleInput: TStringArray;
+  puzzleDimensions:TPoint;
   index, firstSetIndex,secondSetIndex, increasingCount,avg1,avg2:integer;
 begin
   puzzleInput:= getPuzzleInputAsStringArray('day_1_1.txt');
+  puzzleDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
   increasingCount:=0;
   //we start at 3 because we need to compare the first three entries to
   //the second three entries (i.e. comparing 0,1,2 to 1,2,3)
-  for index:=3 to pred(length(puzzleInput)) do
+  for index:=3 to pred(puzzleDimensions.Y) do
     begin
     avg1:=0;
     avg2:=0;
@@ -182,15 +202,17 @@ end;
 procedure TmainForm.day2part1;
 var
   puzzleInput: TStringArray;
+  puzzleDimensions:TPoint;
   elements:TStringArray;
   command: string;
   index,value: integer;
   horPos,depth:integer;
 begin
   puzzleInput:=getPuzzleInputAsStringArray('day_2_1.txt');
+  puzzleDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
   horPos:=0;
   depth:=0;
-  for index:=0 to pred(length(puzzleinput)) do
+  for index:=0 to pred(puzzleDimensions.Y) do
     begin
     elements:=puzzleInput[index].Split(' ');
     command:=elements[0];
@@ -206,16 +228,18 @@ end;
 procedure TmainForm.day2part2;
  var
   puzzleInput: TStringArray;
+  puzzleDimensions:TPoint;
   elements:TStringArray;
   command: string;
   index,value: integer;
   horPos,depth,aim:integer;
 begin
   puzzleInput:=getPuzzleInputAsStringArray('day_2_1.txt');
+  puzzleDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
   horPos:=0;
   depth:=0;
   aim:=0;
-  for index:=0 to pred(length(puzzleinput)) do
+  for index:=0 to pred(puzzleDimensions.Y) do
     begin
     elements:=puzzleInput[index].Split(' ');
     command:=elements[0];
@@ -306,15 +330,16 @@ end;
 procedure TmainForm.day4part1;
 var
  puzzleInput,numbersToCall:TStringArray;
+ puzzleDimensions:TPoint;
  currentLine:string;
  currentCardData:TStringArray; //The block of numbers to passed to the card constructor
  bingoCards: TBingoCards;
  cardNumber:integer;
- lineNumber,numberOfLines,callNumber:integer;
+ lineNumber,callNumber:integer;
 begin
  //Get the puzzle input without removing blank lines as we need these
  puzzleInput:= getPuzzleInputAsStringArray('day_4_1.txt',false);
- numberOfLines:=length(puzzleInput);
+ puzzleDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
  //The first line is the numbers that will be called.
  numbersToCall:=puzzleInput[0].Split(',');
  //For the rest of the input we need to create a bingo card for each block
@@ -324,7 +349,7 @@ begin
  currentCardData:=TStringArray.Create;
  setLength(currentCardData,0); //clear the array
  cardNumber:=0;
- for lineNumber:= 1 to pred(numberOfLines) do
+ for lineNumber:= 1 to pred(puzzleDimensions.Y) do
    begin
    currentLine:=puzzleInput[lineNumber];
    if length(currentLine)> 0
@@ -389,6 +414,7 @@ var
  fishNo,newFishNo,dayNo:integer;
 begin
  //Retrieve the lines from the file. In this case there's only one
+ //TODO use int array instead
  fishInput:= getPuzzleInputAsStringArray('day_6_1.txt');
  if (length(fishInput) = 1) then
    begin
@@ -474,6 +500,7 @@ end;
 procedure TmainForm.day7part1;
 var
  puzzleInput:TStringArray;
+ puzzleDimensions:TPoint;
  crabPositions:TIntArray;
  maxValue,totalValue,averageValue,index:integer;
  startPoint,endPoint,fuelAtThisPoint,leastFuel:integer;
@@ -494,7 +521,8 @@ var
 
   begin
   puzzleInput:=getPuzzleInputAsStringArray('day_7_part_1.txt');
-  if length(puzzleInput)= 1 then
+  puzzleDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
+  if puzzleDimensions.Y = 1 then
     begin
     crabPositions:=toIntArray(puzzleInput[0].Split(','));
     maxValue:=getMaxValue(crabPositions);
@@ -577,14 +605,16 @@ end;
 procedure TmainForm.day8part1;
 var
 requiredOutputs:TIntArray;
+puzzleDimensions:TPoint;
 puzzleInput,outputSeq:TStringArray;
 lineNo,elementNo:Integer;
 matchingOutputs:integer;
 begin
  requiredOutputs:=TIntArray.create(2,3,4,7);
  puzzleInput:=getPuzzleInputAsStringArray('day_8_1.txt');
+ puzzleDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
  matchingOutputs:=0;
- for lineNo:=0 to pred(length(puzzleInput)) do
+ for lineNo:=0 to pred(puzzleDimensions.Y) do
    begin
    //split on pipe
    outputSeq:=puzzleInput[lineNo].Split('|')[1].Split(' ');
@@ -688,14 +718,15 @@ procedure TmainForm.day8part2;
 var
   segmentMap: TSegmentMap;
   puzzleInput,inputSeq,outputSeq:TStringArray;
+  puzzleDimensions:TPoint;
   lineNo,outputIndex:integer;
   sOutput,sLineValue: string;
   lineSum,totalSum:integer;
-
 begin
   puzzleInput:=getPuzzleInputAsStringArray('day_8_1.txt');
+  puzzleDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
   totalSum:=0;
-  for lineNo:=0 to pred(length(puzzleInput)) do
+  for lineNo:=0 to pred(puzzleDimensions.Y) do
    begin
    sLineValue:='';
    inputSeq:=removeBlankEntriesFromArray(puzzleInput[lineNo].Split('|')[0].Split(' '));
@@ -718,16 +749,18 @@ end;
 procedure TmainForm.day9part1;
 var
   puzzleInput:TStringArray;
+  puzzleDimensions:TPoint;
   lineNo,index:integer;
   currentLine,previousLine,nextLine:String;
   centre,north,south,east,west:integer;
   totalRiskLevel:integer;
 begin
   puzzleInput:=getPuzzleInputAsStringArray('day_9_1.txt');
+  puzzleDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
   //find points that are lower than all those around them
   //start at the second line and stop at the second last line
   totalRiskLevel:=0;
-  for lineNo:=0 to pred(length(puzzleInput)) do
+  for lineNo:=0 to pred(puzzleDimensions.Y) do
     begin
     currentLine:=puzzleInput[lineNo];
     if (lineNo > 0) then previousLine:=puzzleInput[lineNo-1];
@@ -760,6 +793,7 @@ end;
 procedure TmainForm.day9part2;
 var
   puzzleInput:TStringArray;
+  puzzleDimensions:TPoint;
   basinMap:T3DIntMap;
   mapMaxX,mapMaxY:integer;
   currentLine:string;
@@ -808,13 +842,14 @@ begin
   //load the puzzle input into the array
   basinNo:=0;
   puzzleInput:=getPuzzleInputAsStringArray('day_9_1.txt');
-  if (length(puzzleInput)=0) then exit;
+  puzzleDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
+  if (puzzleDimensions.Y = 0) then exit;
   basinMap:=T3DIntMap.create;
   mapMaxX:=length(puzzleInput[0]);
   mapMaxY:=length(puzzleInput);
   setLength(basinMap,mapMaxX,mapMaxY,2);
   //populate the map
-  for y:=0 to pred(length(puzzleInput)) do
+  for y:=0 to pred(puzzleDimensions.Y) do
     begin
     currentLine:=puzzleInput[y];
     for elementNo:=0 to pred(currentline.length) do
@@ -897,6 +932,7 @@ const
  autoCompleteScore: array[0..3] of integer = (1,2,3,4);
 var
   puzzleInput:TStringArray;
+  puzzleDimensions:TPoint;
   lineNo:integer;
   incomplete:boolean;
   tagResult:string;
@@ -933,7 +969,7 @@ var
     remainingTagIndex:integer;
     begin
     expectedClosingTags:=TStringArray.create;
-    for index := 0 to pred(length(input)) do
+    for index := 0 to pred(puzzleDimensions.Y) do
       begin
       currentTag:=input.Substring(index,1);
       openingTagIndex := arrPos(openingTags,currentTag);
@@ -970,7 +1006,8 @@ begin
   totalScore:=0;
   completionScores:=TInt64Array.create;
   puzzleInput:=getPuzzleInputAsStringArray('day_10_1.txt');
-  for lineNo:= 0 to pred(length(puzzleInput)) do
+  puzzleDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
+  for lineNo:= 0 to pred(puzzleDimensions.Y) do
     begin
     tagResult:=missingOrIllegalTags(puzzleInput[lineNo],incomplete);
     if incomplete then
@@ -1018,26 +1055,24 @@ var
   function inRange(position:TPoint):boolean;
   var
     notAtOwnPosition:boolean;
-  begin
-  notAtOwnPosition:= ((xPosition <> position.X) or (yPosition <> position.Y));
-  result:=(xPosition < mapWidth)
-      and (xPosition > -1)
-      and (yPosition < mapHeight)
-      and (yPosition > -1)
-      and notAtOwnPosition;
-  end;
+    begin
+    notAtOwnPosition:= ((xPosition <> position.X) or (yPosition <> position.Y));
+    result:=(xPosition < mapWidth)
+        and (xPosition > -1)
+        and (yPosition < mapHeight)
+        and (yPosition > -1)
+        and notAtOwnPosition;
+    end;
 
 begin
 if sender is TOctopus then with sender as TOctopus do
   begin
   octopusFlashCount:= octopusFlashCount + 1;
-  mapHeight:= length(octopusMap);
-  if mapHeight = 0 then exit;
-  mapWidth:=length(octopusMap[0]);
+  mapWidth:=length(octopusMap);
+  if mapWidth = 0 then exit;
+  mapHeight:= length(octopusMap[0]);
   //get its position
   octoPosition:=position;
-  //lbResults.items.add('Flash '+octoPosition.X.ToString+':'+octoPosition.Y.ToString);
-  //increment the energy of all surrounding including diagonal
   for xPosition:= octoPosition.X - 1 to octoPosition.X + 1 do
     for yPosition:= octoPosition.Y -1 to octoPosition.Y + 1 do
       begin
@@ -1045,55 +1080,42 @@ if sender is TOctopus then with sender as TOctopus do
       if inRange(octoPosition)
         then with octopusMap[xPosition][yPosition] as TOctopus do
           begin
-          //lbResults.items.add('Increment '+xPosition.ToString+':'+yPosition.ToString);
           addEnergy(1);
           end;
       end;
   end;
 end;
 
-procedure TmainForm.day11part1;
-const maxSteps = 100;
+procedure TmainForm.runOctopuses(mapDimensions:TPoint);
 var
-  puzzleInput:TStringArray;
-  mapWidth,mapHeight:integer;
   row,column:integer;
-  octopusEnergy:integer;
-  mapPosition:TPoint;
-  steps:integer;
-
-  procedure outputMap;
-  var
-    row,column:integer;
-    sLine:String;
   begin
-    for row:=0 to pred(mapHeight) do
-    begin
-    sLine:='';
-    for column:=0 to pred(mapWidth) do
-      begin
-      with octopusMap[column][row] as TOctopus do
-        begin
-        sLine:=sLine+energy.ToString;
-        end;
-      end;
-    lbResults.items.add(sLine);
-    end;
+    for row:=0 to pred(mapDimensions.Y) do
+      for column:=0 to pred(mapDimensions.X)do
+        with octopusMap[column][row]as TOctopus do
+          addEnergy(1);
   end;
 
+procedure TmainForm.resetOctopuses(mapDimensions: TPoint);
+var
+  row,column:integer;
+begin
+    for row:=0 to pred(mapDimensions.Y) do
+      for column:=0 to pred(mapDimensions.X) do
+        with octopusMap[column][row] as TOctopus do
+          resetFlash;
+end;
 
+procedure TmainForm.setupOctopuses(puzzleInput:TStringArray; mapDimensions:TPoint);
+var
+  row,column,octopusEnergy:integer;
+  mapPosition:TPoint;
 begin
   octopusMap:=TOctopusMap.create;
-  puzzleInput:=getPuzzleInputAsStringArray('day_11_1.txt');
-  mapHeight:= length(puzzleInput);
-  if mapHeight = 0 then exit;
-  mapWidth:=length(puzzleInput[0]);
-  setLength(octopusMap,mapWidth,mapHeight);
-  for row:=0 to pred(mapHeight) do
-    begin
-    for column:=0 to pred(mapWidth) do
+  setLength(octopusMap, mapDimensions.X,mapDimensions.Y);
+  for row:=0 to pred(mapDimensions.Y) do
+    for column:=0 to pred(mapDimensions.X) do
       begin
-      //fill the map with octopus
       with mapPosition do
         begin
         X:=column;
@@ -1101,43 +1123,63 @@ begin
         end;
       octopusEnergy:=puzzleInput[row].Substring(column,1).ToInteger;
       octopusMap[column][row]:=TOctopus.create(octopusEnergy,mapPosition,@OctopusFlashHandler);
-      end;
-    end;
+  end;
+end;
+
+procedure TmainForm.day11part1;
+const maxSteps = 100;
+var
+  puzzleInput:TStringArray;
+  mapDimensions:TPoint;
+  steps:integer;
+begin
+  puzzleInput:=getPuzzleInputAsStringArray('day_11_1.txt');
+  mapDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
+  setupOctopuses(puzzleInput,mapDimensions);
   octopusFlashCount:=0;
   for steps:=0 to maxSteps -1 do
     begin
-    lbResults.items.add('step '+steps.ToString);
-    //increase the energy of every octopus
-    for row:=0 to pred(mapHeight) do
-      for column:=0 to pred(mapWidth)do
-        with octopusMap[column][row]as TOctopus do
-        begin
-        addEnergy(1);
-        end;
-
-  //sleep(10);
-  //outputMap;
-    //reset the octopus
-  for row:=0 to pred(mapHeight) do
-    begin
-    for column:=0 to pred(mapWidth) do
-      begin
-      with octopusMap[column][row] as TOctopus do
-        begin
-        resetFlash;
-        end;
-      end;
-    end;
-
+    runOctopuses(mapDimensions);
+    resetOctopuses(mapDimensions);
     end;
   lbResults.items.add('total flash count: '+octopusFlashCount.ToString);
-
-
 end;
 
 procedure TmainForm.day11part2;
-begin
+var
+  puzzleInput:TStringArray;
+  mapDimensions:TPoint;
+  steps:integer;
+  done:boolean;
 
+  function allHaveFlashed:boolean;
+  var
+    x,y,flashCount :integer;
+  begin
+  flashCount:=0;
+    for x:=0 to pred(mapDimensions.X) do
+      for y:=0 to pred(mapDimensions.Y) do
+        with octopusMap[x][y] as TOctopus do
+          begin
+          if hasFlashed then flashCount:=flashCount + 1;
+          end;
+    result:= flashCount = mapDimensions.X * mapDimensions.Y;
+  end;
+
+begin
+  puzzleInput:=getPuzzleInputAsStringArray('day_11_1.txt');
+  mapDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
+  setupOctopuses(puzzleInput,mapDimensions);
+  //we want to run the octopuses until we reach a point where they have
+  //all flashed. We can find this by checking the hasFlashed property
+  steps:=0;
+  repeat
+  runOctopuses(mapDimensions);
+  steps:=steps+1;
+  done:=allHaveFlashed;
+  resetOctopuses;
+  until done;
+lbresults.items.add('All octopuses flash on step '+steps.ToString);
 end;
 
 

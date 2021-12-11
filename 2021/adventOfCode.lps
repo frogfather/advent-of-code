@@ -18,9 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="1059"/>
-        <CursorPos X="17" Y="1060"/>
-        <FoldState Value=" T3kE0D3 piYjD0K]9j5jW034]9DjR0i01112]DJlf0S21]E T1pH020J p0vg02 TM Huf01e"/>
+        <TopLine Value="1168"/>
+        <CursorPos X="32" Y="1180"/>
+        <FoldState Value=" T3kU0F3 piejL0K]9j6jX034]9EjS0k01112]DLm20T21]E3132 T1pg020J p0wB0]GM HvS01L"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -49,7 +49,7 @@
         <UnitName Value="ventMap"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="35" Y="88"/>
-        <UsageCount Value="190"/>
+        <UsageCount Value="195"/>
       </Unit4>
       <Unit5>
         <Filename Value="lanternfish.pas"/>
@@ -57,7 +57,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="15"/>
         <CursorPos X="28" Y="38"/>
-        <UsageCount Value="151"/>
+        <UsageCount Value="156"/>
       </Unit5>
       <Unit6>
         <Filename Value="aocutils.pas"/>
@@ -65,7 +65,7 @@
         <UnitName Value="aocUtils"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="10"/>
-        <UsageCount Value="111"/>
+        <UsageCount Value="116"/>
       </Unit6>
       <Unit7>
         <Filename Value="arrayutils.pas"/>
@@ -74,7 +74,7 @@
         <EditorIndex Value="2"/>
         <TopLine Value="28"/>
         <CursorPos X="83" Y="28"/>
-        <UsageCount Value="111"/>
+        <UsageCount Value="116"/>
         <Loaded Value="True"/>
       </Unit7>
       <Unit8>
@@ -83,7 +83,7 @@
         <EditorIndex Value="3"/>
         <TopLine Value="18"/>
         <CursorPos X="54" Y="8"/>
-        <UsageCount Value="98"/>
+        <UsageCount Value="103"/>
         <Loaded Value="True"/>
       </Unit8>
       <Unit9>
@@ -95,7 +95,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="32"/>
         <CursorPos X="27" Y="57"/>
-        <UsageCount Value="66"/>
+        <UsageCount Value="71"/>
       </Unit9>
       <Unit10>
         <Filename Value="/usr/local/share/fpcsrc/rtl/objpas/sysutils/syshelph.inc"/>
@@ -215,132 +215,132 @@
         <Filename Value="octopus.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="37"/>
-        <CursorPos X="23" Y="45"/>
-        <UsageCount Value="49"/>
+        <TopLine Value="14"/>
+        <CursorPos Y="42"/>
+        <UsageCount Value="53"/>
         <Loaded Value="True"/>
       </Unit26>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="advent.pas"/>
-        <Caret Line="1093" TopLine="1077"/>
+        <Filename Value="octopus.pas"/>
+        <Caret Line="47" Column="6" TopLine="35"/>
       </Position1>
       <Position2>
         <Filename Value="advent.pas"/>
-        <Caret Line="1094" TopLine="1078"/>
+        <Caret Line="1072" Column="12" TopLine="1046"/>
       </Position2>
       <Position3>
         <Filename Value="advent.pas"/>
-        <Caret Line="1096" TopLine="1080"/>
+        <Caret Line="1054" Column="23" TopLine="1042"/>
       </Position3>
       <Position4>
         <Filename Value="advent.pas"/>
-        <Caret Line="1093" TopLine="1080"/>
+        <Caret Line="1094" Column="9" TopLine="1098"/>
       </Position4>
       <Position5>
         <Filename Value="advent.pas"/>
-        <Caret Line="1094" TopLine="1080"/>
+        <Caret Line="1076" Column="74" TopLine="1065"/>
       </Position5>
       <Position6>
         <Filename Value="advent.pas"/>
-        <Caret Line="1096" TopLine="1080"/>
+        <Caret Line="1078" Column="22" TopLine="1071"/>
       </Position6>
       <Position7>
         <Filename Value="advent.pas"/>
-        <Caret Line="1093" TopLine="1080"/>
+        <Caret Line="1079" Column="22" TopLine="1075"/>
       </Position7>
       <Position8>
         <Filename Value="advent.pas"/>
-        <Caret Line="1094" TopLine="1080"/>
+        <Caret Line="1012" Column="11" TopLine="1012"/>
       </Position8>
       <Position9>
         <Filename Value="advent.pas"/>
-        <Caret Line="1096" TopLine="1080"/>
+        <Caret Line="56" Column="15" TopLine="46"/>
       </Position9>
       <Position10>
         <Filename Value="advent.pas"/>
-        <Caret Line="1093" TopLine="1080"/>
+        <Caret Line="58" Column="20" TopLine="49"/>
       </Position10>
       <Position11>
         <Filename Value="advent.pas"/>
-        <Caret Line="1094" TopLine="1080"/>
+        <Caret Line="1117" Column="58" TopLine="1076"/>
       </Position11>
       <Position12>
         <Filename Value="advent.pas"/>
-        <Caret Line="1096" TopLine="1080"/>
+        <Caret Line="58" Column="25" TopLine="50"/>
       </Position12>
       <Position13>
         <Filename Value="advent.pas"/>
-        <Caret Line="1093" TopLine="1080"/>
+        <Caret Line="150" Column="14" TopLine="138"/>
       </Position13>
       <Position14>
         <Filename Value="advent.pas"/>
-        <Caret Line="1094" TopLine="1080"/>
+        <Caret Line="1140" Column="7" TopLine="1125"/>
       </Position14>
       <Position15>
         <Filename Value="advent.pas"/>
-        <Caret Line="1096" TopLine="1080"/>
+        <Caret Line="337" Column="13" TopLine="331"/>
       </Position15>
       <Position16>
         <Filename Value="advent.pas"/>
-        <Caret Line="1093" TopLine="1080"/>
+        <Caret Line="971" Column="44" TopLine="960"/>
       </Position16>
       <Position17>
         <Filename Value="advent.pas"/>
-        <Caret Line="1094" TopLine="1080"/>
+        <Caret Line="1120" Column="3" TopLine="1104"/>
       </Position17>
       <Position18>
         <Filename Value="advent.pas"/>
-        <Caret Line="1096" TopLine="1080"/>
+        <Caret Line="1121" Column="7" TopLine="1105"/>
       </Position18>
       <Position19>
         <Filename Value="advent.pas"/>
-        <Caret Line="1093" TopLine="1080"/>
+        <Caret Line="1161" Column="60" TopLine="1142"/>
       </Position19>
       <Position20>
         <Filename Value="advent.pas"/>
-        <Caret Line="1094" TopLine="1080"/>
+        <Caret Line="1174" Column="65" TopLine="1159"/>
       </Position20>
       <Position21>
         <Filename Value="advent.pas"/>
-        <Caret Line="1096" TopLine="1080"/>
+        <Caret Line="1171" TopLine="1160"/>
       </Position21>
       <Position22>
         <Filename Value="advent.pas"/>
-        <Caret Line="1093" TopLine="1080"/>
+        <Caret Line="1160" TopLine="1142"/>
       </Position22>
       <Position23>
         <Filename Value="advent.pas"/>
-        <Caret Line="1087" TopLine="1087"/>
+        <Caret Line="1155" Column="40" TopLine="1142"/>
       </Position23>
       <Position24>
         <Filename Value="advent.pas"/>
-        <Caret Line="1101" TopLine="1087"/>
+        <Caret Line="1171" TopLine="1159"/>
       </Position24>
       <Position25>
         <Filename Value="advent.pas"/>
-        <Caret Line="1103" TopLine="1087"/>
+        <Caret Line="58" Column="29" TopLine="47"/>
       </Position25>
       <Position26>
         <Filename Value="advent.pas"/>
-        <Caret Line="1113" TopLine="1101"/>
+        <Caret Line="1153" Column="7" TopLine="1151"/>
       </Position26>
       <Position27>
         <Filename Value="advent.pas"/>
-        <Caret Line="1099" TopLine="1089"/>
+        <Caret Line="1180" Column="13" TopLine="1166"/>
       </Position27>
       <Position28>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="23" Column="21" TopLine="10"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1157" Column="14" TopLine="1153"/>
       </Position28>
       <Position29>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="26" Column="49" TopLine="37"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1167" TopLine="1153"/>
       </Position29>
       <Position30>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="47" Column="6" TopLine="35"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1180" Column="18" TopLine="1166"/>
       </Position30>
     </JumpHistory>
     <RunParams>
@@ -349,19 +349,13 @@
     </RunParams>
   </ProjectSession>
   <Debugging>
-    <Watches Count="4">
+    <Watches Count="2">
       <Item1>
-        <Expression Value="tags"/>
+        <Expression Value="flashCount"/>
       </Item1>
       <Item2>
-        <Expression Value="completionTag"/>
+        <Expression Value="mapDimensions"/>
       </Item2>
-      <Item3>
-        <Expression Value="tagScore"/>
-      </Item3>
-      <Item4>
-        <Expression Value="runningTotal"/>
-      </Item4>
     </Watches>
   </Debugging>
 </CONFIG>
