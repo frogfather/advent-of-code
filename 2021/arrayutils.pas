@@ -10,11 +10,13 @@ type
   //Looks like the built in TintegerArray is a static array
   //so let's define our own dynamic integer array
   TIntArray = array of integer;
+  TInt64Array = array of int64;
   //used in day 9 part two
   T3DIntMap = array of array of array of integer;
   TColours = array of TColor;
 procedure addToArray(var arrInput:TStringArray; item:string;index:integer=-1);
 procedure addToArray(var arrInput:TIntArray;item:integer;index:integer=-1);
+procedure addToArray(var arrInput:TInt64Array;item:int64;index:integer=-1);
 function deleteFromArray(var arrInput:TStringArray; index: integer):string;
 function deleteFromArray(var arrInput:TIntArray; index: integer):integer;
 function removeBlankEntriesFromArray(arrInput: TStringArray):TStringArray;
@@ -25,6 +27,7 @@ function arrPos(arrInput:TStringArray; element:string):integer;
 function containsCharacters(toSearch,toFind:String):boolean;
 procedure sort(var arr: array of Integer; count: Integer; ascending:boolean=true);
 procedure sort(var str: string; count: Integer;ascending:boolean=true);
+procedure sort(var arr: array of int64; count: Integer; ascending:boolean=true);
 implementation
 
 const strChars: string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -58,6 +61,21 @@ begin
     if (pos > 0) then arrInput[pos]:=arrInput[pos-1];
     end;
   arrInput[index]:=item;
+end;
+
+procedure addToArray(var arrInput: TInt64Array; item: int64; index: integer);
+var
+  pos,lastItemIndex:integer;
+begin
+  //if index is -1 add at the end
+  setLength(arrInput,length(arrInput)+1);
+  lastItemIndex:= pred(length(arrInput));
+  //if (index = -1) then index:=lastItemIndex; //insert at end
+  //for pos:=lastItemIndex downto index do
+  //  begin
+  //  if (pos > 0) then arrInput[pos]:=arrInput[pos-1];
+  //  end;
+  arrInput[lastItemIndex]:=item;
 end;
 
 function deleteFromArray(var arrInput: TStringArray; index: integer):string;
@@ -195,19 +213,19 @@ end;
 
 //Comparator functions for integers
 
-function CompareIntAsc(const d1,d2): integer;
+function CompareInt64Asc(const d1,d2): int64;
 var
-  i1 : integer absolute d1;
-  i2 : integer absolute d2;
+  i1 : int64 absolute d1;
+  i2 : int64 absolute d2;
 begin
   if i1=i2 then Result:=0
   else if i1<i2 then Result:=-1
   else Result:=1;
 end;
-function CompareIntDesc(const d1,d2): integer;
+function CompareInt64Desc(const d1,d2): int64;
 var
-  i1 : integer absolute d1;
-  i2 : integer absolute d2;
+  i1 : int64 absolute d1;
+  i2 : int64 absolute d2;
 begin
   if i1=i2 then Result:=0
   else if i1>i2 then Result:=-1
@@ -245,9 +263,9 @@ end;
 procedure sort(var arr: array of Integer; count: Integer;ascending:boolean=true);
 begin
   if ascending then
-    anysort.AnySort(arr, Count, sizeof(Integer), @CompareIntAsc)
+    anysort.AnySort(arr, Count, sizeof(Integer), @CompareInt64Asc)
   else
-    anysort.AnySort(arr, Count, sizeof(Integer), @CompareIntDesc)
+    anysort.AnySort(arr, Count, sizeof(Integer), @CompareInt64Desc)
 end;
 
 procedure sort(var str: string; count: Integer; ascending: boolean);
@@ -275,6 +293,14 @@ begin
     end;
   index:=index + 1;
   until index > length(str)-1;
+end;
+
+procedure sort(var arr: array of int64; count: Integer; ascending: boolean);
+begin
+ if ascending then
+    anysort.AnySort(arr, Count, sizeof(Int64), @CompareInt64Asc)
+  else
+    anysort.AnySort(arr, Count, sizeof(Int64), @CompareInt64Desc)
 end;
 
 end.

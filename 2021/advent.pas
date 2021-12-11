@@ -845,7 +845,6 @@ begin
   sort(basinSizes,length(basinSizes),false);
   //and get the first three entries
   lbResults.items.add('risk is '+(basinSizes[0]*basinSizes[1]*basinSizes[2]).ToString);
-
 end;
 
 procedure TmainForm.paintMap(map: T3DIntMap; basinSizes: TIntArray);
@@ -884,19 +883,43 @@ const
  openingTags: array [0..3] of string = ('(','[','{','<');
  closingTags: array [0..3] of string = (')',']','}','>');
  tagScore: array[0..3] of integer = (3,57,1197,25137);
+ autoCompleteScore: array[0..3] of integer = (1,2,3,4);
 var
   puzzleInput:TStringArray;
   lineNo:integer;
   incomplete:boolean;
-  firstIllegal:string;
-  illegalIndex,tagValue,totalScore:integer;
+  tagResult:string;
+  illegalIndex,totalScore:integer;
+  completionScores:TInt64Array;
+  tagValue:integer;
+  completionScore,completionResult :int64;
+  allScoresCount, midpointIndex:integer;
 
-  function firstIllegalSymbol(input:string; out incomplete: boolean):string;
+
+  function calculateCompletionScore(tags:string):int64;
+  var
+    completionTag:string;
+    tagScore,index,completionTagIndex: integer;
+    runningTotal:int64;
+    begin
+    runningTotal:=0;
+    for index:=0 to pred(length(tags)) do
+      begin
+      completionTag:=tags.Substring(index,1);
+      completionTagIndex:=arrPos(closingTags,completionTag);
+      tagScore:=autocompleteScore[completionTagIndex];
+      runningTotal:=(runningTotal*5)+tagScore;
+      end;
+    result:=runningTotal;
+    end;
+   //288957
+  function missingOrIllegalTags(input:string; out incomplete: boolean):string;
   var
     expectedClosingTags: TStringArray;
     index:integer;
     currentTag,expectedClosingTag:string;
     openingTagIndex:integer;
+    remainingTagIndex:integer;
     begin
     expectedClosingTags:=TStringArray.create;
     for index := 0 to pred(length(input)) do
@@ -922,26 +945,50 @@ var
           end;
         end;
       end;
+
     incomplete:= length(expectedClosingTags) > 0;
-    result:='';
+    if incomplete then
+      begin
+      result:='';
+      for remainingTagIndex:= pred(length(expectedClosingTags)) downto 0 do
+        result:=result+expectedClosingTags[remainingTagIndex];
+      end else result:='';
     end;
 
 begin
   totalScore:=0;
+  completionScores:=TInt64Array.create;
   puzzleInput:=getPuzzleInputAsStringArray('day_10_1.txt');
   for lineNo:= 0 to pred(length(puzzleInput)) do
     begin
-    firstIllegal:=firstIllegalSymbol(puzzleInput[lineNo],incomplete);
+    tagResult:=missingOrIllegalTags(puzzleInput[lineNo],incomplete);
     if incomplete then
-      //do nothing for now
-    else if (firstIllegal <> '') then
       begin
-      illegalIndex:=arrPos(closingTags,firstIllegal);
+      completionScore:=calculateCompletionScore(tagResult);
+      addToArray(completionScores,completionScore);
+      end
+    else if (tagResult <> '') then
+      begin
+      illegalIndex:=arrPos(closingTags,tagResult);
       tagValue:=tagScore[illegalIndex];
       totalScore:=totalScore + tagValue;
       end;
     end;
+
+  //sort the completion results and choose the middle one
+  sort(completionScores,length(completionScores));
+
+  for lineNo:=0 to pred(length(completionScores)) do
+    begin
+    lbresults.items.add(lineNo.ToString+' '+completionScores[lineNo].ToString);
+    end;
+
+
+  allScoresCount:= length(completionScores);
+  midpointIndex:=(allScoresCount div 2);//array zero indexed!
+  completionResult:=completionScores[midpointIndex];
   lbResults.Items.Add('Total score of illegal tags '+totalScore.ToString);
+  lbResults.items.add('value of middle completion score '+completionResult.ToString);
 end;
 
 procedure TmainForm.day10part2;
