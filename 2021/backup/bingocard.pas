@@ -10,7 +10,7 @@ type
   ABingoCard = array of array of array of string;
   { TBingoCard }
 
-  TBingoCard = class(TInterfacedObject)
+  TBingoCard = class(IUnknown)
     private
     fId: Integer;
     fCard: ABingoCard;
@@ -152,7 +152,7 @@ var
 
 begin
 fRowCount:=length(input);
-if (fRowCount > 0) then currElements:= removeBlankLinesFromArray(input[0].Split(' ')) else currElements:=TStringArray.Create;
+if (fRowCount > 0) then currElements:= removeBlankEntriesFromArray(input[0].Split(' ')) else currElements:=TStringArray.Create;
 fcolCount:=length(currElements);
 fWinning:=false;
 fCard:=ABingoCard.create;
@@ -162,7 +162,7 @@ fId:=cardId;//we need this to identify which card has won
 setLength(fCard,fRowCount,fColCount,2);
 for currLine:=0 to pred(fRowCount) do
   begin
-  currElements:=removeBlankLinesFromArray(input[currLine].Split(' '));
+  currElements:=removeBlankEntriesFromArray(input[currLine].Split(' '));
   for currCol:=0 to pred(fColCount) do
     begin
     fCard[currLine][currCol][0]:=currElements[currCol];

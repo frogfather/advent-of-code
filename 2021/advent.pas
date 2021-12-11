@@ -7,11 +7,13 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics,
   Dialogs, StdCtrls, math, bingoCard,
-  ventMap,fgl,DateUtils,aocUtils,arrayUtils,paintbox;
+  ventMap,fgl,DateUtils,aocUtils,arrayUtils,paintbox,
+  octopus;
 
 type
   TbingoCards = array of TbingoCard;
   TSegmentMap = specialize TFPGMap<String,String>;
+  TOctopusMap = array of array of TOctopus;
 
   { TmainForm }
   TmainForm = class(TForm)
@@ -46,7 +48,10 @@ type
     procedure day9part2;
     procedure day10part1;
     procedure day10part2;
+    procedure day11part1;
+    procedure day11part2;
     procedure CardNotifyWinHandler(Sender: TObject);
+    procedure OctopusFlashHandler(Sender: TObject);
     function identifySegmentValues(input:TStringArray):TSegmentMap;
   public
 
@@ -60,6 +65,9 @@ var
   //doesn't know anything about which cards have won, we need to
   //keep a global list of these.
   winningCards: TBingoCards;
+  //Used in day 11 part 1 for the same reason as the bingo cards
+  octopusFlashCount: integer;
+  octopusMap:TOctopusMap;
 
 implementation
 
@@ -95,6 +103,8 @@ begin
    17: day9part2;
    18: day10part1;
    19: day10part2;
+   20: day11part1;
+   21: day11part2;
   end;
  endTime:=now;
  lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
@@ -703,7 +713,8 @@ begin
    end;
  lbResults.items.add('Sum of all entries '+totalSum.ToString);
 end;
- { day 9 }
+
+{ day 9 }
 procedure TmainForm.day9part1;
 var
   puzzleInput:TStringArray;
@@ -912,7 +923,7 @@ var
       end;
     result:=runningTotal;
     end;
-   //288957
+
   function missingOrIllegalTags(input:string; out incomplete: boolean):string;
   var
     expectedClosingTags: TStringArray;
@@ -992,6 +1003,113 @@ begin
 end;
 
 procedure TmainForm.day10part2;
+begin
+ day10part1;
+end;
+
+{ day 11 }
+
+procedure TmainForm.OctopusFlashHandler(Sender: TObject);
+var
+  octoPosition:TPoint;
+  xPosition,yPosition:integer;
+  mapWidth,mapHeight:integer;
+
+  function inRange(position:TPoint):boolean;
+  var
+    notAtOwnPosition:boolean;
+  begin
+  notAtOwnPosition:= ((xPosition <> position.X) or (yPosition <> position.Y));
+  result:=(xPosition < mapWidth)
+      and (xPosition > -1)
+      and (yPosition < mapHeight)
+      and (yPosition > -1)
+      and notAtOwnPosition;
+  end;
+
+begin
+if sender is TOctopus then with sender as TOctopus do
+  begin
+  octopusFlashCount:= octopusFlashCount + 1;
+  mapHeight:= length(octopusMap);
+  if mapHeight = 0 then exit;
+  mapWidth:=length(octopusMap[0]);
+  //get its position
+  octoPosition:=position;
+  for xPosition:= octoPosition.X - 1 to octoPosition.X + 1 do
+    for yPosition:= octoPosition.Y -1 to octoPosition.Y + 1 do
+      begin
+      //check within range
+      if inRange(octoPosition)
+        then with octopusMap[xPosition][yPosition] as TOctopus do
+          begin
+          addEnergy(1);
+          end;
+      end;
+  end;
+end;
+
+procedure TmainForm.day11part1;
+const maxSteps = 100;
+var
+  puzzleInput:TStringArray;
+  mapWidth,mapHeight:integer;
+  row,column:integer;
+  octopusEnergy:integer;
+  mapPosition:TPoint;
+  steps:integer;
+
+begin
+  octopusMap:=TOctopusMap.create;
+  puzzleInput:=getPuzzleInputAsStringArray('day_11_1.txt');
+  mapHeight:= length(puzzleInput);
+  if mapHeight = 0 then exit;
+  mapWidth:=length(puzzleInput[0]);
+  setLength(octopusMap,mapWidth,mapHeight);
+  for row:=0 to pred(mapHeight) do
+    begin
+    for column:=0 to pred(mapWidth) do
+      begin
+      //fill the map with octopus
+      with mapPosition do
+        begin
+        X:=column;
+        Y:=row;
+        end;
+      octopusEnergy:=puzzleInput[row].Substring(column,1).ToInteger;
+      octopusMap[column][row]:=TOctopus.create(octopusEnergy,mapPosition,@OctopusFlashHandler);
+      end;
+    end;
+  octopusFlashCount:=0;
+  for steps:=0 to maxSteps -1 do
+    begin
+    //increase the energy of every octopus
+    for row:=0 to pred(mapHeight) do
+      for column:=0 to pred(mapWidth)do
+        with octopusMap[column][row]as TOctopus do
+        begin
+        addEnergy(1);
+        end;
+
+    //reset the octopus
+    for row:=0 to pred(mapHeight) do
+      begin
+      for column:=0 to pred(mapWidth) do
+        begin
+        with octopusMap[column][row] as TOctopus do
+          begin
+          resetFlash;
+          end;
+        end;
+      end;
+
+    end;
+  lbResults.items.add('total flash count: '+octopusFlashCount.ToString);
+
+
+end;
+
+procedure TmainForm.day11part2;
 begin
 
 end;
