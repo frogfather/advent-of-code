@@ -1438,10 +1438,36 @@ begin
 end;
 
 procedure TmainForm.day13part2;
+var
+  origami:TOrigami;
+  coordinates:TStringArray;
+  instructions,mapOutput:TStringList;
+  index,instruction:integer;
 begin
-
+  coordinates:=getPuzzleInputAsStringArray('day_13_1.txt',false); //leave blank lines
+  //remove last blank line
+  setLength(coordinates,length(coordinates)-1);
+  instructions:=TStringlist.Create;
+  //move the instructions to the stringlist and delete from array;
+  index:=pred(length(coordinates));
+  while length(coordinates[index]) > 0 do
+    begin
+    instructions.Insert(0,coordinates[index]);
+    setLength(coordinates,length(coordinates)-1);
+    index:=index-1;
+    end;
+  //remove blank line after coordinates
+  setLength(coordinates,length(coordinates)-1);
+  origami:=TOrigami.create(coordinates);
+  //constructor sets up the map and populates it.
+  for instruction:=0 to pred(instructions.Count) do
+    begin
+    origami.fold(instructions[instruction]);
+    end;
+  //this time we need to print out the dots
+  mapOutput:=origami.getMapOutput;
+  lbResults.Items:=mapOutput;
 end;
-
 
 end.
 

@@ -28,7 +28,9 @@ type
     public
     constructor create(coordinates:TStringArray);
     procedure fold(input:string);
+    function getMapOutput:TStringList;
     property dotCount:integer read calculateDotCount;
+    property dimensions:TPoint read fDimensions;
   end;
 
 implementation
@@ -88,7 +90,26 @@ begin
   //we can now map any items after the fold line
   mapFolded(foldPosition,foldHorizontally);
   //now resize the map again to the folded size
-  resizeMap(foldedDimension-originalDimension,foldHorizontally);
+  resizeMap(foldedDimension,foldHorizontally);
+end;
+
+function TOrigami.getMapOutput: TStringList;
+var
+  x,y:integer;
+  sline:string;
+  output:TStringList;
+begin
+  output:=TStringlist.create;
+  for x:=0 to pred(fDimensions.X) do
+    begin
+    sLine:='';
+    for y:=0 to pred(fDimensions.Y) do
+      begin
+      if (fMap[x][y])='#' then sLine:=sLine+'#' else sLine:=sLine+'  ';
+      end;
+    output.Add(sLine);
+    end;
+  result:=output;
 end;
 
 function TOrigami.calculateMapDimensions(coordinates: TStringArray): TPoint;
@@ -155,14 +176,17 @@ var
 procedure TOrigami.resizeMap(size: integer; columns: boolean);
 var
   column:integer;
+  columnLength:integer;
 begin
   if columns then
     begin
-    for column:=0 to length(fMap)do
-      setLength(fMap[column],length(fMap[column])+size);
+    for column:=0 to pred(length(fMap)) do
+      setLength(fMap[column], size);
     end else
     begin
-    setLength(fMap,length(fMap)+size);
+    if (size > 0) and (length(fMap)>0)
+      then columnLength:=length(fMap[0]) else columnLength:=0;
+    setLength(fMap,size,columnLength);
     end;
   getMapDimensions;
 end;
@@ -187,17 +211,24 @@ end;
 procedure TOrigami.mapFolded(foldPoint: integer; columns: boolean);
 var
   xpos,ypos,mirroredPosition:integer;
+  someVariable:integer;
+  rowLength,columnLength:integer;
 begin
 if columns then
   begin
   for ypos:=foldPoint+1 to pred(fDimensions.Y)do
+    begin
     for xpos:=0 to pred(fDimensions.X) do
       begin
+      rowLength:=length(fMap);
+      columnLength:=length(fMap[xPos]);
       mirroredPosition:=foldPoint - abs(yPos - foldPoint);
       //if there's a # in either position then the result is #
-      if (fMap[xPos][mirroredPosition] = '#') or (fMap[xpos][ypos] = '#')
+      if (mirroredPosition >= 0)
+      and ((fMap[xPos][mirroredPosition] = '#') or (fMap[xpos][ypos] = '#'))
         then fMap[xPos][mirroredPosition]:= '#';
       end;
+    end;
   end else
   begin
   for xpos:=foldPoint+1 to pred(fDimensions.X)do
@@ -205,7 +236,8 @@ if columns then
       begin
       mirroredPosition:=foldPoint - abs(xPos - foldPoint);
       //if there's a # in either position then the result is #
-      if (fMap[mirroredPosition][yPos] = '#') or (fMap[xpos][ypos] = '#')
+      if (mirroredPosition >= 0)
+      and ((fMap[mirroredPosition][yPos] = '#') or (fMap[xpos][ypos] = '#'))
         then fMap[mirroredPosition][yPos]:= '#';
       end;
   end;

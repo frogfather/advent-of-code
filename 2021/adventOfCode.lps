@@ -18,9 +18,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="1410"/>
-        <CursorPos X="53" Y="1419"/>
-        <FoldState Value=" T3lQ0F3 piejL0K]9j6jX034]9EjS0k01112A p0tX0c0151141 T1qc02@"/>
+        <TopLine Value="1452"/>
+        <CursorPos X="3" Y="1469"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -64,7 +63,7 @@
         <UnitName Value="aocUtils"/>
         <EditorIndex Value="2"/>
         <TopLine Value="6"/>
-        <UsageCount Value="170"/>
+        <UsageCount Value="175"/>
         <Loaded Value="True"/>
       </Unit6>
       <Unit7>
@@ -74,7 +73,7 @@
         <EditorIndex Value="3"/>
         <TopLine Value="22"/>
         <CursorPos X="3" Y="118"/>
-        <UsageCount Value="170"/>
+        <UsageCount Value="175"/>
         <Loaded Value="True"/>
       </Unit7>
       <Unit8>
@@ -83,7 +82,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="34"/>
         <CursorPos X="9" Y="56"/>
-        <UsageCount Value="157"/>
+        <UsageCount Value="162"/>
       </Unit8>
       <Unit9>
         <Filename Value="paintbox.pas"/>
@@ -94,135 +93,135 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="32"/>
         <CursorPos X="27" Y="57"/>
-        <UsageCount Value="125"/>
+        <UsageCount Value="130"/>
       </Unit9>
       <Unit10>
         <Filename Value="octopus.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="107"/>
+        <UsageCount Value="112"/>
       </Unit10>
       <Unit11>
+        <Filename Value="origami.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="81"/>
+        <CursorPos Y="91"/>
+        <UsageCount Value="40"/>
+        <Loaded Value="True"/>
+      </Unit11>
+      <Unit12>
         <Filename Value="cave.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="35" Y="8"/>
         <UsageCount Value="38"/>
-      </Unit11>
-      <Unit12>
+      </Unit12>
+      <Unit13>
         <Filename Value="/usr/local/share/fpcsrc/rtl/objpas/sysutils/syshelph.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="142"/>
         <CursorPos X="14" Y="155"/>
         <UsageCount Value="8"/>
-      </Unit12>
-      <Unit13>
+      </Unit13>
+      <Unit14>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/classes/classesh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="805"/>
         <CursorPos X="3" Y="816"/>
         <UsageCount Value="6"/>
-      </Unit13>
-      <Unit14>
+      </Unit14>
+      <Unit15>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/classes/streams.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="613"/>
         <CursorPos Y="617"/>
         <UsageCount Value="8"/>
-      </Unit14>
-      <Unit15>
+      </Unit15>
+      <Unit16>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/fgl.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1658"/>
         <CursorPos Y="1668"/>
         <UsageCount Value="9"/>
-      </Unit15>
-      <Unit16>
+      </Unit16>
+      <Unit17>
         <Filename Value="/Applications/Lazarus/lcl/include/customform.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2936"/>
         <CursorPos Y="2947"/>
         <UsageCount Value="1"/>
-      </Unit16>
-      <Unit17>
+      </Unit17>
+      <Unit18>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/sysutils/syshelph.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="544"/>
         <CursorPos X="14" Y="552"/>
         <UsageCount Value="2"/>
-      </Unit17>
-      <Unit18>
+      </Unit18>
+      <Unit19>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/sysutils/syshelpo.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="73"/>
         <CursorPos X="16" Y="76"/>
         <UsageCount Value="2"/>
-      </Unit18>
-      <Unit19>
+      </Unit19>
+      <Unit20>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/sysutils/sysstrh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="108"/>
         <CursorPos X="16" Y="117"/>
         <UsageCount Value="2"/>
-      </Unit19>
-      <Unit20>
+      </Unit20>
+      <Unit21>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/sysutils/sysstr.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="861"/>
         <CursorPos X="11" Y="863"/>
         <UsageCount Value="2"/>
-      </Unit20>
-      <Unit21>
+      </Unit21>
+      <Unit22>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/inc/systemh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="781"/>
         <CursorPos X="11" Y="788"/>
         <UsageCount Value="9"/>
-      </Unit21>
-      <Unit22>
+      </Unit22>
+      <Unit23>
         <Filename Value="/Applications/Lazarus/lcl/clipbrd.pp"/>
         <UnitName Value="Clipbrd"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="46"/>
         <CursorPos X="22" Y="26"/>
         <UsageCount Value="6"/>
-      </Unit22>
-      <Unit23>
+      </Unit23>
+      <Unit24>
         <Filename Value="/Applications/Lazarus/lcl/lcltype.pp"/>
         <UnitName Value="LCLType"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2693"/>
         <CursorPos X="3" Y="2704"/>
         <UsageCount Value="6"/>
-      </Unit23>
-      <Unit24>
+      </Unit24>
+      <Unit25>
         <Filename Value="/Applications/Lazarus/lcl/include/clipbrd.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="21"/>
         <CursorPos X="3" Y="23"/>
         <UsageCount Value="6"/>
-      </Unit24>
-      <Unit25>
+      </Unit25>
+      <Unit26>
         <Filename Value="/Applications/Lazarus/lcl/include/customlistbox.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="192"/>
         <CursorPos Y="203"/>
         <UsageCount Value="6"/>
-      </Unit25>
-      <Unit26>
+      </Unit26>
+      <Unit27>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/packages/fcl-json/src/fpjson.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="311"/>
         <CursorPos X="3" Y="318"/>
         <UsageCount Value="10"/>
-      </Unit26>
-      <Unit27>
-        <Filename Value="origami.pas"/>
-        <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="63"/>
-        <CursorPos Y="132"/>
-        <UsageCount Value="36"/>
-        <Loaded Value="True"/>
       </Unit27>
       <Unit28>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/unix/classes.pp"/>
@@ -240,124 +239,124 @@
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="origami.pas"/>
-        <Caret Line="134" TopLine="122"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1464" TopLine="1452"/>
       </Position1>
       <Position2>
-        <Filename Value="origami.pas"/>
-        <Caret Line="135" TopLine="122"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1463" TopLine="1452"/>
       </Position2>
       <Position3>
-        <Filename Value="origami.pas"/>
-        <Caret Line="134" TopLine="122"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1464" TopLine="1452"/>
       </Position3>
       <Position4>
-        <Filename Value="origami.pas"/>
-        <Caret Line="135" TopLine="122"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1463" TopLine="1452"/>
       </Position4>
       <Position5>
-        <Filename Value="origami.pas"/>
-        <Caret Line="134" TopLine="122"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1466" TopLine="1452"/>
       </Position5>
       <Position6>
-        <Filename Value="origami.pas"/>
-        <Caret Line="135" TopLine="122"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1467" TopLine="1452"/>
       </Position6>
       <Position7>
         <Filename Value="origami.pas"/>
-        <Caret Line="134" TopLine="122"/>
+        <Caret Line="189" TopLine="179"/>
       </Position7>
       <Position8>
-        <Filename Value="origami.pas"/>
-        <Caret Line="135" TopLine="122"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1467" Column="41" TopLine="1452"/>
       </Position8>
       <Position9>
         <Filename Value="origami.pas"/>
-        <Caret Line="134" TopLine="122"/>
+        <Caret Line="111" Column="18" TopLine="99"/>
       </Position9>
       <Position10>
-        <Filename Value="origami.pas"/>
-        <Caret Line="135" TopLine="122"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1467" TopLine="1454"/>
       </Position10>
       <Position11>
         <Filename Value="origami.pas"/>
-        <Caret Line="134" TopLine="122"/>
+        <Caret Line="60" TopLine="57"/>
       </Position11>
       <Position12>
         <Filename Value="origami.pas"/>
-        <Caret Line="135" TopLine="122"/>
+        <Caret Line="61" TopLine="57"/>
       </Position12>
       <Position13>
         <Filename Value="origami.pas"/>
-        <Caret Line="134" TopLine="122"/>
+        <Caret Line="62" TopLine="57"/>
       </Position13>
       <Position14>
         <Filename Value="origami.pas"/>
-        <Caret Line="135" TopLine="122"/>
+        <Caret Line="63" TopLine="57"/>
       </Position14>
       <Position15>
         <Filename Value="origami.pas"/>
-        <Caret Line="134" TopLine="122"/>
+        <Caret Line="64" TopLine="57"/>
       </Position15>
       <Position16>
         <Filename Value="origami.pas"/>
-        <Caret Line="135" TopLine="122"/>
+        <Caret Line="65" TopLine="57"/>
       </Position16>
       <Position17>
         <Filename Value="origami.pas"/>
-        <Caret Line="134" TopLine="122"/>
+        <Caret Line="68" TopLine="57"/>
       </Position17>
       <Position18>
         <Filename Value="origami.pas"/>
-        <Caret Line="135" TopLine="122"/>
+        <Caret Line="74" TopLine="59"/>
       </Position18>
       <Position19>
         <Filename Value="origami.pas"/>
-        <Caret Line="134" TopLine="122"/>
+        <Caret Line="75" TopLine="60"/>
       </Position19>
       <Position20>
         <Filename Value="origami.pas"/>
-        <Caret Line="135" TopLine="122"/>
+        <Caret Line="78" TopLine="76"/>
       </Position20>
       <Position21>
         <Filename Value="origami.pas"/>
-        <Caret Line="134" TopLine="122"/>
+        <Caret Line="79" TopLine="76"/>
       </Position21>
       <Position22>
         <Filename Value="origami.pas"/>
-        <Caret Line="135" TopLine="122"/>
+        <Caret Line="81" TopLine="76"/>
       </Position22>
       <Position23>
         <Filename Value="origami.pas"/>
-        <Caret Line="134" TopLine="122"/>
+        <Caret Line="82" TopLine="76"/>
       </Position23>
       <Position24>
         <Filename Value="origami.pas"/>
-        <Caret Line="135" TopLine="122"/>
+        <Caret Line="83" TopLine="76"/>
       </Position24>
       <Position25>
         <Filename Value="origami.pas"/>
-        <Caret Line="134" TopLine="122"/>
+        <Caret Line="91" TopLine="84"/>
       </Position25>
       <Position26>
         <Filename Value="origami.pas"/>
-        <Caret Line="135" TopLine="122"/>
+        <Caret Line="60" TopLine="52"/>
       </Position26>
       <Position27>
         <Filename Value="origami.pas"/>
-        <Caret Line="134" TopLine="122"/>
+        <Caret Line="91" TopLine="84"/>
       </Position27>
       <Position28>
         <Filename Value="origami.pas"/>
-        <Caret Line="91" TopLine="78"/>
+        <Caret Line="60" TopLine="52"/>
       </Position28>
       <Position29>
         <Filename Value="origami.pas"/>
-        <Caret Line="159" TopLine="149"/>
+        <Caret Line="146" Column="34" TopLine="131"/>
       </Position29>
       <Position30>
         <Filename Value="origami.pas"/>
-        <Caret Line="165" Column="20" TopLine="149"/>
+        <Caret Line="60" TopLine="49"/>
       </Position30>
     </JumpHistory>
     <RunParams>
@@ -366,10 +365,28 @@
     </RunParams>
   </ProjectSession>
   <Debugging>
-    <Watches Count="1">
+    <Watches Count="7">
       <Item1>
-        <Expression Value="size"/>
+        <Expression Value="instruction"/>
       </Item1>
+      <Item2>
+        <Expression Value="foldHorizontally"/>
+      </Item2>
+      <Item3>
+        <Expression Value="centrePoint"/>
+      </Item3>
+      <Item4>
+        <Expression Value="originalDimension"/>
+      </Item4>
+      <Item5>
+        <Expression Value="foldOffset"/>
+      </Item5>
+      <Item6>
+        <Expression Value="edgeOffset"/>
+      </Item6>
+      <Item7>
+        <Expression Value="foldedDimension"/>
+      </Item7>
     </Watches>
   </Debugging>
 </CONFIG>
