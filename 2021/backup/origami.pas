@@ -15,16 +15,13 @@ type
     fMap: T2DStringArray;
     fCoordinates:TStringArray;
     fDimensions:TPoint;
-    fMapCentre:TPoint;
     function calculateDotCount: integer;
-    function calculateMapDimensions(coordinates:TStringArray):TPoint;
+    function calculateMapDimensionsFromCoordinates(coordinates:TStringArray):TPoint;
     function calculateMapCentre:TPoint;
     function getMapDimensions:TPoint;
     procedure populateMap;
     procedure resizeMap(size:integer;columns:boolean=true);
-    procedure moveMapData(offset:integer;columns:boolean=true);
     procedure mapFolded(foldPoint:integer;columns:boolean=true);
-    property mapCentre:TPoint read fMapCentre;
     public
     constructor create(coordinates:TStringArray);
     procedure fold(input:string);
@@ -43,18 +40,18 @@ var
 begin
   fMap:=T2DStringArray.create;
   fCoordinates:=coordinates;
-  mapDimensions:=calculateMapDimensions(fCoordinates);
+  mapDimensions:=calculateMapDimensionsFromCoordinates(fCoordinates);
   setLength(fmap,mapDimensions.X,mapDimensions.Y);
   getMapDimensions;
-  fMapCentre:=calculateMapCentre;
+  calculateMapCentre;
   populateMap;
 end;
 
 procedure TOrigami.fold(input:string);
 var
   instruction:TStringArray;
-  centrePoint,originalDimension:integer;
-  foldPosition,foldOffset,edgeOffset,foldedDimension:integer;
+  originalDimension:integer;
+  foldPosition,foldedDimension:integer;
   foldHorizontally:boolean;
 begin
   if (length((input.Split(' '))) <> 3) then exit;
@@ -63,33 +60,11 @@ begin
   if (instruction[0] <> 'x')and(instruction[0] <> 'y') then exit;
   foldPosition:=instruction[1].ToInteger;
   foldHorizontally:=instruction[0]='y';
-  //the calculations are the same regardless of the axis
-  //if we're folding on x we're folding on the y axis
-  if foldHorizontally then
-    begin
-    centrePoint:=mapCentre.Y;
-    originalDimension:=fDimensions.Y;
-    end else
-    begin
-    centrePoint:=mapCentre.X;
-    originalDimension:=fDimensions.X;
-    end;
-  //How far the fold position is from the centre point
-  foldOffset:=foldPosition - centrePoint;
-  if (foldOffset < 0)
-    then edgeOffset:=2*foldOffset
-  else edgeOffset:=0;
-  foldedDimension:=(originalDimension div 2)+ abs(foldOffset);
-  if (edgeOffset > 0) then
-    begin
-    resizeMap(abs(edgeOffset),foldHorizontally);
-    moveMapData(edgeOffset,foldHorizontally);
-    centrePoint:=centrePoint + abs(edgeOffset);
-    foldPosition:=foldPosition + abs(edgeOffset);
-    end;
-  //we can now map any items after the fold line
+  if foldHorizontally
+    then originalDimension:=fDimensions.Y
+  else originalDimension:=fDimensions.X;
+  foldedDimension:=(originalDimension div 2);
   mapFolded(foldPosition,foldHorizontally);
-  //now resize the map again to the folded size
   resizeMap(foldedDimension,foldHorizontally);
 end;
 
@@ -100,10 +75,10 @@ var
   output:TStringList;
 begin
   output:=TStringlist.create;
-  for x:=0 to pred(fDimensions.X) do
+  for y:= 0 to  do
     begin
     sLine:='';
-    for y:=0 to pred(fDimensions.Y) do
+    for x:=0 to pred(fDimensions.X) do
       begin
       if (fMap[x][y])='#' then sLine:=sLine+'#' else sLine:=sLine+'  ';
       end;
@@ -112,7 +87,7 @@ begin
   result:=output;
 end;
 
-function TOrigami.calculateMapDimensions(coordinates: TStringArray): TPoint;
+function TOrigami.calculateMapDimensionsFromCoordinates(coordinates: TStringArray): TPoint;
 var
   index:integer;
   begin
@@ -189,23 +164,7 @@ begin
     setLength(fMap,size,columnLength);
     end;
   getMapDimensions;
-end;
 
-procedure TOrigami.moveMapData(offset: integer; columns: boolean);
-var
-  xPosition,yPosition:integer;
-begin
-  if columns then
-    begin
-    for yPosition:= pred(fDimensions.Y) downto abs(offset) do
-      for xPosition:=0 to pred(fDimensions.X) do
-        fMap[xPosition][yPosition]:= fMap[xPosition][yPosition + offset];
-    end else
-    begin
-    for xPosition:=pred(fDimensions.X) downto abs(offset) do
-      for yPosition:=0 to pred(fDimensions.Y) do
-        fMap[xPosition][yPosition]:= fMap[xPosition + offset][yPosition];
-    end;
 end;
 
 procedure TOrigami.mapFolded(foldPoint: integer; columns: boolean);
