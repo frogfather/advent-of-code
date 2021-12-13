@@ -75,7 +75,7 @@ var
   output:TStringList;
 begin
   output:=TStringlist.create;
-  for y:= 0 to  do
+  for y:= 0 to pred(fDimensions.Y) do
     begin
     sLine:='';
     for x:=0 to pred(fDimensions.X) do
@@ -170,24 +170,17 @@ end;
 procedure TOrigami.mapFolded(foldPoint: integer; columns: boolean);
 var
   xpos,ypos,mirroredPosition:integer;
-  someVariable:integer;
-  rowLength,columnLength:integer;
 begin
 if columns then
   begin
   for ypos:=foldPoint+1 to pred(fDimensions.Y)do
-    begin
     for xpos:=0 to pred(fDimensions.X) do
       begin
-      rowLength:=length(fMap);
-      columnLength:=length(fMap[xPos]);
       mirroredPosition:=foldPoint - abs(yPos - foldPoint);
-      //if there's a # in either position then the result is #
       if (mirroredPosition >= 0)
       and ((fMap[xPos][mirroredPosition] = '#') or (fMap[xpos][ypos] = '#'))
         then fMap[xPos][mirroredPosition]:= '#';
       end;
-    end;
   end else
   begin
   for xpos:=foldPoint+1 to pred(fDimensions.X)do

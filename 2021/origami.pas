@@ -153,41 +153,31 @@ var
   column:integer;
   columnLength:integer;
 begin
-  if columns then
-    begin
-    for column:=0 to pred(length(fMap)) do
-      setLength(fMap[column], size);
-    end else
+  if columns
+    then for column:=0 to pred(length(fMap)) do
+      setLength(fMap[column], size) else
     begin
     if (size > 0) and (length(fMap)>0)
       then columnLength:=length(fMap[0]) else columnLength:=0;
     setLength(fMap,size,columnLength);
     end;
   getMapDimensions;
-
 end;
 
 procedure TOrigami.mapFolded(foldPoint: integer; columns: boolean);
 var
   xpos,ypos,mirroredPosition:integer;
-  someVariable:integer;
-  rowLength,columnLength:integer;
 begin
 if columns then
   begin
   for ypos:=foldPoint+1 to pred(fDimensions.Y)do
-    begin
     for xpos:=0 to pred(fDimensions.X) do
       begin
-      rowLength:=length(fMap);
-      columnLength:=length(fMap[xPos]);
       mirroredPosition:=foldPoint - abs(yPos - foldPoint);
-      //if there's a # in either position then the result is #
       if (mirroredPosition >= 0)
       and ((fMap[xPos][mirroredPosition] = '#') or (fMap[xpos][ypos] = '#'))
         then fMap[xPos][mirroredPosition]:= '#';
       end;
-    end;
   end else
   begin
   for xpos:=foldPoint+1 to pred(fDimensions.X)do
