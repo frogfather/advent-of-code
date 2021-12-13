@@ -22,12 +22,7 @@ const descriptionDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/puzzle
 //For where the puzzle input is lines separated by linefeed (#$0A)
 function getPuzzleInputAsStringArray(fileName: String; removeBlankLines: boolean=true): TStringArray;
 begin
-  try
-    result:= openFileAsArray(datadir+filename,#$0A,removeBlankLines);
-  except
-    result:='No description for this puzzle'
-  end;
-
+  result:= openFileAsArray(datadir+filename,#$0A,removeBlankLines);
 end;
 
 //For where the puzzle input is a single line of comma separated numbers
@@ -137,7 +132,11 @@ end;
 
 function getDescription(fileName: String): String;
 begin
-  result:=readStream(descriptionDir+fileName);
+  try
+    result:=readStream(descriptionDir+fileName);
+  except
+    result:='No description for this puzzle'
+  end;
 end;
 
 end.

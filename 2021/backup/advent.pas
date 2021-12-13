@@ -6,13 +6,14 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics,
-  Dialogs, StdCtrls, Menus, math, bingoCard,
-  ventMap,fgl,DateUtils,aocUtils,arrayUtils,paintbox,
-  octopus,clipbrd;
+  Dialogs, StdCtrls, math, bingoCard,
+  ventMap,fgl,DateUtils,aocUtils,arrayUtils,fpJSON,paintbox,
+  octopus,clipbrd,origami;
 
 type
   TbingoCards = array of TbingoCard;
   TSegmentMap = specialize TFPGMap<String,String>;
+  TStringIntMap = specialize TFPGMap<String,Integer>;
   TOctopusMap = array of array of TOctopus;
 
   { TmainForm }
@@ -24,13 +25,11 @@ type
     OpenDialog1: TOpenDialog;
     clipboard:TClipboard;
     procedure bExecuteClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure cbSelectSelect(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure lbResultsSelectionChange(Sender: TObject; User: boolean);
-    procedure Memo1Change(Sender: TObject);
   private
     procedure paintMap(map:T3DIntMap;basinSizes:TIntArray);
     procedure loadText(fileName:String);
@@ -58,6 +57,8 @@ type
     procedure day11part2;
     procedure day12part1;
     procedure day12part2;
+    procedure day13part1;
+    procedure day13part2;
     procedure CardNotifyWinHandler(Sender: TObject);
     procedure OctopusFlashHandler(Sender: TObject);
     function identifySegmentValues(input:TStringArray):TSegmentMap;
@@ -80,6 +81,7 @@ var
   //Used in day 11 part 1 for the same reason as the bingo cards
   octopusFlashCount: integer;
   octopusMap:TOctopusMap;
+  caveMap: TJSONObject;
 
 implementation
 
@@ -119,15 +121,12 @@ begin
    21: day11part2;
    22: day12part1;
    23: day12part2;
+   24: day13part1;
+   25: day13part2;
   end;
  endTime:=now;
  lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
  lbResults.Items.Add('Time: '+inttostr(millisecondsBetween(endTime,startTime))+' ms');
-end;
-
-procedure TmainForm.Button1Click(Sender: TObject);
-begin
-  lbResults.SelectAll;
 end;
 
 procedure TmainForm.cbSelectSelect(Sender: TObject);
@@ -176,11 +175,6 @@ begin
        then copiedLines:= copiedLines + lbResults.Items[lineNo] + #$0A;
     end;
   clipboard.AsText:=copiedLines;
-end;
-
-procedure TmainForm.Memo1Change(Sender: TObject);
-begin
-
 end;
 
 procedure TmainForm.loadText(fileName: String);
@@ -1225,16 +1219,227 @@ begin
   resetOctopuses(mapDimensions);
   until done;
 lbresults.items.add('All octopuses flash on step '+steps.ToString);
+lbResults.SelectAll;
 end;
 
 procedure TmainForm.day12part1;
+var
+  puzzleInput:TStringArray;
+  visited:TStringList;
+  paths:integer;
+
+  function isSmallCave(input:string):boolean;
+  begin
+  result:=ord(input[1]) > 90;
+  end;
+
+  procedure addToDictionary(key,value:string);
+  var
+    jValue:TJSONString;
+    begin
+    jValue:=TJSONString.Create(value);
+    if caveMap.indexOfName(key) = -1
+        then caveMap.Add(key,TJSONArray.Create);
+    if caveMap.Arrays[key].IndexOf(jValue) = -1
+      then caveMap.Arrays[key].Add(jValue);
+    end;
+
+  procedure setUpCaveMap;
+  var
+    index:integer;
+    pathFrom,pathTo:string;
+    begin
+    for index:=0 to pred(length(puzzleInput))do
+      begin
+      pathFrom:=puzzleInput[index].Split('-')[0];
+      pathTo:=puzzleInput[index].Split('-')[1];
+      addToDictionary(pathFrom,pathTo);
+      if (pathFrom <> 'start') then
+        addToDictionary(pathTo,pathFrom);
+      end;
+    end;
+
+  procedure explore(cave:string);
+  var
+    neighbourId:integer;
+    neighbour:string;
+    begin
+    if (cave = 'end') then
+      begin
+      paths:=paths+1;
+      exit;
+      end;
+    if isSmallCave(cave) then
+      begin
+      if visited.IndexOf(cave) = -1
+        then visited.Add(cave)
+        else exit;
+      end;
+    //explore all the neighbours
+    for neighbourId:=0 to pred(caveMap.Arrays[cave].Count) do
+      begin
+      neighbour:=caveMap.Arrays[cave].Items[neighbourId].AsString;
+      explore(neighbour);
+      end;
+
+    if isSmallCave(cave) then visited.Delete(visited.IndexOf(cave));
+    end;
+
 begin
- lbResults.Items.add('Not done this yet');
+  puzzleInput:=getPuzzleInputAsStringArray('day_12_1.txt');
+  caveMap:=TJSONObject.Create;
+  setUpCaveMap;
+  visited:=TStringList.Create;
+  paths:=0;
+  explore('start');
+  lbResults.items.add('Paths: '+paths.ToString);
+  caveMap.Free;
 end;
 
 procedure TmainForm.day12part2;
+var
+  puzzleInput:TStringArray;
+  visited:TStringIntMap;
+  paths,level:integer;
+
+  function isSmallCave(input:string):boolean;
+  begin
+  result:=ord(input[1]) > 90;
+  end;
+
+  procedure adjustVisitedCount(cave:string;value:integer);
+  var
+  visitCount:integer;
+  begin
+  visited.TryGetData(cave,visitCount);
+  visitCount:=visitCount + value;
+  visited.AddOrSetData(cave,visitCount);
+  end;
+
+  function getVisitCount(cave:string):integer;
+  var
+  count:integer;
+  begin
+  if visited.tryGetData(cave,count) then result:= count;
+  end;
+
+  procedure addToDictionary(key,value:string);
+  var
+    jValue:TJSONString;
+    begin
+    jValue:=TJSONString.Create(value);
+    if caveMap.indexOfName(key) = -1
+        then caveMap.Add(key,TJSONArray.Create);
+    if caveMap.Arrays[key].IndexOf(jValue) = -1
+      then caveMap.Arrays[key].Add(jValue);
+    end;
+
+  procedure setUpVisitedMap;
+    var
+      index:integer;
+    begin
+    for index:=0 to pred(caveMap.Count) do
+    visited.Add(caveMap.Names[index],0);
+    end;
+
+  procedure setUpCaveMap;
+  var
+    index:integer;
+    pathFrom,pathTo:string;
+    begin
+    for index:=0 to pred(length(puzzleInput))do
+      begin
+      pathFrom:=puzzleInput[index].Split('-')[0];
+      pathTo:=puzzleInput[index].Split('-')[1];
+      addToDictionary(pathFrom,pathTo);
+      if (pathFrom <> 'start') then
+        addToDictionary(pathTo,pathFrom);
+      end;
+    end;
+
+  procedure explore(cave:string);
+  var
+    neighbourId:integer;
+    neighbour:string;
+    index:integer;
+    moreThanOnce:integer;
+    caveToCheck:String;
+    currentCount:integer;
+    begin
+    if (cave = 'end') then
+      begin
+      paths:=paths+1;
+      exit;
+      end;
+    if isSmallCave(cave) then adjustVisitedCount(cave,1);
+    //now check how many small caves have been visited more than once
+    moreThanOnce:=0;
+    for index:= 0 to pred(visited.Count) do
+      begin
+      currentCount:=visited.Data[index];
+      if (currentCount > 1) then moreThanOnce:=moreThanOnce+1;
+      if (moreThanOnce > 1) or (currentCount > 2) then
+        begin
+        adjustVisitedCount(cave,-1);
+        exit;
+        end;
+      end;
+    //explore all the neighbours
+    for neighbourId:=0 to pred(caveMap.Arrays[cave].Count) do
+      begin
+      neighbour:=caveMap.Arrays[cave].Items[neighbourId].AsString;
+      level:=level+1;
+      explore(neighbour);
+      level:=level-1;
+      end;
+    if isSmallCave(cave) then adjustVisitedCount(cave,-1);
+    end;
+
 begin
- lbResults.Items.add('Not done this yet');
+  puzzleInput:=getPuzzleInputAsStringArray('day_12_1.txt');
+  caveMap:=TJSONObject.Create;
+  setUpCaveMap;
+  visited:=TStringIntMap.Create;
+  setUpVisitedMap;
+  paths:=0;
+  level:=0;
+  explore('start');
+  lbResults.items.add('Paths: '+paths.ToString);
+  caveMap.Free;
+end;
+
+{ day 13 }
+procedure TmainForm.day13part1;
+var
+  origami:TOrigami;
+  coordinates:TStringArray;
+  instructions:TStringList;
+  index:integer;
+begin
+  coordinates:=getPuzzleInputAsStringArray('day_13_test.txt',false); //leave blank lines
+  //remove last blank line
+  setLength(coordinates,length(coordinates)-1);
+  instructions:=TStringlist.Create;
+  //move the instructions to the stringlist and delete from array;
+  index:=pred(length(coordinates));
+  while length(coordinates[index]) > 0 do
+    begin
+    instructions.Insert(0,coordinates[index]);
+    setLength(coordinates,length(coordinates)-1);
+    index:=index-1;
+    end;
+  //remove blank line after coordinates
+  setLength(coordinates,length(coordinates)-1);
+  origami:=TOrigami.create(coordinates);
+  //constructor sets up the map and populates it.
+  //Now we need to call the fold method and find the number of dots
+  origami.fold(instructions[0]);
+  lbResults.items.add('Dots after fold '+origami.dotCount.ToString);
+end;
+
+procedure TmainForm.day13part2;
+begin
+
 end;
 
 

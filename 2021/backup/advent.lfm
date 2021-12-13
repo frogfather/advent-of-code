@@ -48,7 +48,6 @@ object mainForm: TmainForm
     Top = 56
     Width = 528
     Lines.Strings = (    )
-    OnChange = Memo1Change
     TabOrder = 3
   end
   object OpenDialog1: TOpenDialog

@@ -14,6 +14,7 @@ type
   //used in day 9 part two
   T3DIntMap = array of array of array of integer;
   TColours = array of TColor;
+
 procedure addToArray(var arrInput:TStringArray; item:string;index:integer=-1);
 procedure addToArray(var arrInput:TIntArray;item:integer;index:integer=-1);
 procedure addToArray(var arrInput:TInt64Array;item:int64;index:integer=-1);
@@ -193,9 +194,6 @@ begin
     end;
 end;
 
-//used in day 8 part 2. String has a .contains method but we
-//can't assume the characters in the substring will be in the
-//same order in the string we're searching
 function containsCharacters(toSearch, toFind: String): boolean;
 var
   index:integer;
@@ -212,8 +210,6 @@ begin
         end;
     end;
 end;
-
-//Comparator functions for int64
 
 function CompareInt64Asc(const d1,d2): integer;
 var

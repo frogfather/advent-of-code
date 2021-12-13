@@ -19,6 +19,7 @@ implementation
 const dataDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/input/';
 const descriptionDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/puzzle_description/';
 
+
 //For where the puzzle input is lines separated by linefeed (#$0A)
 function getPuzzleInputAsStringArray(fileName: String; removeBlankLines: boolean=true): TStringArray;
 begin
