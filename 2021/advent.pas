@@ -8,11 +8,10 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics,
   Dialogs, StdCtrls, math, bingoCard,
   ventMap,fgl,DateUtils,aocUtils,arrayUtils,fpJSON,paintbox,
-  octopus,clipbrd,origami;
+  octopus,clipbrd,origami,polymer;
 
 type
   TbingoCards = array of TbingoCard;
-  TStringMap = specialize TFPGMap<String,String>;
   TStringIntMap = specialize TFPGMap<String,Integer>;
   TStringInt64Map = specialize TFPGMap<String,Int64>;
   TOctopusMap = array of array of TOctopus;
@@ -1476,79 +1475,15 @@ end;
 
 { day 14 }
 procedure TmainForm.day14part1;
+const maxSteps: integer = 10;
 var
   puzzleInput:TStringArray;
-  instruction,sequence,key:string;
-  polymerMap:TStringMap;
-  distributionMap:TStringIntMap;
-  index,step,value:integer;
-  max,min:integer;
-
-  procedure runProcess;
-  var
-    seqPos:integer;
-    inserted:boolean;
-    code,insertion:string;
-  begin
-  seqPos:=1;
-  inserted:=false;
-  while seqPos < length(sequence) do
-    begin
-    if not inserted then
-      begin
-      code:=sequence.Substring(seqPos-1,2);
-      insertion:=polymerMap.KeyData[code];
-      sequence.Insert(seqPos,insertion);
-      inserted:=true;
-      end else inserted:=false;
-    seqPos:=seqPos+1;
-    end;
-  end;
-
+  polymer:TPolymer;
 begin
   puzzleInput:=getPuzzleInputAsStringArray('day_14_1.txt');
-  sequence:=puzzleInput[0];
-  deleteFromArray(puzzleInput,0);
-  polymerMap:=TStringMap.Create;
-  distributionMap:=TStringIntMap.Create;
-  //pretty sure there will be some better way of doing this than
-  //adding items to a string, but let's see if that works for part 1
-  for index:=0 to pred(length(puzzleInput)) do
-    begin
-    instruction:=puzzleInput[index];
-    polymerMap.Add(instruction.Split(' -> ',TStringSplitOptions.ExcludeEmpty)[0],
-      instruction.Split(' -> ',TStringSplitOptions.ExcludeEmpty)[1]);
-    end;
-  for step:=0 to 9 do
-    runProcess;
-  lbResults.items.add(length(sequence).ToString);
-  for index:=0 to pred(length(sequence)) do
-    begin
-    key:=sequence.Substring(index,1);
-    if (distributionMap.TryGetData(key,value))
-      then value:=value+1
-    else value:=1;
-    distributionMap.AddOrSetData(key,value);
-    end;
-  max:=0;
-  if distributionMap.count > 0 then
-    begin
-    //set min to the first value
-    distributionMap.TryGetData(distributionMap.keys[0],value);
-    min:=value;
-    for index:=0 to pred(distributionMap.Count) do
-      begin
-      key:=distributionMap.Keys[index];
-      if distributionMap.TryGetData(key,value) then
-        begin
-        lbResults.items.add(key+'->'+value.ToString);
-        if value>max then max:=value;
-        if value<min then min:=value;
-        end;
-      end;
-    lbResults.items.add('Max: '+max.ToString+', Min: '+min.ToString);
-    lbResults.items.Add('Answer: '+ (max-min).ToString);
-    end;
+  polymer:=TPolymer.Create(puzzleInput);
+  polymer.run(maxSteps);
+  lbResults.items.add('Answer is: '+polymer.answer.ToString);
 end;
 
 //From solution by William Feng https://www.youtube.com/watch?v=2IVmEcZb4Mw
@@ -1556,147 +1491,12 @@ procedure TmainForm.day14part2;
 const maxSteps: integer = 40;
 var
   puzzleInput:TStringArray;
-  instruction,sequence,key:string;
-  polymerMap:TStringMap;
-  pairMap,copyPairMap,distributionMap:TStringInt64Map;
-  index,step:integer;
-  value,max,min:int64;
-
-  procedure updateMap(map:TStringInt64Map;key:string;adjustment:int64);
-  var
-    currentValue:int64;
-    begin
-    //find the key if it exists and increment or add
-    if not map.TryGetData(key,currentValue)
-      then currentValue:=adjustment
-    else currentValue:=currentValue+adjustment;
-    //if the adjusted value is 0 we should remove the entry
-    if currentValue = 0
-      then map.Remove(key)
-    else map.AddOrSetData(key,currentValue);
-    end;
-
-  function copyMap(sourceMap:TStringInt64Map):TStringInt64Map;
-  var
-    copiedMap:TStringInt64Map;
-    copyIndex:integer;
-    begin
-    copiedMap:=TStringInt64Map.Create;
-    for copyIndex:=0 to pred(sourceMap.Count) do
-      begin
-      key:=sourceMap.Keys[copyIndex];
-      if sourceMap.TryGetData(key,value)
-        then copiedMap.Add(key,value);
-      end;
-    result:=copiedMap;
-    end;
-
-  procedure run;
-  var
-    dMapIndex:integer;
-    entry,polymerValue,modifiedEntry,pair1,pair2:string;
-    entryValue:int64;
-    begin
-    copyPairMap:=copyMap(pairMap);
-    //go through the original and modify the copy
-    //at the end copy back
-    for dMapIndex:=0 to pred(pairMap.Count) do
-      begin
-      entry:=pairMap.Keys[dMapIndex];
-      pairMap.TryGetData(entry,entryValue);
-      //find the entry in polymer map and insert the value
-      if polymerMap.TryGetData(entry,polymerValue) then
-        begin
-        modifiedEntry:=entry;
-        modifiedEntry:=modifiedEntry.Insert(1,polymerValue);
-        pair1:=modifiedEntry.Substring(0,2);
-        pair2:=modifiedEntry.Substring(1,2);
-        //remove the entry key from the copy map
-        updateMap(copyPairMap,entry,entryValue * -1);
-        //update or add the new pairs
-        updateMap(copyPairMap,pair1,entryValue);
-        updateMap(copyPairMap,pair2,entryValue);
-        end;
-      end;
-    //now copy back to the original distribution map
-    pairMap:=copyMap(copyPairMap);
-    copyPairMap.Free;
-    end;
-
+  polymer:TPolymer;
 begin
   puzzleInput:=getPuzzleInputAsStringArray('day_14_1.txt');
-  sequence:=puzzleInput[0];
-  deleteFromArray(puzzleInput,0);
-  polymerMap:=TStringMap.Create;
-  pairMap:=TStringInt64Map.Create;
-  distributionMap:=TStringInt64Map.Create;
-
-  //Set up the polymer map
-  for index:=0 to pred(length(puzzleInput)) do
-    begin
-    instruction:=puzzleInput[index];
-    polymerMap.Add(instruction.Split(' -> ',TStringSplitOptions.ExcludeEmpty)[0],
-      instruction.Split(' -> ',TStringSplitOptions.ExcludeEmpty)[1]);
-    end;
-  //Set up the pair map with initial pairs
-  for index:=1 to pred(length(sequence)) do
-    begin
-    key:=sequence.Substring(index-1,2);
-    if (pairMap.TryGetData(key,value))
-      then value:=value+1
-    else value:=1;
-    pairMap.AddOrSetData(key,value);
-    end;
-
-  //run the required number of cycles
-  for index:=0 to pred(maxSteps) do run;
-
-  //FOR TESTING
-  for index:=0 to pred(pairMap.Count) do
-    begin
-    key:=pairMap.Keys[index];
-    pairMap.TryGetData(key,value);
-    //add each element of the pair to the distribution map
-    end;
-  //END FOR TESTING
-
-  //set up the distribution map
-  for index:=0 to pred(pairMap.Count) do
-    begin
-    key:=pairMap.Keys[index];
-    pairMap.TryGetData(key,value);
-    //add each element of the pair to the distribution map
-    updateMap(distributionMap,key.Substring(0,1),value);
-    updateMap(distributionMap,key.Substring(1,1),value);
-    end;
-  //increment first and last elements by 1 because all others are double counted
-  updateMap(distributionMap,sequence.Substring(0,1),1);
-  updateMap(distributionMap,sequence.Substring(pred(length(sequence)),1),1);
-
-  max:=0;
-  //Get the max and min - remember to divide by 2!
-  if distributionMap.count > 0 then
-    begin
-    //set min to the first value
-    key:=distributionMap.keys[0];
-    distributionMap.TryGetData(key,value);
-    min:=value;
-    for index:=0 to pred(distributionMap.Count) do
-      begin
-      key:=distributionMap.Keys[index];
-      if distributionMap.TryGetData(key,value) then
-        begin
-        if value>max then max:=value;
-        if value<min then min:=value;
-        end;
-      end;
-    max:=max div 2;
-    min:=min div 2;
-    lbResults.items.add('Max: '+max.ToString+', Min: '+min.ToString);
-    lbResults.items.Add('Answer: '+ (max-min).ToString);
-    //For some reason the list box won't allow selection unless I do this:
-    lbResults.SelectAll;
-    end;
+  polymer:=TPolymer.Create(puzzleInput);
+  polymer.run(maxSteps);
+  lbResults.items.add('Answer is: '+polymer.answer.ToString)
 end;
 
 end.

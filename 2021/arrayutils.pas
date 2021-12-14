@@ -5,13 +5,15 @@ unit arrayUtils;
 interface
 
 uses
-  Classes, SysUtils,anysort,graphics;
+  Classes, SysUtils,anysort,graphics,fgl;
 type
   //Looks like the built in TintegerArray is a static array
   //so let's define our own dynamic integer array
   TIntArray = array of integer;
   TInt64Array = array of int64;
-  //used in day 9 part two
+  TStringMap = specialize TFPGMap<String,String>;
+  TStringIntMap = specialize TFPGMap<String,Integer>;
+  TStringInt64Map = specialize TFPGMap<String,Int64>;
   T3DIntMap = array of array of array of integer;
   T2DStringArray = array of array of string;
   TColours = array of TColor;
