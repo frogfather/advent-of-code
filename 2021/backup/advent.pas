@@ -1483,7 +1483,7 @@ begin
   puzzleInput:=getPuzzleInputAsStringArray('day_14_1.txt');
   polymer:=TPolymer.Create(puzzleInput);
   polymer.run(maxSteps);
-  lbResults.items.add('Answer is: '+polymer.answer.ToString)
+  lbResults.items.add('Answer is: '+polymer.answer.ToString);
 end;
 
 //From solution by William Feng https://www.youtube.com/watch?v=2IVmEcZb4Mw

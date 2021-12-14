@@ -1226,6 +1226,7 @@ lbresults.items.add('All octopuses flash on step '+steps.ToString);
 lbResults.SelectAll;
 end;
 
+{ day 12 }
 procedure TmainForm.day12part1;
 var
   puzzleInput:TStringArray;
@@ -1475,6 +1476,7 @@ end;
 
 { day 14 }
 procedure TmainForm.day14part1;
+//From solution by William Feng https://www.youtube.com/watch?v=2IVmEcZb4Mw
 const maxSteps: integer = 10;
 var
   puzzleInput:TStringArray;
@@ -1486,8 +1488,8 @@ begin
   lbResults.items.add('Answer is: '+polymer.answer.ToString);
 end;
 
-//From solution by William Feng https://www.youtube.com/watch?v=2IVmEcZb4Mw
 procedure TmainForm.day14part2;
+//From solution by William Feng https://www.youtube.com/watch?v=2IVmEcZb4Mw
 const maxSteps: integer = 40;
 var
   puzzleInput:TStringArray;

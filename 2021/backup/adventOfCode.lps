@@ -240,7 +240,7 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <TopLine Value="33"/>
-        <CursorPos X="33" Y="48"/>
+        <CursorPos Y="42"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
       </Unit30>
@@ -373,15 +373,6 @@
     </RunParams>
   </ProjectSession>
   <Debugging>
-    <BreakPoints Count="1">
-      <Item1>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="polymer.pas"/>
-        <Line Value="42"/>
-      </Item1>
-    </BreakPoints>
     <Watches Count="2">
       <Item1>
         <Expression Value="key"/>
