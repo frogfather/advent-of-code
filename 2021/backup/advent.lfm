@@ -15,7 +15,7 @@ object mainForm: TmainForm
     Height = 25
     Top = 480
     Width = 96
-    Anchors = [akTop, akLeft, akBottom]
+    Anchors = [akLeft, akBottom]
     Caption = 'Run'
     OnClick = bExecuteClick
     TabOrder = 0

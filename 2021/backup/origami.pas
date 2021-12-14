@@ -116,7 +116,9 @@ end;
 function TOrigami.getMapDimensions: TPoint;
 begin
   result.X:=length(fMap);
-  if (length(fMap)>0)then result.Y:=length(fMap[0])else result.Y:=0;
+  if length(fMap) > 0
+    then result.Y:=length(fMap[0])
+  else result.Y:=0;
   fDimensions:=result;
 end;
 
@@ -153,18 +155,15 @@ var
   column:integer;
   columnLength:integer;
 begin
-  if columns then
-    begin
-    for column:=0 to pred(length(fMap)) do
-      setLength(fMap[column], size);
-    end else
+  if columns
+    then for column:=0 to pred(length(fMap)) do
+      setLength(fMap[column], size) else
     begin
     if (size > 0) and (length(fMap)>0)
       then columnLength:=length(fMap[0]) else columnLength:=0;
     setLength(fMap,size,columnLength);
     end;
   getMapDimensions;
-
 end;
 
 procedure TOrigami.mapFolded(foldPoint: integer; columns: boolean);

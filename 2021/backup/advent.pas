@@ -12,7 +12,7 @@ uses
 
 type
   TbingoCards = array of TbingoCard;
-  TSegmentMap = specialize TFPGMap<String,String>;
+  TStringMap = specialize TFPGMap<String,String>;
   TStringIntMap = specialize TFPGMap<String,Integer>;
   TOctopusMap = array of array of TOctopus;
 
@@ -59,9 +59,11 @@ type
     procedure day12part2;
     procedure day13part1;
     procedure day13part2;
+    procedure day14part1;
+    procedure day14part2;
     procedure CardNotifyWinHandler(Sender: TObject);
     procedure OctopusFlashHandler(Sender: TObject);
-    function identifySegmentValues(input:TStringArray):TSegmentMap;
+    function identifySegmentValues(input:TStringArray):TStringMap;
     procedure setupOctopuses(puzzleInput:TStringArray; mapDimensions:TPoint);
     procedure runOctopuses(mapDimensions:TPoint);
     procedure resetOctopuses(mapDimensions:TPoint);
@@ -123,6 +125,8 @@ begin
    23: day12part2;
    24: day13part1;
    25: day13part2;
+   26: day14part1;
+   27: day14part2;
   end;
  endTime:=now;
  lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
@@ -668,9 +672,9 @@ begin
 end;
 
 //A method to determine what number each sequence of letters corresponds to
-function TmainForm.identifySegmentValues(input: TStringArray): TSegmentMap;
+function TmainForm.identifySegmentValues(input: TStringArray): TStringMap;
 var
-  output:TSegmentMap;
+  output:TStringMap;
   index:integer;
   code1,code3,code4,code6:string;
   inputItem:string;
@@ -680,7 +684,7 @@ begin
   //6 doesn't have the segments in 1
   //0 is the other 6 segment value
   //all the segments in 5 are also in 6
-  output:=TSegmentMap.create;
+  output:=TStringMap.create;
   //Start by sorting the entries and putting them into the map
   for index:=0 to pred(length(input)) do
     begin
@@ -755,7 +759,7 @@ end;
 
 procedure TmainForm.day8part2;
 var
-  segmentMap: TSegmentMap;
+  segmentMap: TStringMap;
   puzzleInput,inputSeq,outputSeq:TStringArray;
   puzzleDimensions:TPoint;
   lineNo,outputIndex:integer;
@@ -1467,6 +1471,88 @@ begin
   //this time we need to print out the dots
   mapOutput:=origami.getMapOutput;
   lbResults.Items:=mapOutput;
+end;
+
+{ day 14 }
+procedure TmainForm.day14part1;
+var
+  puzzleInput:TStringArray;
+  instruction,sequence,key:string;
+  polymerMap:TStringMap;
+  distributionMap:TStringIntMap;
+  index,step,value:integer;
+  max,min:integer;
+
+  procedure runProcess;
+  var
+    seqPos:integer;
+    inserted:boolean;
+    code,insertion:string;
+  begin
+  seqPos:=1;
+  inserted:=false;
+  while seqPos < length(sequence) do
+    begin
+    if not inserted then
+      begin
+      code:=sequence.Substring(seqPos-1,2);
+      insertion:=polymerMap.KeyData[code];
+      sequence.Insert(seqPos,insertion);
+      inserted:=true;
+      end else inserted:=false;
+    seqPos:=seqPos+1;
+    end;
+  end;
+
+begin
+  puzzleInput:=getPuzzleInputAsStringArray('day_14_1.txt');
+  sequence:=puzzleInput[0];
+  deleteFromArray(puzzleInput,0);
+  polymerMap:=TStringMap.Create;
+  distributionMap:=TStringIntMap.Create;
+  //pretty sure there will be some better way of doing this than
+  //adding items to a string, but let's see if that works for part 1
+  for index:=0 to length(puzzleInput) do
+    begin
+    instruction:=puzzleInput[index];
+    polymerMap.Add(instruction.Split(' -> ',TStringSplitOptions.ExcludeEmpty)[0],
+      instruction.Split(' -> ',TStringSplitOptions.ExcludeEmpty)[1]);
+    end;
+  for step:=0 to 9 do
+    runProcess;
+  lbResults.items.add(length(sequence).ToString);
+  for index:=0 to pred(length(sequence)) do
+    begin
+    key:=sequence.Substring(index,1);
+    if (distributionMap.TryGetData(key,value))
+      then value:=value+1
+    else value:=1;
+    distributionMap.AddOrSetData(key,value);
+    end;
+  max:=0;
+  if distributionMap.count > 0 then
+    begin
+    //set min to the first value
+    distributionMap.TryGetData(distributionMap.keys[0],value);
+    min:=value;
+    for index:=0 to pred(distributionMap.Count) do
+      begin
+      key:=distributionMap.Keys[index];
+      if distributionMap.TryGetData(key,value) then
+        begin
+        lbResults.items.add(key+'->'+value.ToString);
+        if value>max then max:=value;
+        if value<min then min:=value;
+        end;
+      end;
+    lbResults.items.add('Max: '+max.ToString+', Min: '+min.ToString);
+    lbResults.items.Add('Answer: '+ (max-min).ToString);
+    end;
+end;
+
+procedure TmainForm.day14part2;
+begin
+
 end;
 
 end.

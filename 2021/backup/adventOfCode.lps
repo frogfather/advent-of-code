@@ -17,8 +17,10 @@
         <ComponentName Value="mainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="1452"/>
-        <CursorPos X="3" Y="1469"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="1507"/>
+        <CursorPos X="18" Y="1519"/>
+        <FoldState Value=" T3$d0Q1z"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -60,19 +62,18 @@
         <Filename Value="aocutils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="aocUtils"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="6"/>
-        <UsageCount Value="175"/>
+        <UsageCount Value="178"/>
         <Loaded Value="True"/>
       </Unit6>
       <Unit7>
         <Filename Value="arrayutils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="arrayUtils"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="22"/>
+        <EditorIndex Value="4"/>
         <CursorPos X="3" Y="118"/>
-        <UsageCount Value="175"/>
+        <UsageCount Value="178"/>
         <Loaded Value="True"/>
       </Unit7>
       <Unit8>
@@ -81,7 +82,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="34"/>
         <CursorPos X="9" Y="56"/>
-        <UsageCount Value="162"/>
+        <UsageCount Value="165"/>
       </Unit8>
       <Unit9>
         <Filename Value="paintbox.pas"/>
@@ -92,22 +93,20 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="32"/>
         <CursorPos X="27" Y="57"/>
-        <UsageCount Value="130"/>
+        <UsageCount Value="133"/>
       </Unit9>
       <Unit10>
         <Filename Value="octopus.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="112"/>
+        <UsageCount Value="115"/>
       </Unit10>
       <Unit11>
         <Filename Value="origami.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="173"/>
-        <CursorPos X="11" Y="183"/>
-        <UsageCount Value="40"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="84" Y="7"/>
+        <UsageCount Value="43"/>
         <Loaded Value="True"/>
       </Unit11>
       <Unit12>
@@ -153,10 +152,11 @@
       </Unit17>
       <Unit18>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/sysutils/syshelph.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="544"/>
-        <CursorPos X="14" Y="552"/>
-        <UsageCount Value="2"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="44"/>
+        <CursorPos X="44" Y="55"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
       </Unit18>
       <Unit19>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/sysutils/syshelpo.inc"/>
@@ -239,124 +239,124 @@
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="advent.pas"/>
-        <Caret Line="1467" Column="41" TopLine="1452"/>
+        <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/sysutils/syshelph.inc"/>
+        <Caret Line="171" Column="116" TopLine="162"/>
       </Position1>
       <Position2>
-        <Filename Value="origami.pas"/>
-        <Caret Line="111" Column="18" TopLine="99"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1514" Column="84" TopLine="1504"/>
       </Position2>
       <Position3>
         <Filename Value="advent.pas"/>
-        <Caret Line="1467" TopLine="1454"/>
+        <Caret Line="1529" Column="23" TopLine="1513"/>
       </Position3>
       <Position4>
-        <Filename Value="origami.pas"/>
-        <Caret Line="60" TopLine="57"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1535" Column="87" TopLine="1518"/>
       </Position4>
       <Position5>
-        <Filename Value="origami.pas"/>
-        <Caret Line="61" TopLine="57"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1533" Column="45" TopLine="1523"/>
       </Position5>
       <Position6>
-        <Filename Value="origami.pas"/>
-        <Caret Line="62" TopLine="57"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1537" Column="39" TopLine="1525"/>
       </Position6>
       <Position7>
-        <Filename Value="origami.pas"/>
-        <Caret Line="63" TopLine="57"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1512" TopLine="1507"/>
       </Position7>
       <Position8>
-        <Filename Value="origami.pas"/>
-        <Caret Line="64" TopLine="57"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1515" TopLine="1507"/>
       </Position8>
       <Position9>
-        <Filename Value="origami.pas"/>
-        <Caret Line="65" TopLine="57"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1517" TopLine="1507"/>
       </Position9>
       <Position10>
-        <Filename Value="origami.pas"/>
-        <Caret Line="68" TopLine="57"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1518" TopLine="1507"/>
       </Position10>
       <Position11>
-        <Filename Value="origami.pas"/>
-        <Caret Line="74" TopLine="59"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1517" TopLine="1507"/>
       </Position11>
       <Position12>
-        <Filename Value="origami.pas"/>
-        <Caret Line="75" TopLine="60"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1515" TopLine="1507"/>
       </Position12>
       <Position13>
-        <Filename Value="origami.pas"/>
-        <Caret Line="78" TopLine="76"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1527" TopLine="1521"/>
       </Position13>
       <Position14>
-        <Filename Value="origami.pas"/>
-        <Caret Line="79" TopLine="76"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1536" Column="31" TopLine="1523"/>
       </Position14>
       <Position15>
-        <Filename Value="origami.pas"/>
-        <Caret Line="81" TopLine="76"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1526" TopLine="1522"/>
       </Position15>
       <Position16>
-        <Filename Value="origami.pas"/>
-        <Caret Line="82" TopLine="76"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1527" TopLine="1522"/>
       </Position16>
       <Position17>
-        <Filename Value="origami.pas"/>
-        <Caret Line="83" TopLine="76"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1522" TopLine="1512"/>
       </Position17>
       <Position18>
-        <Filename Value="origami.pas"/>
-        <Caret Line="91" TopLine="84"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1526" TopLine="1512"/>
       </Position18>
       <Position19>
-        <Filename Value="origami.pas"/>
-        <Caret Line="60" TopLine="52"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1547" Column="68" TopLine="1529"/>
       </Position19>
       <Position20>
-        <Filename Value="origami.pas"/>
-        <Caret Line="91" TopLine="84"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1515" TopLine="1509"/>
       </Position20>
       <Position21>
-        <Filename Value="origami.pas"/>
-        <Caret Line="60" TopLine="52"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1517" TopLine="1509"/>
       </Position21>
       <Position22>
-        <Filename Value="origami.pas"/>
-        <Caret Line="146" Column="34" TopLine="131"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1518" TopLine="1509"/>
       </Position22>
       <Position23>
-        <Filename Value="origami.pas"/>
-        <Caret Line="60" TopLine="49"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1517" TopLine="1509"/>
       </Position23>
       <Position24>
-        <Filename Value="origami.pas"/>
-        <Caret Line="57" Column="15" TopLine="50"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1515" TopLine="1509"/>
       </Position24>
       <Position25>
-        <Filename Value="origami.pas"/>
-        <Caret Line="72" Column="10" TopLine="60"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1517" TopLine="1509"/>
       </Position25>
       <Position26>
-        <Filename Value="origami.pas"/>
-        <Caret Line="80" Column="10" TopLine="63"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1518" TopLine="1509"/>
       </Position26>
       <Position27>
-        <Filename Value="origami.pas"/>
-        <Caret Line="177" Column="5" TopLine="175"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1517" TopLine="1509"/>
       </Position27>
       <Position28>
-        <Filename Value="origami.pas"/>
-        <Caret Line="69" Column="42" TopLine="60"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1515" TopLine="1509"/>
       </Position28>
       <Position29>
-        <Filename Value="origami.pas"/>
-        <Caret Line="17" Column="24" TopLine="10"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1517" TopLine="1509"/>
       </Position29>
       <Position30>
-        <Filename Value="origami.pas"/>
-        <Caret Line="78" Column="16" TopLine="69"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1518" TopLine="1509"/>
       </Position30>
     </JumpHistory>
     <RunParams>
@@ -365,28 +365,29 @@
     </RunParams>
   </ProjectSession>
   <Debugging>
-    <Watches Count="7">
+    <BreakPoints Count="2">
       <Item1>
-        <Expression Value="instruction"/>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="advent.pas"/>
+        <Line Value="1515"/>
       </Item1>
       <Item2>
-        <Expression Value="foldHorizontally"/>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="advent.pas"/>
+        <Line Value="1521"/>
       </Item2>
-      <Item3>
-        <Expression Value="centrePoint"/>
-      </Item3>
-      <Item4>
-        <Expression Value="originalDimension"/>
-      </Item4>
-      <Item5>
-        <Expression Value="foldOffset"/>
-      </Item5>
-      <Item6>
-        <Expression Value="edgeOffset"/>
-      </Item6>
-      <Item7>
-        <Expression Value="foldedDimension"/>
-      </Item7>
+    </BreakPoints>
+    <Watches Count="2">
+      <Item1>
+        <Expression Value="sLine"/>
+      </Item1>
+      <Item2>
+        <Expression Value="instruction"/>
+      </Item2>
     </Watches>
   </Debugging>
 </CONFIG>
