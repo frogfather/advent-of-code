@@ -1514,7 +1514,7 @@ var
   routeFinder:TRouteFinder;
   startPoint,endPoint:TPoint;
 begin
-  puzzleInput:=getPuzzleInputAsStringArray('day_15_test-2.txt');
+  puzzleInput:=getPuzzleInputAsStringArray('day_15_1.txt');
   routeFinder:=TRouteFinder.create(puzzleInput);
   startPoint.X:=0;
   startPoint.Y:=0;
@@ -1551,7 +1551,7 @@ var
     end;
 
 begin
-  puzzleInput:=getPuzzleInputAsStringArray('day_15_test-2.txt');
+  puzzleInput:=getPuzzleInputAsStringArray('day_15_1.txt');
   //we need to clone this map 4 times in each direction
   //first extend each string incrementing each time
   for lineNo:=0 to pred(length(puzzleInput)) do
@@ -1577,8 +1577,10 @@ begin
   routeFinder:=TRouteFinder.create(puzzleInput);
   startPoint.X:=0;
   startPoint.Y:=0;
-  endPoint.X:= pred(routeFinder.mapDimensions.X);
-  endPoint.Y:= pred(routeFinder.mapDimensions.Y);
+  endPoint.X:=100;
+  endPoint.Y:=100;
+  //endPoint.X:= pred(routeFinder.mapDimensions.X);
+  //endPoint.Y:= pred(routeFinder.mapDimensions.Y);
   routeFinder.findShortestPath(startPoint, endPoint);
   lbResults.Items.add('least risky route has risk '+routeFinder.shortest.ToString);
 end;
