@@ -14,6 +14,7 @@ type
   TStringMap = specialize TFPGMap<String,String>;
   TStringIntMap = specialize TFPGMap<String,Integer>;
   TStringInt64Map = specialize TFPGMap<String,Int64>;
+  T2DIntMap = array of array of integer;
   T3DIntMap = array of array of array of integer;
   T2DStringArray = array of array of string;
   TColours = array of TColor;
@@ -23,7 +24,6 @@ procedure addToArray(var arrInput:TIntArray;item:integer;index:integer=-1);
 procedure addToArray(var arrInput:TInt64Array;item:int64;index:integer=-1);
 function deleteFromArray(var arrInput:TStringArray; index: integer):string;
 function deleteFromArray(var arrInput:TIntArray; index: integer):integer;
-function removeBlankEntriesFromArray(arrInput: TStringArray):TStringArray;
 function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
 function arrPos(arrInput:TIntArray; element:integer):integer;

@@ -10,7 +10,7 @@ type
   ABingoCard = array of array of array of string;
   { TBingoCard }
 
-  TBingoCard = class(IUnknown)
+  TBingoCard = class(TInterfacedObject)
     private
     fId: Integer;
     fCard: ABingoCard;
@@ -152,7 +152,7 @@ var
 
 begin
 fRowCount:=length(input);
-if (fRowCount > 0) then currElements:= removeBlankEntriesFromArray(input[0].Split(' ')) else currElements:=TStringArray.Create;
+if (fRowCount > 0) then currElements:= input[0].Split(' ',TStringSplitOptions.ExcludeEmpty) else currElements:=TStringArray.Create;
 fcolCount:=length(currElements);
 fWinning:=false;
 fCard:=ABingoCard.create;

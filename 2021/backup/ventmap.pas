@@ -67,7 +67,7 @@ begin
   output:=APathArray.create;
   for lineNumber:= 0 to pred(length(input)) do
     begin
-    coordPair:= removeBlankLinesFromArray(input[lineNumber].Split('->'));
+    coordPair:= input[lineNumber].Split('->',TStringSplitOptions.ExcludeEmpty);
     if (length(coordPair)=2) then
       begin
        path.start:=coordToPoint(coordPair[0]);
@@ -85,7 +85,7 @@ var
 begin
   x:=0;
   y:=0;
-  xy:= removeBlankLinesFromArray(coord.split(','));
+  xy:= removeBlankEntriesFromArray(coord.split(','));
   if (length(xy) = 2) then
     begin
      x:=xy[0].Trim(' ').ToInteger;

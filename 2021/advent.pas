@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics,
   Dialogs, StdCtrls, math, bingoCard,
   ventMap,fgl,DateUtils,aocUtils,arrayUtils,fpJSON,paintbox,
-  octopus,clipbrd,origami,polymer;
+  octopus,clipbrd,origami,polymer,chiton;
 
 type
   TbingoCards = array of TbingoCard;
@@ -61,6 +61,8 @@ type
     procedure day13part2;
     procedure day14part1;
     procedure day14part2;
+    procedure day15part1;
+    procedure day15part2;
     procedure CardNotifyWinHandler(Sender: TObject);
     procedure OctopusFlashHandler(Sender: TObject);
     function identifySegmentValues(input:TStringArray):TStringMap;
@@ -127,6 +129,9 @@ begin
    25: day13part2;
    26: day14part1;
    27: day14part2;
+   28: day15part1;
+   29: day15part2;
+
   end;
  endTime:=now;
  lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
@@ -462,7 +467,7 @@ begin
  if (length(fishInput) = 1) then
    begin
    //split on comma to get an array of the values
-   fishValues:=removeBlankEntriesFromArray(fishInput[0].Split(','));
+   fishValues:=fishInput[0].Split(',',TStringSplitOptions.ExcludeEmpty);
    //easier to work with integers
    fishes:=toIntArray(fishValues);
    newFishes:=TIntArray.create;
@@ -503,7 +508,7 @@ begin
  if (length(crabInput) = 1) then
    begin
    //split on comma to get an array of the values
-   fishValues:=removeBlankEntriesFromArray(crabInput[0].Split(','));
+   fishValues:=crabInput[0].Split(',',TStringSplitOptions.ExcludeEmpty);
    //create the map and add entries with keys 0-8 and values 0
    daysList:=TInt64List.Create;
    for i:=0 to 8 do daysList.Add(0);
@@ -772,8 +777,10 @@ begin
   for lineNo:=0 to pred(puzzleDimensions.Y) do
    begin
    sLineValue:='';
-   inputSeq:=removeBlankEntriesFromArray(puzzleInput[lineNo].Split('|')[0].Split(' '));
-   outputSeq:=removeBlankEntriesFromArray(puzzleInput[lineNo].Split('|')[1].Split(' '));
+   inputSeq:=puzzleInput[lineNo].Split('|',TStringSplitOptions.ExcludeEmpty)[0]
+     .Split(' ',TStringSplitOptions.ExcludeEmpty);
+   outputSeq:=puzzleInput[lineNo].Split('|',TStringSplitOptions.ExcludeEmpty)[1]
+     .Split(' ',TStringSplitOptions.ExcludeEmpty);
    //TODO Sort both input and output
    segmentMap:=identifySegmentValues(inputSeq);
    for outputIndex:=0 to pred(length(outputSeq)) do
@@ -1499,6 +1506,81 @@ begin
   polymer:=TPolymer.Create(puzzleInput);
   polymer.run(maxSteps);
   lbResults.items.add('Answer is: '+polymer.answer.ToString)
+end;
+
+procedure TmainForm.day15part1;
+var
+  puzzleInput:TStringArray;
+  routeFinder:TRouteFinder;
+  startPoint,endPoint:TPoint;
+begin
+  puzzleInput:=getPuzzleInputAsStringArray('day_15_1.txt');
+  routeFinder:=TRouteFinder.create(puzzleInput);
+  startPoint.X:=0;
+  startPoint.Y:=0;
+  endPoint.X:= pred(routeFinder.mapDimensions.X);
+  endPoint.Y:= pred(routeFinder.mapDimensions.Y);
+  routeFinder.findShortestPath(startPoint, endPoint);
+  lbResults.Items.add('least risky route has risk '+routeFinder.shortest.ToString)
+end;
+
+procedure TmainForm.day15part2;
+var
+  puzzleInput:TStringArray;
+  routeFinder:TRouteFinder;
+  startPoint,endPoint:TPoint;
+  lineNo,copyCount:integer;
+  originalLine,newLine:String;
+  originalPuzzleLength:integer;
+
+  function copyAndIncrement(input:String; copyNo:integer):string;
+  var
+    index:integer;
+    copyLine:string;
+    element:integer;
+    begin
+    copyLine:='';
+    for index:=0 to pred(length(input)) do
+      begin
+      element:=input.Substring(index,1).ToInteger;
+      element:=element+copyNo;
+      if element > 9 then element:=copyNo;
+      copyLine:=copyLine+element.ToString;
+      end;
+    result:=copyLine;
+    end;
+
+begin
+  puzzleInput:=getPuzzleInputAsStringArray('day_15_1.txt');
+  //we need to clone this map 4 times in each direction
+  //first extend each string incrementing each time
+  for lineNo:=0 to pred(length(puzzleInput)) do
+    begin
+    originalLine:=puzzleInput[lineNo];
+    newLine:=originalLine;
+    for copyCount:=1 to 4 do
+    newLine:=newLine+copyAndIncrement(originalLine,copyCount);
+    puzzleInput[lineNo]:=newLine;
+    end;
+
+  //now for lines 0 to pred(originalPuzzleLength) we need to do the same
+  originalPuzzleLength:=length(puzzleInput);
+  for copyCount:= 1 to 4 do
+    begin
+    for lineNo:=0 to pred(originalPuzzleLength) do
+      begin
+      newLine:=copyAndIncrement(puzzleInput[lineNo],copyCount);
+      addToArray(puzzleInput,newLine);
+      end;
+    end;
+
+  routeFinder:=TRouteFinder.create(puzzleInput);
+  startPoint.X:=0;
+  startPoint.Y:=0;
+  endPoint.X:= pred(routeFinder.mapDimensions.X);
+  endPoint.Y:= pred(routeFinder.mapDimensions.Y);
+  routeFinder.findShortestPath(startPoint, endPoint);
+  lbResults.Items.add('least risky route has risk '+routeFinder.shortest.ToString);
 end;
 
 end.

@@ -5,7 +5,7 @@ unit arrayUtils;
 interface
 
 uses
-  Classes, SysUtils,anysort,graphics;
+  Classes, SysUtils,anysort,graphics,fgl;
 type
   //Looks like the built in TintegerArray is a static array
   //so let's define our own dynamic integer array
@@ -23,7 +23,6 @@ procedure addToArray(var arrInput:TIntArray;item:integer;index:integer=-1);
 procedure addToArray(var arrInput:TInt64Array;item:int64;index:integer=-1);
 function deleteFromArray(var arrInput:TStringArray; index: integer):string;
 function deleteFromArray(var arrInput:TIntArray; index: integer):integer;
-function removeBlankEntriesFromArray(arrInput: TStringArray):TStringArray;
 function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
 function arrPos(arrInput:TIntArray; element:integer):integer;
