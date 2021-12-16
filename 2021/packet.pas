@@ -14,25 +14,29 @@ type
 
   TPacket = class(TInterfacedObject)
      private
-     fVersion:string;
+     fVersion:integer;
      fPacketType: PacketType;
      public
-     constructor create(version:string);
+     constructor create(version:integer; packetType:PacketType);
   end;
+
+  { TliteralPacket }
 
   TliteralPacket = class(TPacket)
     private
-
+    fData:string;
     public
-    constructor create();
+    constructor create(version: integer; packetData:string);
 
   end;
+
+  { TOperatorPacket }
 
   TOperatorPacket = class(TPacket)
     private
 
     public
-    constructor create();
+    constructor create(version:integer);
 
   end;
 
@@ -42,6 +46,7 @@ type
   TpacketFactory = class(TInterfacedObject)
     private
     fData:string;
+    fIndex:integer;
     function findPacketVersion:string;
     function findPacketType: PacketType;
     public
@@ -50,46 +55,51 @@ type
 
 implementation
 
+{ TOperatorPacket }
+
+constructor TOperatorPacket.create(version:integer);
+begin
+  inherited create(version,PacketType.operatorType);
+end;
+
+{ TliteralPacket }
+
+constructor TliteralPacket.create(version:integer;packetData:string);
+begin
+  inherited create(version,PacketType.literalType);
+  fData:=packetData;
+end;
+
 { TpacketFactory }
 
 function TpacketFactory.findPacketVersion: string;
 begin
+  //assuming we have correctly found the start of the packet
+  //fIndex should point to it
 
 end;
 
 function TpacketFactory.findPacketType: PacketType;
 begin
-
+  //assuming we have correctly found the start of the packet
+  //fIndex should point to it
 end;
 
 constructor TpacketFactory.create(input: string);
 begin
-
+  fData:=input;
+  fIndex:=0;
 end;
 
 { TPacket }
 
-constructor TPacket.create(version: string);
+constructor TPacket.create(version: integer; packetType: PacketType);
 begin
-
+  fVersion:=version;
+  fPacketType:=packetType;
 end;
 
-{ TpacketDecoder }
 
-function TpacketDecoder.findPacketVersion: string;
-begin
-
-end;
-
-function TpacketDecoder.findPacketType: PacketType;
-begin
-
-end;
-
-constructor TpacketDecoder.create(input: string);
-begin
-  fData:=hexStringToBinString(input);
-end;
 
 end.
 
