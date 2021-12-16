@@ -9,11 +9,13 @@ uses
 
 function getPuzzleInputAsStringArray(fileName: String; removeBlankLines: boolean=true): TStringArray;
 function getPuzzleInputAsIntArray(fileName: String; removeBlankLines: boolean=true): TIntArray;
+function getPuzzleInputAsString(fileName:string; removeBlankLines: boolean=true):string;
 function stringOfBinaryToInteger(input: String): integer;
 function calculateCommonestValue(input: TStringArray; reverse:Boolean=false): TBits;
 function getUniqueEntry(input: TStringArray;reverse:boolean=false):String;
 function getMaxValue(input:TIntArray):integer;
 function getDescription(fileName:String):String;
+function hexStringToBinString(hexString:string):string;
 implementation
 
 const dataDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/input/';
@@ -36,6 +38,12 @@ begin
  fileLines:= openFileAsArray(datadir+filename,#$0A,removeBlankLines);
  if (length(fileLines)=1) then
  result:= toIntArray(fileLines[0].Split(','));
+end;
+
+function getPuzzleInputAsString(fileName: string; removeBlankLines: boolean
+  ): string;
+begin
+  result:=fileUtilities.readStream(datadir+fileName);
 end;
 
 function stringOfBinaryToInteger(input: String): integer;
@@ -138,6 +146,36 @@ begin
   except
     result:='No description for this puzzle'
   end;
+end;
+
+function hexStringToBinString(hexString: string): string;
+var
+  inputPos:integer;
+  output:string;
+  element:Char;
+  value:integer;
+  binValue:string;
+begin
+  output:='';
+  binValue:='';
+  for inputPos:=1 to length(hexString) do
+    begin
+    element:=hexString[inputPos];
+    if element IN ['A'..'F','a'..'f']
+      then value:=(ord(element)+9) and 15
+    else value:= (ord(element)) and 15;
+    //convert to binary
+    binValue:=binValue+(value div 8).ToString;
+    if value >= 8 then value:=value - 8;
+    binValue:=binValue+(value div 4).ToString;
+    if value >= 4 then value:=value - 4;
+    binValue:=binValue+(value div 2).ToString;
+    if value >= 2 then value:=value - 2;
+    binValue:=binValue+(value).ToString;
+    output:=output + binValue;
+    binValue:='';
+    end;
+  result:=output;
 end;
 
 end.

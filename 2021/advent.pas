@@ -63,6 +63,8 @@ type
     procedure day14part2;
     procedure day15part1;
     procedure day15part2;
+    procedure day16part1;
+    procedure day16part2;
     procedure CardNotifyWinHandler(Sender: TObject);
     procedure OctopusFlashHandler(Sender: TObject);
     function identifySegmentValues(input:TStringArray):TStringMap;
@@ -131,7 +133,8 @@ begin
    27: day14part2;
    28: day15part1;
    29: day15part2;
-
+   30: day16part1;
+   31: day16part2;
   end;
  endTime:=now;
  lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
@@ -1582,6 +1585,23 @@ begin
 
   routeFinder.findShortestPath(startPoint, endPoint);
   lbResults.Items.add('least risky route has risk '+routeFinder.shortest.ToString);
+end;
+
+{ day 16 }
+procedure TmainForm.day16part1;
+ var
+   input,output:string;
+begin
+  input:='EE00D40C823060';
+  output:= hexStringToBinString(input);
+  //11101110000000001101010000001100100000100011000001100000
+  lbResults.items.add('input: '+input);
+  lbResults.items.add('output: '+output);
+end;
+
+procedure TmainForm.day16part2;
+begin
+
 end;
 
 end.
