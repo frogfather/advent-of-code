@@ -34,17 +34,19 @@ type
 
   TRouteFinder = class(TInterfacedObject)
     private
-    fMap:T2DIntMap;
+    fMap:T3DIntMap;
     fQueue:TQueue;
     fShortest:integer;
     fFinishPoint:TPoint;
     function getQueueLength: integer;
     function getMapDimensions:TPoint;
-    procedure processNode(startPoint,endPoint:TPoint);
+    procedure initializeMap(puzzleInput:TStringArray);
+    function processNode(startPoint,endPoint:TPoint):TPoint;
     function findQueueEntryPosition(queueEntry:TQueueEntry):integer;
     procedure updateRisk(queueEntry,sourceEntry:TQueueEntry);
     procedure removeFromQueue(queueEntry:TQueueEntry);
     procedure addToQueue(queueEntry:TQueueEntry);
+    function visitable(point,refPoint:TPoint):boolean;
     function getLeastRiskyQueueEntry:TQueueEntry;
     function findQueueEntry(atPoint:TPoint):TQueueEntry;
     property queueLength:integer read getQueueLength;
@@ -63,8 +65,9 @@ implementation
 
 constructor TRouteFinder.create(puzzleInput: TStringArray);
 begin
-  fMap:=T2DIntMap.create;
+  fMap:=T3DIntMap.create;
   fQueue:=TQueue.create;
+  initializeMap(puzzleInput);
 end;
 
 function TRouteFinder.getQueueLength: integer;
@@ -78,7 +81,24 @@ begin
   if (length(fMap)>0) then result.Y:=length(fMap[0]) else result.Y:=0;
 end;
 
-procedure TRouteFinder.processNode(startPoint,endPoint: TPoint);
+procedure TRouteFinder.initializeMap(puzzleInput: TStringArray);
+var
+  puzzleWidth,puzzleHeight,x,y:integer;
+  sLine:string;
+begin
+  puzzleHeight:=length(puzzleInput);
+  if puzzleHeight > 0 then puzzleWidth:=length(puzzleInput[0]);
+  setLength(fMap,puzzleWidth,puzzleHeight,2);
+  for y:=0 to pred(puzzleHeight) do
+    begin
+    sLine:=puzzleInput[y];
+    for x:=0 to pred(puzzleWidth) do
+      fMap[x][y][0]:=sLine.Substring(x,1).ToInteger;
+      fMap[x][y][1]:=0;//unvisited
+    end;
+end;
+
+function TRouteFinder.processNode(startPoint,endPoint: TPoint):TPoint;
 var
   startEntry,visitedEntry:TQueueEntry;
   visitingPoint:TPoint;
@@ -90,34 +110,45 @@ begin
     then fShortest:= startEntry.fRisk
   else
     begin
+    fMap[startPoint.X][startPoint.Y][1]:=1;
     for xOffset:=-1 to 1 do
       for yOffset:= -1 to 1 do
         begin
         visitingPoint.X := startEntry.nodePos.X + xOffset;
         visitingPoint.Y := startEntry.nodePos.Y + yOffset;
-        if ((visitingPoint.X = startEntry.nodePos.X)
-          or (visitingPoint.Y = startEntry.nodePos.Y))
-          and not ((visitingPoint.X = startEntry.nodePos.X) and (visitingPoint.Y = startEntry.nodePos.Y)) then
+        if visitable(visitingPoint,startEntry.nodePos) then
           begin
           //calculate the new risk value and add a queue entry
-          updatedRisk:=startEntry.risk + fMap[visitingPoint.X][visitingPoint.Y];
+          updatedRisk:=startEntry.risk + fMap[visitingPoint.X][visitingPoint.Y][0];
           visitedEntry:= findQueueEntry(visitingPoint);
           if visitedEntry = nil
             then addToQueue(TQueueEntry.create(visitingPoint,mapDimensions,updatedRisk,startEntry.nodeId))
           else updateRisk(visitedEntry,startEntry);
           end;
         end;
+    writeln('remove from queue ' +startPoint.X.ToString+':'+startPoint.Y.ToString);
     removeFromQueue(startEntry);
-    writeLn('queue length '+queueLength.ToString);
-    processNode(leastRiskyQueueEntry.nodePos, endPoint);
+    result:=leastRiskyQueueEntry.fNodePos;
     end;
 end;
 
 procedure TRouteFinder.findShortestPath(startPoint, endPoint: TPoint);
+var
+  endEntry:TQueueEntry;
+  leastRiskPoint:TPoint;
+  done:boolean;
 begin
   finishPoint:=endPoint;
-  addToQueue(TQueueEntry.create(startPoint));
-  processNode(startPoint,endPoint);
+  addToQueue(TQueueEntry.create(startPoint,mapDimensions));
+  leastRiskPoint:= startPoint;
+    repeat
+    leastRiskPoint:=processNode(leastRiskPoint,endPoint);
+    done:=leastRiskPoint = endPoint;
+    until done;
+  findQueueEntry(endPoint);
+  if endEntry <> nil then
+  fShortest:=endEntry.risk;
+
 end;
 
 function TRouteFinder.findQueueEntry(atPoint: TPoint): TQueueEntry;
@@ -160,7 +191,7 @@ procedure TRouteFinder.updateRisk(queueEntry,sourceEntry: TQueueEntry);
 var
   riskToVisitingPoint:integer;
 begin
-  riskToVisitingPoint:= sourceEntry.risk + fMap[queueEntry.nodePos.X][queueEntry.nodePos.Y];
+  riskToVisitingPoint:= sourceEntry.risk + fMap[queueEntry.nodePos.X][queueEntry.nodePos.Y][0];
   if queueEntry.infinity or (riskToVisitingPoint < queueEntry.risk)
     then
       begin
@@ -190,6 +221,17 @@ procedure TRouteFinder.addToQueue(queueEntry: TQueueEntry);
 begin
   setLength(fQueue,queueLength+1);
   fQueue[queueLength - 1]:=queueEntry;
+end;
+
+function TRouteFinder.visitable(point, refPoint: TPoint): boolean;
+begin
+  result:= ((point.X = refPoint.X)
+    or (point.Y = refPoint.Y))
+    and not ((point.X = refPoint.X) and (point.Y = refPoint.Y))
+    and (point.X > -1) and (point.Y > -1)
+    and (point.X < mapDimensions.X)
+    and (point.Y < mapDimensions.Y)
+    and (fMap[point.X][point.Y][1] <> 1)
 end;
 
 function TRouteFinder.getLeastRiskyQueueEntry: TQueueEntry;

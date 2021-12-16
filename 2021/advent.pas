@@ -1544,7 +1544,7 @@ var
       begin
       element:=input.Substring(index,1).ToInteger;
       element:=element+copyNo;
-      if element > 9 then element:=copyNo;
+      if element > 9 then element:=element - 9;
       copyLine:=copyLine+element.ToString;
       end;
     result:=copyLine;
@@ -1579,6 +1579,7 @@ begin
   startPoint.Y:=0;
   endPoint.X:= pred(routeFinder.mapDimensions.X);
   endPoint.Y:= pred(routeFinder.mapDimensions.Y);
+
   routeFinder.findShortestPath(startPoint, endPoint);
   lbResults.Items.add('least risky route has risk '+routeFinder.shortest.ToString);
 end;
