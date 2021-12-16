@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics,
   Dialogs, StdCtrls, math, bingoCard,
   ventMap,fgl,DateUtils,aocUtils,arrayUtils,fpJSON,paintbox,
-  octopus,clipbrd,origami,polymer,chiton;
+  octopus,clipbrd,origami,polymer,chiton,packet;
 
 type
   TbingoCards = array of TbingoCard;
@@ -1589,10 +1589,12 @@ end;
 
 { day 16 }
 procedure TmainForm.day16part1;
-
+ var
+   puzzleInput:String;
+   packetDecoder:TPacketDecoder;
 begin
-
-
+   puzzleInput:=getPuzzleInputAsString('day_16_test.txt');
+   packetDecoder:=TPacketDecoder.create(puzzleInput);
 end;
 
 procedure TmainForm.day16part2;
