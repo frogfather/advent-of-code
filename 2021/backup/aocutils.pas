@@ -16,6 +16,7 @@ function getUniqueEntry(input: TStringArray;reverse:boolean=false):String;
 function getMaxValue(input:TIntArray):integer;
 function getDescription(fileName:String):String;
 function hexStringToBinString(hexString:string):string;
+function binStringToInteger(binString:string):integer;
 implementation
 
 const dataDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/input/';
@@ -155,24 +156,47 @@ var
   element:Char;
   value:integer;
   binValue:string;
+  valid:boolean;
 begin
   output:='';
   binValue:='';
   for inputPos:=1 to length(hexString) do
     begin
+    valid:=true;
     element:=hexString[inputPos];
     if element IN ['A'..'F','a'..'f']
       then value:=(ord(element)+9) and 15
-    else value:= (ord(element)) and 15;
+    else if element IN ['0'..'9']
+      then value:= (ord(element)) and 15
+    else valid = false;
     //convert to binary
-    binValue:=binValue+(value div 8).ToString;
-    if value > 8 then value:=value - 8;
-    binValue:=binValue+(value div 4).ToString;
-    if value > 4 then value:=value - 4;
-    binValue:=binValue+(value div 2).ToString;
-    if value > 2 then value:=value - 2;
-    binValue:=binValue+(value).ToString;
-    output:=output + binValue;
+    if valid then
+      begin
+      binValue:=binValue+(value div 8).ToString;
+      if value >= 8 then value:=value - 8;
+      binValue:=binValue+(value div 4).ToString;
+      if value >= 4 then value:=value - 4;
+      binValue:=binValue+(value div 2).ToString;
+      if value >= 2 then value:=value - 2;
+      binValue:=binValue+(value).ToString;
+      output:=output + binValue;
+      binValue:='';
+      end;
+    end;
+  result:=output;
+end;
+
+function binStringToInteger(binString: string): integer;
+var
+  index,pwr,output:integer;
+  element:string;
+begin
+output:=0;
+  for index:=0 to pred(length(binString)) do
+    begin
+    element:=binString.Substring(index,1);
+    pwr:=length(binString)-(index+1);
+    output:=output + (element.ToInteger * round(power(2,pwr)));
     end;
   result:=output;
 end;

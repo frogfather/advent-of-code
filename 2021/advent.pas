@@ -1591,10 +1591,11 @@ end;
 procedure TmainForm.day16part1;
  var
    puzzleInput:String;
-   packetDecoder:TPacketFactory;
+   packetFactory:TPacketFactory;
 begin
    puzzleInput:=getPuzzleInputAsString('day_16_test.txt');
-   packetDecoder:=TPacketFactory.create(puzzleInput);
+   packetFactory:=TPacketFactory.create(puzzleInput);
+
 end;
 
 procedure TmainForm.day16part2;
