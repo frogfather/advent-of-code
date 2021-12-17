@@ -1593,7 +1593,7 @@ procedure TmainForm.day16part1;
    puzzleInput:String;
    packetFactory:TPacketFactory;
 begin
-   puzzleInput:=getPuzzleInputAsString('day_16_test.txt');
+   puzzleInput:=getPuzzleInputAsString('day_16_test-multisubpacket.txt');
    packetFactory:=TPacketFactory.create(puzzleInput);
 
 end;

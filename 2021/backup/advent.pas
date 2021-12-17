@@ -1593,9 +1593,9 @@ procedure TmainForm.day16part1;
    puzzleInput:String;
    packetFactory:TPacketFactory;
 begin
-   puzzleInput:=getPuzzleInputAsString('day_16_test.txt');
+   puzzleInput:=getPuzzleInputAsString('day_16_test-subpacket-length.txt');
    packetFactory:=TPacketFactory.create(puzzleInput);
-   hexToBin
+
 end;
 
 procedure TmainForm.day16part2;
