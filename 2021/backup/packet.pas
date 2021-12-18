@@ -28,7 +28,6 @@ type
     fData:integer;
     public
     constructor create(versionNo: integer; packetData:integer);
-
   end;
 
   { TOperatorPacket }
@@ -36,20 +35,19 @@ type
   TOperatorPacket = class(TPacket)
     private
     fData:string;
-    fSubPackets:integer;
-    property subPackets: integer read fSubPackets write fSubPackets;
+    fSubPackets: array of TPacket;
+    procedure addSubPacket(subPacket: TPacket);
     public
     constructor create(versionNo,subPacketCount:integer;data:string);
   end;
 
-  TPacketArray = array of TPacket;
 
   { TpacketFactory }
 
   TpacketFactory = class(TInterfacedObject)
     private
     fData:string;
-    fPackets: TPacketArray;
+    fPackets: array of TPacket;
     fRDepth: integer;
     fLog: TStringList;
     function findPacketVersion(packetStart:integer):integer;
@@ -61,8 +59,7 @@ type
     function getPacketCount:integer;
     function getVersionTotal:integer;
     procedure addPacket(pckt:TPacket);
-    function identifyPackets(packetStart:integer):integer;
-    procedure logPackets;
+    function parse(packetStart:integer):integer;
     procedure log(message: string);
     property data:string read fData;
     property rDepth: integer read fRdepth write fRdepth;
@@ -82,9 +79,8 @@ constructor TpacketFactory.create(input: string);
 begin
   fData:=hexStringToBinString(input);
   fLog:=TStringList.Create;
-  identifyPackets(0);
+  parse(0);
   fRDepth:=0;
-  logPackets;
 end;
 
 destructor TpacketFactory.destroy;
@@ -214,40 +210,45 @@ begin
   fPackets[length(fPackets)-1]:=pckt;
 end;
 
-function TpacketFactory.identifyPackets(packetStart:integer):integer;
+function TpacketFactory.parse(packetStart:integer):integer;
 var
-  packetVersion,packetEnd: integer;
+  version,packetEnd: integer;
   subPacketCount,subPacketStart, subPacketEnd, packetLengthType:integer;
   pcktType:PacketType;
   literalData,i:integer;
   operatorData:string;
-  sPacketType:string;
+  sPacketType,sPad:string;
 begin
- packetVersion:=findPacketVersion(packetStart);
+ spad:='';
+ version:=findPacketVersion(packetStart);
  pcktType:=findPacketType(packetStart);
  if pcktType = PacketType.literalType then sPacketType:='literal' else sPacketType := 'operator';
  packetEnd:=findCurrentPacketEnd(packetStart,pcktType);
+ for i:= 0 to rDepth do sPad:=sPad+'  ';
+ log(sPad+rDepth.ToString+' Start '+packetStart.ToString+' End '+packetEnd.ToString+' Version '+version.ToString+' Type: '+spacketType);
+
  if pcktType = PacketType.literalType then
    begin
      literalData:=decodeLiteralData(fData, packetStart,packetEnd);
-     addPacket(TLiteralPacket.create(packetVersion,literalData));
+     log(sPad+rDepth.ToString+' Add literal packet');
+     addPacket(TLiteralPacket.create(version,literalData));
    end
  else if pcktType = PacketType.operatorType then
    begin
-     //we need to add this packet as well as any sub packets
-     //get the subpacket count for this
      packetLengthType:=findPacketLengthType(packetStart);
      subPacketCount:=getSubPacketCount(packetStart,packetEnd);
+     log(sPad+rDepth.ToString+' Sub packet count: '+subPacketCount.ToString);
        if packetLengthType = 1
        then subPacketStart:= packetStart + 18
      else subPacketStart:= packetStart + 22;
      operatorData:=fData.Substring(subPacketStart, (1+ packetEnd - subPacketStart));
-     addPacket(TOperatorPacket.create(packetVersion,subPacketCount,operatorData));
+     log(sPad+rDepth.ToString+' Add operator packet');
+     addPacket(TOperatorPacket.create(version,subPacketCount,operatorData));
      //while this packet has subpackets call this method again
      while subPacketCount > 0 do
        begin
        rDepth:=rDepth + 1;
-       subPacketEnd:= identifyPackets(subPacketStart);
+       subPacketEnd:= parse(subPacketStart);
        rDepth:=rDepth -1;
        subPacketCount:=subPacketCount -1;
        if subPacketCount > 0 then subPacketStart:=subPacketEnd + 1;
@@ -256,20 +257,18 @@ begin
  result:=packetEnd;
 end;
 
-procedure TpacketFactory.logPackets;
-var
-  index:integer;
-begin
-  for index:=0 to pred(packetCount) do
-    log(index.ToString': '+fPackets[index].version.ToString);
-end;
-
 procedure TpacketFactory.log(message: string);
 begin
   fLog.Add(message);
 end;
 
 { TPacket }
+
+procedure TOperatorPacket.addSubPacket(subPacket: TPacket);
+begin
+ setLength(fSubPackets, length(fSubPackets) + 1);
+ fSubPackets[pred(length(fSubPackets))]:=subPacket;
+end;
 
 constructor TPacket.create(versionNo: integer; packetType: PacketType);
 begin
@@ -282,6 +281,7 @@ end;
 constructor TOperatorPacket.create(versionNo,subPacketCount:integer;data:string);
 begin
   inherited create(versionNo,PacketType.operatorType);
+  fSubPackets:=TPacketArray.create;
 end;
 
 { TliteralPacket }
