@@ -66,12 +66,12 @@ type
     function getPacketCount:integer;
     procedure addPacket(pckt:TPacket);
     function parse(parentPacket:TPacket;packetStart:integer):integer;
-    function calculateValue(packet:TPacket=nil):integer;
     property data:string read fData;
     property packets: TPacketArray read fPackets;
     public
     constructor create(input:string);
     function getVersionTotal(packet:TPacket=nil):integer;
+    function calculateValue(packet:TPacket=nil):integer;
     property packetCount: integer read getPacketCount;
   end;
 
@@ -296,6 +296,7 @@ function TpacketFactory.calculateValue(packet: TPacket): integer;
 var
   pNo,subPacketCount:integer;
   packetArray:TPacketArray;
+  firstPacket,secondPacket:TLiteralPacket;
   calculatedTotal:integer;
   allLiteral:boolean;
   pktOp: PacketOperator;
@@ -311,8 +312,13 @@ begin
     packetArray:= packets;
     subPacketCount:= packetCount;
     end;
-  //look at the subPackets. if all literal, return the operation on them
-  //otherwise call this again
+
+  if (packetArray = nil) or (subPacketCount = 0) then
+    begin
+    result:=0;
+    exit;
+    end;
+
   allLiteral:=true;
   for pNo:=0 to pred(subPacketCount) do
     begin
@@ -328,6 +334,8 @@ begin
       calculatedTotal:= calculateValue(packetArray[pNo]);
       end else
       begin
+      firstPacket:=(packetArray[0] as TLiteralPacket);
+      if subPacketCount > 1 then secondPacket:=(packetArray[1] as TLiteralPacket);
       pktOp:= (packet as TOperatorPacket).packetOp;
         case pktOp of
           poSum:
@@ -347,23 +355,38 @@ begin
             end;
           poMin:
             begin
+            calculatedTotal:= (packetArray[0] as TLiteralPacket).fData;
+            for pNo:= 0 to pred(subPacketCount) do;
+              begin
+              if (packetArray[pNo] as TLiteralPacket).fData < calculatedTotal
+                then calculatedTotal:= (packetArray[pNo] as TLiteralPacket).fData;
+              end;
             //minimum of the values
             end;
           poMax:
             begin
+            calculatedTotal:=0;
+            for pNo:= 0 to pred(subPacketCount) do;
+              begin
+              if (packetArray[pNo] as TLiteralPacket).fData > calculatedTotal
+                then calculatedTotal:= (packetArray[pNo] as TLiteralPacket).fData;
+              end;
             //max of the values
             end;
           poGreater:
             begin
-            //1 if first sub packet > second otherwise 0
+            if firstPacket.fData > secondPacket.fData
+              then calculatedTotal:=1 else calculatedTotal:=0;
             end;
           poLess:
             begin
-            //1 if first sub packet < second otherwise 0
+            if firstPacket.fData < secondPacket.fData
+              then calculatedTotal:=1 else calculatedTotal:=0;
             end;
           poEqual:
             begin
-            //1 if first sub packet = second otherwise 0
+            if firstPacket.fData = secondPacket.fData
+              then calculatedTotal:=1 else calculatedTotal:=0;
             end;
         end;
       end;
