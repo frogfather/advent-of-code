@@ -8,7 +8,8 @@ uses
   Classes, SysUtils,aocUtils,arrayUtils;
 type
 
-  PacketType = (literalType,operatorType);
+  PacketType = (literalType, operatorType);
+  PacketOperator = (poSum, poProduct, poMin, poMax, poGreater, poLess, poEqual,poNone);
 
   { TPacket }
 
@@ -38,10 +39,12 @@ type
   TOperatorPacket = class(TPacket)
     private
     fSubPackets: TPacketArray;
+    fOperator: PacketOperator;
     procedure addSubPacket(subPacket: TPacket);
     function getSubPacketCount:integer;
     public
-    constructor create(versionNo:integer);
+    constructor create(versionNo:integer; pktOperator: PacketOperator);
+    property packetOp: PacketOperator read fOperator;
     property subPackets: TPacketArray read fSubPackets;
     property subPacketCount:integer read getSubPacketCount;
   end;
@@ -55,6 +58,7 @@ type
     fPackets: TPacketArray;
     function findPacketVersion(packetStart:integer):integer;
     function findPacketType(packetStart: integer): PacketType;
+    function findPacketOperator(packetStart: integer): PacketOperator;
     function findPacketLengthType(packetStart:integer):integer;
     function decodeLiteralData(data:string;start,finish: integer):integer;
     function findCurrentPacketEnd(start: integer;pcktType:PacketType):integer;
@@ -62,6 +66,7 @@ type
     function getPacketCount:integer;
     procedure addPacket(pckt:TPacket);
     function parse(parentPacket:TPacket;packetStart:integer):integer;
+    function calculateValue(packet:TPacket=nil):integer;
     property data:string read fData;
     property packets: TPacketArray read fPackets;
     public
@@ -85,13 +90,32 @@ begin
   result:=binStringToInteger(fData.Substring(packetStart,3));
 end;
 
+//TODO - change this to take a packet instead of an integer
 function TpacketFactory.findPacketType(packetStart: integer): PacketType;
 var
   typeId:integer;
 begin
-  typeId:=binStringToInteger(fData.Substring(packetStart+3,3));
+  typeId:=binStringToInteger(data.Substring(packetStart+3,3));
   if typeId = 4 then result:= PacketType.literalType
   else result:=PacketType.operatorType;
+end;
+
+function TpacketFactory.findPacketOperator(packetStart: integer): PacketOperator;
+var
+  typeId:integer;
+begin
+  typeId:=binStringToInteger(fData.Substring(packetStart+3,3));
+  case typeId of
+    0: result:= PacketOperator.poSum;
+    1: result:= PacketOperator.poProduct;
+    2: result:= PacketOperator.poMin;
+    3: result:= PacketOperator.poMax;
+    5: result:= PacketOperator.poGreater;
+    6: result:= PacketOperator.poLess;
+    7: result:= PacketOperator.poEqual;
+  else
+    result:=PacketOperator.poNone;
+  end;
 end;
 
 function TpacketFactory.findPacketLengthType(packetStart:integer): integer;
@@ -230,6 +254,7 @@ var
   version,packetEnd: integer;
   subPacketCount,subPacketStart, subPacketEnd, packetLengthType:integer;
   pcktType:PacketType;
+  pcktOp: PacketOperator;
   literalData:integer;
 
 begin
@@ -247,11 +272,12 @@ begin
  else if pcktType = PacketType.operatorType then
    begin
      packetLengthType:=findPacketLengthType(packetStart);
+     pcktOp:= findPacketOperator(packetStart);
      subPacketCount:=getSubPacketCount(packetStart);
        if packetLengthType = 1
        then subPacketStart:= packetStart + 18
      else subPacketStart:= packetStart + 22;
-     thisPacket:=TOperatorPacket.create(version);
+     thisPacket:=TOperatorPacket.create(version,pcktOp);
      if parentPacket = nil
        then addPacket(thisPacket)
      else with parentPacket as TOperatorPacket do addSubPacket(thisPacket);
@@ -264,6 +290,84 @@ begin
        end;
    end;
  result:=packetEnd;
+end;
+
+function TpacketFactory.calculateValue(packet: TPacket): integer;
+var
+  pNo,subPacketCount:integer;
+  packetArray:TPacketArray;
+  calculatedTotal:integer;
+  allLiteral:boolean;
+  pktOp: PacketOperator;
+begin
+  calculatedTotal:=0;
+  if packet is TOperatorPacket then
+    begin
+    packetArray:= (packet as TOperatorPacket).subPackets;
+    subPacketCount:= (packet as TOperatorPacket).subPacketCount;
+    end else
+  if packet = nil then
+    begin
+    packetArray:= packets;
+    subPacketCount:= packetCount;
+    end;
+  //look at the subPackets. if all literal, return the operation on them
+  //otherwise call this again
+  allLiteral:=true;
+  for pNo:=0 to pred(subPacketCount) do
+    begin
+    if packetArray[pNo] is TOperatorPacket then
+      begin
+      allLiteral:=false;
+      break;
+      end;
+    end;
+  if allLiteral = false then
+    for pNo:=0 to pred(subPacketCount) do
+      begin
+      calculatedTotal:= calculateValue(packetArray[pNo]);
+      end else
+      begin
+      pktOp:= (packet as TOperatorPacket).packetOp;
+        case pktOp of
+          poSum:
+            begin
+            for pNo:= 0 to pred(subPacketCount) do;
+              begin
+              calculatedTotal:=calculatedTotal + (packetArray[pNo] as TLiteralPacket).fData;
+              end;
+            end;
+          poProduct:
+            begin
+            calculatedTotal:=1;
+            for pNo:= 0 to pred(subPacketCount) do;
+              begin
+              calculatedTotal:=calculatedTotal * (packetArray[pNo] as TLiteralPacket).fData;
+              end;
+            end;
+          poMin:
+            begin
+            //minimum of the values
+            end;
+          poMax:
+            begin
+            //max of the values
+            end;
+          poGreater:
+            begin
+            //1 if first sub packet > second otherwise 0
+            end;
+          poLess:
+            begin
+            //1 if first sub packet < second otherwise 0
+            end;
+          poEqual:
+            begin
+            //1 if first sub packet = second otherwise 0
+            end;
+        end;
+      end;
+  result:=calculatedTotal;
 end;
 
 { TPacket }
@@ -287,10 +391,11 @@ end;
 
 { TOperatorPacket }
 
-constructor TOperatorPacket.create(versionNo:integer);
+constructor TOperatorPacket.create(versionNo:integer;pktOperator:PacketOperator);
 begin
   inherited create(versionNo,PacketType.operatorType);
   fSubPackets:=TPacketArray.create;
+  fOperator:=pktOperator;
 end;
 
 { TliteralPacket }
