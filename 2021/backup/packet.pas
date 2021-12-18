@@ -21,6 +21,9 @@ type
      constructor create(versionNo:integer; packetType:PacketType);
   end;
 
+  { TPacketArray }
+  TPacketArray = array of TPacket;
+
   { TliteralPacket }
 
   TliteralPacket = class(TPacket)
@@ -34,11 +37,13 @@ type
 
   TOperatorPacket = class(TPacket)
     private
-    fData:string;
-    fSubPackets: array of TPacket;
+    fSubPackets: TPacketArray;
     procedure addSubPacket(subPacket: TPacket);
+    function getSubPacketCount:integer;
     public
-    constructor create(versionNo,subPacketCount:integer;data:string);
+    constructor create(versionNo:integer);
+    property subPackets: TPacketArray read fSubPackets;
+    property subPacketCount:integer read getSubPacketCount;
   end;
 
 
@@ -47,28 +52,22 @@ type
   TpacketFactory = class(TInterfacedObject)
     private
     fData:string;
-    fPackets: array of TPacket;
-    fRDepth: integer;
-    fLog: TStringList;
+    fPackets: TPacketArray;
     function findPacketVersion(packetStart:integer):integer;
     function findPacketType(packetStart: integer): PacketType;
     function findPacketLengthType(packetStart:integer):integer;
     function decodeLiteralData(data:string;start,finish: integer):integer;
     function findCurrentPacketEnd(start: integer;pcktType:PacketType):integer;
-    function getSubPacketCount(packetStart,packetEnd:integer):integer;
+    function getSubPacketCount(packetStart:integer):integer;
     function getPacketCount:integer;
-    function getVersionTotal:integer;
     procedure addPacket(pckt:TPacket);
-    function parse(packetStart:integer):integer;
-    procedure log(message: string);
+    function parse(parentPacket:TPacket;packetStart:integer):integer;
     property data:string read fData;
-    property rDepth: integer read fRdepth write fRdepth;
+    property packets: TPacketArray read fPackets;
     public
     constructor create(input:string);
-    destructor destroy;
+    function getVersionTotal(packet:TPacket=nil):integer;
     property packetCount: integer read getPacketCount;
-    property versionTotal: integer read getVersionTotal;
-    property pLog: TStringlist read fLog;
   end;
 
 implementation
@@ -78,14 +77,7 @@ implementation
 constructor TpacketFactory.create(input: string);
 begin
   fData:=hexStringToBinString(input);
-  fLog:=TStringList.Create;
-  parse(0);
-  fRDepth:=0;
-end;
-
-destructor TpacketFactory.destroy;
-begin
-  fLog.Free;
+  parse(nil,0);
 end;
 
 function TpacketFactory.findPacketVersion(packetStart: integer): integer;
@@ -161,7 +153,7 @@ begin
   result:=index;
 end;
 
-function TpacketFactory.getSubPacketCount(packetStart, packetEnd: integer
+function TpacketFactory.getSubPacketCount(packetStart: integer
   ): integer;
 var
   isPacketCount:boolean;
@@ -182,6 +174,7 @@ begin
       subPacketType:=findPacketType(subPacketStart);
       subPacketEnd:=findCurrentPacketEnd(subPacketStart, subPacketType);
       subPacketLength:=subPacketLength - (1+ subPacketEnd - subPacketStart);
+      subPacketStart:=succ(subPacketEnd);
       subPacketCount:=subPacketCount+1;
       end;
     result:=subPacketCount;
@@ -194,14 +187,35 @@ begin
   result:=length(fPackets);
 end;
 
-function TpacketFactory.getVersionTotal: integer;
+function TpacketFactory.getVersionTotal(packet:TPacket=nil): integer;
 var
-  packetNo,versionSum:integer;
+  pNo,subPacketCount:integer;
+  packetArray:TPacketArray;
+  versionTotal:integer;
 begin
-  versionSum:=0;
-  for packetNo:=0 to pred(packetCount) do
-    versionSum:=versionSum + fPackets[packetNo].version;
-  result:=versionSum;
+  versionTotal:=0;
+  if packet is TLiteralPacket then
+    begin
+    versionTotal:=versionTotal + packet.version;
+    subPacketCount:=0;
+    end else
+  if packet is TOperatorPacket then
+    begin
+    versionTotal:=versionTotal + packet.version;
+    packetArray:= (packet as TOperatorPacket).subPackets;
+    subPacketCount:= (packet as TOperatorPacket).subPacketCount;
+    end else
+  if packet = nil then
+    begin
+    packetArray:= packets;
+    subPacketCount:= packetCount;
+    end;
+  //for each element in the array, call this again
+  for pNo:= 0 to pred(subPacketCount) do
+    begin
+    versionTotal:= versionTotal + getVersionTotal(packetArray[pNo])
+    end;
+  result:=versionTotal;
 end;
 
 procedure TpacketFactory.addPacket(pckt: TPacket);
@@ -210,56 +224,46 @@ begin
   fPackets[length(fPackets)-1]:=pckt;
 end;
 
-function TpacketFactory.parse(packetStart:integer):integer;
+function TpacketFactory.parse(parentPacket:TPacket;packetStart:integer):integer;
 var
+  thisPacket:TPacket;
   version,packetEnd: integer;
   subPacketCount,subPacketStart, subPacketEnd, packetLengthType:integer;
   pcktType:PacketType;
-  literalData,i:integer;
-  operatorData:string;
-  sPacketType,sPad:string;
+  literalData:integer;
+
 begin
- spad:='';
  version:=findPacketVersion(packetStart);
  pcktType:=findPacketType(packetStart);
- if pcktType = PacketType.literalType then sPacketType:='literal' else sPacketType := 'operator';
  packetEnd:=findCurrentPacketEnd(packetStart,pcktType);
- for i:= 0 to rDepth do sPad:=sPad+'  ';
- log(sPad+rDepth.ToString+' Start '+packetStart.ToString+' End '+packetEnd.ToString+' Version '+version.ToString+' Type: '+spacketType);
-
  if pcktType = PacketType.literalType then
    begin
      literalData:=decodeLiteralData(fData, packetStart,packetEnd);
-     log(sPad+rDepth.ToString+' Add literal packet');
-     addPacket(TLiteralPacket.create(version,literalData));
+     thisPacket:=TLiteralPacket.create(version,literalData);
+     if parentPacket = nil
+       then addPacket(thisPacket) //edge case where there is only one packet
+     else with parentPacket as TOperatorPacket do addSubPacket(thisPacket);
    end
  else if pcktType = PacketType.operatorType then
    begin
      packetLengthType:=findPacketLengthType(packetStart);
      subPacketCount:=getSubPacketCount(packetStart,packetEnd);
-     log(sPad+rDepth.ToString+' Sub packet count: '+subPacketCount.ToString);
        if packetLengthType = 1
        then subPacketStart:= packetStart + 18
      else subPacketStart:= packetStart + 22;
-     operatorData:=fData.Substring(subPacketStart, (1+ packetEnd - subPacketStart));
-     log(sPad+rDepth.ToString+' Add operator packet');
-     addPacket(TOperatorPacket.create(version,subPacketCount,operatorData));
+     thisPacket:=TOperatorPacket.create(version);
+     if parentPacket = nil
+       then addPacket(thisPacket)
+     else with parentPacket as TOperatorPacket do addSubPacket(thisPacket);
      //while this packet has subpackets call this method again
      while subPacketCount > 0 do
        begin
-       rDepth:=rDepth + 1;
-       subPacketEnd:= parse(subPacketStart);
-       rDepth:=rDepth -1;
+       subPacketEnd:= parse(thisPacket,subPacketStart);
        subPacketCount:=subPacketCount -1;
        if subPacketCount > 0 then subPacketStart:=subPacketEnd + 1;
        end;
    end;
  result:=packetEnd;
-end;
-
-procedure TpacketFactory.log(message: string);
-begin
-  fLog.Add(message);
 end;
 
 { TPacket }
@@ -270,6 +274,11 @@ begin
  fSubPackets[pred(length(fSubPackets))]:=subPacket;
 end;
 
+function TOperatorPacket.getSubPacketCount: integer;
+begin
+  result:=length(fSubPackets);
+end;
+
 constructor TPacket.create(versionNo: integer; packetType: PacketType);
 begin
   fVersion:=versionNo;
@@ -278,7 +287,7 @@ end;
 
 { TOperatorPacket }
 
-constructor TOperatorPacket.create(versionNo,subPacketCount:integer;data:string);
+constructor TOperatorPacket.create(versionNo:integer);
 begin
   inherited create(versionNo,PacketType.operatorType);
   fSubPackets:=TPacketArray.create;
