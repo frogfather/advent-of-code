@@ -1593,9 +1593,11 @@ procedure TmainForm.day16part1;
    puzzleInput:String;
    packetFactory:TPacketFactory;
 begin
-   puzzleInput:=getPuzzleInputAsString('day_16_test-subpacket-length.txt');
+   puzzleInput:=getPuzzleInputAsString('day_16_1.txt');
    packetFactory:=TPacketFactory.create(puzzleInput);
-
+   lbResults.items.add('packets '+packetFactory.packetCount.ToString);
+   lbResults.items.add('version total '+packetFactory.versionTotal.ToString);
+   //lbResults.Items:= packetFactory.pLog;
 end;
 
 procedure TmainForm.day16part2;
