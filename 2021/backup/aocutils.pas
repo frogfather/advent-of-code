@@ -168,7 +168,7 @@ begin
       then value:=(ord(element)+9) and 15
     else if element IN ['0'..'9']
       then value:= (ord(element)) and 15
-    else valid = false;
+    else valid := false;
     //convert to binary
     if valid then
       begin
@@ -186,9 +186,10 @@ begin
   result:=output;
 end;
 
-function binStringToInteger(binString: string): integer;
+function binStringToInt64(binString: string): int64;
 var
-  index,pwr,output:integer;
+  index,pwr:integer;
+  output:int64;
   element:string;
 begin
 output:=0;
