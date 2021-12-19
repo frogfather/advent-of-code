@@ -3,7 +3,7 @@
   <ProjectSession>
     <Version Value="11"/>
     <BuildModes Active="Default"/>
-    <Units Count="24">
+    <Units Count="25">
       <Unit0>
         <Filename Value="adventOfCode.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -17,8 +17,9 @@
         <ComponentName Value="mainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="1587"/>
-        <CursorPos X="2" Y="1600"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="1593"/>
+        <CursorPos X="54" Y="1597"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -108,14 +109,14 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="84" Y="7"/>
-        <UsageCount Value="168"/>
+        <UsageCount Value="169"/>
       </Unit11>
       <Unit12>
         <Filename Value="polymer.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="42"/>
-        <UsageCount Value="139"/>
+        <UsageCount Value="140"/>
       </Unit12>
       <Unit13>
         <Filename Value="chiton.pas"/>
@@ -123,17 +124,16 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="132"/>
         <CursorPos X="14" Y="148"/>
-        <UsageCount Value="137"/>
+        <UsageCount Value="138"/>
       </Unit13>
       <Unit14>
         <Filename Value="packet.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="26"/>
-        <CursorPos X="60" Y="34"/>
+        <TopLine Value="66"/>
+        <CursorPos X="21" Y="60"/>
         <FoldState Value=" T3j4076 piajF0R6r"/>
-        <UsageCount Value="96"/>
+        <UsageCount Value="97"/>
         <Loaded Value="True"/>
       </Unit14>
       <Unit15>
@@ -200,120 +200,135 @@
         <CursorPos X="-1" Y="-1"/>
         <UsageCount Value="14"/>
       </Unit23>
+      <Unit24>
+        <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/fgl.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="938"/>
+        <CursorPos Y="950"/>
+        <UsageCount Value="10"/>
+      </Unit24>
     </Units>
-    <JumpHistory Count="28" HistoryIndex="27">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="packet.pas"/>
-        <Caret Line="393" TopLine="379"/>
+        <Caret Line="393" TopLine="381"/>
       </Position1>
       <Position2>
         <Filename Value="packet.pas"/>
-        <Caret Line="387" TopLine="379"/>
+        <Caret Line="389" TopLine="381"/>
       </Position2>
       <Position3>
         <Filename Value="packet.pas"/>
-        <Caret Line="389" TopLine="379"/>
+        <Caret Line="391" TopLine="381"/>
       </Position3>
       <Position4>
         <Filename Value="packet.pas"/>
-        <Caret Line="390" TopLine="379"/>
+        <Caret Line="392" TopLine="381"/>
       </Position4>
       <Position5>
         <Filename Value="packet.pas"/>
-        <Caret Line="391" TopLine="379"/>
+        <Caret Line="393" TopLine="381"/>
       </Position5>
       <Position6>
         <Filename Value="packet.pas"/>
-        <Caret Line="393" TopLine="379"/>
+        <Caret Line="389" TopLine="381"/>
       </Position6>
       <Position7>
         <Filename Value="packet.pas"/>
-        <Caret Line="440" TopLine="431"/>
+        <Caret Line="395" TopLine="381"/>
       </Position7>
       <Position8>
         <Filename Value="packet.pas"/>
-        <Caret Line="382" Column="84" TopLine="380"/>
+        <Caret Line="380" TopLine="372"/>
       </Position8>
       <Position9>
         <Filename Value="packet.pas"/>
-        <Caret Line="387" Column="23" TopLine="380"/>
+        <Caret Line="457" TopLine="449"/>
       </Position9>
       <Position10>
         <Filename Value="packet.pas"/>
-        <Caret Line="388" TopLine="380"/>
+        <Caret Line="458" TopLine="449"/>
       </Position10>
       <Position11>
         <Filename Value="packet.pas"/>
-        <Caret Line="390" TopLine="380"/>
+        <Caret Line="374" TopLine="366"/>
       </Position11>
       <Position12>
         <Filename Value="packet.pas"/>
-        <Caret Line="391" TopLine="380"/>
+        <Caret Line="375" TopLine="367"/>
       </Position12>
       <Position13>
         <Filename Value="packet.pas"/>
-        <Caret Line="392" TopLine="380"/>
+        <Caret Line="383" TopLine="369"/>
       </Position13>
       <Position14>
         <Filename Value="packet.pas"/>
-        <Caret Line="394" TopLine="380"/>
+        <Caret Line="377" TopLine="369"/>
       </Position14>
       <Position15>
         <Filename Value="packet.pas"/>
-        <Caret Line="441" TopLine="433"/>
+        <Caret Line="383" TopLine="369"/>
       </Position15>
       <Position16>
         <Filename Value="packet.pas"/>
-        <Caret Line="288" Column="29" TopLine="284"/>
+        <Caret Line="386" Column="7" TopLine="384"/>
       </Position16>
       <Position17>
         <Filename Value="packet.pas"/>
-        <Caret Line="66" Column="25" TopLine="59"/>
+        <Caret Line="390" TopLine="384"/>
       </Position17>
       <Position18>
         <Filename Value="packet.pas"/>
-        <Caret Line="150" Column="26" TopLine="136"/>
+        <Caret Line="392" TopLine="384"/>
       </Position18>
       <Position19>
-        <Filename Value="aocutils.pas"/>
-        <Caret Line="19" Column="10" TopLine="10"/>
+        <Filename Value="packet.pas"/>
+        <Caret Line="393" TopLine="384"/>
       </Position19>
       <Position20>
-        <Filename Value="aocutils.pas"/>
-        <Caret Line="189" Column="26" TopLine="188"/>
+        <Filename Value="packet.pas"/>
+        <Caret Line="394" TopLine="384"/>
       </Position20>
       <Position21>
-        <Filename Value="aocutils.pas"/>
-        <Caret Line="19" Column="50" TopLine="10"/>
+        <Filename Value="packet.pas"/>
+        <Caret Line="390" TopLine="384"/>
       </Position21>
       <Position22>
         <Filename Value="packet.pas"/>
-        <Caret Line="102" Column="27" TopLine="93"/>
+        <Caret Line="392" TopLine="384"/>
       </Position22>
       <Position23>
         <Filename Value="packet.pas"/>
-        <Caret Line="110" Column="27" TopLine="101"/>
+        <Caret Line="393" TopLine="384"/>
       </Position23>
       <Position24>
         <Filename Value="packet.pas"/>
-        <Caret Line="119" Column="27" TopLine="110"/>
+        <Caret Line="394" TopLine="384"/>
       </Position24>
       <Position25>
         <Filename Value="packet.pas"/>
-        <Caret Line="150" Column="27" TopLine="133"/>
+        <Caret Line="390" TopLine="384"/>
       </Position25>
       <Position26>
         <Filename Value="packet.pas"/>
-        <Caret Line="179" Column="39" TopLine="165"/>
+        <Caret Line="396" TopLine="384"/>
       </Position26>
       <Position27>
         <Filename Value="packet.pas"/>
-        <Caret Line="288" Column="34" TopLine="285"/>
+        <Caret Line="457" TopLine="449"/>
       </Position27>
       <Position28>
         <Filename Value="packet.pas"/>
-        <Caret Line="289" Column="104" TopLine="284"/>
+        <Caret Line="458" TopLine="449"/>
       </Position28>
+      <Position29>
+        <Filename Value="packet.pas"/>
+        <Caret Line="376" TopLine="368"/>
+      </Position29>
+      <Position30>
+        <Filename Value="packet.pas"/>
+        <Caret Line="377" TopLine="368"/>
+      </Position30>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
@@ -332,7 +347,7 @@
         <Expression Value="pNo"/>
       </Item3>
       <Item4>
-        <Expression Value="allLiteral"/>
+        <Expression Value="level"/>
       </Item4>
       <Item5>
         <Expression Value="packetArray[pNo]"/>

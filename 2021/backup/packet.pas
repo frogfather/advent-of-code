@@ -57,7 +57,7 @@ type
     fData:string;
     fPackets: TPacketArray;
     fLog:TStringList;
-    fPacketSum:integer;
+    fPacketSum:int64;
     fLevel:integer;
     function findPacketVersion(packetStart:integer):integer;
     function findPacketType(packetStart: integer): PacketType;
@@ -328,28 +328,25 @@ begin
   if packet is TLiteralPacket then
     begin
     //return it unchanged and quit - nothing more to do
-    calculatedTotal:= (packet as TLiteralPacket).fData;
-    subPacketCount:=0;
-    packetArray:=nil;
     result:=packet;
-    exit;
     log('L '+level.ToString+' Packet is literal with value '+calculatedTotal.ToString);
+    exit;
     end;
   if packet is TOperatorPacket then
     begin
-    //traverse the subpackets and return a Literal packet with the value of it
+    //check if it has sub packets
     packetArray:= (packet as TOperatorPacket).subPackets;
     subPacketCount:= (packet as TOperatorPacket).subPacketCount;
     log('L '+level.ToString+' Operator packet has '+subPacketCount.ToString+' subpackets');
     end else
   if packet = nil then
     begin
-    //top level packet - traverse subpackets
+    //starting point - use the packets property of this object
     packetArray:= packets;
     subPacketCount:= packetCount;
     log('L '+level.ToString+' top level packet. SubPacketCount: '+subPacketCount.ToString);
     end;
-
+  //If there aren't any packets then return a literal packet with value 0
   if (packetArray = nil) or (subPacketCount = 0) then
     begin
     //return a packet with zero value
@@ -371,89 +368,100 @@ begin
   if allLiteral = false then
     for pNo:=0 to pred(subPacketCount) do
       begin
-      //this should return a LiteralPacket for each element in the array;
-      fLevel:=fLevel+1;
-      result:= calculateValue(packetArray[pNo]);
-      log('L '+level.ToString+' Sum of subpackets '+(result as TLiteralPacket).fData.ToString);
-      fLevel:=fLevel-1;
-      end else
-      begin
-      //apply the specified operator to them and return a literal packet with that value
-      firstPacket:=(packetArray[0] as TLiteralPacket);
-      if subPacketCount > 1 then secondPacket:=(packetArray[1] as TLiteralPacket);
-      pktOp:= (packet as TOperatorPacket).packetOp;
-        case pktOp of
-          poSum:
-            begin
-            for subPNo:= 0 to pred(subPacketCount) do
-              begin
-              pkValue:= (packetArray[subPNo] as TLiteralPacket).fData;
-              log('L '+level.ToString+' Literal packet value '+(pkValue.ToString));
-              calculatedTotal:=calculatedTotal + (packetArray[subPNo] as TLiteralPacket).fData;
-              end;
-              log('L '+level.ToString+' Total from add operation '+ calculatedTotal.ToString);
-            end;
-          poProduct:
-            begin
-            calculatedTotal:=1;
-            for subPNo:= 0 to pred(subPacketCount) do
-              begin
-              pkValue:= (packetArray[subPNo] as TLiteralPacket).fData;
-              log('L '+level.ToString+' Literal packet value '+(pkValue.ToString));
-              calculatedTotal:=calculatedTotal * pkValue;
-              log('L '+level.ToString+' Total from multiply operation '+ calculatedTotal.ToString);
-              end;
-            end;
-          poMin:
-            begin
-            calculatedTotal:= (packetArray[0] as TLiteralPacket).fData;
-            for subPNo:= 0 to pred(subPacketCount) do
-              begin
-              pkValue:= (packetArray[subPNo] as TLiteralPacket).fData;
-              log('L '+level.ToString+' Literal packet value '+(pkValue.ToString));
-              if (packetArray[subPNo] as TLiteralPacket).fData < calculatedTotal
-                then calculatedTotal:= (packetArray[subPNo] as TLiteralPacket).fData;
-              end;
-            log('L '+level.ToString+' Lowest value '+ calculatedTotal.ToString);
-            //minimum of the values
-            end;
-          poMax:
-            begin
-            calculatedTotal:=0;
-            for subPNo:= 0 to pred(subPacketCount) do
-              begin
-              pkValue:= (packetArray[subPNo] as TLiteralPacket).fData;
-              log('L '+level.ToString+' Literal packet value '+(pkValue.ToString));
-              if (packetArray[subPNo] as TLiteralPacket).fData > calculatedTotal
-                then calculatedTotal:= (packetArray[subPNo] as TLiteralPacket).fData;
-              end;
-            //max of the values
-            log('L '+level.ToString+' Highest value '+ calculatedTotal.ToString);
-            end;
-          poGreater:
-            begin
-            log('L '+level.ToString+' poGreater '+ firstPacket.fData.ToString+ ' '+ secondPacket.fData.ToString);
-            if firstPacket.fData > secondPacket.fData
-              then calculatedTotal:=1 else calculatedTotal:=0;
-            log('L '+level.ToString+'result '+calculatedTotal.ToString);
-            end;
-          poLess:
-            begin
-            log('L '+level.ToString+' poLess '+ firstPacket.fData.ToString+ ' '+ secondPacket.fData.ToString);
-            if firstPacket.fData < secondPacket.fData
-              then calculatedTotal:=1 else calculatedTotal:=0;
-            log('L '+level.ToString+'result '+calculatedTotal.ToString);
-            end;
-          poEqual:
-            begin
-            log('L '+level.ToString+' poEqual '+ firstPacket.fData.ToString+ ' '+ secondPacket.fData.ToString);
-            if firstPacket.fData = secondPacket.fData
-              then calculatedTotal:=1 else calculatedTotal:=0;
-            log('L '+level.ToString+'result '+calculatedTotal.ToString);
-            end;
+      //if some of the subpackets are operator packets then we need to replace
+      //them with the calculated value
+      if packetArray[pNo] is TOperatorPacket then
+        begin
+        fLevel:=fLevel+1;
+        packetArray[pNo]:= calculateValue(packetArray[pNo]);
+        log('L '+level.ToString+' Sum of subpackets '+(packetArray[pNo] as TLiteralPacket).fData.ToString);
+        fLevel:=fLevel-1;
         end;
       end;
-  result:= TLiteralPacket.create(0,calculatedTotal);
+  //at this point we should have an array whose elements are all TLiteralPacket
+  //and we can do the computations on them
+  //apply the specified operator to them and return a literal packet with that value
+  firstPacket:=(packetArray[0] as TLiteralPacket);
+  if subPacketCount > 1 then secondPacket:=(packetArray[1] as TLiteralPacket);
+  if (packet = nil) then
+    //it's the top level 'packet' which is nil
+    begin
+    result:=firstPacket;
+    end else
+    begin
+    pktOp:= (packet as TOperatorPacket).packetOp;
+      case pktOp of
+        poSum:
+          begin
+          for subPNo:= 0 to pred(subPacketCount) do
+            begin
+            pkValue:= (packetArray[subPNo] as TLiteralPacket).fData;
+            log('L '+level.ToString+' Literal packet value '+(pkValue.ToString));
+            calculatedTotal:=calculatedTotal + (packetArray[subPNo] as TLiteralPacket).fData;
+            end;
+            log('L '+level.ToString+' Total from add operation '+ calculatedTotal.ToString);
+          end;
+        poProduct:
+          begin
+          calculatedTotal:=1;
+          for subPNo:= 0 to pred(subPacketCount) do
+            begin
+            pkValue:= (packetArray[subPNo] as TLiteralPacket).fData;
+            log('L '+level.ToString+' Literal packet value '+(pkValue.ToString));
+            calculatedTotal:=calculatedTotal * pkValue;
+            log('L '+level.ToString+' Total from multiply operation '+ calculatedTotal.ToString);
+            end;
+          end;
+        poMin:
+          begin
+          calculatedTotal:= (packetArray[0] as TLiteralPacket).fData;
+          for subPNo:= 0 to pred(subPacketCount) do
+            begin
+            pkValue:= (packetArray[subPNo] as TLiteralPacket).fData;
+            log('L '+level.ToString+' Literal packet value '+(pkValue.ToString));
+            if (packetArray[subPNo] as TLiteralPacket).fData < calculatedTotal
+              then calculatedTotal:= (packetArray[subPNo] as TLiteralPacket).fData;
+            end;
+          log('L '+level.ToString+' Lowest value '+ calculatedTotal.ToString);
+          //minimum of the values
+          end;
+        poMax:
+          begin
+          calculatedTotal:=0;
+          for subPNo:= 0 to pred(subPacketCount) do
+            begin
+            pkValue:= (packetArray[subPNo] as TLiteralPacket).fData;
+            log('L '+level.ToString+' Literal packet value '+(pkValue.ToString));
+            if (packetArray[subPNo] as TLiteralPacket).fData > calculatedTotal
+              then calculatedTotal:= (packetArray[subPNo] as TLiteralPacket).fData;
+            end;
+          //max of the values
+          log('L '+level.ToString+' Highest value '+ calculatedTotal.ToString);
+          end;
+        poGreater:
+          begin
+          log('L '+level.ToString+' poGreater '+ firstPacket.fData.ToString+ ' '+ secondPacket.fData.ToString);
+          if firstPacket.fData > secondPacket.fData
+            then calculatedTotal:=1 else calculatedTotal:=0;
+          log('L '+level.ToString+'result '+calculatedTotal.ToString);
+          end;
+        poLess:
+          begin
+          log('L '+level.ToString+' poLess '+ firstPacket.fData.ToString+ ' '+ secondPacket.fData.ToString);
+          if firstPacket.fData < secondPacket.fData
+            then calculatedTotal:=1 else calculatedTotal:=0;
+          log('L '+level.ToString+'result '+calculatedTotal.ToString);
+          end;
+        poEqual:
+          begin
+          log('L '+level.ToString+' poEqual '+ firstPacket.fData.ToString+ ' '+ secondPacket.fData.ToString);
+          if firstPacket.fData = secondPacket.fData
+            then calculatedTotal:=1 else calculatedTotal:=0;
+          log('L '+level.ToString+'result '+calculatedTotal.ToString);
+          end;
+      end;
+    result:= TLiteralPacket.create(0,calculatedTotal);
+    end;
 end;
 
 { TPacket }
@@ -486,7 +494,7 @@ end;
 
 { TliteralPacket }
 
-constructor TliteralPacket.create(versionNo:integer;packetData:integer);
+constructor TliteralPacket.create(versionNo:integer;packetData:int64);
 begin
   inherited create(versionNo,PacketType.literalType);
   fData:=packetData;

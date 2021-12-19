@@ -1595,7 +1595,6 @@ procedure TmainForm.day16part1;
 begin
    puzzleInput:=getPuzzleInputAsString('day_16_1.txt');
    packetFactory:=TPacketFactory.create(puzzleInput);
-   lbResults.Items:= packetFactory.logItems;
    lbResults.items.add('version total '+packetFactory.getVersionTotal.ToString);
 
 end;
@@ -1607,7 +1606,6 @@ procedure TmainForm.day16part2;
 begin
     puzzleInput:=getPuzzleInputAsString('day_16_1.txt');
     packetFactory:=TPacketFactory.create(puzzleInput);
-    lbResults.Items:= packetFactory.logItems;
     lbResults.items.add('Packet sum :'+ packetFactory.packetSum.ToString);
 end;
 
