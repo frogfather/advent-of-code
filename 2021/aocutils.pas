@@ -15,6 +15,7 @@ function calculateCommonestValue(input: TStringArray; reverse:Boolean=false): TB
 function getUniqueEntry(input: TStringArray;reverse:boolean=false):String;
 function getMaxValue(input:TIntArray):integer;
 function getDescription(fileName:String):String;
+function triangular(input:integer):integer;
 function hexStringToBinString(hexString:string):string;
 function binStringToInt64(binString:string):int64;
 implementation
@@ -147,6 +148,11 @@ begin
   except
     result:='No description for this puzzle'
   end;
+end;
+
+function triangular(input: integer): integer;
+begin
+  result:= (input * (input + 1)) div 2;
 end;
 
 function hexStringToBinString(hexString: string): string;

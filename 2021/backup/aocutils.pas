@@ -16,7 +16,7 @@ function getUniqueEntry(input: TStringArray;reverse:boolean=false):String;
 function getMaxValue(input:TIntArray):integer;
 function getDescription(fileName:String):String;
 function hexStringToBinString(hexString:string):string;
-function binStringToInteger(binString:string):integer;
+function binStringToInt64(binString:string):int64;
 implementation
 
 const dataDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/input/';

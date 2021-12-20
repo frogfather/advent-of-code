@@ -8,7 +8,7 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, advent, bingoCard, ventMap, arrayUtils, anysort, paintbox, octopus,
-  origami, polymer, chiton, packet;
+  origami, polymer, chiton, packet, rangecalc, trickshot;
 
 {$R *.res}
 

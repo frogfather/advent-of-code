@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics,
   Dialogs, StdCtrls, math, bingoCard,
   ventMap,fgl,DateUtils,aocUtils,arrayUtils,fpJSON,paintbox,
-  octopus,clipbrd,origami,polymer,chiton,packet;
+  octopus,clipbrd,origami,polymer,chiton,packet,trickshot;
 
 type
   TbingoCards = array of TbingoCard;
@@ -65,6 +65,8 @@ type
     procedure day15part2;
     procedure day16part1;
     procedure day16part2;
+    procedure day17part1;
+    procedure day17part2;
     procedure CardNotifyWinHandler(Sender: TObject);
     procedure OctopusFlashHandler(Sender: TObject);
     function identifySegmentValues(input:TStringArray):TStringMap;
@@ -135,6 +137,8 @@ begin
    29: day15part2;
    30: day16part1;
    31: day16part2;
+   32: day17part1;
+   33: day17part2;
   end;
  endTime:=now;
  lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
@@ -1607,6 +1611,27 @@ begin
     puzzleInput:=getPuzzleInputAsString('day_16_1.txt');
     packetFactory:=TPacketFactory.create(puzzleInput);
     lbResults.items.add('Packet sum :'+ packetFactory.packetSum.ToString);
+end;
+
+procedure TmainForm.day17part1;
+var
+   puzzleInput: String;
+   trickshot:Ttrickshot;
+   velocity:TPoint;
+   timesToTarget:TRange;
+begin
+   //puzzleInput:= getPuzzleInputAsString('day_17_1.txt');
+   puzzleInput:='target area: x=20..30, y=-10..-5';
+   trickshot:=TTrickshot.create(puzzleInput);
+   velocity.X:=7;
+   velocity.Y:=2;
+   //timesToTarget:=trickshot.calculateTimesToTarget(velocity);
+   //lbResults.Items.Add('times to target: Xmin: '+timesToTarget.xMin.ToString+' Xmax: '+timesToTarget.xMax.ToString+' Ymin: '+timesToTarget.yMin.ToString+' Ymax: '+timesToTarget.yMax.ToString);
+end;
+
+procedure TmainForm.day17part2;
+begin
+
 end;
 
 end.

@@ -67,6 +67,7 @@ constructor TRouteFinder.create(puzzleInput: TStringArray);
 begin
   fMap:=T3DIntMap.create;
   fQueue:=TQueue.create;
+  fFinishPoint:=TPoint.Create(0,0);
   initializeMap(puzzleInput);
 end;
 

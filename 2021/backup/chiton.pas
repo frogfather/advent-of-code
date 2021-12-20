@@ -67,6 +67,7 @@ constructor TRouteFinder.create(puzzleInput: TStringArray);
 begin
   fMap:=T3DIntMap.create;
   fQueue:=TQueue.create;
+  fNodePos:=TPoint.Create(0,0);
   initializeMap(puzzleInput);
 end;
 
@@ -145,7 +146,7 @@ begin
     leastRiskPoint:=processNode(leastRiskPoint,endPoint);
     done:=leastRiskPoint = endPoint;
     until done;
-  findQueueEntry(endPoint);
+  endEntry:= findQueueEntry(endPoint);
   if endEntry <> nil then
   fShortest:=endEntry.risk;
 

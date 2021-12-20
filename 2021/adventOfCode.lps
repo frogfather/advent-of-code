@@ -3,7 +3,7 @@
   <ProjectSession>
     <Version Value="11"/>
     <BuildModes Active="Default"/>
-    <Units Count="25">
+    <Units Count="26">
       <Unit0>
         <Filename Value="adventOfCode.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -17,8 +17,8 @@
         <ComponentName Value="mainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="1593"/>
-        <CursorPos X="54" Y="1597"/>
+        <TopLine Value="1618"/>
+        <CursorPos X="4" Y="1629"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -27,10 +27,10 @@
         <Filename Value="fileutilities.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="fileUtilities"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="78"/>
-        <CursorPos Y="91"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="76"/>
         <UsageCount Value="220"/>
+        <Loaded Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="bingocard.pas"/>
@@ -62,9 +62,9 @@
         <Filename Value="aocutils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="aocUtils"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="10"/>
-        <CursorPos X="50" Y="19"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="138"/>
+        <CursorPos X="31" Y="155"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit6>
@@ -72,8 +72,8 @@
         <Filename Value="arrayutils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="arrayUtils"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="3"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="37"/>
         <CursorPos X="75" Y="26"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -108,226 +108,232 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="84" Y="7"/>
-        <UsageCount Value="169"/>
+        <UsageCount Value="196"/>
       </Unit11>
       <Unit12>
         <Filename Value="polymer.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="42"/>
-        <UsageCount Value="140"/>
+        <UsageCount Value="167"/>
       </Unit12>
       <Unit13>
         <Filename Value="chiton.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="132"/>
-        <CursorPos X="14" Y="148"/>
-        <UsageCount Value="138"/>
+        <UsageCount Value="165"/>
       </Unit13>
       <Unit14>
         <Filename Value="packet.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="70"/>
-        <CursorPos X="30" Y="81"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="26"/>
         <FoldState Value=" T3j4076 piajF0R6r"/>
-        <UsageCount Value="97"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="124"/>
       </Unit14>
       <Unit15>
+        <Filename Value="trickshot.pas"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="145"/>
+        <CursorPos X="67" Y="156"/>
+        <UsageCount Value="46"/>
+        <Loaded Value="True"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="rangecalc.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="10"/>
+        <CursorPos X="37" Y="27"/>
+        <UsageCount Value="35"/>
+      </Unit16>
+      <Unit17>
         <Filename Value="cave.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="35" Y="8"/>
-        <UsageCount Value="28"/>
-      </Unit15>
-      <Unit16>
+        <UsageCount Value="26"/>
+      </Unit17>
+      <Unit18>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/classes/classesh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2302"/>
         <CursorPos X="15" Y="2320"/>
-        <UsageCount Value="5"/>
-      </Unit16>
-      <Unit17>
-        <Filename Value="/Applications/Lazarus/lcl/include/customform.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="2936"/>
-        <CursorPos Y="2947"/>
-        <UsageCount Value="1"/>
-      </Unit17>
-      <Unit18>
-        <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/sysutils/syshelph.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="161"/>
-        <CursorPos X="16" Y="171"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="3"/>
       </Unit18>
       <Unit19>
+        <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/sysutils/syshelph.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="160"/>
+        <CursorPos X="17" Y="171"/>
+        <UsageCount Value="8"/>
+      </Unit19>
+      <Unit20>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/packages/fcl-json/src/fpjson.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="311"/>
         <CursorPos X="3" Y="318"/>
-        <UsageCount Value="10"/>
-      </Unit19>
-      <Unit20>
-        <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/sysutils/syshelp.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="1291"/>
-        <CursorPos X="22" Y="1300"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="8"/>
       </Unit20>
       <Unit21>
+        <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/sysutils/syshelp.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1302"/>
+        <CursorPos X="3" Y="1291"/>
+        <UsageCount Value="8"/>
+      </Unit21>
+      <Unit22>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/classes/util.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="30"/>
         <CursorPos X="3" Y="38"/>
-        <UsageCount Value="5"/>
-      </Unit21>
-      <Unit22>
+        <UsageCount Value="3"/>
+      </Unit22>
+      <Unit23>
         <Filename Value="util.inc"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="14"/>
-      </Unit22>
-      <Unit23>
+        <UsageCount Value="12"/>
+      </Unit23>
+      <Unit24>
         <Filename Value="classesh.inc"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="14"/>
-      </Unit23>
-      <Unit24>
+        <UsageCount Value="12"/>
+      </Unit24>
+      <Unit25>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/fgl.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="938"/>
         <CursorPos Y="950"/>
-        <UsageCount Value="10"/>
-      </Unit24>
+        <UsageCount Value="8"/>
+      </Unit25>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="packet.pas"/>
-        <Caret Line="389" TopLine="381"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="11" Column="37"/>
       </Position1>
       <Position2>
-        <Filename Value="packet.pas"/>
-        <Caret Line="391" TopLine="381"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="11" Column="58"/>
       </Position2>
       <Position3>
-        <Filename Value="packet.pas"/>
-        <Caret Line="392" TopLine="381"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1625" Column="16" TopLine="1611"/>
       </Position3>
       <Position4>
-        <Filename Value="packet.pas"/>
-        <Caret Line="393" TopLine="381"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="37" Column="76" TopLine="32"/>
       </Position4>
       <Position5>
-        <Filename Value="packet.pas"/>
-        <Caret Line="389" TopLine="381"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="63" TopLine="50"/>
       </Position5>
       <Position6>
-        <Filename Value="packet.pas"/>
-        <Caret Line="395" TopLine="381"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="64" TopLine="50"/>
       </Position6>
       <Position7>
-        <Filename Value="packet.pas"/>
-        <Caret Line="380" TopLine="372"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="65" TopLine="50"/>
       </Position7>
       <Position8>
-        <Filename Value="packet.pas"/>
-        <Caret Line="457" TopLine="449"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="66" TopLine="50"/>
       </Position8>
       <Position9>
-        <Filename Value="packet.pas"/>
-        <Caret Line="458" TopLine="449"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="67" TopLine="50"/>
       </Position9>
       <Position10>
-        <Filename Value="packet.pas"/>
-        <Caret Line="374" TopLine="366"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="18" Column="17"/>
       </Position10>
       <Position11>
-        <Filename Value="packet.pas"/>
-        <Caret Line="375" TopLine="367"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="25" Column="20" TopLine="19"/>
       </Position11>
       <Position12>
-        <Filename Value="packet.pas"/>
-        <Caret Line="383" TopLine="369"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="29" Column="52" TopLine="14"/>
       </Position12>
       <Position13>
-        <Filename Value="packet.pas"/>
-        <Caret Line="377" TopLine="369"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="25" Column="19" TopLine="18"/>
       </Position13>
       <Position14>
-        <Filename Value="packet.pas"/>
-        <Caret Line="383" TopLine="369"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="46" Column="43" TopLine="28"/>
       </Position14>
       <Position15>
-        <Filename Value="packet.pas"/>
-        <Caret Line="386" Column="7" TopLine="384"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="25" Column="23" TopLine="18"/>
       </Position15>
       <Position16>
-        <Filename Value="packet.pas"/>
-        <Caret Line="390" TopLine="384"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="57" Column="14" TopLine="36"/>
       </Position16>
       <Position17>
-        <Filename Value="packet.pas"/>
-        <Caret Line="392" TopLine="384"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="46" Column="42" TopLine="35"/>
       </Position17>
       <Position18>
-        <Filename Value="packet.pas"/>
-        <Caret Line="393" TopLine="384"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="50" Column="35" TopLine="39"/>
       </Position18>
       <Position19>
-        <Filename Value="packet.pas"/>
-        <Caret Line="394" TopLine="384"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="61" Column="3" TopLine="51"/>
       </Position19>
       <Position20>
-        <Filename Value="packet.pas"/>
-        <Caret Line="390" TopLine="384"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="80" Column="5" TopLine="65"/>
       </Position20>
       <Position21>
-        <Filename Value="packet.pas"/>
-        <Caret Line="392" TopLine="384"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="71" Column="79" TopLine="60"/>
       </Position21>
       <Position22>
-        <Filename Value="packet.pas"/>
-        <Caret Line="393" TopLine="384"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="24" Column="26" TopLine="15"/>
       </Position22>
       <Position23>
-        <Filename Value="packet.pas"/>
-        <Caret Line="394" TopLine="384"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="46" Column="49" TopLine="28"/>
       </Position23>
       <Position24>
-        <Filename Value="packet.pas"/>
-        <Caret Line="390" TopLine="384"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="41" Column="20" TopLine="30"/>
       </Position24>
       <Position25>
-        <Filename Value="packet.pas"/>
-        <Caret Line="396" TopLine="384"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="39" Column="43" TopLine="34"/>
       </Position25>
       <Position26>
-        <Filename Value="packet.pas"/>
-        <Caret Line="457" TopLine="449"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="155" Column="74" TopLine="134"/>
       </Position26>
       <Position27>
-        <Filename Value="packet.pas"/>
-        <Caret Line="458" TopLine="449"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="144" Column="12" TopLine="131"/>
       </Position27>
       <Position28>
-        <Filename Value="packet.pas"/>
-        <Caret Line="376" TopLine="368"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="137" Column="22" TopLine="133"/>
       </Position28>
       <Position29>
-        <Filename Value="packet.pas"/>
-        <Caret Line="377" TopLine="368"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="155" Column="44" TopLine="138"/>
       </Position29>
       <Position30>
-        <Filename Value="advent.pas"/>
-        <Caret Line="1597" Column="54" TopLine="1593"/>
+        <Filename Value="trickshot.pas"/>
+        <Caret Line="153" Column="44" TopLine="145"/>
       </Position30>
     </JumpHistory>
     <RunParams>
@@ -336,28 +342,10 @@
     </RunParams>
   </ProjectSession>
   <Debugging>
-    <Watches Count="7">
+    <Watches Count="1">
       <Item1>
-        <Expression Value="subPacketCount"/>
+        <Expression Value="targetCoords[2]"/>
       </Item1>
-      <Item2>
-        <Expression Value="calculatedTotal"/>
-      </Item2>
-      <Item3>
-        <Expression Value="pNo"/>
-      </Item3>
-      <Item4>
-        <Expression Value="level"/>
-      </Item4>
-      <Item5>
-        <Expression Value="packetArray[pNo]"/>
-      </Item5>
-      <Item6>
-        <Expression Value="pkValue"/>
-      </Item6>
-      <Item7>
-        <Expression Value="subPNo"/>
-      </Item7>
     </Watches>
   </Debugging>
 </CONFIG>
