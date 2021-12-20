@@ -151,10 +151,10 @@ begin
   velocitiesThatHit:=0;
   initVelocities.X:=0;
   initVelocities.Y:=0;
-  minX:=23;
-  maxX:=30;
-  minY:=1;
-  maxY:=125;
+  minX:=1;
+  maxX:=500;
+  minY:=-500;
+  maxY:=500;
   largestMaxHeight:=0;
   velocitiesForLargestHeight:=TPoint.Create(0,0);
   for x:= minX to maxX do
