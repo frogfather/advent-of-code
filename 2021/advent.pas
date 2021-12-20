@@ -1617,16 +1617,16 @@ procedure TmainForm.day17part1;
 var
    puzzleInput: String;
    trickshot:Ttrickshot;
-   velocity:TPoint;
-   timesToTarget:TRange;
+   maxHeightVelocity:TPoint;
 begin
-   //puzzleInput:= getPuzzleInputAsString('day_17_1.txt');
-   puzzleInput:='target area: x=20..30, y=-10..-5';
+   puzzleInput:= getPuzzleInputAsString('day_17_1.txt');
+   //puzzleInput:='target area: x=20..30, y=-10..-5';
    trickshot:=TTrickshot.create(puzzleInput);
-   velocity.X:=7;
-   velocity.Y:=2;
-   //timesToTarget:=trickshot.calculateTimesToTarget(velocity);
-   //lbResults.Items.Add('times to target: Xmin: '+timesToTarget.xMin.ToString+' Xmax: '+timesToTarget.xMax.ToString+' Ymin: '+timesToTarget.yMin.ToString+' Ymax: '+timesToTarget.yMax.ToString);
+   maxHeightVelocity:=trickshot.calculateVelocityForMaxHeight;
+   lbResults.Items.Add('velocity for max height: X: '+maxHeightVelocity.X.ToString+' Y: '+maxHeightVelocity.Y.ToString);
+   lbResults.items.add('max height is '+trickShot.maxHeight.ToString);
+   lbResults.items.add('number of hits '+trickShot.allHits.ToString);
+
 end;
 
 procedure TmainForm.day17part2;

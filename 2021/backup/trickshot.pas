@@ -21,6 +21,8 @@ type
     private
     fTargetMin:TPoint;
     fTargetMax:TPoint;
+    fMaxHeight:integer;
+    fAllHits:integer;
     function minXVelocityToReachPos(pos:integer):integer;
     function calculateVelocityAtInterval(initialVelocity:TPoint;interval:integer):TPoint;
     function calculatePositionAtInterval(initialVelocity:TPoint;interval:integer):TPoint;
@@ -30,6 +32,8 @@ type
     public
     function calculateVelocityForMaxHeight:TPoint;
     constructor create(puzzleInput:string);
+    property maxHeight:integer read fMaxHeight;
+    property allHits:integer read fAllHits;
   end;
 
 implementation
@@ -88,15 +92,15 @@ end;
 
 function TTrickShot.hitsTarget(initialVelocity: TPoint): boolean;
 var
-  maxHeight:integer;
+  maximumHeight:integer;
   interval:integer;
   hitOrPast:boolean;
   positionAtInterval,velocityAtInterval:TPoint;
 begin
   result:=false;
-  maxHeight:= calculatePositionAtInterval(initialVelocity,initialVelocity.Y).Y;
+  maximumHeight:= calculatePositionAtInterval(initialVelocity,initialVelocity.Y).Y;
   //if the target is above the max height we'll never hit it
-  if maxHeight < targetMin.Y
+  if maximumHeight < targetMin.Y
     then exit
   else
     begin
@@ -137,31 +141,46 @@ var
   minX,minY,maxX,maxY:integer;
   x,y:integer;
   initVelocities:TPoint;
-  maxHeight:integer;
-  largestMaxHeight:integer;
+  maximumHeight,largestMaxHeight:integer;
+  velocitiesForLargestHeight:TPoint;
+  velocitiesThatHit:integer;
 begin
   //find initial velocity to reach fTargetMin and fTargetMax
-  minX:=minXVelocityToReachPos(targetMin.X);
-  maxX:=minXVelocityToReachPos(targetMax.X);
-  minY:=0;
-  maxY:=100;
+  //minX:=minXVelocityToReachPos(targetMin.X);
+  //maxX:=minXVelocityToReachPos(targetMax.X);
+  velocitiesThatHit:=0;
+  initVelocities.X:=0;
+  initVelocities.Y:=0;
+  minX:=23;
+  maxX:=30;
+  minY:=1;
+  maxY:=125;
   largestMaxHeight:=0;
+  velocitiesForLargestHeight:=TPoint.Create(0,0);
   for x:= minX to maxX do
     begin
     for y:=minY to maxY do
       begin
-      initVelocities:=TPoint.Create(x,y);
+      initVelocities.X:=x;
+      initVelocities.Y:=y;
       if hitsTarget(initVelocities) then
         begin
-        maxHeight:=calculatePositionAtInterval(initVelocities,y);
-        if maxHeight > largestMaxHeight then largestMaxHeight:=maxHeight;
+        velocitiesThatHit:= velocitiesThatHit+1;
+        maximumHeight:=calculatePositionAtInterval(initVelocities,y).Y;
+        if maximumHeight > largestMaxHeight then
+          begin
+          velocitiesForLargestHeight:=initVelocities;
+          largestMaxHeight:=maximumHeight;
+          end;
         end;
       end;
     end;
   //these should be the limits of X velocity
   //min Y velocity is 0
   //max Y velocity is where probe just hits target
-
+  fMaxHeight:=largestMaxHeight;
+  fAllHits:=velocitiesThatHit;
+  result:=velocitiesForLargestHeight;
 end;
 
 constructor TTrickShot.create(puzzleInput: string);
