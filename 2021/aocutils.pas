@@ -19,10 +19,13 @@ function triangular(input:integer):integer;
 function hexStringToBinString(hexString:string):string;
 function binStringToInt64(binString:string):int64;
 function findCharPos(input,substring:string;startIndex:integer=0):integer;
+function isNumberString(input:string):boolean;
 implementation
 
 const dataDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/input/';
 const descriptionDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/puzzle_description/';
+const numbers: array[0..9] of integer = (0,1,2,3,4,5,6,7,8,9);
+const strnumbers: array[0..9] of string = ('0','1','2','3','4','5','6','7','8','9');
 
 
 //For where the puzzle input is lines separated by linefeed (#$0A)
@@ -235,6 +238,21 @@ begin
     then p:=p+1
   else done:=true;
   until done;
+end;
+
+function isNumberString(input: string): boolean;
+var
+  index:integer;
+  element:String;
+begin
+  result:=true;
+  if length(input) = 0 then result:= false else
+  for index:=0 to pred(length(input)) do
+    begin
+    element:=input.Substring(index,1);
+    if arrPos(strNumbers,element) = -1
+      then result:=false;
+    end;
 end;
 
 end.

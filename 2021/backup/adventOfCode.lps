@@ -17,9 +17,7 @@
         <ComponentName Value="mainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="1598"/>
-        <CursorPos X="24" Y="1650"/>
-        <FoldState Value=" T3^7093%"/>
+        <CursorPos X="53" Y="11"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -63,10 +61,10 @@
         <Filename Value="aocutils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="aocUtils"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="220"/>
-        <CursorPos Y="226"/>
+        <TopLine Value="227"/>
+        <CursorPos Y="241"/>
+        <FoldState Value=" T3V03114h"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit6>
@@ -75,7 +73,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="arrayUtils"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="37"/>
+        <TopLine Value="16"/>
         <CursorPos X="75" Y="26"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -117,13 +115,13 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="42"/>
-        <UsageCount Value="172"/>
+        <UsageCount Value="177"/>
       </Unit12>
       <Unit13>
         <Filename Value="chiton.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="170"/>
+        <UsageCount Value="175"/>
       </Unit13>
       <Unit14>
         <Filename Value="packet.pas"/>
@@ -131,16 +129,15 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="26"/>
         <FoldState Value=" T3j4076 piajF0R6r"/>
-        <UsageCount Value="129"/>
+        <UsageCount Value="134"/>
       </Unit14>
       <Unit15>
         <Filename Value="trickshot.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="151"/>
-        <CursorPos X="18" Y="186"/>
+        <TopLine Value="158"/>
         <FoldState Value=" T0kV4Gd"/>
-        <UsageCount Value="51"/>
+        <UsageCount Value="56"/>
       </Unit15>
       <Unit16>
         <Filename Value="rangecalc.pas"/>
@@ -148,59 +145,61 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="10"/>
         <CursorPos X="37" Y="27"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="45"/>
       </Unit16>
       <Unit17>
+        <Filename Value="snailfish.pas"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="106"/>
+        <CursorPos X="12" Y="114"/>
+        <UsageCount Value="27"/>
+        <Loaded Value="True"/>
+      </Unit17>
+      <Unit18>
         <Filename Value="cave.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="35" Y="8"/>
         <UsageCount Value="26"/>
-      </Unit17>
-      <Unit18>
+      </Unit18>
+      <Unit19>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/classes/classesh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2302"/>
         <CursorPos X="15" Y="2320"/>
         <UsageCount Value="3"/>
-      </Unit18>
-      <Unit19>
+      </Unit19>
+      <Unit20>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/sysutils/syshelph.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="160"/>
         <CursorPos X="17" Y="171"/>
         <UsageCount Value="8"/>
-      </Unit19>
-      <Unit20>
+      </Unit20>
+      <Unit21>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/packages/fcl-json/src/fpjson.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="311"/>
         <CursorPos X="3" Y="318"/>
         <UsageCount Value="8"/>
-      </Unit20>
-      <Unit21>
+      </Unit21>
+      <Unit22>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/sysutils/syshelp.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1302"/>
         <CursorPos X="3" Y="1291"/>
         <UsageCount Value="8"/>
-      </Unit21>
-      <Unit22>
+      </Unit22>
+      <Unit23>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/classes/util.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="30"/>
         <CursorPos X="3" Y="38"/>
         <UsageCount Value="3"/>
-      </Unit22>
-      <Unit23>
-        <Filename Value="util.inc"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="12"/>
       </Unit23>
       <Unit24>
-        <Filename Value="classesh.inc"/>
+        <Filename Value="util.inc"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
@@ -208,142 +207,141 @@
         <UsageCount Value="12"/>
       </Unit24>
       <Unit25>
+        <Filename Value="classesh.inc"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="12"/>
+      </Unit25>
+      <Unit26>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/fgl.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="938"/>
         <CursorPos Y="950"/>
         <UsageCount Value="8"/>
-      </Unit25>
-      <Unit26>
-        <Filename Value="snailfish.pas"/>
-        <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="51"/>
-        <CursorPos Y="53"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
       </Unit26>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="aocutils.pas"/>
-        <Caret Line="237" TopLine="219"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="114" TopLine="106"/>
       </Position1>
       <Position2>
-        <Filename Value="aocutils.pas"/>
-        <Caret Line="229" TopLine="219"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="128" TopLine="119"/>
       </Position2>
       <Position3>
-        <Filename Value="aocutils.pas"/>
-        <Caret Line="234" TopLine="219"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="130" TopLine="119"/>
       </Position3>
       <Position4>
         <Filename Value="aocutils.pas"/>
-        <Caret Line="235" TopLine="219"/>
+        <Caret Line="221" TopLine="212"/>
       </Position4>
       <Position5>
         <Filename Value="aocutils.pas"/>
-        <Caret Line="237" TopLine="219"/>
+        <Caret Line="222" TopLine="212"/>
       </Position5>
       <Position6>
         <Filename Value="aocutils.pas"/>
-        <Caret Line="229" TopLine="219"/>
+        <Caret Line="223" TopLine="212"/>
       </Position6>
       <Position7>
         <Filename Value="aocutils.pas"/>
-        <Caret Line="234" TopLine="219"/>
+        <Caret Line="229" TopLine="214"/>
       </Position7>
       <Position8>
         <Filename Value="aocutils.pas"/>
-        <Caret Line="235" TopLine="219"/>
+        <Caret Line="230" TopLine="215"/>
       </Position8>
       <Position9>
         <Filename Value="aocutils.pas"/>
-        <Caret Line="237" TopLine="219"/>
+        <Caret Line="232" TopLine="223"/>
       </Position9>
       <Position10>
         <Filename Value="aocutils.pas"/>
-        <Caret Line="229" TopLine="219"/>
+        <Caret Line="237" TopLine="223"/>
       </Position10>
       <Position11>
         <Filename Value="aocutils.pas"/>
-        <Caret Line="234" TopLine="219"/>
+        <Caret Line="238" TopLine="224"/>
       </Position11>
       <Position12>
         <Filename Value="aocutils.pas"/>
-        <Caret Line="235" TopLine="219"/>
+        <Caret Line="240" TopLine="226"/>
       </Position12>
       <Position13>
         <Filename Value="aocutils.pas"/>
-        <Caret Line="237" TopLine="219"/>
+        <Caret Line="232" Column="11" TopLine="226"/>
       </Position13>
       <Position14>
         <Filename Value="aocutils.pas"/>
-        <Caret Line="229" TopLine="219"/>
+        <Caret Line="238" TopLine="226"/>
       </Position14>
       <Position15>
         <Filename Value="aocutils.pas"/>
-        <Caret Line="231" TopLine="219"/>
+        <Caret Line="240" TopLine="226"/>
       </Position15>
       <Position16>
         <Filename Value="aocutils.pas"/>
-        <Caret Line="232" Column="11" TopLine="220"/>
+        <Caret Line="232" TopLine="226"/>
       </Position16>
       <Position17>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="66" TopLine="49"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="237" TopLine="226"/>
       </Position17>
       <Position18>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="67" TopLine="49"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="238" TopLine="226"/>
       </Position18>
       <Position19>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="53" TopLine="50"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="240" TopLine="226"/>
       </Position19>
       <Position20>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="54" TopLine="50"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="232" TopLine="226"/>
       </Position20>
       <Position21>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="55" TopLine="50"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="237" TopLine="226"/>
       </Position21>
       <Position22>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="68" TopLine="49"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="238" TopLine="226"/>
       </Position22>
       <Position23>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="66" TopLine="49"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="240" TopLine="226"/>
       </Position23>
       <Position24>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="67" TopLine="49"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="232" TopLine="226"/>
       </Position24>
       <Position25>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="53" TopLine="50"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="234" TopLine="226"/>
       </Position25>
       <Position26>
         <Filename Value="aocutils.pas"/>
-        <Caret Line="231" Column="17" TopLine="220"/>
+        <Caret Line="235" TopLine="226"/>
       </Position26>
       <Position27>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="66" TopLine="49"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="241" TopLine="227"/>
       </Position27>
       <Position28>
         <Filename Value="snailfish.pas"/>
-        <Caret Line="67" TopLine="49"/>
+        <Caret Line="130" TopLine="119"/>
       </Position28>
       <Position29>
         <Filename Value="snailfish.pas"/>
-        <Caret Line="53" Column="11" TopLine="50"/>
+        <Caret Line="127" Column="28" TopLine="119"/>
       </Position29>
       <Position30>
         <Filename Value="snailfish.pas"/>
-        <Caret Line="55" TopLine="50"/>
+        <Caret Line="131" Column="7" TopLine="119"/>
       </Position30>
     </JumpHistory>
     <RunParams>
@@ -358,23 +356,41 @@
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="snailfish.pas"/>
-        <Line Value="66"/>
+        <Line Value="146"/>
       </Item1>
       <Item2>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
-        <Source Value="aocutils.pas"/>
-        <Line Value="226"/>
+        <Source Value="snailfish.pas"/>
+        <Line Value="130"/>
       </Item2>
     </BreakPoints>
-    <Watches Count="2">
+    <Watches Count="8">
       <Item1>
         <Expression Value="output"/>
       </Item1>
       <Item2>
-        <Expression Value="input"/>
+        <Expression Value="sfNumberPos"/>
       </Item2>
+      <Item3>
+        <Expression Value="numberToExplode"/>
+      </Item3>
+      <Item4>
+        <Expression Value="leftNo"/>
+      </Item4>
+      <Item5>
+        <Expression Value="rightNo"/>
+      </Item5>
+      <Item6>
+        <Expression Value="nearestLeftPos"/>
+      </Item6>
+      <Item7>
+        <Expression Value="nearestRightPos"/>
+      </Item7>
+      <Item8>
+        <Expression Value="adjustedValue"/>
+      </Item8>
     </Watches>
   </Debugging>
 </CONFIG>

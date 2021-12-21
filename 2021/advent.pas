@@ -5,7 +5,7 @@ unit advent;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics,
+  Classes, SysUtils, Forms, Controls, Graphics,typinfo,
   Dialogs, StdCtrls, math, bingoCard,
   ventMap,fgl,DateUtils,aocUtils,arrayUtils,fpJSON,paintbox,
   octopus,clipbrd,origami,polymer,chiton,packet,trickshot,snailfish;

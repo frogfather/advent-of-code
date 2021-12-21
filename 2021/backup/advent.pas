@@ -5,10 +5,10 @@ unit advent;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics,
+  Classes, SysUtils, Forms, Controls, Graphics,typinfo,
   Dialogs, StdCtrls, math, bingoCard,
   ventMap,fgl,DateUtils,aocUtils,arrayUtils,fpJSON,paintbox,
-  octopus,clipbrd,origami,polymer,chiton,packet,trickshot;
+  octopus,clipbrd,origami,polymer,chiton,packet,trickshot,snailfish;
 
 type
   TbingoCards = array of TbingoCard;
@@ -1643,8 +1643,15 @@ end;
 procedure TmainForm.day18part1;
 var
   puzzleInput:TStringArray;
+  snailFish:TSnailfish;
+  PI:PTypeInfo;
 begin
   puzzleInput:=getPuzzleInputAsStringArray('day_18_1.txt');
+  snailFish:= TSnailfish.create(puzzleInput);
+  snailFish.doHomework;
+  PI:=snailFish.ClassInfo;
+  lbResults.items.add('class name '+PI^.Name)
+
 end;
 
 procedure TmainForm.day18part2;
