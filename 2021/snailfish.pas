@@ -5,7 +5,7 @@ unit snailfish;
 interface
 
 uses
-  Classes, SysUtils,aocUtils;
+  Classes, SysUtils,aocUtils,math;
 type
   
   { TSnailfish }
@@ -14,10 +14,12 @@ type
     private
     fNumbers: TStringArray;
     fSum: int64;
+    function findNumberWidth(input:string;position:integer):integer;
     function findNearestNumberIndex(input,snailFishNumber:string;out nearestNumber: integer;left:boolean=true):boolean;
     function getNumber(snailFishNumber:string;left:boolean=true):integer;
     function addNumbers(number1,number2:string):string;
     function explodeNumber(input,numberToExplode:string):string;
+    function splitNumber(input:string;position:integer):string;
     function magnitude(input: string):int64;
     function replaceNumberWithZero(input:string; numberStart:integer):string;
     public
@@ -30,6 +32,29 @@ implementation
 
 { TSnailfish }
 const separators: array [0..2] of string = ('[',',',']');
+
+function TSnailfish.findNumberWidth(input: string; position: integer): integer;
+var
+  numberWidth,index: integer;
+  done:boolean;
+begin
+  index:=position;
+  numberWidth:=0;
+  done:=false;
+  repeat
+  if isNumberString(input.Substring(index,1))
+    then numberWidth:=numberWidth + 1
+  else
+    begin
+    done:=true;
+    break;
+    end;
+  if index < pred(length(input))
+    then index:=index+1
+  else done:=true;
+  until done;
+  result:=numberWidth;
+end;
 
 function TSnailfish.findNearestNumberIndex(input,snailFishNumber:string;out nearestNumber: integer;left:boolean=true):boolean;
 var
@@ -115,6 +140,31 @@ begin
   result:=output;
 end;
 
+function TSnailfish.splitNumber(input: string; position:integer): string;
+var
+  output,replacement:string;
+  numberWidth: integer;
+  numberBeforeSplit,leftNumber,rightNumber:integer;
+  currentRoundingMode:TFPURoundingMode;
+
+begin
+  //replace the number with a pair. lh rounded down, rh rounded up
+  //number should be followed by either a comma or ]
+  output:=Copy(input,0);
+  numberWidth:=findNumberWidth(input,position);
+  if numberWidth = 0 then exit;
+  numberBeforeSplit:=input.Substring(position,numberWidth).ToInteger;
+  currentRoundingMode:= setRoundMode(TFPURoundingmode.rmDown);
+  leftNumber:= round(roundTo((numberBeforeSplit/2),-1));
+  currentRoundingMode:= setRoundMode(TFPURoundingmode.rmUp);
+  rightNumber:= round(roundTo((numberBeforeSplit/2),-1));
+  setRoundMode(currentRoundingMode);
+  replacement:='['+leftNumber.ToString+','+rightNumber.ToString+']';
+  output:=output.Remove(position,numberwidth);
+  output.Insert(position,replacement);
+  result:=output;
+end;
+
 function TSnailfish.magnitude(input: string): int64;
 begin
 
@@ -128,6 +178,7 @@ begin
   if (numberStart > pred(length(input))) or (input[numberStart] <> '[')
     then exit;
   numberEnd:=findCharPos(input,']', numberStart);
+  //change to remove and insert
   result:=input.Substring(0,numberStart)+'0'+input.Substring(succ(numberEnd));
 end;
 
@@ -138,12 +189,13 @@ end;
 
 procedure TSnailfish.doHomework;
 var
-  input,noToExplode:string;
-  exploded:string;
+  input:string;
+  splitresult:string;
+  noTosplit:integer;
 begin
-  input:='[[[[[4,3],4],4],[7,[[8,4],9]]],[1,1]]';
-  noToExplode:='[4,3]';
-  exploded:=explodeNumber(input,noToExplode);
+  input:='[[[[0,7],4],[15,[0,13]]],[1,1]]';
+  noToSplit:= 13;
+  splitResult:=splitNumber(input, noToSplit);
 end;
 
 end.
