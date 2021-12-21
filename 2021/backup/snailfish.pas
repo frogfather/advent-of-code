@@ -19,9 +19,8 @@ type
     function magnitude(input: string):int64;
     function replaceElementWithZero(input:string; elementStart:integer):string;
     public
-    constructor create(puzzleInput:TStringArray);
-    procedure doHomework;
     property sum: int64 read fSum;
+    procedure doHomework;
   end;
 
 implementation
@@ -52,11 +51,6 @@ begin
     then exit;
   elementEnd:=findCharPos(input,']',elementStart);
   result:=input.Substring(0,elementStart)+'0'+input.Substring(succ(elementEnd));
-end;
-
-constructor TSnailfish.create(puzzleInput: TStringArray);
-begin
-  fNumbers:=puzzleInput;
 end;
 
 procedure TSnailfish.doHomework;

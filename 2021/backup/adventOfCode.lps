@@ -3,7 +3,7 @@
   <ProjectSession>
     <Version Value="11"/>
     <BuildModes Active="Default"/>
-    <Units Count="26">
+    <Units Count="27">
       <Unit0>
         <Filename Value="adventOfCode.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -17,8 +17,9 @@
         <ComponentName Value="mainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="1608"/>
-        <CursorPos X="4" Y="1623"/>
+        <TopLine Value="1598"/>
+        <CursorPos X="24" Y="1650"/>
+        <FoldState Value=" T3^7093%"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -62,9 +63,10 @@
         <Filename Value="aocutils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="aocUtils"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="138"/>
-        <CursorPos X="31" Y="155"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="220"/>
+        <CursorPos Y="226"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit6>
@@ -108,20 +110,20 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="84" Y="7"/>
-        <UsageCount Value="199"/>
+        <UsageCount Value="201"/>
       </Unit11>
       <Unit12>
         <Filename Value="polymer.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="42"/>
-        <UsageCount Value="170"/>
+        <UsageCount Value="172"/>
       </Unit12>
       <Unit13>
         <Filename Value="chiton.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="168"/>
+        <UsageCount Value="170"/>
       </Unit13>
       <Unit14>
         <Filename Value="packet.pas"/>
@@ -129,18 +131,16 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="26"/>
         <FoldState Value=" T3j4076 piajF0R6r"/>
-        <UsageCount Value="127"/>
+        <UsageCount Value="129"/>
       </Unit14>
       <Unit15>
         <Filename Value="trickshot.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="152"/>
-        <CursorPos X="11" Y="157"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="151"/>
+        <CursorPos X="18" Y="186"/>
         <FoldState Value=" T0kV4Gd"/>
-        <UsageCount Value="49"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="51"/>
       </Unit15>
       <Unit16>
         <Filename Value="rangecalc.pas"/>
@@ -148,7 +148,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="10"/>
         <CursorPos X="37" Y="27"/>
-        <UsageCount Value="38"/>
+        <UsageCount Value="40"/>
       </Unit16>
       <Unit17>
         <Filename Value="cave.pas"/>
@@ -214,127 +214,136 @@
         <CursorPos Y="950"/>
         <UsageCount Value="8"/>
       </Unit25>
+      <Unit26>
+        <Filename Value="snailfish.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="51"/>
+        <CursorPos Y="53"/>
+        <UsageCount Value="22"/>
+        <Loaded Value="True"/>
+      </Unit26>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="159" TopLine="152"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="237" TopLine="219"/>
       </Position1>
       <Position2>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="160" TopLine="152"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="229" TopLine="219"/>
       </Position2>
       <Position3>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="154" TopLine="151"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="234" TopLine="219"/>
       </Position3>
       <Position4>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="159" TopLine="151"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="235" TopLine="219"/>
       </Position4>
       <Position5>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="154" TopLine="148"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="237" TopLine="219"/>
       </Position5>
       <Position6>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="156" TopLine="148"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="229" TopLine="219"/>
       </Position6>
       <Position7>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="163" Column="39" TopLine="149"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="234" TopLine="219"/>
       </Position7>
       <Position8>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="160" TopLine="149"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="235" TopLine="219"/>
       </Position8>
       <Position9>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="162" TopLine="149"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="237" TopLine="219"/>
       </Position9>
       <Position10>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="163" TopLine="149"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="229" TopLine="219"/>
       </Position10>
       <Position11>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="154" TopLine="149"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="234" TopLine="219"/>
       </Position11>
       <Position12>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="157" Column="17" TopLine="152"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="235" TopLine="219"/>
       </Position12>
       <Position13>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="27" Column="14" TopLine="15"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="237" TopLine="219"/>
       </Position13>
       <Position14>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="97" TopLine="95"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="229" TopLine="219"/>
       </Position14>
       <Position15>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="109" TopLine="95"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="231" TopLine="219"/>
       </Position15>
       <Position16>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="109" TopLine="101"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="232" Column="11" TopLine="220"/>
       </Position16>
       <Position17>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="115" TopLine="101"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="66" TopLine="49"/>
       </Position17>
       <Position18>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="159" Column="27" TopLine="154"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="67" TopLine="49"/>
       </Position18>
       <Position19>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="151" Column="11" TopLine="142"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="53" TopLine="50"/>
       </Position19>
       <Position20>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="166" TopLine="158"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="54" TopLine="50"/>
       </Position20>
       <Position21>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="150" Column="11" TopLine="156"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="55" TopLine="50"/>
       </Position21>
       <Position22>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="166" TopLine="157"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="68" TopLine="49"/>
       </Position22>
       <Position23>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="174" TopLine="158"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="66" TopLine="49"/>
       </Position23>
       <Position24>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="166" TopLine="158"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="67" TopLine="49"/>
       </Position24>
       <Position25>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="176" Column="32" TopLine="160"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="53" TopLine="50"/>
       </Position25>
       <Position26>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="93" Column="6" TopLine="84"/>
+        <Filename Value="aocutils.pas"/>
+        <Caret Line="231" Column="17" TopLine="220"/>
       </Position26>
       <Position27>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="142" Column="16" TopLine="133"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="66" TopLine="49"/>
       </Position27>
       <Position28>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="151" Column="11" TopLine="141"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="67" TopLine="49"/>
       </Position28>
       <Position29>
-        <Filename Value="trickshot.pas"/>
-        <Caret Line="152" Column="10" TopLine="147"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="53" Column="11" TopLine="50"/>
       </Position29>
       <Position30>
-        <Filename Value="advent.pas"/>
-        <Caret Line="1623" Column="4" TopLine="1608"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="55" TopLine="50"/>
       </Position30>
     </JumpHistory>
     <RunParams>
@@ -343,19 +352,29 @@
     </RunParams>
   </ProjectSession>
   <Debugging>
-    <Watches Count="4">
+    <BreakPoints Count="2">
       <Item1>
-        <Expression Value="initVelocities"/>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="snailfish.pas"/>
+        <Line Value="66"/>
       </Item1>
       <Item2>
-        <Expression Value="maxHeight"/>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="aocutils.pas"/>
+        <Line Value="226"/>
       </Item2>
-      <Item3>
-        <Expression Value="LargestMaxHeight"/>
-      </Item3>
-      <Item4>
-        <Expression Value="velocitiesForLargestHeight"/>
-      </Item4>
+    </BreakPoints>
+    <Watches Count="2">
+      <Item1>
+        <Expression Value="output"/>
+      </Item1>
+      <Item2>
+        <Expression Value="input"/>
+      </Item2>
     </Watches>
   </Debugging>
 </CONFIG>

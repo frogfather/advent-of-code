@@ -67,6 +67,8 @@ type
     procedure day16part2;
     procedure day17part1;
     procedure day17part2;
+    procedure day18part1;
+    procedure day18part2;
     procedure CardNotifyWinHandler(Sender: TObject);
     procedure OctopusFlashHandler(Sender: TObject);
     function identifySegmentValues(input:TStringArray):TStringMap;
@@ -139,6 +141,8 @@ begin
    31: day16part2;
    32: day17part1;
    33: day17part2;
+   34: day18part1;
+   35: day18part2;
   end;
  endTime:=now;
  lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
@@ -1613,6 +1617,7 @@ begin
     lbResults.items.add('Packet sum :'+ packetFactory.packetSum.ToString);
 end;
 
+{ day 17 }
 procedure TmainForm.day17part1;
 var
    puzzleInput: String;
@@ -1624,13 +1629,29 @@ begin
    trickshot:=TTrickshot.create(puzzleInput);
    maxHeightVelocity:=trickshot.calculateVelocityForMaxHeight;
    lbResults.Items.Add('velocity for max height: X: '+maxHeightVelocity.X.ToString+' Y: '+maxHeightVelocity.Y.ToString);
-   lbResults.items.add('max height is '+trickShot.maxHeight.ToString)
+   lbResults.items.add('max height is '+trickShot.maxHeight.ToString);
+   lbResults.items.add('number of hits '+trickShot.allHits.ToString);
+
 end;
 
 procedure TmainForm.day17part2;
 begin
+  day17part1;
+end;
+
+{ day 18 }
+procedure TmainForm.day18part1;
+var
+  puzzleInput:TStringArray;
+begin
+  puzzleInput:=getPuzzleInputAsStringArray('day_18_1.txt');
+end;
+
+procedure TmainForm.day18part2;
+begin
 
 end;
+
 
 end.
 

@@ -15,8 +15,10 @@ function calculateCommonestValue(input: TStringArray; reverse:Boolean=false): TB
 function getUniqueEntry(input: TStringArray;reverse:boolean=false):String;
 function getMaxValue(input:TIntArray):integer;
 function getDescription(fileName:String):String;
+function triangular(input:integer):integer;
 function hexStringToBinString(hexString:string):string;
 function binStringToInt64(binString:string):int64;
+function findCharPos(input,substring:string;startIndex:integer=0):integer;
 implementation
 
 const dataDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/input/';
@@ -149,6 +151,11 @@ begin
   end;
 end;
 
+function triangular(input: integer): integer;
+begin
+  result:= (input * (input + 1)) div 2;
+end;
+
 function hexStringToBinString(hexString: string): string;
 var
   inputPos:integer;
@@ -200,6 +207,34 @@ output:=0;
     output:=output + (element.ToInteger * round(power(2,pwr)));
     end;
   result:=output;
+end;
+
+function findCharPos(input, substring: string; startIndex: integer
+  ): integer;
+var
+  p:integer;
+  done:boolean;
+begin
+  if (startIndex < 0)
+    or (startIndex > pred(length(input)))
+    or (length(substring) = 0)
+    then
+      begin
+      result:=-1;
+      exit;
+      end;
+  p:=startIndex;
+  done:=false;
+  repeat
+    if (input[p] = substring) then
+    begin
+      result:= p;
+      exit;
+    end;
+  if p < pred(length(input))
+    then p:=p+1
+  else done:=true;
+  until done;
 end;
 
 end.
