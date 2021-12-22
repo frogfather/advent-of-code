@@ -1644,14 +1644,10 @@ procedure TmainForm.day18part1;
 var
   puzzleInput:TStringArray;
   snailFish:TSnailfish;
-  PI:PTypeInfo;
 begin
   puzzleInput:=getPuzzleInputAsStringArray('day_18_1.txt');
   snailFish:= TSnailfish.create(puzzleInput);
   snailFish.doHomework;
-  PI:=snailFish.ClassInfo;
-  lbResults.items.add('class name '+PI^.Name)
-
 end;
 
 procedure TmainForm.day18part2;

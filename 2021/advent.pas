@@ -1648,6 +1648,7 @@ begin
   puzzleInput:=getPuzzleInputAsStringArray('day_18_1.txt');
   snailFish:= TSnailfish.create(puzzleInput);
   snailFish.doHomework;
+  lbResults.Items:= snailFish.log;
 end;
 
 procedure TmainForm.day18part2;
