@@ -22,6 +22,8 @@ type
     function splitNumber(input:string;position:integer):string;
     function magnitude(input: string):int64;
     function replaceNumberWithZero(input:string; numberStart:integer):string;
+    function findFirstExplodingNumber(input:string):integer;
+    function findFirstSplittingNumber(input:string):integer;
     public
     constructor create(puzzleInput:TStringArray);
     procedure doHomework;
@@ -154,9 +156,9 @@ begin
   if numberWidth = 0 then exit;
   numberBeforeSplit:=input.Substring(position,numberWidth).ToInteger;
   currentRoundingMode:= setRoundMode(TFPURoundingmode.rmDown);
-  leftNumber:= round(roundTo((numberBeforeSplit/2),1));
+  leftNumber:= round(roundTo((numberBeforeSplit/2),-1));
   currentRoundingMode:= setRoundMode(TFPURoundingmode.rmUp);
-  rightNumber:= round(roundTo((numberBeforeSplit/2),1));
+  rightNumber:= round(roundTo((numberBeforeSplit/2),-1));
   setRoundMode(currentRoundingMode);
   replacement:='['+leftNumber.ToString+','+rightNumber.ToString+']';
   output:=output.Remove(position,numberwidth);
@@ -165,8 +167,40 @@ begin
 end;
 
 function TSnailfish.magnitude(input: string): int64;
+var
+  accumulator,multiplier:integer;
+  firstNumber:boolean;
+  lhNumber,rhNumber:integer;
+  element:string;
 begin
+  multiplier:=3;
+  //Should be possible to do this recursively
+  //if we find [x,x] then replace with its value
+  //the first thing we encounter at the start should be either
+  //opening bracket (remove and recurse)  or
+  //first number (multiply by 3
 
+  //within the method, if we've got the first number and hit a comma
+  //we are looking for the second number
+  //if the next thing we find is the second number then multiply by 2
+  //and add to first number
+  //if the next thing we find is [ recurse
+  //if the next thing we find is ] remove it
+  if length(input) = 0
+    then exit;
+  element:= input.Substring(0,1);
+  if element = '['
+    then accumulator:= multiplier * magnitude(input.Substring(1))
+  else
+  if strNumbers.indexOf(element) > -1
+    then
+      begin
+      if multiplier = 3
+        then multiplier:= 2
+      else multiplier:= 3;
+      accumulator:=accumulator + (multiplier * element.ToInteger);
+      end;
+  result:=accumulator;
 end;
 
 function TSnailfish.replaceNumberWithZero(input: string; numberStart: integer
@@ -181,6 +215,46 @@ begin
   result:=input.Substring(0,numberStart)+'0'+input.Substring(succ(numberEnd));
 end;
 
+function TSnailfish.findFirstExplodingNumber(input: string): integer;
+var
+  bracketCount,index:integer;
+begin
+  bracketCount:=0;
+  result:=-1;
+  for index:=0 to pred(length(input)) do
+    begin
+    if input.Substring(index,1) = '['
+      then bracketCount:=bracketCount+1
+    else if input.Substring(index,1) = ']'
+      then bracketCount:=bracketCount -1;
+    if bracketCount = 5 then
+      begin
+      result:=index;
+      exit;
+      end;
+    end;
+end;
+
+function TSnailfish.findFirstSplittingNumber(input: string): integer;
+var
+  sepNumbers:TStringArray;
+  index:integer;
+  element:string;
+begin
+  result:=-1;
+  //split on separators leaving just numbers then see if any are over 9
+  sepNumbers:=input.Split(separators,TStringSplitOptions.ExcludeEmpty);
+  for index:= 0 to pred(length(sepNumbers)) do
+    begin
+    element:=sepNumbers[index];
+    if (length(element) > 0) and (element.ToInteger > 9) then
+      begin
+      result:=pos(element,input) - 1;
+      exit;
+      end;
+    end;
+end;
+
 constructor TSnailfish.create(puzzleInput: TStringArray);
 begin
   fNumbers:=puzzleInput;
@@ -189,12 +263,10 @@ end;
 procedure TSnailfish.doHomework;
 var
   input:string;
-  splitresult:string;
-  noTosplit:integer;
+  foundIndex:integer;
 begin
-  input:='[[[[0,7],4],[15,[0,13]]],[1,1]]';
-  noToSplit:= 13;
-  splitResult:=splitNumber(input, noToSplit);
+  input:='[[[[0,7],4],[7,[[8,4],9]]],[1,1]]';
+  foundIndex:=findFirstExplodingNumber(input);
 end;
 
 end.

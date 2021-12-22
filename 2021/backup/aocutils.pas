@@ -249,7 +249,7 @@ begin
   if length(input) = 0 then result:= false else
   for index:=0 to pred(length(input)) do
     begin
-    element:=input[index];
+    element:=input.Substring(index,1);
     if arrPos(strNumbers,element) = -1
       then result:=false;
     end;
