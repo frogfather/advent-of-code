@@ -1644,14 +1644,14 @@ procedure TmainForm.day18part1;
 var
   puzzleInput:TStringArray;
   snailFish:TSnailfish;
-  testInput:string;
+  output:string;
 begin
   puzzleInput:=getPuzzleInputAsStringArray('day_18_test_2.txt');
   snailFish:= TSnailfish.create(puzzleInput);
+  output:=snailfish.regexTest('[[[[0,[4,5]],[0,0]],[[[4,5],[2,6]],[9,5]]],[7,[[[3,7],[4,3]],[[6,3],[8,8]]]]]',10);
   //snailFish.doHomework;
-  //lbResults.Items:= snailFish.log;
-  testInput:='[[3,[2,[8,0]]],[9,[5,[[3,2],4]]]]';
-  lbResults.items.add('regex pos of '+testInput+' '+snailfish.regexTest(testInput).ToString);
+  lbResults.Items:= snailFish.log;
+  lbResults.Items.add('result '+output);
 end;
 
 procedure TmainForm.day18part2;
