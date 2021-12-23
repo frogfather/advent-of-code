@@ -365,10 +365,9 @@ end;
 
 procedure TSnailfish.doHomework;
 var
-  sfLineNo,explodeIndex,splitIndex,bracketedSingleIndex:integer;
-  bracketedSingleValue:integer;
+  sfLineNo,explodeIndex,splitIndex:integer;
   sfsum:string;
-  moreExplodes,moreSplits,moreBracketedSingles:boolean;
+  moreExplodes,moreSplits:boolean;
   loopCount:integer;
 begin
   loopCount:=0;
@@ -377,37 +376,36 @@ begin
   if length(fNumbers)=0 then exit;
   //add the first sfNumber to the next
   sfsum:=fNumbers[0];
-  doLog(sfLineNo.ToString+' initial sum : '+sfSum);
+  //doLog(sfLineNo.ToString+' initial sum : '+sfSum);
     repeat
-    doLog(sfLineNo.ToString+'line : '+sfSum);
+    //doLog(sfLineNo.ToString+'line : '+sfSum);
     moreExplodes:=true;
     moreSplits:=true;
     while moreExplodes or moreSplits do
       begin
       loopCount:=loopCount+1;
-      doLog('loop '+loopCount.ToString);
+      //doLog('loop '+loopCount.ToString);
       //do all explodes first
       while moreExplodes do
         begin
         explodeIndex:= findFirstExplodingNumber(sfSum);
         moreExplodes:=explodeIndex > -1;
-        if explodeIndex > 1 then
-          doLog(sfLineNo.ToString+' going to explode at : '+explodeIndex.ToString);
+        //if explodeIndex > 1 then
+        //  doLog(sfLineNo.ToString+' going to explode at : '+explodeIndex.ToString);
         if explodeIndex > -1
           then sfSum:= explodeNumber(sfSum,explodeIndex);
-        if explodeIndex > 1 then
-          doLog(sfLineNo.ToString+' result: '+sfSum);
+        //if explodeIndex > 1 then
+        //  doLog(sfLineNo.ToString+' result: '+sfSum);
         end;
       splitIndex:= findFirstSplittingNumber(sfSum);
-      if splitIndex > 1 then
-        doLog(sfLineNo.ToString+' going to split at: '+splitIndex.ToString);
+      //if splitIndex > 1 then
+      //  doLog(sfLineNo.ToString+' going to split at: '+splitIndex.ToString);
       if splitIndex > -1
         then sfSum:= splitNumber(sfSum,splitIndex);
-      if splitIndex > 1 then
-        doLog(sfLineNo.ToString+' result: '+sfSum);
+      //if splitIndex > 1 then
+      //  doLog(sfLineNo.ToString+' result: '+sfSum);
       moreExplodes:=findFirstExplodingNumber(sfSum) > -1;
       moreSplits:= findFirstSplittingNumber(sfSum) > -1;
-      if loopCount = 50 then exit;
       end;
     sfLineNo:=sfLineNo + 1;
     if sfLineNo < length(fNumbers) then sfsum:='['+sfsum+','+fNumbers[sfLineNo]+']';

@@ -1645,10 +1645,10 @@ var
   puzzleInput:TStringArray;
   snailFish:TSnailfish;
 begin
-  puzzleInput:=getPuzzleInputAsStringArray('day_18_test_2.txt');
+  puzzleInput:=getPuzzleInputAsStringArray('day_18_1.txt');
   snailFish:= TSnailfish.create(puzzleInput);
   snailFish.doHomework;
-  lbResults.Items:= snailFish.log;
+  lbResults.Items.add('Sum '+snailfish.sum.ToString);
 end;
 
 procedure TmainForm.day18part2;
