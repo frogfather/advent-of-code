@@ -5,7 +5,7 @@ unit snailfish;
 interface
 
 uses
-  Classes, SysUtils,aocUtils,math;
+  Classes, SysUtils,aocUtils,math,regexpr;
 type
   
   { TSnailfish }
@@ -14,7 +14,7 @@ type
     private
     fNumbers: TStringArray;
     fSum: int64;
-    fLog:TStringList;
+    fLog: TStringlist;
     function findNumberWidth(input:string;position:integer):integer;
     function findNearestNumberIndex(input:string;startPos:integer;out nearestNumber: integer;left:boolean=true):boolean;
     function getNumber(snailFishNumber:string;left:boolean=true):integer;
@@ -22,15 +22,19 @@ type
     function explodeNumber(input:string;explodeStart:integer):string;
     function splitNumber(input:string;position:integer):string;
     function magnitude(input: string):int64;
+    function isSfNumber(input:string):boolean;
+    function bracketDepthAtPosition(input:string;position:integer):integer;
     function replaceNumberWithValue(input:string; numberStart:integer;value:integer=0):string;
     function replaceWithCalculatedvalue(input:string;position:integer):string;
     function findFirstBracketedSingleNumber(input:string;out bracketedSingle:integer):integer;
     function findFirstExplodingNumber(input:string):integer;
     function findFirstSplittingNumber(input:string):integer;
-    procedure addTolog(message:string);
+    function getNumberAtPosition(input:string;position:integer):integer;
+    procedure doLog(message:string);
     public
     constructor create(puzzleInput:TStringArray);
     procedure doHomework;
+    function regexTest(input:string):integer;
     property sum: int64 read fSum;
     property log: TStringlist read fLog;
   end;
@@ -42,25 +46,21 @@ const separators: array [0..2] of string = ('[',',',']');
 
 function TSnailfish.findNumberWidth(input: string; position: integer): integer;
 var
-  numberWidth,index: integer;
-  done:boolean;
+  regex:TRegexpr;
+  sNumber:string;
 begin
-  index:=position;
-  numberWidth:=0;
-  done:=false;
-  repeat
-  if isNumberString(input.Substring(index,1))
-    then numberWidth:=numberWidth + 1
-  else
-    begin
-    done:=true;
-    break;
-    end;
-  if index < pred(length(input))
-    then index:=index+1
-  else done:=true;
-  until done;
-  result:=numberWidth;
+  result:=0;
+  regex:=TRegexpr.Create('[0-9]*');
+  if (regex.Exec(input))
+    then
+      begin
+      if regex.ExecPos(position+1) then
+        begin
+        sNumber:=regex.Match[0];
+        result:=length(sNumber);
+        end;
+      end;
+  regex.free;
 end;
 
 function TSnailfish.findNearestNumberIndex(input:string;startPos:integer;out nearestNumber: integer;left:boolean=true):boolean;
@@ -115,7 +115,7 @@ function TSnailfish.explodeNumber(input:string;explodeStart:integer):string;
 var
   leftNo,rightNo: integer;
   nearestLeftPos,nearestRightPos:integer;
-  adjustedValue:integer;
+  adjustedValue,oldValueWidth:integer;
   numberToExplode,output:string;
   explodeEnd:integer;
 begin
@@ -129,15 +129,17 @@ begin
   //if we replace a single digit number with a two digit number
   if findNearestNumberIndex(output, explodeEnd, nearestRightPos, false) then
     begin
-    adjustedValue:=output.Substring(nearestRightPos,1).ToInteger + rightNo;
-    output:=output.Remove(nearestRightPos,1);
+    oldValueWidth:=findNumberWidth(input,nearestRightPos);
+    adjustedValue:=getNumberAtPosition(input,nearestRightPos) + rightNo;
+    output:=output.Remove(nearestRightPos,oldValueWidth);
     output.Insert(nearestRightPos,adjustedValue.ToString);
     end;
   output:= replaceNumberWithValue(output,explodeStart);
   if findNearestNumberIndex(output, explodeStart, nearestLeftPos) then
     begin
-    adjustedValue:=output.Substring(nearestLeftPos,1).ToInteger + leftNo;
-    output:=output.Remove(nearestLeftPos,1);
+    oldValueWidth:=findNumberWidth(input,nearestLeftPos);
+    adjustedValue:=getNumberAtPosition(input,nearestLeftPos) + leftNo;
+    output:=output.Remove(nearestLeftPos,oldValueWidth);
     output.Insert(nearestLeftPos,adjustedValue.ToString);
     end;
   result:=output;
@@ -209,6 +211,44 @@ begin
   result:=output.ToInteger;
 end;
 
+function TSnailfish.isSfNumber(input: string): boolean;
+var
+  numberCount, commaCount, index:integer;
+  element:string;
+begin
+  result:=false;
+  numberCount:=0;
+  commaCount:=0;
+  if length(input) = 0 then exit;
+  for index:=0 to pred(length(input)) do
+    begin
+    element:=input.substring(index,1);
+    if isNumberString(element) then numberCount:=numberCount + 1;
+    if element = ',' then commaCount:=commaCount+1;
+    end;
+  result:= (commaCount = 1) and (numberCount > 1);
+end;
+
+function TSnailfish.bracketDepthAtPosition(input: string; position: integer
+  ): integer;
+var
+  index,bracketCount:integer;
+  element:string;
+begin
+  bracketCount:=0;
+  result:=-1;
+  if position > pred(length(input)) then exit;
+  for index:=0 to position do
+    begin
+    element:=input.Substring(index,1);
+      case element of
+      '[': bracketCount:=bracketCount+1;
+      ']': bracketCount:=bracketCount-1;
+      end;
+    end;
+  result:=bracketCount;
+end;
+
 function TSnailfish.replaceNumberWithValue(input: string; numberStart: integer;
   value:integer=0): string;
 var
@@ -251,7 +291,6 @@ var
   commaFound:boolean;
 begin
   result:=-1;
-  //want to find [x] or [xx]
   startBracket:=-1;
   for index:= 0 to pred(length(input)) do
     begin
@@ -275,23 +314,34 @@ end;
 
 function TSnailfish.findFirstExplodingNumber(input: string): integer;
 var
-  bracketCount,index:integer;
+  matchPos,actualStart:integer;
+  expression:String;
+  regex:TRegexpr;
+  done,nextResult,resultValid:boolean;
 begin
-  bracketCount:=0;
-  result:=-1;
-  for index:=0 to pred(length(input)) do
-    begin
-    if input.Substring(index,1) = '['
-      then bracketCount:=bracketCount+1
-    else if input.Substring(index,1) = ']'
-      then bracketCount:=bracketCount -1;
-    //we want the index of the bracket just before a number where bracketCount >=5
-    if isNumberString(input.Substring(index,1)) and (bracketCount >= 5) then
-      begin
-      result:=index - 1;
-      exit;
-      end;
-    end;
+result:=-1;
+expression:= '\[\[[0-9]+,[0-9]+\],|\[[0-9]+,\[[0-9]+,[0-9]+\]';
+//we're looking for this pattern: [[a,b], or [z,[x,y]]
+regex:=TRegexpr.Create(expression);
+nextResult:= regex.Exec(input);
+if nextResult then
+  begin
+    repeat
+    matchPos:=regex.MatchPos[0] - 1;//matchPos 1 based. Why?!?!
+    actualStart:=matchPos + 1;
+    while input.Substring(actualStart,1) <> '[' do
+      actualStart:=actualStart + 1;
+    resultValid:= (bracketDepthAtPosition(input,actualStart) > 4)
+      and nextResult;
+    if resultValid then result:=actualStart else result:=-1;
+
+    if resultValid then doLog('explode '+input.Substring(actualStart,5)+' pos '+actualStart.ToString);
+
+    if not resultValid then nextResult:=regex.ExecNext;
+    done:= resultValid or not nextResult;
+    until done;
+  end
+else result:=-1;
 end;
 
 function TSnailfish.findFirstSplittingNumber(input: string): integer;
@@ -314,7 +364,23 @@ begin
     end;
 end;
 
-procedure TSnailfish.addTolog(message: string);
+function TSnailfish.getNumberAtPosition(input: string; position: integer
+  ): integer;
+var
+  regex:TRegexpr;
+  numLength:integer;
+begin
+  result:=0;
+  regex:=TRegexpr.Create('[0-9]*');
+  if (regex.Exec(input)) and (regex.ExecPos(position + 1))
+    then
+      begin
+      result:=regex.Match[0];
+      end;
+  regex.free;
+end;
+
+procedure TSnailfish.doLog(message: string);
 begin
   fLog.Add(message);
 end;
@@ -322,6 +388,7 @@ end;
 constructor TSnailfish.create(puzzleInput: TStringArray);
 begin
   fNumbers:=puzzleInput;
+  fLog:=TStringlist.Create;
 end;
 
 procedure TSnailfish.doHomework;
@@ -332,55 +399,59 @@ var
   moreExplodes,moreSplits,moreBracketedSingles:boolean;
 begin
   fSum:=0;
-  sfLineNo:=1;
+  sfLineNo:=0;
   if length(fNumbers)=0 then exit;
   //add the first sfNumber to the next
   sfsum:=fNumbers[0];
-  while sfLineNo < length(fNumbers) do
-    begin
-    sfsum:='['+sfsum+','+fNumbers[sfLineNo]+']';
-    addTolog('line no '+sfLineNo.ToString+' sum: '+sfSum);
+  doLog(sfLineNo.ToString+' initial sum : '+sfSum);
+    repeat
+    doLog(sfLineNo.ToString+'line : '+sfSum);
     moreExplodes:=true;
     moreSplits:=true;
     while moreExplodes or moreSplits do
       begin
-      //deal with all the explodes, then all the splits
-      //then any explodes caused by the splits
-      //then any splits caused by the explodes etc
+      //do all explodes first
       while moreExplodes do
         begin
         explodeIndex:= findFirstExplodingNumber(sfSum);
+        moreExplodes:=explodeIndex > -1;
+        if explodeIndex > 1 then
+          doLog(sfLineNo.ToString+' going to explode at : '+explodeIndex.ToString);
         if explodeIndex > -1
           then sfSum:= explodeNumber(sfSum,explodeIndex);
-        moreExplodes:= explodeIndex > -1;
-        addTolog('line no '+sfLineNo.ToString+' explode '+explodeIndex.ToString+' sum: '+sfSum);
-        if findFirstBracketedSingleNumber(sfSum,bracketedSingleValue) > -1 then
-          begin
-          writeLn('something');
-          exit;
-          end;
-
+        if explodeIndex > 1 then
+          doLog(sfLineNo.ToString+' result: '+sfSum);
         end;
+      //if findFirstBracketedSingleNumber(sfSum,bracketedSingleValue) > -1
+      //then
+      //  begin
+      //  doLog('Oops '+sfLineNo.ToString+' '+sfSum);
+      //  exit;
+      //  end;
+
+      splitIndex:= findFirstSplittingNumber(sfSum);
+      if splitIndex > 1 then
+        doLog(sfLineNo.ToString+' going to split at: '+splitIndex.ToString);
+      if splitIndex > -1
+        then sfSum:= splitNumber(sfSum,splitIndex);
+      if splitIndex > 1 then
+        doLog(sfLineNo.ToString+' result: '+sfSum);
+      moreExplodes:=findFirstExplodingNumber(sfSum) > -1;
       moreSplits:= findFirstSplittingNumber(sfSum) > -1;
-      while moreSplits do
-        begin
-        splitIndex:= findFirstSplittingNumber(sfSum);
-          if splitIndex > -1
-            then sfSum:= splitNumber(sfSum,splitIndex);
-        moreSplits:= splitIndex > -1;
-        addTolog('line no '+sfLineNo.ToString+' split '+splitIndex.ToString+' sum: '+sfSum);
-        if findFirstBracketedSingleNumber(sfSum,bracketedSingleValue) > -1 then
-          begin
-          writeLn('something');
-          exit;
-          end;
-
-        end;
-      moreExplodes:= findFirstExplodingNumber(sfSum) > -1;
       end;
     sfLineNo:=sfLineNo + 1;
-    end;
+    if sfLineNo < length(fNumbers) then sfsum:='['+sfsum+','+fNumbers[sfLineNo]+']';
+    until sfLineNo > length(fNumbers);
   fSum:=magnitude(sfSum);
+  //[[[[4,0],[5,4]],[[7,7],[6,0]]],[[8,[7,7]],[[7,9],[5,0]]]]
+end;
+
+function TSnailfish.regexTest(input:string): integer;
+var
+  regex:TRegexpr;
+  matchPos:integer;
+begin
+  result:=findFirstExplodingNumber(input);
 end;
 
 end.
