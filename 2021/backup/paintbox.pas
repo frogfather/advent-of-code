@@ -45,15 +45,16 @@ x,y:integer;
 basinNumber:integer;
 basinColor:TColor;
 boxL,boxR,boxT,boxB:integer;
-  function generateNormalisedRandomValue(normalizeTo,offset:integer):byte;
-    begin
-    result:= random(normalizeTo)+offset mod normalizeTo;
-    end;
-
+  //function generateNormalisedRandomValue(normalizeTo,offset:integer):byte;
+  //  begin
+  //  result:= random(normalizeTo)+offset mod normalizeTo;
+  //  end;
+  //
 begin
 if length(fmap)=0 then exit;
 with paintboxForm.PaintBox1 do
   begin
+  canvas.Pen.Color:=clGray;
   for x:=0 to pred(length(map)) do
     begin
     for y:=0 to pred(length(map[0])) do

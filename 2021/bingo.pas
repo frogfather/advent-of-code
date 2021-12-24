@@ -5,7 +5,7 @@ unit bingo;
 interface
 
 uses
-  Classes, SysUtils,arrayUtils;
+  Classes, SysUtils,aocUtils,arrayUtils;
 type
   ABingoCard = array of array of array of string;
 
@@ -42,7 +42,6 @@ type
   fNumbersToCall:TStringArray;
   procedure CardNotifyWinHandler(Sender: TObject);
   procedure createCards(puzzleInput:TStringArray);
-  function getDimensionsOfPuzzleInput(input: TStringArray): TPoint;
   public
   constructor create(puzzleInput:TStringArray);
   procedure playGame;
@@ -104,19 +103,6 @@ begin
        end;
    end;
 end;
-
-function TBingoGame.getDimensionsOfPuzzleInput(input: TStringArray): TPoint;
-begin
-  result.X:=0;
-  result.Y:=0;
-  if length(input) = 0 then exit;
-  with result do
-    begin
-    Y:= length(input);
-    X:= length(input[0]);
-    end;
-end;
-
 
 constructor TBingoGame.create(puzzleInput: TStringArray);
 begin

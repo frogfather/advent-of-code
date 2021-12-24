@@ -45,11 +45,6 @@ x,y:integer;
 basinNumber:integer;
 basinColor:TColor;
 boxL,boxR,boxT,boxB:integer;
-  function generateNormalisedRandomValue(normalizeTo,offset:integer):byte;
-    begin
-    result:= random(normalizeTo)+offset mod normalizeTo;
-    end;
-
 begin
 if length(fmap)=0 then exit;
 with paintboxForm.PaintBox1 do

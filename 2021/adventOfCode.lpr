@@ -17,7 +17,6 @@ begin
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TmainForm, mainForm);
-  Application.CreateForm(TpaintboxForm, paintboxForm);
   Application.Run;
 end.
 

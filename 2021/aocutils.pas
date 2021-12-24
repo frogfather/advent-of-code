@@ -21,6 +21,7 @@ function hexStringToBinString(hexString:string):string;
 function binStringToInt64(binString:string):int64;
 function findCharPos(input,substring:string;startIndex:integer=0):integer;
 function isNumberString(input:string):boolean;
+function getDimensionsOfPuzzleInput(input:TStringArray):TPoint;
 implementation
 
 const dataDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/input/';
@@ -251,6 +252,18 @@ begin
     element:=input.Substring(index,1);
     if arrPos(strNumbers,element) = -1
       then result:=false;
+    end;
+end;
+
+function getDimensionsOfPuzzleInput(input: TStringArray): TPoint;
+begin
+  result.X:=0;
+  result.Y:=0;
+  if length(input) = 0 then exit;
+  with result do
+    begin
+    Y:= length(input);
+    X:= length(input[0]);
     end;
 end;
 

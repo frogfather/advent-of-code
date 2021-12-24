@@ -177,31 +177,31 @@ var
   done,finished:boolean;
   index:integer;
 begin
-  output:=copy(input,0);
-  done:=false;
-  while not done do
+output:=copy(input,0);
+done:=false;
+while not done do
+  begin
+  sfNoEnd := pos(']',output) - 1;
+  if sfNoEnd > -1 then
     begin
-    sfNoEnd := pos(']',output) - 1;
-    if sfNoEnd > -1 then
-      begin
-      index:=sfNoEnd - 1;
-      finished:=false;
-      repeat
-        if (output.Substring(index,1) = '[')
-          then
-            begin
-            sfNoStart:=index;
-            finished:=true;
-            end
-        else index:=index -1;
-        if index < 0 then finished:=true;
-      until finished;
-      if sfNoEnd > 0
-        then output:= replaceWithCalculatedValue(output,sfNoStart)
-      else done:=true;
-      end else done:=true;
-    end;
-  result:=output.ToInteger;
+    index:=sfNoEnd - 1;
+    finished:=false;
+    repeat
+      if (output.Substring(index,1) = '[')
+        then
+          begin
+          sfNoStart:=index;
+          finished:=true;
+          end
+      else index:=index -1;
+      if index < 0 then finished:=true;
+    until finished;
+    if sfNoEnd > 0
+      then output:= replaceWithCalculatedValue(output,sfNoStart)
+    else done:=true;
+    end else done:=true;
+  end;
+result:=output.ToInteger;
 end;
 
 function TSnailfish.bracketDepthAtPosition(input: string; position: integer

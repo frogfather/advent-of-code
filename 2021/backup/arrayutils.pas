@@ -14,6 +14,7 @@ type
   TStringMap = specialize TFPGMap<String,String>;
   TStringIntMap = specialize TFPGMap<String,Integer>;
   TStringInt64Map = specialize TFPGMap<String,Int64>;
+  T2DIntMap = array of array of integer;
   T3DIntMap = array of array of array of integer;
   T2DStringArray = array of array of string;
   TColours = array of TColor;
@@ -232,6 +233,25 @@ begin
   else Result:=1;
 end;
 
+function CompareIntAsc(const d1,d2): integer;
+var
+  i1 : int absolute d1;
+  i2 : int absolute d2;
+begin
+  if i1=i2 then Result:=0
+  else if i1<i2 then Result:=-1
+  else Result:=1;
+end;
+function CompareIntDesc(const d1,d2): integer;
+var
+  i1 : int absolute d1;
+  i2 : int absolute d2;
+begin
+  if i1=i2 then Result:=0
+  else if i1>i2 then Result:=-1
+  else Result:=1;
+end;
+
 function CompareStrAsc(const d1,d2): integer;
 var
   s1 : string absolute d1;
@@ -299,9 +319,9 @@ end;
 procedure sort(var arr: array of Integer; count: Integer;ascending:boolean=true);
 begin
   if ascending then
-    anysort.AnySort(arr, Count, sizeof(Integer), @CompareInt64Asc)
+    anysort.AnySort(arr, Count, sizeof(Integer), @CompareIntAsc)
   else
-    anysort.AnySort(arr, Count, sizeof(Integer), @CompareInt64Desc)
+    anysort.AnySort(arr, Count, sizeof(Integer), @CompareIntDesc)
 end;
 
 procedure sort(var arr: array of int64; count: Integer; ascending: boolean);

@@ -204,7 +204,6 @@ begin
   result:=output.ToInteger;
 end;
 
-
 function TSnailfish.bracketDepthAtPosition(input: string; position: integer
   ): integer;
 var

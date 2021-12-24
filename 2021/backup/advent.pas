@@ -13,7 +13,6 @@ uses
 type
   TStringIntMap = specialize TFPGMap<String,Integer>;
   TStringInt64Map = specialize TFPGMap<String,Int64>;
-  TOctopusMap = array of array of TOctopus;
 
   { TmainForm }
   TmainForm = class(TForm)
@@ -68,25 +67,14 @@ type
     procedure day17part2;
     procedure day18part1;
     procedure day18part2;
-    procedure OctopusFlashHandler(Sender: TObject);
     function identifySegmentValues(input:TStringArray):TStringMap;
-    procedure setupOctopuses(puzzleInput:TStringArray; mapDimensions:TPoint);
-    procedure runOctopuses(mapDimensions:TPoint);
-    procedure resetOctopuses(mapDimensions:TPoint);
-    function getDimensionsOfPuzzleInput(input:TStringArray):TPoint;
-  public
+    public
 
   end;
 
 const dataDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/input/';
 var
   mainForm: TmainForm;
-  //Used in day 4 part 2. Because a card signals that it has won
-  //by firing the event handler, and because the main method (day4part1)
-  //doesn't know anything about which cards have won, we need to
-  //keep a global list of these.
-  winningCards: TBingoCards;
-  //Used in day 11 part 1 for the same reason as the bingo cards
   octopusFlashCount: integer;
   octopusMap:TOctopusMap;
   caveMap: TJSONObject;
@@ -198,18 +186,6 @@ end;
 procedure TmainForm.loadText(fileName: String);
 begin
   memo1.Text:=getDescription(fileName);
-end;
-
-function TmainForm.getDimensionsOfPuzzleInput(input: TStringArray): TPoint;
-begin
-  result.X:=0;
-  result.Y:=0;
-  if length(input) = 0 then exit;
-  with result do
-    begin
-    Y:= length(input);
-    X:= length(input[0]);
-    end;
 end;
 
 { day 1 }
@@ -361,17 +337,14 @@ var
 procedure TmainForm.day4part1;
 var
  bingoGame: TBingoGame;
- numbersToCall:TStringArray;
- bingoCards: TBingoCards;
- cardNumber:integer;
- callNumber:integer;
  winningCards:TBingoCards;
 begin
  bingoGame:=TBingoGame.create(getPuzzleInputAsStringArray('day_4_1.txt',false));
  bingoGame.playGame;
+ winningCards:= bingoGame.winningCards;
  //now examine the winning cards array to see what the first and last objects are
- lbresults.items.add('First winning card: '+bingoGame.winningCards[0].id.ToString+' '+(bingoGame.winningCards[0].uncalled * bingoGame.winningCards[0].lastCalled).ToString);
- lbresults.items.add('Last answer '+(bingoGame.winningCards[pred(length(winningCards))].uncalled * winningCards[pred(length(winningCards))].lastCalled).ToString);
+ lbresults.items.add('First winning card: '+winningCards[0].id.ToString+' '+(winningCards[0].uncalled * winningCards[0].lastCalled).ToString);
+ lbresults.items.add('Last answer '+(winningCards[pred(length(winningCards))].uncalled * winningCards[pred(length(winningCards))].lastCalled).ToString);
 
 end;
 procedure TmainForm.day4part2;
@@ -790,12 +763,8 @@ var
   basinMap:T3DIntMap;
   mapMaxX,mapMaxY:integer;
   currentLine:string;
-  y,elementNo:integer;
-  currentElement,currentBasin:integer;
-  basinNo:integer;
-  itemsMarked:integer;
+  y,elementNo,basinNo,currentElement,currentBasin,itemsMarked:integer;
   basinSizes:TIntArray;
-
   //keep traversing the map until we hit 9s
   procedure basinCrawl(var map: T3DIntMap;currentLine, currentLinePosition, currentBasin:integer);
   var
@@ -911,9 +880,11 @@ for basinIndex:=0 to pred(length(basinsizes))do
   basinColor:=rgbToColor(red,green,blue);
   basinColors[basinIndex]:=basinColor;
   end;
+paintboxForm:=TPaintboxForm.Create(nil);
 paintboxForm.colours:=basinColors;
 paintboxForm.map:=map;
 paintboxForm.showModal;
+freeAndNil(paintboxForm);
 end;
 
 { day 10 }
@@ -1038,139 +1009,38 @@ begin
 end;
 
 { day 11 }
-
-procedure TmainForm.OctopusFlashHandler(Sender: TObject);
-var
-  octoPosition:TPoint;
-  xPosition,yPosition:integer;
-  mapWidth,mapHeight:integer;
-
-  function inRange(position:TPoint):boolean;
-  var
-    notAtOwnPosition:boolean;
-    begin
-    notAtOwnPosition:= ((xPosition <> position.X) or (yPosition <> position.Y));
-    result:=(xPosition < mapWidth)
-        and (xPosition > -1)
-        and (yPosition < mapHeight)
-        and (yPosition > -1)
-        and notAtOwnPosition;
-    end;
-
-begin
-if sender is TOctopus then with sender as TOctopus do
-  begin
-  octopusFlashCount:= octopusFlashCount + 1;
-  mapWidth:=length(octopusMap);
-  if mapWidth = 0 then exit;
-  mapHeight:= length(octopusMap[0]);
-  //get its position
-  octoPosition:=position;
-  for xPosition:= octoPosition.X - 1 to octoPosition.X + 1 do
-    for yPosition:= octoPosition.Y -1 to octoPosition.Y + 1 do
-      begin
-      //check within range
-      if inRange(octoPosition)
-        then with octopusMap[xPosition][yPosition] as TOctopus do
-          begin
-          addEnergy(1);
-          end;
-      end;
-  end;
-end;
-
-procedure TmainForm.runOctopuses(mapDimensions:TPoint);
-var
-  row,column:integer;
-  begin
-    for row:=0 to pred(mapDimensions.Y) do
-      for column:=0 to pred(mapDimensions.X)do
-        with octopusMap[column][row]as TOctopus do
-          addEnergy(1);
-  end;
-
-procedure TmainForm.resetOctopuses(mapDimensions: TPoint);
-var
-  row,column:integer;
-begin
-    for row:=0 to pred(mapDimensions.Y) do
-      for column:=0 to pred(mapDimensions.X) do
-        with octopusMap[column][row] as TOctopus do
-          resetFlash;
-end;
-
-procedure TmainForm.setupOctopuses(puzzleInput:TStringArray; mapDimensions:TPoint);
-var
-  row,column,octopusEnergy:integer;
-  mapPosition:TPoint;
-begin
-  octopusMap:=TOctopusMap.create;
-  setLength(octopusMap, mapDimensions.X,mapDimensions.Y);
-  for row:=0 to pred(mapDimensions.Y) do
-    for column:=0 to pred(mapDimensions.X) do
-      begin
-      with mapPosition do
-        begin
-        X:=column;
-        Y:=row;
-        end;
-      octopusEnergy:=puzzleInput[row].Substring(column,1).ToInteger;
-      octopusMap[column][row]:=TOctopus.create(octopusEnergy,mapPosition,@OctopusFlashHandler);
-  end;
-end;
-
 procedure TmainForm.day11part1;
 const maxSteps = 100;
 var
-  puzzleInput:TStringArray;
-  mapDimensions:TPoint;
+  octopusHandler:TOctopusHandler;
   steps:integer;
 begin
-  puzzleInput:=getPuzzleInputAsStringArray('day_11_1.txt');
-  mapDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
-  setupOctopuses(puzzleInput,mapDimensions);
-  octopusFlashCount:=0;
+  octopusHandler:=TOctopusHandler
+    .create(getPuzzleInputAsStringArray('day_11_1.txt'));
   for steps:=0 to maxSteps -1 do
     begin
-    runOctopuses(mapDimensions);
-    resetOctopuses(mapDimensions);
+    octopusHandler.runOctopuses;
+    octopusHandler.resetOctopuses;
     end;
-  lbResults.items.add('total flash count: '+octopusFlashCount.ToString);
+  lbResults.items.add('total flash count: '+octopusHandler.flashCount.ToString);
 end;
 
 procedure TmainForm.day11part2;
 var
-  puzzleInput:TStringArray;
-  mapDimensions:TPoint;
+  octopusHandler:TOctopusHandler;
   steps:integer;
   done:boolean;
-
-  function allHaveFlashed:boolean;
-  var
-    x,y,flashCount :integer;
-  begin
-  flashCount:=0;
-    for x:=0 to pred(mapDimensions.X) do
-      for y:=0 to pred(mapDimensions.Y) do
-        with octopusMap[x][y] as TOctopus do
-          begin
-          if hasFlashed then flashCount:=flashCount + 1;
-          end;
-    result:= flashCount = mapDimensions.X * mapDimensions.Y;
-  end;
-
 begin
-  puzzleInput:=getPuzzleInputAsStringArray('day_11_1.txt');
-  mapDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
-  setupOctopuses(puzzleInput,mapDimensions);
+  octopusHandler:= TOctopusHandler
+    .create(getPuzzleInputAsStringArray('day_11_1.txt'));
   //we want to run the octopuses until we reach a point where they have
   //all flashed. We can find this by checking the hasFlashed property
   steps:=0;
   repeat
-  runOctopuses(mapDimensions);
+  octopusHandler.runOctopuses;
   steps:=steps+1;
-  done:=allHaveFlashed;
-  resetOctopuses(mapDimensions);
+  done:=octopusHandler.allFlashed;
+  octopusHandler.resetOctopuses;
   until done;
 lbresults.items.add('All octopuses flash on step '+steps.ToString);
 lbResults.SelectAll;

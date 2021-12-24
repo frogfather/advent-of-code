@@ -6,6 +6,7 @@ interface
 
 uses
   Classes, SysUtils,fileUtilities,math,arrayUtils;
+const strnumbers: array[0..9] of string = ('0','1','2','3','4','5','6','7','8','9');
 
 function getPuzzleInputAsStringArray(fileName: String; removeBlankLines: boolean=true): TStringArray;
 function getPuzzleInputAsIntArray(fileName: String; removeBlankLines: boolean=true): TIntArray;
@@ -20,13 +21,12 @@ function hexStringToBinString(hexString:string):string;
 function binStringToInt64(binString:string):int64;
 function findCharPos(input,substring:string;startIndex:integer=0):integer;
 function isNumberString(input:string):boolean;
+function getDimensionsOfPuzzleInput(input:TStringArray):TPoint;
 implementation
 
 const dataDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/input/';
 const descriptionDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/puzzle_description/';
 const numbers: array[0..9] of integer = (0,1,2,3,4,5,6,7,8,9);
-const strnumbers: array[0..9] of string = ('0','1','2','3','4','5','6','7','8','9');
-
 
 //For where the puzzle input is lines separated by linefeed (#$0A)
 function getPuzzleInputAsStringArray(fileName: String; removeBlankLines: boolean=true): TStringArray;
@@ -253,6 +253,11 @@ begin
     if arrPos(strNumbers,element) = -1
       then result:=false;
     end;
+end;
+
+function getDimensionsOfPuzzleInput(input: TStringArray): TPoint;
+begin
+
 end;
 
 end.
