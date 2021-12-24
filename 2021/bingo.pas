@@ -1,15 +1,15 @@
-unit bingoCard;
+unit bingo;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils,fileUtilities,arrayUtils;
+  Classes, SysUtils,arrayUtils;
 type
   ABingoCard = array of array of array of string;
-  { TBingoCard }
 
+  { TBingoCard }
   TBingoCard = class(TInterfacedObject)
     private
     fId: Integer;
@@ -32,7 +32,115 @@ type
     property id: integer read fId;
   end;
 
+  TbingoCards = array of TbingoCard;
+
+  { TBingoGame }
+  TBingoGame = class(TInterfacedObject)
+  private
+  fCards:TBingoCards;
+  fWinningCards:TBingoCards;
+  fNumbersToCall:TStringArray;
+  procedure CardNotifyWinHandler(Sender: TObject);
+  procedure createCards(puzzleInput:TStringArray);
+  function getDimensionsOfPuzzleInput(input: TStringArray): TPoint;
+  public
+  constructor create(puzzleInput:TStringArray);
+  procedure playGame;
+  property winningCards:TBingoCards read fWinningCards;
+  end;
+
 implementation
+
+{ TBingoGame }
+
+procedure TBingoGame.CardNotifyWinHandler(Sender: TObject);
+var
+ winningCardIndex:integer;
+ found:boolean;
+begin
+if Sender is TBingoCard then
+  with Sender as TBingoCard do
+  begin
+  //add the winning card to the winningCards list if it isn't there
+  found:=false;
+  for winningCardIndex:=0 to pred(length(fWinningCards)) do
+    begin
+    if (fWinningCards[winningCardIndex] = sender as TBingoCard) then found:=true;
+    end;
+  if not found then
+    begin
+    setLength(fWinningCards, length(fWinningCards)+1);
+    fWinningCards[pred(length(fWinningCards))]:=sender as TBingoCard;
+    end;
+  end;
+end;
+
+procedure TBingoGame.createCards(puzzleInput: TStringArray);
+var
+ puzzleDimensions:TPoint;
+ currentCardData:TStringArray;
+ cardNumber, lineNumber: Integer;
+ currentLine: String;
+begin
+ currentCardData:=TStringArray.Create;
+ setLength(currentCardData,0); //clear the array
+ puzzleDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
+ cardNumber:=0;
+ for lineNumber:= 1 to pred(puzzleDimensions.Y) do
+   begin
+   currentLine:=puzzleInput[lineNumber];
+   if length(currentLine)> 0
+     then addToArray(currentCardData,currentLine) else
+       begin
+         //The current line is blank
+         //if the currentCardData is not empty then create a bingo card from it
+         if (length(currentCardData)> 0) then
+           begin
+           setLength(fCards,length(fCards)+1);
+           fCards[pred(length(fCards))]:=TBingoCard.create(currentCardData,cardNumber,@CardNotifyWinHandler);
+           setLength(currentCardData,0);
+           cardNumber:=cardnumber+1;
+           end;
+       end;
+   end;
+end;
+
+function TBingoGame.getDimensionsOfPuzzleInput(input: TStringArray): TPoint;
+begin
+  result.X:=0;
+  result.Y:=0;
+  if length(input) = 0 then exit;
+  with result do
+    begin
+    Y:= length(input);
+    X:= length(input[0]);
+    end;
+end;
+
+
+constructor TBingoGame.create(puzzleInput: TStringArray);
+begin
+  fNumbersToCall:=puzzleInput[0].Split(',');
+  fCards:=TBingoCards.create;
+  fWinningCards:=TBingoCards.create;
+  createCards(puzzleInput);
+end;
+
+procedure TBingoGame.playGame;
+var
+  callNumber, cardNumber: Integer;
+begin
+  for callNumber := 0 to pred(length(fNumbersToCall)) do
+   begin
+   //Pass each number into each card. A winning card will fire the event handler
+   //but won't stop this loop. However, we can look at the first result
+   //This also is useful in part 2
+   for cardNumber := 0 to pred(length(fCards)) do
+     begin
+     fCards[cardNumber].call(strToInt(fNumbersToCall[callNumber]));
+     end;
+   end;
+end;
 
 { TBingoCard }
 
@@ -71,7 +179,6 @@ begin
       exit;
       end;
     end;
-
   result:=false;
 end;
 

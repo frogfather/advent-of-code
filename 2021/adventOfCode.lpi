@@ -48,9 +48,8 @@
         <UnitName Value="fileUtilities"/>
       </Unit2>
       <Unit3>
-        <Filename Value="bingocard.pas"/>
+        <Filename Value="bingo.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="bingoCard"/>
       </Unit3>
       <Unit4>
         <Filename Value="ventmap.pas"/>

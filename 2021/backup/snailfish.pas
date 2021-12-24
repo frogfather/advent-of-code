@@ -14,7 +14,6 @@ type
     private
     fNumbers: TStringArray;
     fSum: int64;
-    fLog: TStringlist;
     function findNumberWidth(input:string;position:integer):integer;
     function findNearestNumberIndex(input:string;startPos:integer;out nearestNumberIndex: integer;left:boolean=true):boolean;
     function getNumber(snailFishNumber:string;left:boolean=true):integer;
@@ -22,20 +21,16 @@ type
     function explodeNumber(input:string;explodeStart:integer):string;
     function splitNumber(input:string;position:integer):string;
     function magnitude(input: string):int64;
-    function isSfNumber(input:string):boolean;
     function bracketDepthAtPosition(input:string;position:integer):integer;
     function replaceNumberWithValue(input:string; numberStart:integer;value:integer=0):string;
     function replaceWithCalculatedvalue(input:string;position:integer):string;
     function findFirstExplodingNumber(input:string):integer;
     function findFirstSplittingNumber(input:string):integer;
     function getNumberAtPosition(input:string;position:integer):integer;
-    procedure doLog(message:string);
     public
     constructor create(puzzleInput:TStringArray);
     procedure doHomework;
-    function regexTest(input:string;pos:integer):string;
     property sum: int64 read fSum;
-    property log: TStringlist read fLog;
   end;
 
 implementation
@@ -119,7 +114,6 @@ var
   explodeEnd:integer;
   nearestLeftFound,nearestRightFound:boolean;
 begin
-  //find the length of the number to explode
   output:=Copy(input,0);
   explodeEnd:=findCharPos(output,']',explodeStart);
   numberToExplode:=output.Substring(explodeStart, succ(explodeEnd-explodeStart));
@@ -154,9 +148,6 @@ var
   numberBeforeSplit,leftNumber,rightNumber:integer;
   currentRoundingMode:TFPURoundingMode;
 begin
-  //replace the number with a pair. lh rounded down, rh rounded up
-  //number should be followed by either a comma or ]
-  //if the number is even both values should be that number div 2
   output:=Copy(input,0);
   numberWidth:=findNumberWidth(input,position);
   if numberWidth = 0 then exit;
@@ -213,23 +204,6 @@ begin
   result:=output.ToInteger;
 end;
 
-function TSnailfish.isSfNumber(input: string): boolean;
-var
-  numberCount, commaCount, index:integer;
-  element:string;
-begin
-  result:=false;
-  numberCount:=0;
-  commaCount:=0;
-  if length(input) = 0 then exit;
-  for index:=0 to pred(length(input)) do
-    begin
-    element:=input.substring(index,1);
-    if isNumberString(element) then numberCount:=numberCount + 1;
-    if element = ',' then commaCount:=commaCount+1;
-    end;
-  result:= (commaCount = 1) and (numberCount > 1);
-end;
 
 function TSnailfish.bracketDepthAtPosition(input: string; position: integer
   ): integer;
@@ -261,7 +235,6 @@ begin
     then exit;
   output:=copy(input,0);
   numberEnd:=findCharPos(output,']', numberStart);
-  //change to remove and insert
   output:=output.Remove(numberStart,(numberEnd-numberStart)+1);
   output.Insert(numberStart, value.ToString);
   result:=output;
@@ -294,7 +267,6 @@ var
 begin
 result:=-1;
 expression:= '\[\[[0-9]+,[0-9]+\],|\[[0-9]+,\[[0-9]+,[0-9]+\]';
-//we're looking for this pattern: [[a,b], or [z,[x,y]]
 regex:=TRegexpr.Create(expression);
 nextResult:= regex.Exec(input);
 if nextResult then
@@ -307,9 +279,6 @@ if nextResult then
     resultValid:= (bracketDepthAtPosition(input,actualStart) > 4)
       and nextResult;
     if resultValid then result:=actualStart else result:=-1;
-
-    if resultValid then doLog('explode '+input.Substring(actualStart,5)+' pos '+actualStart.ToString);
-
     if not resultValid then nextResult:=regex.ExecNext;
     done:= resultValid or not nextResult;
     until done;
@@ -319,22 +288,13 @@ end;
 
 function TSnailfish.findFirstSplittingNumber(input: string): integer;
 var
-  sepNumbers:TStringArray;
-  index:integer;
-  element:string;
+  regex:TRegexpr;
 begin
   result:=-1;
-  //split on separators leaving just numbers then see if any are over 9
-  sepNumbers:=input.Split(separators,TStringSplitOptions.ExcludeEmpty);
-  for index:= 0 to pred(length(sepNumbers)) do
-    begin
-    element:=sepNumbers[index];
-    if (length(element) > 0) and (element.ToInteger > 9) then
-      begin
-      result:=pos(element,input) - 1;
-      exit;
-      end;
-    end;
+  regex:=TRegexpr.Create('\d{2,}');
+  if regex.Exec(input)
+  then result:= regex.MatchPos[0] -1;
+  regex.Free;
 end;
 
 function TSnailfish.getNumberAtPosition(input: string; position: integer
@@ -352,15 +312,9 @@ begin
   regex.free;
 end;
 
-procedure TSnailfish.doLog(message: string);
-begin
-  fLog.Add(message);
-end;
-
 constructor TSnailfish.create(puzzleInput: TStringArray);
 begin
   fNumbers:=puzzleInput;
-  fLog:=TStringlist.Create;
 end;
 
 procedure TSnailfish.doHomework;
@@ -411,18 +365,6 @@ begin
     if sfLineNo < length(fNumbers) then sfsum:='['+sfsum+','+fNumbers[sfLineNo]+']';
     until sfLineNo > length(fNumbers);
   fSum:=magnitude(sfSum);
-end;
-
-function TSnailfish.regexTest(input:string;pos:integer): string;
-var
-  regex:TRegexpr;
-begin
-  regex:=TRegexpr.Create('[0-9]*');
-  if regex.Exec(input) then
-    begin
-    while regex.ExecNext do doLog(regex.MatchPos[0].ToString);
-    end;
-
 end;
 
 end.

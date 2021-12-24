@@ -6,12 +6,11 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics,typinfo,
-  Dialogs, StdCtrls, math, bingoCard,
+  Dialogs, StdCtrls, math, bingo,
   ventMap,fgl,DateUtils,aocUtils,arrayUtils,fpJSON,paintbox,
   octopus,clipbrd,origami,polymer,chiton,packet,trickshot,snailfish;
 
 type
-  TbingoCards = array of TbingoCard;
   TStringIntMap = specialize TFPGMap<String,Integer>;
   TStringInt64Map = specialize TFPGMap<String,Int64>;
   TOctopusMap = array of array of TOctopus;
@@ -69,7 +68,6 @@ type
     procedure day17part2;
     procedure day18part1;
     procedure day18part2;
-    procedure CardNotifyWinHandler(Sender: TObject);
     procedure OctopusFlashHandler(Sender: TObject);
     function identifySegmentValues(input:TStringArray):TStringMap;
     procedure setupOctopuses(puzzleInput:TStringArray; mapDimensions:TPoint);
@@ -359,87 +357,21 @@ var
   end;
 
 { day 4 }
-procedure TmainForm.CardNotifyWinHandler(Sender: TObject);
-//The constructor for the bingo cards gets passed a pointer to this method
-//as their fNotifyCardWin property. If a card calculates that
-//it has won it calls the event handler(this method) passing itself
-//as the sender parameter
-var
- winningCardIndex:integer;
- found:boolean;
-begin
-if Sender is TBingoCard then
-with Sender as TBingoCard do
-  begin
-  //add the winning card to the winningCards list if it isn't there
-  found:=false;
-  for winningCardIndex:=0 to pred(length(winningCards)) do
-    begin
-    if (winningCards[winningCardIndex] = sender as TBingoCard) then found:=true;
-    end;
-  if not found then
-    begin
-    lbResults.items.add('Card '+id.ToString+' added to winning cards list');
-    setLength(winningCards, length(winningCards)+1);
-    winningCards[pred(length(winningCards))]:=sender as TBingoCard;
-    end;
-  end;
-end;
 
 procedure TmainForm.day4part1;
 var
- puzzleInput,numbersToCall:TStringArray;
- puzzleDimensions:TPoint;
- currentLine:string;
- currentCardData:TStringArray; //The block of numbers to passed to the card constructor
+ bingoGame: TBingoGame;
+ numbersToCall:TStringArray;
  bingoCards: TBingoCards;
  cardNumber:integer;
- lineNumber,callNumber:integer;
+ callNumber:integer;
+ winningCards:TBingoCards;
 begin
- //Get the puzzle input without removing blank lines as we need these
- puzzleInput:= getPuzzleInputAsStringArray('day_4_1.txt',false);
- puzzleDimensions:=getDimensionsOfPuzzleInput(puzzleInput);
- //The first line is the numbers that will be called.
- numbersToCall:=puzzleInput[0].Split(',');
- //For the rest of the input we need to create a bingo card for each block
- //The blocks are separated by a blank line.
- bingoCards:=TBingoCards.create;
- winningCards:=TBingoCards.create;
- currentCardData:=TStringArray.Create;
- setLength(currentCardData,0); //clear the array
- cardNumber:=0;
- for lineNumber:= 1 to pred(puzzleDimensions.Y) do
-   begin
-   currentLine:=puzzleInput[lineNumber];
-   if length(currentLine)> 0
-     then addToArray(currentCardData,currentLine) else
-       begin
-         //The current line is blank
-         //if the currentCardData is not empty then create a bingo card from it
-         if (length(currentCardData)> 0) then
-           begin
-           setLength(bingoCards,length(bingoCards)+1);
-           bingoCards[pred(length(bingoCards))]:=TBingoCard.create(currentCardData,cardNumber,@CardNotifyWinHandler);
-           setLength(currentCardData,0);
-           cardNumber:=cardnumber+1;
-           end;
-       end;
-   end;
- //now we have our cards set up. We can feed numbers into them
- //If a card has won it will fire the event handler above
- for callNumber := 0 to pred(length(numbersToCall)) do
-   begin
-   //Pass each number into each card. A winning card will fire the event handler
-   //Unfortunately it won't stop this loop. However, we can look at the first result
-   //This also is useful in part 2
-   for cardNumber := 0 to pred(length(bingoCards)) do
-     begin
-     bingoCards[cardNumber].call(strToInt(numbersToCall[callNumber]));
-     end;
-   end;
+ bingoGame:=TBingoGame.create(getPuzzleInputAsStringArray('day_4_1.txt',false));
+ bingoGame.playGame;
  //now examine the winning cards array to see what the first and last objects are
- lbresults.items.add('First winning card: '+winningCards[0].id.ToString+' '+(winningCards[0].uncalled * winningCards[0].lastCalled).ToString);
- lbresults.items.add('Last answer '+(winningCards[pred(length(winningCards))].uncalled * winningCards[pred(length(winningCards))].lastCalled).ToString);
+ lbresults.items.add('First winning card: '+bingoGame.winningCards[0].id.ToString+' '+(bingoGame.winningCards[0].uncalled * bingoGame.winningCards[0].lastCalled).ToString);
+ lbresults.items.add('Last answer '+(bingoGame.winningCards[pred(length(winningCards))].uncalled * winningCards[pred(length(winningCards))].lastCalled).ToString);
 
 end;
 procedure TmainForm.day4part2;
@@ -1648,7 +1580,7 @@ begin
   puzzleInput:=getPuzzleInputAsStringArray('day_18_1.txt');
   snailFish:= TSnailfish.create(puzzleInput);
   snailFish.doHomework;
-  lbResults.Items.add(snailfish.sum);
+  lbResults.Items.add('Sum '+snailfish.sum.ToString);
 end;
 
 procedure TmainForm.day18part2;
