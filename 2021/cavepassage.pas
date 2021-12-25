@@ -25,7 +25,7 @@ type
     public
     constructor create(puzzleInput:TStringArray);
     destructor destroy;
-    procedure explore(cave: string; maxSmallCaveRepeatVisits:integer=0);
+    procedure explore(cave: string; maxSmallCaveVisits:integer=1; maxSmallCaveRepeatVisits:integer=0);
     property paths: integer read fPaths;
   end;
 
@@ -96,13 +96,12 @@ begin
   fCaveMap.Free;
 end;
 
-procedure TCaveNavigator.explore(cave: string; maxSmallCaveRepeatVisits:integer=0);
+procedure TCaveNavigator.explore(cave: string;maxSmallCaveVisits:integer=1; maxSmallCaveRepeatVisits:integer=0);
 var
   neighbourId:integer;
   neighbour:string;
   index:integer;
-  smallCavesVisitedMoreThanOnce:integer;
-  caveToCheck:String;
+  moreThanOnce:integer;
   currentCount:integer;
   begin
   if (cave = 'end') then
@@ -112,26 +111,22 @@ var
     end;
   if isSmallCave(cave) then adjustVisitedCount(cave,1);
   //now check how many small caves have been visited more than once
-  smallCavesVisitedMoreThanOnce:=0;
+  moreThanOnce:=0;
   for index:= 0 to pred(fVisitedCaveMap.Count) do
     begin
     currentCount:=fVisitedCaveMap.Data[index];
-    //in part one we can visit no small caves twice
-    //in part two we can visit exactly one small cave twice
-    if (currentCount > 1)
-      then smallCavesVisitedMoreThanOnce:=smallCavesVisitedMoreThanOnce + 1;
-    if (smallCavesVisitedMoreThanOnce > maxSmallCaveRepeatVisits)
-      then
-        begin
-        adjustVisitedCount(cave,-1);
-        exit;
-        end;
+    if (currentCount > 1) then moreThanOnce:=moreThanOnce + 1;
+    if (moreThanOnce > maxSmallCaveRepeatVisits) or (currentCount > maxSmallCaveVisits) then
+      begin
+      adjustVisitedCount(cave,-1);
+      exit;
+      end;
     end;
   //explore all the neighbours
   for neighbourId:=0 to pred(fCaveMap.Arrays[cave].Count) do
     begin
     neighbour:=fCaveMap.Arrays[cave].Items[neighbourId].AsString;
-    explore(neighbour);
+    explore(neighbour,maxSmallCaveVisits,maxSmallCaveRepeatVisits);
     end;
   if isSmallCave(cave) then adjustVisitedCount(cave,-1);
   end;
