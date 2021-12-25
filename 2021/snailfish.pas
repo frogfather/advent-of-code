@@ -177,6 +177,8 @@ var
   done,finished:boolean;
   index:integer;
 begin
+//should be able to do this recursively
+//need a 'find snailfish number' method
 output:=copy(input,0);
 done:=false;
 while not done do

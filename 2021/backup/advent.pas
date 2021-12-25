@@ -5,13 +5,13 @@ unit advent;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics,typinfo,
-  Dialogs, StdCtrls, math, bingo,
-  ventMap,fgl,DateUtils,aocUtils,arrayUtils,fpJSON,paintbox,
-  octopus,clipbrd,origami,polymer,chiton,packet,trickshot,snailfish;
+  Classes, SysUtils, Forms, Controls, Graphics,
+  Dialogs, StdCtrls, math,clipbrd,fgl,DateUtils,fpJSON,
+  aocUtils,arrayUtils,
+  bingo,ventMap,paintbox,octopus,origami,cavePassage,
+  polymer,chiton,packet,trickshot,snailfish;
 
 type
-  TStringIntMap = specialize TFPGMap<String,Integer>;
   TStringInt64Map = specialize TFPGMap<String,Int64>;
 
   { TmainForm }
@@ -75,9 +75,6 @@ type
 const dataDir: string = '/Users/cloudsoft/Code/advent-of-code/2021/input/';
 var
   mainForm: TmainForm;
-  octopusFlashCount: integer;
-  octopusMap:TOctopusMap;
-  caveMap: TJSONObject;
 
 implementation
 
@@ -1043,194 +1040,30 @@ begin
   octopusHandler.resetOctopuses;
   until done;
 lbresults.items.add('All octopuses flash on step '+steps.ToString);
-lbResults.SelectAll;
 end;
 
 { day 12 }
 procedure TmainForm.day12part1;
 var
   puzzleInput:TStringArray;
-  visited:TStringList;
-  paths:integer;
-
-  function isSmallCave(input:string):boolean;
-  begin
-  result:=ord(input[1]) > 90;
-  end;
-
-  procedure addToDictionary(key,value:string);
-  var
-    jValue:TJSONString;
-    begin
-    jValue:=TJSONString.Create(value);
-    if caveMap.indexOfName(key) = -1
-        then caveMap.Add(key,TJSONArray.Create);
-    if caveMap.Arrays[key].IndexOf(jValue) = -1
-      then caveMap.Arrays[key].Add(jValue);
-    end;
-
-  procedure setUpCaveMap;
-  var
-    index:integer;
-    pathFrom,pathTo:string;
-    begin
-    for index:=0 to pred(length(puzzleInput))do
-      begin
-      pathFrom:=puzzleInput[index].Split('-')[0];
-      pathTo:=puzzleInput[index].Split('-')[1];
-      addToDictionary(pathFrom,pathTo);
-      if (pathFrom <> 'start') then
-        addToDictionary(pathTo,pathFrom);
-      end;
-    end;
-
-  procedure explore(cave:string);
-  var
-    neighbourId:integer;
-    neighbour:string;
-    begin
-    if (cave = 'end') then
-      begin
-      paths:=paths+1;
-      exit;
-      end;
-    if isSmallCave(cave) then
-      begin
-      if visited.IndexOf(cave) = -1
-        then visited.Add(cave)
-        else exit;
-      end;
-    //explore all the neighbours
-    for neighbourId:=0 to pred(caveMap.Arrays[cave].Count) do
-      begin
-      neighbour:=caveMap.Arrays[cave].Items[neighbourId].AsString;
-      explore(neighbour);
-      end;
-
-    if isSmallCave(cave) then visited.Delete(visited.IndexOf(cave));
-    end;
-
+  caveNavigator:TCaveNavigator;
 begin
   puzzleInput:=getPuzzleInputAsStringArray('day_12_1.txt');
-  caveMap:=TJSONObject.Create;
-  setUpCaveMap;
-  visited:=TStringList.Create;
-  paths:=0;
-  explore('start');
-  lbResults.items.add('Paths: '+paths.ToString);
-  caveMap.Free;
+  caveNavigator:= TCaveNavigator.create(puzzleInput);
+  caveNavigator.explore('start');
+  lbResults.items.add('Paths: '+caveNavigator.paths.ToString);
 end;
 
 procedure TmainForm.day12part2;
 var
   puzzleInput:TStringArray;
-  visited:TStringIntMap;
-  paths,level:integer;
-
-  function isSmallCave(input:string):boolean;
-  begin
-  result:=ord(input[1]) > 90;
-  end;
-
-  procedure adjustVisitedCount(cave:string;value:integer);
-  var
-  visitCount:integer;
-  begin
-  visited.TryGetData(cave,visitCount);
-  visitCount:=visitCount + value;
-  visited.AddOrSetData(cave,visitCount);
-  end;
-
-  function getVisitCount(cave:string):integer;
-  var
-  count:integer;
-  begin
-  if visited.tryGetData(cave,count) then result:= count;
-  end;
-
-  procedure addToDictionary(key,value:string);
-  var
-    jValue:TJSONString;
-    begin
-    jValue:=TJSONString.Create(value);
-    if caveMap.indexOfName(key) = -1
-        then caveMap.Add(key,TJSONArray.Create);
-    if caveMap.Arrays[key].IndexOf(jValue) = -1
-      then caveMap.Arrays[key].Add(jValue);
-    end;
-
-  procedure setUpVisitedMap;
-    var
-      index:integer;
-    begin
-    for index:=0 to pred(caveMap.Count) do
-    visited.Add(caveMap.Names[index],0);
-    end;
-
-  procedure setUpCaveMap;
-  var
-    index:integer;
-    pathFrom,pathTo:string;
-    begin
-    for index:=0 to pred(length(puzzleInput))do
-      begin
-      pathFrom:=puzzleInput[index].Split('-')[0];
-      pathTo:=puzzleInput[index].Split('-')[1];
-      addToDictionary(pathFrom,pathTo);
-      if (pathFrom <> 'start') then
-        addToDictionary(pathTo,pathFrom);
-      end;
-    end;
-
-  procedure explore(cave:string);
-  var
-    neighbourId:integer;
-    neighbour:string;
-    index:integer;
-    moreThanOnce:integer;
-    caveToCheck:String;
-    currentCount:integer;
-    begin
-    if (cave = 'end') then
-      begin
-      paths:=paths+1;
-      exit;
-      end;
-    if isSmallCave(cave) then adjustVisitedCount(cave,1);
-    //now check how many small caves have been visited more than once
-    moreThanOnce:=0;
-    for index:= 0 to pred(visited.Count) do
-      begin
-      currentCount:=visited.Data[index];
-      if (currentCount > 1) then moreThanOnce:=moreThanOnce+1;
-      if (moreThanOnce > 1) or (currentCount > 2) then
-        begin
-        adjustVisitedCount(cave,-1);
-        exit;
-        end;
-      end;
-    //explore all the neighbours
-    for neighbourId:=0 to pred(caveMap.Arrays[cave].Count) do
-      begin
-      neighbour:=caveMap.Arrays[cave].Items[neighbourId].AsString;
-      level:=level+1;
-      explore(neighbour);
-      level:=level-1;
-      end;
-    if isSmallCave(cave) then adjustVisitedCount(cave,-1);
-    end;
+  caveNavigator:TCaveNavigator;
 
 begin
   puzzleInput:=getPuzzleInputAsStringArray('day_12_1.txt');
-  caveMap:=TJSONObject.Create;
-  setUpCaveMap;
-  visited:=TStringIntMap.Create;
-  setUpVisitedMap;
-  paths:=0;
-  level:=0;
-  explore('start');
-  lbResults.items.add('Paths: '+paths.ToString);
-  caveMap.Free;
+  caveNavigator:= TCaveNavigator.create(puzzleInput);
+  caveNavigator.explore('start',2);
+  lbResults.items.add('Paths: '+caveNavigator.paths.ToString);
 end;
 
 { day 13 }

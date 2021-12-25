@@ -3,7 +3,7 @@
   <ProjectSession>
     <Version Value="11"/>
     <BuildModes Active="Default"/>
-    <Units Count="26">
+    <Units Count="28">
       <Unit0>
         <Filename Value="adventOfCode.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -17,9 +17,8 @@
         <ComponentName Value="mainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="64"/>
-        <CursorPos X="23" Y="77"/>
+        <TopLine Value="1041"/>
+        <CursorPos X="34" Y="1065"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -60,19 +59,18 @@
         <Filename Value="aocutils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="aocUtils"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="249"/>
-        <CursorPos Y="259"/>
+        <EditorIndex Value="2"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit6>
       <Unit7>
         <Filename Value="arrayutils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="arrayUtils"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="233"/>
-        <CursorPos X="15" Y="249"/>
+        <EditorIndex Value="3"/>
+        <CursorPos X="30" Y="20"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit7>
       <Unit8>
         <Filename Value="anysort.pas"/>
@@ -96,11 +94,9 @@
       <Unit10>
         <Filename Value="octopus.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="105"/>
-        <CursorPos X="13" Y="117"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="16"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
       </Unit10>
       <Unit11>
         <Filename Value="origami.pas"/>
@@ -136,7 +132,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="158"/>
         <FoldState Value=" T0kV4Gd"/>
-        <UsageCount Value="137"/>
+        <UsageCount Value="141"/>
       </Unit15>
       <Unit16>
         <Filename Value="rangecalc.pas"/>
@@ -144,53 +140,55 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="10"/>
         <CursorPos X="37" Y="27"/>
-        <UsageCount Value="126"/>
+        <UsageCount Value="130"/>
       </Unit16>
       <Unit17>
         <Filename Value="snailfish.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="289"/>
-        <CursorPos X="21" Y="230"/>
-        <UsageCount Value="108"/>
+        <TopLine Value="170"/>
+        <CursorPos X="40" Y="181"/>
+        <UsageCount Value="112"/>
       </Unit17>
       <Unit18>
+        <Filename Value="cavepassage.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="cavePassage"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="87"/>
+        <CursorPos X="82" Y="99"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+      </Unit18>
+      <Unit19>
         <Filename Value="cave.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="35" Y="8"/>
         <UsageCount Value="18"/>
-      </Unit18>
-      <Unit19>
-        <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/sysutils/syshelph.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="160"/>
-        <CursorPos X="17" Y="171"/>
-        <UsageCount Value="10"/>
       </Unit19>
       <Unit20>
+        <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/sysutils/syshelph.inc"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="3" Y="5"/>
+        <UsageCount Value="10"/>
+      </Unit20>
+      <Unit21>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/packages/fcl-json/src/fpjson.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="311"/>
         <CursorPos X="3" Y="318"/>
         <UsageCount Value="10"/>
-      </Unit20>
-      <Unit21>
+      </Unit21>
+      <Unit22>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/sysutils/syshelp.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1302"/>
         <CursorPos X="3" Y="1291"/>
         <UsageCount Value="10"/>
-      </Unit21>
-      <Unit22>
-        <Filename Value="util.inc"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="4"/>
       </Unit22>
       <Unit23>
-        <Filename Value="classesh.inc"/>
+        <Filename Value="util.inc"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
@@ -198,141 +196,156 @@
         <UsageCount Value="4"/>
       </Unit23>
       <Unit24>
+        <Filename Value="classesh.inc"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="4"/>
+      </Unit24>
+      <Unit25>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/fgl.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="938"/>
         <CursorPos Y="950"/>
         <UsageCount Value="10"/>
-      </Unit24>
-      <Unit25>
+      </Unit25>
+      <Unit26>
         <Filename Value="../../../Downloads/regexpr.pas"/>
         <UnitName Value="RegExpr"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="2921"/>
-        <CursorPos X="67" Y="2926"/>
+        <TopLine Value="5227"/>
+        <CursorPos X="15" Y="5250"/>
         <UsageCount Value="10"/>
-      </Unit25>
+      </Unit26>
+      <Unit27>
+        <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/classes/classesh.inc"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="803"/>
+        <CursorPos X="3" Y="816"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit27>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="advent.pas"/>
-        <Caret Line="1075" Column="5" TopLine="1057"/>
+        <Caret Line="58" Column="15" TopLine="36"/>
       </Position1>
       <Position2>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="62" Column="18" TopLine="42"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="18" Column="32" TopLine="6"/>
       </Position2>
       <Position3>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="38" Column="20" TopLine="25"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="8" Column="26" TopLine="5"/>
       </Position3>
       <Position4>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="39" Column="17" TopLine="28"/>
+        <Filename Value="aocutils.pas"/>
       </Position4>
       <Position5>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="104" Column="8" TopLine="91"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="8" Column="40" TopLine="2"/>
       </Position5>
       <Position6>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="79" Column="15" TopLine="67"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="80" Column="16" TopLine="62"/>
       </Position6>
       <Position7>
-        <Filename Value="advent.pas"/>
-        <Caret Line="82" Column="3" TopLine="72"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="25" Column="18" TopLine="8"/>
       </Position7>
       <Position8>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="82" Column="25" TopLine="67"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="81" Column="21" TopLine="68"/>
       </Position8>
       <Position9>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="88" Column="9" TopLine="72"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="22" Column="18" TopLine="12"/>
       </Position9>
       <Position10>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="40" Column="66" TopLine="26"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="58" Column="18" TopLine="45"/>
       </Position10>
       <Position11>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="73" Column="31" TopLine="64"/>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1060" Column="32" TopLine="1054"/>
       </Position11>
       <Position12>
-        <Filename Value="advent.pas"/>
-        <Caret Line="72" Column="5" TopLine="62"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="143" Column="3" TopLine="107"/>
       </Position12>
       <Position13>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="68" Column="24" TopLine="54"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="126" Column="40" TopLine="114"/>
       </Position13>
       <Position14>
-        <Filename Value="advent.pas"/>
-        <Caret Line="40" Column="69" TopLine="111"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="128" Column="34" TopLine="116"/>
       </Position14>
       <Position15>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="41" Column="19" TopLine="29"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="139" Column="18" TopLine="123"/>
       </Position15>
       <Position16>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="119" Column="9" TopLine="103"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="16" Column="27" TopLine="5"/>
       </Position16>
       <Position17>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="60" Column="28" TopLine="53"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="103" Column="17" TopLine="83"/>
       </Position17>
       <Position18>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="122" Column="48" TopLine="105"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="129" TopLine="118"/>
       </Position18>
       <Position19>
-        <Filename Value="advent.pas"/>
-        <Caret Line="1068" Column="12" TopLine="1053"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="126" TopLine="118"/>
       </Position19>
       <Position20>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="45" Column="25" TopLine="29"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="129" TopLine="118"/>
       </Position20>
       <Position21>
-        <Filename Value="advent.pas"/>
-        <Caret Line="72" Column="18" TopLine="62"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="130" TopLine="118"/>
       </Position21>
       <Position22>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="152" TopLine="132"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="140" TopLine="127"/>
       </Position22>
       <Position23>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="149" Column="14" TopLine="128"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="114" Column="19" TopLine="93"/>
       </Position23>
       <Position24>
-        <Filename Value="advent.pas"/>
-        <Caret Line="71" Column="3" TopLine="59"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="110" Column="16" TopLine="96"/>
       </Position24>
       <Position25>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="46" Column="29" TopLine="26"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="118" Column="34" TopLine="103"/>
       </Position25>
       <Position26>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="139" Column="29" TopLine="126"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="28" Column="61" TopLine="9"/>
       </Position26>
       <Position27>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="148" Column="29" TopLine="135"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="99" Column="55" TopLine="92"/>
       </Position27>
       <Position28>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="47" Column="58" TopLine="33"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="28" Column="61" TopLine="15"/>
       </Position28>
       <Position29>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="48" Column="58" TopLine="30"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="121" Column="51" TopLine="97"/>
       </Position29>
       <Position30>
-        <Filename Value="octopus.pas"/>
-        <Caret Line="117" Column="13" TopLine="105"/>
+        <Filename Value="cavepassage.pas"/>
+        <Caret Line="104" Column="32" TopLine="90"/>
       </Position30>
     </JumpHistory>
     <RunParams>
@@ -343,13 +356,13 @@
   <Debugging>
     <Watches Count="3">
       <Item1>
-        <Expression Value="i1"/>
+        <Expression Value="currentCount"/>
       </Item1>
       <Item2>
-        <Expression Value="i2"/>
+        <Expression Value="moreThanOnce"/>
       </Item2>
       <Item3>
-        <Expression Value="basinSizes"/>
+        <Expression Value="fVisitCount"/>
       </Item3>
     </Watches>
   </Debugging>

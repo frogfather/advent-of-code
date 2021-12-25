@@ -235,17 +235,18 @@ end;
 
 function CompareIntAsc(const d1,d2): integer;
 var
-  i1 : int absolute d1;
-  i2 : int absolute d2;
+  i1 : integer absolute d1;
+  i2 : integer absolute d2;
 begin
   if i1=i2 then Result:=0
   else if i1<i2 then Result:=-1
   else Result:=1;
 end;
+
 function CompareIntDesc(const d1,d2): integer;
 var
-  i1 : int absolute d1;
-  i2 : int absolute d2;
+  i1 : integer absolute d1;
+  i2 : integer absolute d2;
 begin
   if i1=i2 then Result:=0
   else if i1>i2 then Result:=-1

@@ -30,7 +30,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="18">
+    <Units Count="19">
       <Unit0>
         <Filename Value="adventOfCode.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -113,6 +113,11 @@
         <Filename Value="snailfish.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit17>
+      <Unit18>
+        <Filename Value="cavepassage.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="cavePassage"/>
+      </Unit18>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
