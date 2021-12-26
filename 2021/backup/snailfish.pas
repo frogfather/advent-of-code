@@ -49,6 +49,8 @@ type
     fLeft: TNode;
     fRight: TNode;
     fParent: TNode;
+    function getValue:integer;
+    procedure setValue(val:integer);
     public
     constructor create(val:TInt);
     property left: TNode read fLeft write fLeft;
@@ -85,6 +87,7 @@ type
     private
     fPuzzleInput:TStringArray;
     fTree: TNode;
+    fLevel:integer;
     function splitSfNumber(sfNumber:string):TStringArray;
     function parse(fishNum: string): TNode;
     function add(t1,t2:TNode):TNode;
@@ -112,8 +115,11 @@ end;
 
 function TStack.pop: TStackEntry;
 begin
-  if length(fStackArray) > 0
-    then result:= fStackArray[pred(length(fStackArray))];
+  if length(fStackArray) > 0 then
+    begin
+    result:= fStackArray[pred(length(fStackArray))];
+    setLength(fStackArray,pred(length(fStackArray)));
+    end;
 end;
 
 procedure TStack.append(stackEntry: TStackEntry);
@@ -141,6 +147,8 @@ begin
   fTree:=parse(fPuzzleInput[0]);
   for index:= 1 to pred(length(fPuzzleInput)) do
     fTree:= add(fTree, parse(fPuzzleInput[index]));
+  fLevel:=0;
+  testTree(fTree);
 end;
 
 function THomework.splitSfNumber(sfNumber: string): TStringArray;
@@ -186,7 +194,7 @@ begin
   parts:=splitSfNumber(fishNum);
   if length(parts) = 1 then
     begin
-    result.val:= TInt.create(parts[0].ToInteger);
+    result.setValue(parts[0].ToInteger);
     end else
     begin
     result.left:=parse(parts[0]);
@@ -224,21 +232,20 @@ var
   var
     lowValue,highValue:integer;
     begin
-    lowValue:=node.val.value div 2;
-    highValue:=node.val.value - lowValue;
-    node.left := Node.create(TInt.create(lowValue));
-    node.right := Node.create(TInt.create(highValue));
+    lowValue:=node.getValue div 2;
+    highValue:=node.getValue - lowValue;
+    node.left := TNode.create(TInt.create(lowValue));
+    node.right := TNode.create(TInt.create(highValue));
     node.left.parent := node;
     node.right.parent := node;
-    node.val := nil;
+    node.fval := nil;
+    result:=node;
     end;
 
 begin
   done:= true;
   stack:=TStack.Create;
-  stackEntry.node:=tree;
-  stackEntry.depth:=0;
-  stack.append(stackEntry);
+  addToStack(tree,0);
   while stack.len > 0 do
     begin
     stackEntry:= stack.pop;
@@ -248,7 +255,7 @@ begin
       begin
       condition:= ((node.left = nil) and (node.right = nil))
         or ((node.left.val <> nil) and (node.right.val <> nil));
-      if (depth >= 4) and (node.val <> nil) and condition then
+      if (depth >= 4) and (node.val = nil) and condition then
         begin
         //Go up the stack to find left node
         prevNode:=node.left;
@@ -259,19 +266,18 @@ begin
             begin
             prevNode:=currNode;
             currNode:=currNode.parent;
-            if currNode <> nil then
-              begin
-              //currNode has a left child; we go all the way down
-              currNode:= currNode.left;
-              while currNode.val = nil do
-                begin
-                if currNode.right <> nil
-                  then currNode:=currNode.right
-                else currNode:=currNode.left;
-                end;
-              currNode.val.value:= currNode.val.value + node.left.val.value;
-              end;
             end;
+        if currNode <> nil then
+          begin
+          currNode:= currNode.left;
+          while currNode.fVal = nil do
+            begin
+            if currNode.right <> nil
+              then currNode:=currNode.right
+            else currNode:=currNode.left;
+            end;
+          currNode.setValue(currNode.getValue + node.left.getValue);
+          end;
 
         //do the same with the right node
         prevNode := node.right;
@@ -282,23 +288,23 @@ begin
             begin
             prevNode := currNode;
             currNode := currNode.parent;
-            //Right node must exist
-            if currNode <> nil then
-              begin
-              //Now cur_idx has a left child; we go all the way down
-              currNode := currNode.right;
-              while currNode.val <> nil do
-                begin
-                if currNode.left <> nil
-                  then currNode := currNode.left
-                else currNode := currNode.right;
-                //Update some values!
-                currNode.val.value := currNode.val.value + node.right.val.value;
-                end;
-              end
             end;
+          //Right node must exist
+        if currNode <> nil then
+          begin
+          //Now cur_idx has a right child; we go all the way down
+          currNode := currNode.right;
+          while currNode.fVal = nil do
+            begin
+            if currNode.left <> nil
+              then currNode := currNode.left
+            else currNode := currNode.right;
+            //Update some values!
+            currNode.setValue(currNode.getValue + node.right.getValue);
+            end;
+          end;
         //then update the exploding node
-        node.val.value:=0;
+        node.setValue(0);
         node.left:=nil;
         node.right:=nil;
 
@@ -324,45 +330,22 @@ begin
     node:= stack.pop.node;
     if node <> nil then
       begin
-      if node.val <> nil then
+      if (node.fVal <> nil) then
         begin
         //split
         if (node.left = nil) and (node.right = nil)
-          and (node.val.value >= 10) then
+          and (node.fVal <> nil) and (node.getValue >= 10) then
           begin
           node:= splitNode(node);
+          done:=false;
           end;
         end;
         addToStack(node.right,0);
         addToStack(node.left,0);
       end;
-
     end;
-
-
-  //  while len(stack) > 0:
-  //
-  //
-  //      if node.val != None:
-  //          # Split!
-  //          assert node.left == None and node.right == None
-  //          if node.val >= 10:
-  //              node.left = Node(node.val//2)
-  //              node.right = Node(node.val - (node.val//2))
-  //              node.left.par = node
-  //              node.right.par = node
-  //              node.val = None
-  //
-  //              done = False
-  //              break
-
-  //
-  //  # If not done, keep going
-  //  if not done:
-  //      reduce(root)
-
-
-
+  if not done then reduce(tree);
+  result:=tree;
 end;
 
 function THomework.magnitude(tree: TNode): integer;
@@ -376,6 +359,20 @@ end;
 constructor TInt.create(value: integer);
 begin
   fValue:=value;
+end;
+
+function TNode.getValue: integer;
+begin
+  if fVal <> nil
+    then result := fVal.value
+  else result:=0; //not strictly correct but we have to return something
+end;
+
+procedure TNode.setValue(val: integer);
+begin
+  if fVal = nil
+    then fVal:= TInt.create(val)
+  else fVal.value:=val;
 end;
 
 { TNode }

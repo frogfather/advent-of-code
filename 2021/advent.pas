@@ -1292,7 +1292,7 @@ var
   homework:THomework;
 begin
   //tree version of part 1
-  puzzleInput:=getPuzzleInputAsStringArray('day_18_1.txt');
+  puzzleInput:=getPuzzleInputAsStringArray('day_18_test_1.txt');
   homework:=THomework.create(puzzleInput);
   homework.doHomework;
 end;
