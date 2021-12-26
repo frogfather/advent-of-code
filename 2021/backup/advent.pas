@@ -1062,7 +1062,7 @@ var
 begin
   puzzleInput:=getPuzzleInputAsStringArray('day_12_1.txt');
   caveNavigator:= TCaveNavigator.create(puzzleInput);
-  caveNavigator.explore('start',1);
+  caveNavigator.explore('start',2,1);
   lbResults.items.add('Paths: '+caveNavigator.paths.ToString);
 end;
 
@@ -1287,7 +1287,11 @@ begin
 end;
 
 procedure TmainForm.day18part2;
+var
+  puzzleInput:TStringArray;
+  homework:THomework;
 begin
+  //tree version of part 1
 
 end;
 

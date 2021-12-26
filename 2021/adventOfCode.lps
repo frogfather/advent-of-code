@@ -17,8 +17,8 @@
         <ComponentName Value="mainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="1041"/>
-        <CursorPos X="40" Y="1061"/>
+        <TopLine Value="1277"/>
+        <CursorPos X="23" Y="1297"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -59,7 +59,7 @@
         <Filename Value="aocutils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="aocUtils"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit6>
@@ -67,8 +67,8 @@
         <Filename Value="arrayutils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="arrayUtils"/>
-        <EditorIndex Value="3"/>
-        <CursorPos X="30" Y="20"/>
+        <EditorIndex Value="4"/>
+        <CursorPos X="55" Y="16"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit7>
@@ -132,7 +132,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="158"/>
         <FoldState Value=" T0kV4Gd"/>
-        <UsageCount Value="141"/>
+        <UsageCount Value="152"/>
       </Unit15>
       <Unit16>
         <Filename Value="rangecalc.pas"/>
@@ -140,26 +140,26 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="10"/>
         <CursorPos X="37" Y="27"/>
-        <UsageCount Value="130"/>
+        <UsageCount Value="141"/>
       </Unit16>
       <Unit17>
         <Filename Value="snailfish.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="170"/>
-        <CursorPos X="40" Y="181"/>
-        <UsageCount Value="112"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="322"/>
+        <CursorPos X="33" Y="341"/>
+        <UsageCount Value="123"/>
+        <Loaded Value="True"/>
       </Unit17>
       <Unit18>
         <Filename Value="cavepassage.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="cavePassage"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="105"/>
-        <CursorPos X="45" Y="123"/>
-        <UsageCount Value="24"/>
-        <Loaded Value="True"/>
+        <CursorPos X="58" Y="126"/>
+        <UsageCount Value="35"/>
       </Unit18>
       <Unit19>
         <Filename Value="cave.pas"/>
@@ -205,10 +205,11 @@
       </Unit24>
       <Unit25>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/fgl.pp"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="938"/>
-        <CursorPos Y="950"/>
-        <UsageCount Value="10"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="975"/>
+        <CursorPos X="50" Y="988"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
       </Unit25>
       <Unit26>
         <Filename Value="../../../Downloads/regexpr.pas"/>
@@ -220,132 +221,131 @@
       </Unit26>
       <Unit27>
         <Filename Value="/usr/local/share/fpcsrc/3.2.0/rtl/objpas/classes/classesh.inc"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="803"/>
         <CursorPos X="3" Y="816"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit27>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="aocutils.pas"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="69" Column="21" TopLine="56"/>
       </Position1>
       <Position2>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="8" Column="40" TopLine="2"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="8" Column="28"/>
       </Position2>
       <Position3>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="80" Column="16" TopLine="62"/>
+        <Filename Value="aocutils.pas"/>
       </Position3>
       <Position4>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="25" Column="18" TopLine="8"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="74" Column="21" TopLine="60"/>
       </Position4>
       <Position5>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="81" Column="21" TopLine="68"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="84" Column="3" TopLine="60"/>
       </Position5>
       <Position6>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="22" Column="18" TopLine="12"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="74" Column="21" TopLine="60"/>
       </Position6>
       <Position7>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="58" Column="18" TopLine="45"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="164" Column="30" TopLine="150"/>
       </Position7>
       <Position8>
-        <Filename Value="advent.pas"/>
-        <Caret Line="1060" Column="32" TopLine="1054"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="8" Column="46"/>
       </Position8>
       <Position9>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="143" Column="3" TopLine="107"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="63" Column="20" TopLine="41"/>
       </Position9>
       <Position10>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="126" Column="40" TopLine="114"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="67" Column="33" TopLine="57"/>
       </Position10>
       <Position11>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="128" Column="34" TopLine="116"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="170" Column="8" TopLine="155"/>
       </Position11>
       <Position12>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="139" Column="18" TopLine="123"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="74" Column="20" TopLine="57"/>
       </Position12>
       <Position13>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="16" Column="27" TopLine="5"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="102" Column="36" TopLine="92"/>
       </Position13>
       <Position14>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="103" Column="17" TopLine="83"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="76" Column="33" TopLine="63"/>
       </Position14>
       <Position15>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="129" TopLine="118"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="116" Column="55" TopLine="97"/>
       </Position15>
       <Position16>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="126" TopLine="118"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="201" Column="7" TopLine="190"/>
       </Position16>
       <Position17>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="129" TopLine="118"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="73" Column="25" TopLine="61"/>
       </Position17>
       <Position18>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="130" TopLine="118"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="104" Column="31" TopLine="80"/>
       </Position18>
       <Position19>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="140" TopLine="127"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="78" Column="17" TopLine="65"/>
       </Position19>
       <Position20>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="114" Column="19" TopLine="93"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="214" Column="3" TopLine="194"/>
       </Position20>
       <Position21>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="110" Column="16" TopLine="96"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="264" Column="16" TopLine="254"/>
       </Position21>
       <Position22>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="118" Column="34" TopLine="103"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="223" Column="53" TopLine="212"/>
       </Position22>
       <Position23>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="28" Column="61" TopLine="9"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="42" Column="53" TopLine="29"/>
       </Position23>
       <Position24>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="99" Column="55" TopLine="92"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="271" Column="49" TopLine="260"/>
       </Position24>
       <Position25>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="28" Column="61" TopLine="15"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="270" Column="49" TopLine="259"/>
       </Position25>
       <Position26>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="121" Column="51" TopLine="97"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="213" Column="5" TopLine="202"/>
       </Position26>
       <Position27>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="104" Column="32" TopLine="90"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="78" Column="18" TopLine="60"/>
       </Position27>
       <Position28>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="99" Column="56" TopLine="89"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="298" Column="29" TopLine="290"/>
       </Position28>
       <Position29>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="28" Column="61" TopLine="15"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="233" Column="21" TopLine="212"/>
       </Position29>
       <Position30>
-        <Filename Value="cavepassage.pas"/>
-        <Caret Line="125" Column="27" TopLine="110"/>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="230" Column="55" TopLine="217"/>
       </Position30>
     </JumpHistory>
     <RunParams>
@@ -354,16 +354,13 @@
     </RunParams>
   </ProjectSession>
   <Debugging>
-    <Watches Count="3">
+    <Watches Count="2">
       <Item1>
-        <Expression Value="currentCount"/>
+        <Expression Value="fTree"/>
       </Item1>
       <Item2>
-        <Expression Value="moreThanOnce"/>
+        <Expression Value="fTree.left.left"/>
       </Item2>
-      <Item3>
-        <Expression Value="fVisitCount"/>
-      </Item3>
     </Watches>
   </Debugging>
 </CONFIG>

@@ -5,10 +5,10 @@ unit snailfish;
 interface
 
 uses
-  Classes, SysUtils,aocUtils,math,regexpr;
+  Classes, SysUtils,aocUtils,math,regexpr,fgl;
 type
   
-  { TSnailfish }
+  { TSnailfish } //Original implementation - v slow!
 
   TSnailfish = class(TInterfacedObject)
     private
@@ -33,8 +33,362 @@ type
     property sum: int64 read fSum;
   end;
 
+  { TInt } //provides an integer we can set to nil
+  TInt = class(TInterfacedObject)
+    private
+    fValue:integer;
+    public
+    constructor create(value:integer);
+    property value: integer read fValue write fValue;
+  end;
+
+  { TNode }
+  TNode = class(TInterfacedObject)
+    private
+    fVal:TInt;
+    fLeft: TNode;
+    fRight: TNode;
+    fParent: TNode;
+    public
+    constructor create(val:TInt);
+    property left: TNode read fLeft write fLeft;
+    property right: TNode read fRight write fRight;
+    property parent: TNode read fParent write fParent;
+    property val: TInt read fVal write fVal;
+  end;
+
+  { TStackEntry }
+  TStackEntry = record
+    node: TNode;
+    depth: integer;
+  end;
+
+  { TStackArray }
+  TStackArray = array of TStackEntry;
+
+  { TStack }
+  TStack = class(TInterfacedObject)
+    private
+    fStackArray: TStackArray;
+    function getStackArrayLength:integer;
+    public
+    constructor create;
+    function pop:TStackEntry;
+    procedure append(stackEntry:TStackEntry);
+    procedure clear;
+    property len:integer read getStackArrayLength;
+  end;
+
+
+  { THomework }
+  THomework = class
+    private
+    fPuzzleInput:TStringArray;
+    fTree: TNode;
+    function splitSfNumber(sfNumber:string):TStringArray;
+    function parse(fishNum: string): TNode;
+    function add(t1,t2:TNode):TNode;
+    function reduce(tree:TNode):TNode;
+    function magnitude(tree:TNode):integer;
+    public
+    constructor create(puzzleInput:TStringArray);
+    procedure doHomework;
+  end;
+
+
 implementation
 
+{ TStack }
+
+function TStack.getStackArrayLength: integer;
+begin
+  result:=length(fStackArray);
+end;
+
+constructor TStack.create;
+begin
+  fStackArray:= TStackArray.create;
+end;
+
+function TStack.pop: TStackEntry;
+begin
+  if length(fStackArray) > 0
+    then result:= fStackArray[pred(length(fStackArray))];
+end;
+
+procedure TStack.append(stackEntry: TStackEntry);
+begin
+  setLength(fStackArray,length(fStackArray)+1);
+  fStackArray[pred(length(fStackArray))]:= stackEntry;
+end;
+
+procedure TStack.clear;
+begin
+  setLength(fStackArray,0);
+end;
+
+{ THomework }
+constructor THomework.create(puzzleInput: TStringArray);
+begin
+  fPuzzleInput:=puzzleInput;
+  if length(puzzleInput) = 0 then exit;
+end;
+
+procedure THomework.doHomework;
+var
+  index:integer;
+begin
+  fTree:=parse(fPuzzleInput[0]);
+  for index:= 1 to pred(length(fPuzzleInput)) do
+    fTree:= add(fTree, parse(fPuzzleInput[index]));
+end;
+
+function THomework.splitSfNumber(sfNumber: string): TStringArray;
+var
+  index:integer;
+  leftPart,rightPart:string;
+begin
+  result:= TStringArray.create;
+  if (pos(',',sfNumber) = 0)
+    then
+    begin
+    setLength(result,1);
+    result[0]:= sfNumber;
+    end
+  else
+    begin
+    setLength(result,2);
+    for index:= 0 to pred(length(sfNumber)) do
+      begin
+      if sfNumber[index] = ',' then
+        begin
+        //do the brackets match on both parts?
+        leftPart:=sfNumber.Substring(1, index - 2);
+        rightPart:= sfNumber.Substring(index, length(sfNumber)-(index +1));
+        if (leftPart.CountChar('[') = leftPart.CountChar(']'))
+        and (rightPart.CountChar('[') = rightPart.CountChar(']'))
+          then
+            begin
+            result[0]:= leftPart;
+            result[1]:= rightPart;
+            exit;
+            end;
+        end;
+      end;
+    end;
+end;
+
+function THomework.parse(fishNum: string): TNode;
+var
+  parts:TStringArray;
+begin
+  result:=TNode.create(nil);
+  parts:=splitSfNumber(fishNum);
+  if length(parts) = 1 then
+    begin
+    result.val:= TInt.create(parts[0].ToInteger);
+    end else
+    begin
+    result.left:=parse(parts[0]);
+    result.right:=parse(parts[1]);
+    result.left.parent:=result;
+    result.right.parent:=result;
+    end;
+  reduce(result);
+end;
+
+function THomework.add(t1, t2: TNode): TNode;
+begin
+  result:=TNode.create(nil);
+  result.left:=t1;
+  result.right:=t2;
+  result.left.parent:= result;
+  result.right.parent:= result;
+end;
+
+function THomework.reduce(tree: TNode): TNode;
+var
+  stack: TStack;
+  done, condition: Boolean;
+  stackEntry:TStackEntry;
+  node,prevNode,currNode:TNode;
+  depth:integer;
+
+  procedure addToStack(node:TNode; depth:integer);
+    begin
+    stackEntry.node:=node;
+    stackEntry.depth:= depth;
+    stack.append(stackEntry);
+    end;
+  function splitNode(node:TNode):TNode;
+  var
+    lowValue,highValue:integer;
+    begin
+    lowValue:=node.val.value div 2;
+    highValue:=node.val.value - lowValue;
+    node.left := Node.create(TInt.create(lowValue));
+    node.right := Node.create(TInt.create(highValue));
+    node.left.parent := node;
+    node.right.parent := node;
+    node.val := nil;
+    end;
+
+begin
+  done:= true;
+  stack:=TStack.Create;
+  stackEntry.node:=tree;
+  stackEntry.depth:=0;
+  stack.append(stackEntry);
+  while stack.len > 0 do
+    begin
+    stackEntry:= stack.pop;
+    node:=stackEntry.node;
+    depth:=stackEntry.depth;
+    if node <> nil then
+      begin
+      condition:= ((node.left = nil) and (node.right = nil))
+        or ((node.left.val <> nil) and (node.right.val <> nil));
+      if (depth >= 4) and (node.val <> nil) and condition then
+        begin
+        //Go up the stack to find left node
+        prevNode:=node.left;
+        currNode:=node;
+        while (currNode <> nil)
+          and ((currNode.left = prevNode)
+          or (currNode.left = nil)) do
+            begin
+            prevNode:=currNode;
+            currNode:=currNode.parent;
+            if currNode <> nil then
+              begin
+              //currNode has a left child; we go all the way down
+              currNode:= currNode.left;
+              while currNode.val = nil do
+                begin
+                if currNode.right <> nil
+                  then currNode:=currNode.right
+                else currNode:=currNode.left;
+                end;
+              currNode.val.value:= currNode.val.value + node.left.val.value;
+              end;
+            end;
+
+        //do the same with the right node
+        prevNode := node.right;
+        currNode := node;
+        while (currNode <> nil)
+          and ((currNode.right = prevNode)
+          or (currNode.right = nil)) do
+            begin
+            prevNode := currNode;
+            currNode := currNode.parent;
+            //Right node must exist
+            if currNode <> nil then
+              begin
+              //Now cur_idx has a left child; we go all the way down
+              currNode := currNode.right;
+              while currNode.val <> nil do
+                begin
+                if currNode.left <> nil
+                  then currNode := currNode.left
+                else currNode := currNode.right;
+                //Update some values!
+                currNode.val.value := currNode.val.value + node.right.val.value;
+                end;
+              end
+            end;
+        //then update the exploding node
+        node.val.value:=0;
+        node.left:=nil;
+        node.right:=nil;
+
+        done:= false;
+        break;
+        end; //depth >= 4
+      addToStack(node.right, depth + 1);
+      addToStack(node.left, depth + 1);
+      end; //node not nil
+    end; //stackLength > 0
+
+  //look for splits later
+  if not done
+    then
+      begin
+      reduce(tree);
+      exit;
+      end;
+  stack.clear;
+  addToStack(tree,0);
+  while stack.len > 0 do
+    begin
+    node:= stack.pop.node;
+    if node <> nil then
+      begin
+      if node.val <> nil then
+        begin
+        //split
+        if (node.left = nil) and (node.right = nil)
+          and (node.val.value >= 10) then
+          begin
+          node:= splitNode(node);
+          end;
+        end;
+        addToStack(node.right,0);
+        addToStack(node.left,0);
+      end;
+
+    end;
+
+
+  //  while len(stack) > 0:
+  //
+  //
+  //      if node.val != None:
+  //          # Split!
+  //          assert node.left == None and node.right == None
+  //          if node.val >= 10:
+  //              node.left = Node(node.val//2)
+  //              node.right = Node(node.val - (node.val//2))
+  //              node.left.par = node
+  //              node.right.par = node
+  //              node.val = None
+  //
+  //              done = False
+  //              break
+
+  //
+  //  # If not done, keep going
+  //  if not done:
+  //      reduce(root)
+
+
+
+end;
+
+function THomework.magnitude(tree: TNode): integer;
+begin
+  if tree.val is TInt
+    then result:=tree.val.value
+  else result:= (3 * magnitude(tree.left)) + (2 * magnitude(tree.right))
+end;
+
+{ TInt }
+constructor TInt.create(value: integer);
+begin
+  fValue:=value;
+end;
+
+{ TNode }
+constructor TNode.create(val: TInt);
+begin
+fLeft:=nil;
+fRight:=nil;
+fParent:=nil;
+fVal:=val;
+end;
+
+
+//Old method below
 { TSnailfish }
 const separators: array [0..2] of string = ('[',',',']');
 
@@ -177,6 +531,8 @@ var
   done,finished:boolean;
   index:integer;
 begin
+//should be able to do this recursively
+//need a 'find snailfish number' method
 output:=copy(input,0);
 done:=false;
 while not done do

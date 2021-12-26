@@ -1287,8 +1287,14 @@ begin
 end;
 
 procedure TmainForm.day18part2;
+var
+  puzzleInput:TStringArray;
+  homework:THomework;
 begin
-
+  //tree version of part 1
+  puzzleInput:=getPuzzleInputAsStringArray('day_18_1.txt');
+  homework:=THomework.create(puzzleInput);
+  homework.doHomework;
 end;
 
 
