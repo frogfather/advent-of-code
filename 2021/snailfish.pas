@@ -87,6 +87,7 @@ type
     private
     fPuzzleInput:TStringArray;
     fTree: TNode;
+    fAnswer: integer;
     function splitSfNumber(sfNumber:string):TStringArray;
     function parse(fishNum: string): TNode;
     function add(t1,t2:TNode):TNode;
@@ -95,6 +96,7 @@ type
     public
     constructor create(puzzleInput:TStringArray);
     procedure doHomework;
+    property answer: integer read FAnswer;
   end;
 
 
@@ -145,7 +147,10 @@ var
 begin
   fTree:=parse(fPuzzleInput[0]);
   for index:= 1 to pred(length(fPuzzleInput)) do
+    begin
     fTree:= add(fTree, parse(fPuzzleInput[index]));
+    end;
+  fAnswer:= magnitude(fTree);
 end;
 
 function THomework.splitSfNumber(sfNumber: string): TStringArray;
@@ -186,29 +191,36 @@ end;
 function THomework.parse(fishNum: string): TNode;
 var
   parts:TStringArray;
+  currentNode:TNode;
 begin
-  result:=TNode.create(nil);
+  currentNode:=TNode.create(nil);
   parts:=splitSfNumber(fishNum);
   if length(parts) = 1 then
     begin
-    result.setValue(parts[0].ToInteger);
-    end else
+    currentNode.setValue(parts[0].ToInteger);
+    end
+  else
     begin
-    result.left:=parse(parts[0]);
-    result.right:=parse(parts[1]);
-    result.left.parent:=result;
-    result.right.parent:=result;
+    currentNode.left:=parse(parts[0]);
+    currentNode.right:=parse(parts[1]);
+    currentNode.left.parent:=currentNode;
+    currentNode.right.parent:=currentNode;
+    currentNode:= reduce(currentNode);
     end;
-  reduce(result);
+  result:=currentNode;
 end;
 
 function THomework.add(t1, t2: TNode): TNode;
+var
+  currentNode:TNode;
 begin
-  result:=TNode.create(nil);
-  result.left:=t1;
-  result.right:=t2;
-  result.left.parent:= result;
-  result.right.parent:= result;
+  currentNode:=TNode.create(nil);
+  currentNode.left:=t1;
+  currentNode.right:=t2;
+  currentNode.left.parent:= currentNode;
+  currentNode.right.parent:= currentNode;
+  currentNode:= reduce(currentNode);
+  result:=currentNode;
 end;
 
 function THomework.reduce(tree: TNode): TNode;
@@ -296,9 +308,9 @@ begin
             if currNode.left <> nil
               then currNode := currNode.left
             else currNode := currNode.right;
-            //Update some values!
-            currNode.setValue(currNode.getValue + node.right.getValue);
             end;
+          //Update some values!
+          currNode.setValue(currNode.getValue + node.right.getValue);
           end;
         //then update the exploding node
         node.setValue(0);
@@ -324,7 +336,9 @@ begin
   addToStack(tree,0);
   while stack.len > 0 do
     begin
-    node:= stack.pop.node;
+    stackEntry:= stack.pop;
+    node:=stackEntry.node;
+    depth:=stackEntry.depth;
     if node <> nil then
       begin
       if (node.fVal <> nil) then
@@ -335,10 +349,11 @@ begin
           begin
           node:= splitNode(node);
           done:=false;
+          break;
           end;
         end;
-        addToStack(node.right,0);
-        addToStack(node.left,0);
+        addToStack(node.right,depth+1);
+        addToStack(node.left,depth+1);
       end;
     end;
   if not done then reduce(tree);
@@ -347,9 +362,16 @@ end;
 
 function THomework.magnitude(tree: TNode): integer;
 begin
+
+  //if tree.val <> nil then
+  //doLog(fLevel.ToString+' tree value '+ tree.val.value.ToString);
+
   if tree.val is TInt
     then result:=tree.val.value
-  else result:= (3 * magnitude(tree.left)) + (2 * magnitude(tree.right))
+  else
+    begin
+    result:= (3 * magnitude(tree.left)) + (2 * magnitude(tree.right));
+    end;
 end;
 
 { TInt }
