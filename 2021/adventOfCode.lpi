@@ -30,7 +30,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="19">
+    <Units Count="18">
       <Unit0>
         <Filename Value="adventOfCode.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -114,14 +114,6 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="cavePassage"/>
       </Unit17>
-      <Unit18>
-        <Filename Value="treeview.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="NodeGraphForm"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="treeView"/>
-      </Unit18>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -5,7 +5,7 @@ unit snailfish;
 interface
 
 uses
-  Classes, SysUtils,aocUtils,math,regexpr,fgl;
+  Classes, SysUtils,aocUtils,math,regexpr,fgl,treeView;
 type
   
   { TSnailfish } //Original implementation - v slow!
@@ -320,38 +320,6 @@ begin
         done:= false;
         break;
         end; //depth >= 4
-
-      if (node.left <> nil) then
-      begin
-      if (node.left.left <> nil) then
-        begin
-        doLog((depth+1).ToString+' Add left child which has left child');
-        end;
-      if (node.left.right <> nil) then
-        begin
-        doLog((depth+1).ToString+' Add left child which has right child');
-        end;
-      if (node.left.val <> nil) then
-        begin
-        doLog((depth+1).ToString+' Add left child with value '+node.left.val.value.ToString);
-        end;
-      end;
-
-      if (node.right <> nil) then
-      begin
-      if (node.right.left <> nil) then
-        begin
-        doLog((depth+1).ToString+' Add right child which has left child');
-        end;
-      if (node.right.right <> nil) then
-        begin
-        doLog((depth+1).ToString+' Add right child which has right child');
-        end;
-      if (node.right.val <> nil) then
-        begin
-        doLog((depth+1).ToString+' Add right child with value '+node.right.val.value.ToString);
-        end;
-      end;
       addToStack(node.right, depth + 1);
       addToStack(node.left, depth + 1);
       end; //node not nil
@@ -402,34 +370,8 @@ begin
     then result:=tree.val.value
   else
     begin
-    flevel:=flevel+1;
     result:= (3 * magnitude(tree.left)) + (2 * magnitude(tree.right));
-    flevel:=flevel-1;
-    doLog(fLevel.ToString+' result now '+ result.ToString);
     end;
-end;
-
-procedure THomework.doLog(message: String);
-begin
-  fLog.Add(message);
-end;
-
-procedure THomework.checkTree(tree:TNode);
-begin
-  if tree = nil then exit;
-  if tree.left <> nil then
-    begin
-    fLevel:=fLevel+1;
-    checkTree(tree.left);
-    fLevel:=fLevel-1;
-    end;
-  if tree.right <> nil then
-  begin
-    fLevel:=fLevel+1;
-    checkTree(tree.right);
-    fLevel:=fLevel-1;
-    end;
-  if tree.val <> nil then doLog(fLevel.ToString+' Value is '+tree.val.value.ToString);
 end;
 
 { TInt }
