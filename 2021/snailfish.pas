@@ -5,7 +5,7 @@ unit snailfish;
 interface
 
 uses
-  Classes, SysUtils,aocUtils,math,regexpr,fgl;
+  Classes, SysUtils,aocUtils,math,regexpr,treeView;
 type
   
   { TSnailfish } //Original implementation - v slow!
@@ -29,7 +29,7 @@ type
     function getNumberAtPosition(input:string;position:integer):integer;
     public
     constructor create(puzzleInput:TStringArray);
-    procedure doHomework;
+    procedure doHomework(withTreeView:boolean=false);
     property sum: int64 read fSum;
   end;
 
@@ -688,7 +688,7 @@ begin
   fNumbers:=puzzleInput;
 end;
 
-procedure TSnailfish.doHomework;
+procedure TSnailfish.doHomework(withTreeView:boolean=false);
 var
   sfLineNo,explodeIndex,splitIndex:integer;
   sfsum:string;

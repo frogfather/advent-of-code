@@ -5,7 +5,7 @@ unit snailfish;
 interface
 
 uses
-  Classes, SysUtils,aocUtils,math,regexpr,fgl,treeView;
+  Classes, SysUtils,aocUtils,math,regexpr,fgl;
 type
   
   { TSnailfish } //Original implementation - v slow!

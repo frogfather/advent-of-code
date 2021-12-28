@@ -8,7 +8,7 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, advent, bingo, ventMap, arrayUtils, anysort, paintbox, octopus,
-  origami, polymer, chiton, packet, trickshot, snailfish, cavePassage;
+  origami, polymer, chiton, packet, trickshot, snailfish, cavePassage, treeView;
 
 {$R *.res}
 
@@ -17,6 +17,7 @@ begin
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TmainForm, mainForm);
+  Application.CreateForm(TtreeForm, treeForm);
   Application.Run;
 end.
 
