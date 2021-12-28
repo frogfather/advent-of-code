@@ -1295,7 +1295,6 @@ begin
   puzzleInput:=getPuzzleInputAsStringArray('day_18_1.txt');
   homework:=THomework.create(puzzleInput);
   homework.doHomework;
-  //lbResults.Items:=homework.log;
   lbResults.Items.Add('Sum '+homework.answer.ToString);
 end;
 

@@ -118,6 +118,7 @@
         <Filename Value="treeview.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="treeForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="treeView"/>
       </Unit18>

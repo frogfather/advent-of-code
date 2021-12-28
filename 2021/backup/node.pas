@@ -20,18 +20,21 @@ type
   { TNode }
   TNode = class(TInterfacedObject)
     private
+    fLevel:integer;
     fVal:TInt;
     fLeft: TNode;
     fRight: TNode;
     fParent: TNode;
-    function getValue:integer;
-    procedure setValue(val:integer);
     public
     constructor create(val:TInt);
+    destructor destroy;
+    function getValue:integer;
+    procedure setValue(val:integer);
     property left: TNode read fLeft write fLeft;
     property right: TNode read fRight write fRight;
     property parent: TNode read fParent write fParent;
     property val: TInt read fVal write fVal;
+    property level: integer read fLevel;
   end;
 
 implementation
@@ -59,10 +62,17 @@ end;
 { TNode }
 constructor TNode.create(val: TInt);
 begin
+fLevel:=0;
 fLeft:=nil;
 fRight:=nil;
 fParent:=nil;
 fVal:=val;
+end;
+
+destructor TNode.destroy;
+begin
+inherited destroy;
+  writeLn('oops');
 end;
 
 

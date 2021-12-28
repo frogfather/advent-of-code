@@ -62,15 +62,18 @@ type
     fPuzzleInput:TStringArray;
     fTree: TNode;
     fAnswer: integer;
+    fLevel:integer;
     function splitSfNumber(sfNumber:string):TStringArray;
     function parse(fishNum: string): TNode;
     function add(t1,t2:TNode):TNode;
     function reduce(tree:TNode):TNode;
     function magnitude(tree:TNode):integer;
+    function getLevel:integer;
     public
     constructor create(puzzleInput:TStringArray);
     procedure doHomework(withTreeView:boolean=false);
     property answer: integer read FAnswer;
+    property level: integer read getLevel;
   end;
 
 
@@ -125,7 +128,11 @@ begin
     fTree:= add(fTree, parse(fPuzzleInput[index]));
     end;
   fAnswer:= magnitude(fTree);
-  if withTreeView then treeForm.ShowModal;
+  if withTreeView then
+    begin
+    treeForm.tree:=fTree;
+    treeForm.ShowModal;
+    end;
 end;
 
 function THomework.splitSfNumber(sfNumber: string): TStringArray;
@@ -347,6 +354,12 @@ begin
     begin
     result:= (3 * magnitude(tree.left)) + (2 * magnitude(tree.right));
     end;
+end;
+
+function THomework.getLevel: integer;
+begin
+  result:=fLevel;
+  fLevel:=fLevel+1;
 end;
 
 

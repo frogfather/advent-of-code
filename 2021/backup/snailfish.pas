@@ -62,15 +62,18 @@ type
     fPuzzleInput:TStringArray;
     fTree: TNode;
     fAnswer: integer;
+    fLevel:integer;
     function splitSfNumber(sfNumber:string):TStringArray;
     function parse(fishNum: string): TNode;
     function add(t1,t2:TNode):TNode;
     function reduce(tree:TNode):TNode;
     function magnitude(tree:TNode):integer;
+    function getLevel:integer;
     public
     constructor create(puzzleInput:TStringArray);
     procedure doHomework(withTreeView:boolean=false);
     property answer: integer read FAnswer;
+    property level: integer read getLevel;
   end;
 
 
@@ -125,7 +128,11 @@ begin
     fTree:= add(fTree, parse(fPuzzleInput[index]));
     end;
   fAnswer:= magnitude(fTree);
-  if withTreeView then treeForm.ShowModal;
+  if withTreeView then
+    begin
+    treeForm.tree:=fTree;
+    treeForm.ShowModal;
+    end;
 end;
 
 function THomework.splitSfNumber(sfNumber: string): TStringArray;
@@ -168,7 +175,7 @@ var
   parts:TStringArray;
   currentNode:TNode;
 begin
-  currentNode:=TNode.create(nil);
+  currentNode:=TNode.create(nil, getLevel);
   parts:=splitSfNumber(fishNum);
   if length(parts) = 1 then
     begin
@@ -189,7 +196,7 @@ function THomework.add(t1, t2: TNode): TNode;
 var
   currentNode:TNode;
 begin
-  currentNode:=TNode.create(nil);
+  currentNode:=TNode.create(nil, getLevel);
   currentNode.left:=t1;
   currentNode.right:=t2;
   currentNode.left.parent:= currentNode;
@@ -218,8 +225,8 @@ var
     begin
     lowValue:=node.getValue div 2;
     highValue:=node.getValue - lowValue;
-    node.left := TNode.create(TInt.create(lowValue));
-    node.right := TNode.create(TInt.create(highValue));
+    node.left := TNode.create(TInt.create(lowValue), getLevel);
+    node.right := TNode.create(TInt.create(highValue), getLevel);
     node.left.parent := node;
     node.right.parent := node;
     node.val := nil;
@@ -320,7 +327,7 @@ begin
         begin
         //split
         if (node.left = nil) and (node.right = nil)
-          and (node.fVal <> nil) and (node.getValue >= 10) then
+          and (node.val <> nil) and (node.getValue >= 10) then
           begin
           node:= splitNode(node);
           done:=false;
@@ -347,6 +354,12 @@ begin
     begin
     result:= (3 * magnitude(tree.left)) + (2 * magnitude(tree.right));
     end;
+end;
+
+function THomework.getLevel: integer;
+begin
+  result:=fLevel;
+  fLevel:=fLevel+1;
 end;
 
 
