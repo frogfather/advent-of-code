@@ -106,17 +106,21 @@
         <IsPartOfProject Value="True"/>
       </Unit15>
       <Unit16>
-        <Filename Value="rangecalc.pas"/>
+        <Filename Value="snailfish.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit16>
       <Unit17>
-        <Filename Value="snailfish.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit17>
-      <Unit18>
         <Filename Value="cavepassage.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="cavePassage"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="treeview.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="NodeGraphForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="treeView"/>
       </Unit18>
     </Units>
   </ProjectOptions>
@@ -127,6 +131,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="test"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>
