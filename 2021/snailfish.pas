@@ -29,7 +29,7 @@ type
     function getNumberAtPosition(input:string;position:integer):integer;
     public
     constructor create(puzzleInput:TStringArray);
-    procedure doHomework(withTreeView:boolean=false);
+    procedure doHomework;
     property sum: int64 read fSum;
   end;
 
@@ -95,7 +95,7 @@ type
     function magnitude(tree:TNode):integer;
     public
     constructor create(puzzleInput:TStringArray);
-    procedure doHomework;
+    procedure doHomework(withTreeView:boolean=false);
     property answer: integer read FAnswer;
   end;
 
@@ -141,7 +141,7 @@ begin
   if length(puzzleInput) = 0 then exit;
 end;
 
-procedure THomework.doHomework;
+procedure THomework.doHomework(withTreeView:boolean=false);
 var
   index:integer;
 begin
