@@ -5,7 +5,7 @@ unit snailfish;
 interface
 
 uses
-  Classes, SysUtils,aocUtils,math,regexpr,treeView;
+  Classes, SysUtils,aocUtils,math,regexpr,node,treeView;
 type
   
   { TSnailfish } //Original implementation - v slow!
@@ -31,32 +31,6 @@ type
     constructor create(puzzleInput:TStringArray);
     procedure doHomework;
     property sum: int64 read fSum;
-  end;
-
-  { TInt } //provides an integer we can set to nil
-  TInt = class(TInterfacedObject)
-    private
-    fValue:integer;
-    public
-    constructor create(value:integer);
-    property value: integer read fValue write fValue;
-  end;
-
-  { TNode }
-  TNode = class(TInterfacedObject)
-    private
-    fVal:TInt;
-    fLeft: TNode;
-    fRight: TNode;
-    fParent: TNode;
-    function getValue:integer;
-    procedure setValue(val:integer);
-    public
-    constructor create(val:TInt);
-    property left: TNode read fLeft write fLeft;
-    property right: TNode read fRight write fRight;
-    property parent: TNode read fParent write fParent;
-    property val: TInt read fVal write fVal;
   end;
 
   { TStackEntry }
@@ -151,6 +125,7 @@ begin
     fTree:= add(fTree, parse(fPuzzleInput[index]));
     end;
   fAnswer:= magnitude(fTree);
+  if withTreeView then treeForm.ShowModal;
 end;
 
 function THomework.splitSfNumber(sfNumber: string): TStringArray;
@@ -247,7 +222,7 @@ var
     node.right := TNode.create(TInt.create(highValue));
     node.left.parent := node;
     node.right.parent := node;
-    node.fval := nil;
+    node.val := nil;
     result:=node;
     end;
 
@@ -279,7 +254,7 @@ begin
         if currNode <> nil then
           begin
           currNode:= currNode.left;
-          while currNode.fVal = nil do
+          while currNode.val = nil do
             begin
             if currNode.right <> nil
               then currNode:=currNode.right
@@ -303,7 +278,7 @@ begin
           begin
           //Now cur_idx has a right child; we go all the way down
           currNode := currNode.right;
-          while currNode.fVal = nil do
+          while currNode.val = nil do
             begin
             if currNode.left <> nil
               then currNode := currNode.left
@@ -341,11 +316,11 @@ begin
     depth:=stackEntry.depth;
     if node <> nil then
       begin
-      if (node.fVal <> nil) then
+      if (node.val <> nil) then
         begin
         //split
         if (node.left = nil) and (node.right = nil)
-          and (node.fVal <> nil) and (node.getValue >= 10) then
+          and (node.val <> nil) and (node.getValue >= 10) then
           begin
           node:= splitNode(node);
           done:=false;
@@ -374,34 +349,6 @@ begin
     end;
 end;
 
-{ TInt }
-constructor TInt.create(value: integer);
-begin
-  fValue:=value;
-end;
-
-function TNode.getValue: integer;
-begin
-  if fVal <> nil
-    then result := fVal.value
-  else result:=0; //not strictly correct but we have to return something
-end;
-
-procedure TNode.setValue(val: integer);
-begin
-  if fVal = nil
-    then fVal:= TInt.create(val)
-  else fVal.value:=val;
-end;
-
-{ TNode }
-constructor TNode.create(val: TInt);
-begin
-fLeft:=nil;
-fRight:=nil;
-fParent:=nil;
-fVal:=val;
-end;
 
 
 //Old method below
@@ -688,7 +635,7 @@ begin
   fNumbers:=puzzleInput;
 end;
 
-procedure TSnailfish.doHomework(withTreeView:boolean=false);
+procedure TSnailfish.doHomework;
 var
   sfLineNo,explodeIndex,splitIndex:integer;
   sfsum:string;

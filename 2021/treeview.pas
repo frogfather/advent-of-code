@@ -5,10 +5,9 @@ unit treeView;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,node;
 
 type
-
   { TtreeForm }
 
   TtreeForm = class(TForm)
@@ -17,6 +16,7 @@ type
     Panel1: TPanel;
     procedure PaintBox1Paint(Sender: TObject);
   private
+    fTree: TNode;
 
   public
 

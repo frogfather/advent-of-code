@@ -5,22 +5,44 @@ unit treeView;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,node;
 
 type
-  TForm1 = class(TForm)
+
+  { TtreeForm }
+
+  TtreeForm = class(TForm)
+    Button1: TButton;
+    PaintBox1: TPaintBox;
+    Panel1: TPanel;
+    procedure PaintBox1Paint(Sender: TObject);
   private
+    fTree: TNode;
 
   public
 
   end;
 
 var
-  Form1: TForm1;
+  treeForm: TtreeForm;
 
 implementation
 
 {$R *.lfm}
+
+{ TInt }
+
+constructor TInt.create(value: integer);
+begin
+  fValue:=value;
+end;
+
+{ TtreeForm }
+
+procedure TtreeForm.PaintBox1Paint(Sender: TObject);
+begin
+
+end;
 
 end.
 
