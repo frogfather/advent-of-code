@@ -17,8 +17,8 @@
         <ComponentName Value="mainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="1279"/>
-        <CursorPos X="23" Y="1297"/>
+        <TopLine Value="331"/>
+        <CursorPos X="11" Y="334"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -34,9 +34,12 @@
       <Unit3>
         <Filename Value="bingo.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="5" Y="105"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="243"/>
+        <CursorPos X="35" Y="260"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit3>
       <Unit4>
         <Filename Value="ventmap.pas"/>
@@ -143,12 +146,10 @@
       <Unit17>
         <Filename Value="snailfish.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="377"/>
         <CursorPos X="5" Y="376"/>
         <UsageCount Value="150"/>
-        <Loaded Value="True"/>
       </Unit17>
       <Unit18>
         <Filename Value="cavepassage.pas"/>
@@ -231,127 +232,63 @@
         <UsageCount Value="10"/>
       </Unit28>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="14" HistoryIndex="13">
       <Position1>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="426" TopLine="411"/>
-      </Position1>
-      <Position2>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="420" TopLine="411"/>
-      </Position2>
-      <Position3>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="421" TopLine="411"/>
-      </Position3>
-      <Position4>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="430" TopLine="411"/>
-      </Position4>
-      <Position5>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="426" TopLine="411"/>
-      </Position5>
-      <Position6>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="420" TopLine="411"/>
-      </Position6>
-      <Position7>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="421" TopLine="411"/>
-      </Position7>
-      <Position8>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="430" TopLine="411"/>
-      </Position8>
-      <Position9>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="426" TopLine="411"/>
-      </Position9>
-      <Position10>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="427" TopLine="411"/>
-      </Position10>
-      <Position11>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="428" TopLine="411"/>
-      </Position11>
-      <Position12>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="430" TopLine="411"/>
-      </Position12>
-      <Position13>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="426" TopLine="411"/>
-      </Position13>
-      <Position14>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="420" TopLine="411"/>
-      </Position14>
-      <Position15>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="425" TopLine="411"/>
-      </Position15>
-      <Position16>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="426" TopLine="411"/>
-      </Position16>
-      <Position17>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="420" TopLine="411"/>
-      </Position17>
-      <Position18>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="421" TopLine="411"/>
-      </Position18>
-      <Position19>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="420" TopLine="411"/>
-      </Position19>
-      <Position20>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="426" TopLine="411"/>
-      </Position20>
-      <Position21>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="427" TopLine="411"/>
-      </Position21>
-      <Position22>
         <Filename Value="advent.pas"/>
         <Caret Line="1298" Column="5" TopLine="1280"/>
-      </Position22>
-      <Position23>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="424" TopLine="411"/>
-      </Position23>
-      <Position24>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="161" TopLine="149"/>
-      </Position24>
-      <Position25>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="162" TopLine="149"/>
-      </Position25>
-      <Position26>
+      </Position1>
+      <Position2>
         <Filename Value="advent.pas"/>
         <Caret Line="1299" TopLine="1280"/>
-      </Position26>
-      <Position27>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="90" Column="22" TopLine="82"/>
-      </Position27>
-      <Position28>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="140" Column="3" TopLine="128"/>
-      </Position28>
-      <Position29>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="264" Column="12" TopLine="259"/>
-      </Position29>
-      <Position30>
-        <Filename Value="snailfish.pas"/>
-        <Caret Line="313" Column="70" TopLine="301"/>
-      </Position30>
+      </Position2>
+      <Position3>
+        <Filename Value="advent.pas"/>
+        <Caret Line="1297" Column="23" TopLine="1260"/>
+      </Position3>
+      <Position4>
+        <Filename Value="advent.pas"/>
+        <Caret Line="334" Column="11" TopLine="331"/>
+      </Position4>
+      <Position5>
+        <Filename Value="bingo.pas"/>
+        <Caret Line="251" Column="9" TopLine="241"/>
+      </Position5>
+      <Position6>
+        <Filename Value="bingo.pas"/>
+        <Caret Line="10" Column="49"/>
+      </Position6>
+      <Position7>
+        <Filename Value="bingo.pas"/>
+        <Caret Line="178" Column="37" TopLine="166"/>
+      </Position7>
+      <Position8>
+        <Filename Value="bingo.pas"/>
+        <Caret Line="189" Column="37" TopLine="177"/>
+      </Position8>
+      <Position9>
+        <Filename Value="bingo.pas"/>
+        <Caret Line="206" Column="29" TopLine="195"/>
+      </Position9>
+      <Position10>
+        <Filename Value="bingo.pas"/>
+        <Caret Line="196" Column="24" TopLine="189"/>
+      </Position10>
+      <Position11>
+        <Filename Value="bingo.pas"/>
+        <Caret Line="210" Column="60" TopLine="199"/>
+      </Position11>
+      <Position12>
+        <Filename Value="bingo.pas"/>
+        <Caret Line="230" Column="68" TopLine="218"/>
+      </Position12>
+      <Position13>
+        <Filename Value="bingo.pas"/>
+        <Caret Line="229" Column="33" TopLine="218"/>
+      </Position13>
+      <Position14>
+        <Filename Value="bingo.pas"/>
+        <Caret Line="224" Column="22" TopLine="213"/>
+      </Position14>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
