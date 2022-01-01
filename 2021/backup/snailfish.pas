@@ -122,6 +122,7 @@ procedure THomework.doHomework(withTreeView:boolean=false);
 var
   index:integer;
 begin
+  if length(fPuzzleInput) = 0 then exit;
   fTree:=parse(fPuzzleInput[0]);
   for index:= 1 to pred(length(fPuzzleInput)) do
     begin
@@ -175,7 +176,7 @@ var
   parts:TStringArray;
   currentNode:TNode;
 begin
-  currentNode:=TNode.create(nil, getLevel);
+  currentNode:=TNode.create(nil);
   parts:=splitSfNumber(fishNum);
   if length(parts) = 1 then
     begin
@@ -196,7 +197,7 @@ function THomework.add(t1, t2: TNode): TNode;
 var
   currentNode:TNode;
 begin
-  currentNode:=TNode.create(nil, getLevel);
+  currentNode:=TNode.create(nil);
   currentNode.left:=t1;
   currentNode.right:=t2;
   currentNode.left.parent:= currentNode;
@@ -225,8 +226,8 @@ var
     begin
     lowValue:=node.getValue div 2;
     highValue:=node.getValue - lowValue;
-    node.left := TNode.create(TInt.create(lowValue), getLevel);
-    node.right := TNode.create(TInt.create(highValue), getLevel);
+    node.left := TNode.create(TInt.create(lowValue));
+    node.right := TNode.create(TInt.create(highValue));
     node.left.parent := node;
     node.right.parent := node;
     node.val := nil;
@@ -476,24 +477,13 @@ var
   output,replacement:string;
   numberWidth: integer;
   numberBeforeSplit,leftNumber,rightNumber:integer;
-  currentRoundingMode:TFPURoundingMode;
 begin
   output:=Copy(input,0);
   numberWidth:=findNumberWidth(input,position);
   if numberWidth = 0 then exit;
   numberBeforeSplit:=input.Substring(position,numberWidth).ToInteger;
-  if numberBeforeSplit mod 2 = 0 then
-    begin
-    leftNumber:=numberBeforeSplit div 2;
-    rightNumber:=numberBeforeSplit div 2;
-    end else
-    begin
-    currentRoundingMode:= setRoundMode(TFPURoundingmode.rmDown);
-    leftNumber:= round(roundTo((numberBeforeSplit/2),-1));
-    currentRoundingMode:= setRoundMode(TFPURoundingmode.rmUp);
-    rightNumber:= round(roundTo((numberBeforeSplit/2),-1));
-    setRoundMode(currentRoundingMode);
-    end;
+  leftNumber:=numberBeforeSplit div 2;
+  rightNumber:=numberBeforeSplit - leftNumber;
   replacement:='['+leftNumber.ToString+','+rightNumber.ToString+']';
   output:=output.Remove(position,numberwidth);
   output.Insert(position,replacement);

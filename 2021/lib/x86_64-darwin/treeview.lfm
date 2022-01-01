@@ -6,7 +6,6 @@ object treeForm: TtreeForm
   Caption = 'treeForm'
   ClientHeight = 667
   ClientWidth = 953
-  OnCreate = FormCreate
   OnShow = FormShow
   LCLVersion = '2.0.12.0'
   object Button1: TButton
