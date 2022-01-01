@@ -762,8 +762,9 @@ var
   currentLine:string;
   y,elementNo,basinNo,currentElement,currentBasin,itemsMarked:integer;
   basinSizes:TIntArray;
+
   //keep traversing the map until we hit 9s
-  procedure basinCrawl(var map: T3DIntMap;currentLine, currentLinePosition, currentBasin:integer);
+  procedure basinCrawl(var map: T3DIntMap; currentLine, currentLinePosition, currentBasin:integer);
   var
     mapWidth,mapHeight:integer;
     canGoDown,canGoUp,canGoLeft,canGoRight:boolean;
@@ -1294,8 +1295,7 @@ begin
   //tree version of part 1
   puzzleInput:=getPuzzleInputAsStringArray('day_18_1.txt');
   homework:=THomework.create(puzzleInput);
-  homework.doHomework;
-  //lbResults.Items:=homework.log;
+  homework.doHomework(true);
   lbResults.Items.Add('Sum '+homework.answer.ToString);
 end;
 

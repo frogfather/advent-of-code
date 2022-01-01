@@ -5,7 +5,7 @@ unit snailfish;
 interface
 
 uses
-  Classes, SysUtils,aocUtils,math,regexpr,fgl;
+  Classes, SysUtils,aocUtils,math,regexpr,node,treeView;
 type
   
   { TSnailfish } //Original implementation - v slow!
@@ -31,32 +31,6 @@ type
     constructor create(puzzleInput:TStringArray);
     procedure doHomework;
     property sum: int64 read fSum;
-  end;
-
-  { TInt } //provides an integer we can set to nil
-  TInt = class(TInterfacedObject)
-    private
-    fValue:integer;
-    public
-    constructor create(value:integer);
-    property value: integer read fValue write fValue;
-  end;
-
-  { TNode }
-  TNode = class(TInterfacedObject)
-    private
-    fVal:TInt;
-    fLeft: TNode;
-    fRight: TNode;
-    fParent: TNode;
-    function getValue:integer;
-    procedure setValue(val:integer);
-    public
-    constructor create(val:TInt);
-    property left: TNode read fLeft write fLeft;
-    property right: TNode read fRight write fRight;
-    property parent: TNode read fParent write fParent;
-    property val: TInt read fVal write fVal;
   end;
 
   { TStackEntry }
@@ -88,15 +62,18 @@ type
     fPuzzleInput:TStringArray;
     fTree: TNode;
     fAnswer: integer;
+    fLevel:integer;
     function splitSfNumber(sfNumber:string):TStringArray;
     function parse(fishNum: string): TNode;
     function add(t1,t2:TNode):TNode;
     function reduce(tree:TNode):TNode;
     function magnitude(tree:TNode):integer;
+    function getLevel:integer;
     public
     constructor create(puzzleInput:TStringArray);
-    procedure doHomework;
+    procedure doHomework(withTreeView:boolean=false);
     property answer: integer read FAnswer;
+    property level: integer read getLevel;
   end;
 
 
@@ -141,16 +118,22 @@ begin
   if length(puzzleInput) = 0 then exit;
 end;
 
-procedure THomework.doHomework;
+procedure THomework.doHomework(withTreeView:boolean=false);
 var
   index:integer;
 begin
+  if length(fPuzzleInput) = 0 then exit;
   fTree:=parse(fPuzzleInput[0]);
   for index:= 1 to pred(length(fPuzzleInput)) do
     begin
     fTree:= add(fTree, parse(fPuzzleInput[index]));
     end;
   fAnswer:= magnitude(fTree);
+  if withTreeView then
+    begin
+    treeForm.tree:=fTree;
+    treeForm.ShowModal;
+    end;
 end;
 
 function THomework.splitSfNumber(sfNumber: string): TStringArray;
@@ -247,7 +230,7 @@ var
     node.right := TNode.create(TInt.create(highValue));
     node.left.parent := node;
     node.right.parent := node;
-    node.fval := nil;
+    node.val := nil;
     result:=node;
     end;
 
@@ -279,7 +262,7 @@ begin
         if currNode <> nil then
           begin
           currNode:= currNode.left;
-          while currNode.fVal = nil do
+          while currNode.val = nil do
             begin
             if currNode.right <> nil
               then currNode:=currNode.right
@@ -303,7 +286,7 @@ begin
           begin
           //Now cur_idx has a right child; we go all the way down
           currNode := currNode.right;
-          while currNode.fVal = nil do
+          while currNode.val = nil do
             begin
             if currNode.left <> nil
               then currNode := currNode.left
@@ -320,38 +303,6 @@ begin
         done:= false;
         break;
         end; //depth >= 4
-
-      if (node.left <> nil) then
-      begin
-      if (node.left.left <> nil) then
-        begin
-        doLog((depth+1).ToString+' Add left child which has left child');
-        end;
-      if (node.left.right <> nil) then
-        begin
-        doLog((depth+1).ToString+' Add left child which has right child');
-        end;
-      if (node.left.val <> nil) then
-        begin
-        doLog((depth+1).ToString+' Add left child with value '+node.left.val.value.ToString);
-        end;
-      end;
-
-      if (node.right <> nil) then
-      begin
-      if (node.right.left <> nil) then
-        begin
-        doLog((depth+1).ToString+' Add right child which has left child');
-        end;
-      if (node.right.right <> nil) then
-        begin
-        doLog((depth+1).ToString+' Add right child which has right child');
-        end;
-      if (node.right.val <> nil) then
-        begin
-        doLog((depth+1).ToString+' Add right child with value '+node.right.val.value.ToString);
-        end;
-      end;
       addToStack(node.right, depth + 1);
       addToStack(node.left, depth + 1);
       end; //node not nil
@@ -373,11 +324,11 @@ begin
     depth:=stackEntry.depth;
     if node <> nil then
       begin
-      if (node.fVal <> nil) then
+      if (node.val <> nil) then
         begin
         //split
         if (node.left = nil) and (node.right = nil)
-          and (node.fVal <> nil) and (node.getValue >= 10) then
+          and (node.val <> nil) and (node.getValue >= 10) then
           begin
           node:= splitNode(node);
           done:=false;
@@ -402,64 +353,16 @@ begin
     then result:=tree.val.value
   else
     begin
-    flevel:=flevel+1;
     result:= (3 * magnitude(tree.left)) + (2 * magnitude(tree.right));
-    flevel:=flevel-1;
-    doLog(fLevel.ToString+' result now '+ result.ToString);
     end;
 end;
 
-procedure THomework.doLog(message: String);
+function THomework.getLevel: integer;
 begin
-  fLog.Add(message);
+  result:=fLevel;
+  fLevel:=fLevel+1;
 end;
 
-procedure THomework.checkTree(tree:TNode);
-begin
-  if tree = nil then exit;
-  if tree.left <> nil then
-    begin
-    fLevel:=fLevel+1;
-    checkTree(tree.left);
-    fLevel:=fLevel-1;
-    end;
-  if tree.right <> nil then
-  begin
-    fLevel:=fLevel+1;
-    checkTree(tree.right);
-    fLevel:=fLevel-1;
-    end;
-  if tree.val <> nil then doLog(fLevel.ToString+' Value is '+tree.val.value.ToString);
-end;
-
-{ TInt }
-constructor TInt.create(value: integer);
-begin
-  fValue:=value;
-end;
-
-function TNode.getValue: integer;
-begin
-  if fVal <> nil
-    then result := fVal.value
-  else result:=0; //not strictly correct but we have to return something
-end;
-
-procedure TNode.setValue(val: integer);
-begin
-  if fVal = nil
-    then fVal:= TInt.create(val)
-  else fVal.value:=val;
-end;
-
-{ TNode }
-constructor TNode.create(val: TInt);
-begin
-fLeft:=nil;
-fRight:=nil;
-fParent:=nil;
-fVal:=val;
-end;
 
 
 //Old method below
@@ -574,24 +477,13 @@ var
   output,replacement:string;
   numberWidth: integer;
   numberBeforeSplit,leftNumber,rightNumber:integer;
-  currentRoundingMode:TFPURoundingMode;
 begin
   output:=Copy(input,0);
   numberWidth:=findNumberWidth(input,position);
   if numberWidth = 0 then exit;
   numberBeforeSplit:=input.Substring(position,numberWidth).ToInteger;
-  if numberBeforeSplit mod 2 = 0 then
-    begin
-    leftNumber:=numberBeforeSplit div 2;
-    rightNumber:=numberBeforeSplit div 2;
-    end else
-    begin
-    currentRoundingMode:= setRoundMode(TFPURoundingmode.rmDown);
-    leftNumber:= round(roundTo((numberBeforeSplit/2),-1));
-    currentRoundingMode:= setRoundMode(TFPURoundingmode.rmUp);
-    rightNumber:= round(roundTo((numberBeforeSplit/2),-1));
-    setRoundMode(currentRoundingMode);
-    end;
+  leftNumber:=numberBeforeSplit div 2;
+  rightNumber:=numberBeforeSplit - leftNumber;
   replacement:='['+leftNumber.ToString+','+rightNumber.ToString+']';
   output:=output.Remove(position,numberwidth);
   output.Insert(position,replacement);

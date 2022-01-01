@@ -762,8 +762,9 @@ var
   currentLine:string;
   y,elementNo,basinNo,currentElement,currentBasin,itemsMarked:integer;
   basinSizes:TIntArray;
+
   //keep traversing the map until we hit 9s
-  procedure basinCrawl(var map: T3DIntMap;currentLine, currentLinePosition, currentBasin:integer);
+  procedure basinCrawl(var map: T3DIntMap; currentLine, currentLinePosition, currentBasin:integer);
   var
     mapWidth,mapHeight:integer;
     canGoDown,canGoUp,canGoLeft,canGoRight:boolean;

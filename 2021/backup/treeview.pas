@@ -76,11 +76,11 @@ begin
   else nodeText:=node.val.value.ToString;
   with paintbox1.Canvas do
     begin
+    Ellipse(nodeRect);
     brush.Color:=$00009901;
     brush.Color:=fBrushColour;
     pen.Color:=clYellow;
     pen.Color:=fPenColour;
-    Ellipse(nodeRect);
     TextOut(
       nodeRect.Left + (nodeWidth div 2) - (TextExtent(nodeText).Width div 2),
       nodeRect.Top + (nodeHt div 4),
