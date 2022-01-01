@@ -18,8 +18,9 @@
         <ComponentName Value="mainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="1276"/>
-        <CursorPos X="17" Y="1282"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="1281"/>
+        <CursorPos X="22" Y="1298"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit1>
@@ -137,7 +138,6 @@
       <Unit16>
         <Filename Value="snailfish.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <TopLine Value="475"/>
         <CursorPos X="52" Y="479"/>
