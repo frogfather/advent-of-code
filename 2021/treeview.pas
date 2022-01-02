@@ -43,7 +43,12 @@ implementation
 
 procedure TtreeForm.PaintBox1Paint(Sender: TObject);
 begin
-  crawlTree(fTree,0,paintbox1.Width div 2, true);
+  with paintbox1 do
+    begin
+    canvas.Brush.Color:=clGray;
+    canvas.rectangle(0,0,canvas.width,canvas.height);
+    crawlTree(fTree,0,paintbox1.Width div 2, true);
+    end;
 end;
 
 procedure TtreeForm.FormShow(Sender: TObject);

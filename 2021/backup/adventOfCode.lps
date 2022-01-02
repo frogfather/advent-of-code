@@ -18,8 +18,8 @@
         <ComponentName Value="mainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="1227"/>
-        <CursorPos X="22" Y="1298"/>
+        <TopLine Value="1282"/>
+        <CursorPos X="28" Y="1298"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -138,10 +138,9 @@
       <Unit16>
         <Filename Value="snailfish.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="63"/>
-        <CursorPos X="7" Y="71"/>
+        <TopLine Value="118"/>
+        <CursorPos X="12" Y="134"/>
         <UsageCount Value="173"/>
         <Loaded Value="True"/>
       </Unit16>
@@ -161,10 +160,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="treeView"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="71"/>
-        <CursorPos X="17" Y="81"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="72"/>
+        <CursorPos X="42" Y="80"/>
         <UsageCount Value="38"/>
+        <Loaded Value="True"/>
       </Unit18>
       <Unit19>
         <Filename Value="node.pas"/>
@@ -290,7 +291,7 @@
         <UsageCount Value="10"/>
       </Unit35>
     </Units>
-    <JumpHistory Count="22" HistoryIndex="21">
+    <JumpHistory Count="23" HistoryIndex="22">
       <Position1>
         <Filename Value="advent.pas"/>
         <Caret Line="1295" Column="56" TopLine="1287"/>
@@ -379,6 +380,10 @@
         <Filename Value="snailfish.pas"/>
         <Caret Line="367" TopLine="354"/>
       </Position22>
+      <Position23>
+        <Filename Value="snailfish.pas"/>
+        <Caret Line="134" Column="12" TopLine="118"/>
+      </Position23>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>

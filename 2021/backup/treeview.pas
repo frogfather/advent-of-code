@@ -43,7 +43,12 @@ implementation
 
 procedure TtreeForm.PaintBox1Paint(Sender: TObject);
 begin
-  crawlTree(fTree,0,paintbox1.Width div 2, true);
+  with paintbox1 do
+    begin
+    canvas.Brush.Color:=clGray;
+    canvas.rectangle(0,0,canvas.width,canvas.height);
+    crawlTree(fTree,0,paintbox1.Width div 2, true);
+    end;
 end;
 
 procedure TtreeForm.FormShow(Sender: TObject);
@@ -72,15 +77,16 @@ begin
   nodeRect.Right:=nodePos.X + (nodeWidth div 2);
   nodeRect.Top:=nodePos.Y;
   nodeRect.Bottom:=nodePos.Y + nodeHt;
-  if node.val = nil then nodeText:= node.ToString
+  if node.val = nil then nodeText:= node.GetHashCode.ToString
   else nodeText:=node.val.value.ToString;
   with paintbox1.Canvas do
     begin
-    Ellipse(nodeRect);
     brush.Color:=$00009901;
     brush.Color:=fBrushColour;
     pen.Color:=clYellow;
     pen.Color:=fPenColour;
+    font.Size:=6;
+    Ellipse(nodeRect);
     TextOut(
       nodeRect.Left + (nodeWidth div 2) - (TextExtent(nodeText).Width div 2),
       nodeRect.Top + (nodeHt div 4),

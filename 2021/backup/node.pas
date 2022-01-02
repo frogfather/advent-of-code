@@ -20,21 +20,19 @@ type
   { TNode }
   TNode = class(TInterfacedObject)
     private
-    fLevel:integer;
     fVal:TInt;
     fLeft: TNode;
     fRight: TNode;
     fParent: TNode;
     public
     constructor create(val:TInt);
-    destructor destroy;
     function getValue:integer;
     procedure setValue(val:integer);
+    function toString:ansiString; override;
     property left: TNode read fLeft write fLeft;
     property right: TNode read fRight write fRight;
     property parent: TNode read fParent write fParent;
     property val: TInt read fVal write fVal;
-    property level: integer read fLevel;
   end;
 
 implementation
@@ -59,21 +57,20 @@ begin
   else fVal.value:=val;
 end;
 
+function TNode.toString: ansiString;
+begin
+  Result:='myToString';
+end;
+
 { TNode }
 constructor TNode.create(val: TInt);
 begin
-fLevel:=0;
 fLeft:=nil;
 fRight:=nil;
 fParent:=nil;
 fVal:=val;
 end;
 
-destructor TNode.destroy;
-begin
-inherited destroy;
-  writeLn('oops');
-end;
 
 
 end.
