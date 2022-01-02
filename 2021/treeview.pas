@@ -22,14 +22,14 @@ type
     procedure drawLink(parentNodePos,childNodePos:TPoint);
     procedure crawlTree(node:TNode;level,hPos:integer; doPaint:boolean=false);
   private
-    fTree: TNode;
+    fNode: TNode;
     fMaxDepth:integer;
     fNodeHeight:integer;
     fBrushColour:TColor;
     fPenColour:TColor;
     property nodeHeight: integer read fNodeHeight write fNodeHeight;
   public
-    property tree: TNode read fTree write fTree;
+    property tree: TNode read fNode write fNode;
   end;
 
 var
@@ -47,7 +47,7 @@ begin
     begin
     canvas.Brush.Color:=clGray;
     canvas.rectangle(0,0,canvas.width,canvas.height);
-    crawlTree(fTree,0,paintbox1.Width div 2, true);
+    crawlTree(fNode,0,paintbox1.Width div 2, true);
     end;
 end;
 
@@ -61,7 +61,7 @@ end;
 procedure TtreeForm.setTreeDimensions;
 begin
   fMaxDepth:=0;
-  crawlTree(fTree,0, paintbox1.Width div 2);
+  crawlTree(fNode,0, paintbox1.Width div 2);
   nodeHeight:=paintbox1.Height div (2 * fMaxDepth);
 end;
 

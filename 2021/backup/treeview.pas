@@ -77,7 +77,7 @@ begin
   nodeRect.Right:=nodePos.X + (nodeWidth div 2);
   nodeRect.Top:=nodePos.Y;
   nodeRect.Bottom:=nodePos.Y + nodeHt;
-  if node.val = nil then nodeText:= node.GetHashCode.ToString
+  if node.val = nil then nodeText:= node.ToString
   else nodeText:=node.val.value.ToString;
   with paintbox1.Canvas do
     begin
@@ -85,7 +85,6 @@ begin
     brush.Color:=fBrushColour;
     pen.Color:=clYellow;
     pen.Color:=fPenColour;
-    font.Size:=6;
     Ellipse(nodeRect);
     TextOut(
       nodeRect.Left + (nodeWidth div 2) - (TextExtent(nodeText).Width div 2),
