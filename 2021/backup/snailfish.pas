@@ -5,7 +5,7 @@ unit snailfish;
 interface
 
 uses
-  Classes, SysUtils,aocUtils,math,regexpr,node,treeView;
+  Classes, SysUtils,aocUtils,regexpr,node,treeView;
 type
   
   { TSnailfish } //Original implementation - v slow!
@@ -61,19 +61,19 @@ type
     private
     fPuzzleInput:TStringArray;
     fTree: TNode;
+    fStack: TStack;
     fAnswer: integer;
-    fLevel:integer;
     function splitSfNumber(sfNumber:string):TStringArray;
     function parse(fishNum: string): TNode;
     function add(t1,t2:TNode):TNode;
     function reduce(tree:TNode):TNode;
     function magnitude(tree:TNode):integer;
-    function getLevel:integer;
+    //function getLevel:integer;
+    property stack: TStack read fStack;
     public
     constructor create(puzzleInput:TStringArray);
     procedure doHomework(withTreeView:boolean=false);
     property answer: integer read FAnswer;
-    property level: integer read getLevel;
   end;
 
 
@@ -114,6 +114,7 @@ end;
 { THomework }
 constructor THomework.create(puzzleInput: TStringArray);
 begin
+  fStack:=TStack.create;
   fPuzzleInput:=puzzleInput;
   if length(puzzleInput) = 0 then exit;
 end;
@@ -208,11 +209,12 @@ end;
 
 function THomework.reduce(tree: TNode): TNode;
 var
-  stack: TStack;
   done, condition: Boolean;
   stackEntry:TStackEntry;
   node,prevNode,currNode:TNode;
   depth:integer;
+
+  childInfo,hasValues:string;
 
   procedure addToStack(node:TNode; depth:integer);
     begin
@@ -236,7 +238,7 @@ var
 
 begin
   done:= true;
-  stack:=TStack.Create;
+  stack.clear;
   addToStack(tree,0);
   while stack.len > 0 do
     begin
@@ -281,10 +283,8 @@ begin
             prevNode := currNode;
             currNode := currNode.parent;
             end;
-          //Right node must exist
         if currNode <> nil then
           begin
-          //Now cur_idx has a right child; we go all the way down
           currNode := currNode.right;
           while currNode.val = nil do
             begin
@@ -295,6 +295,7 @@ begin
           //Update some values!
           currNode.setValue(currNode.getValue + node.right.getValue);
           end;
+
         //then update the exploding node
         node.setValue(0);
         node.left:=nil;
@@ -315,6 +316,7 @@ begin
       reduce(tree);
       exit;
       end;
+
   stack.clear;
   addToStack(tree,0);
   while stack.len > 0 do
@@ -357,11 +359,11 @@ begin
     end;
 end;
 
-function THomework.getLevel: integer;
-begin
-  result:=fLevel;
-  fLevel:=fLevel+1;
-end;
+//function THomework.getLevel: integer;
+//begin
+//  result:=fLevel;
+//  fLevel:=fLevel+1;
+//end;
 
 
 
