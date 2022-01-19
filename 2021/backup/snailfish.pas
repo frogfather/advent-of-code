@@ -68,7 +68,6 @@ type
     function add(t1,t2:TNode):TNode;
     function reduce(tree:TNode):TNode;
     function magnitude(tree:TNode):integer;
-    //function getLevel:integer;
     property stack: TStack read fStack;
     public
     constructor create(puzzleInput:TStringArray);
@@ -214,14 +213,13 @@ var
   node,prevNode,currNode:TNode;
   depth:integer;
 
-  childInfo,hasValues:string;
-
   procedure addToStack(node:TNode; depth:integer);
     begin
     stackEntry.node:=node;
     stackEntry.depth:= depth;
     stack.append(stackEntry);
     end;
+
   function splitNode(node:TNode):TNode;
   var
     lowValue,highValue:integer;
@@ -347,10 +345,6 @@ end;
 
 function THomework.magnitude(tree: TNode): integer;
 begin
-
-  //if tree.val <> nil then
-  //doLog(fLevel.ToString+' tree value '+ tree.val.value.ToString);
-
   if tree.val is TInt
     then result:=tree.val.value
   else
@@ -358,14 +352,6 @@ begin
     result:= (3 * magnitude(tree.left)) + (2 * magnitude(tree.right));
     end;
 end;
-
-//function THomework.getLevel: integer;
-//begin
-//  result:=fLevel;
-//  fLevel:=fLevel+1;
-//end;
-
-
 
 //Old method below
 { TSnailfish }
