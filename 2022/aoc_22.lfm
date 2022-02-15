@@ -1,0 +1,54 @@
+object Runner: TRunner
+  Left = 141
+  Height = 523
+  Top = 100
+  Width = 1089
+  Caption = 'Runner'
+  ClientHeight = 523
+  ClientWidth = 1089
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  LCLVersion = '2.0.12.0'
+  object Memo1: TMemo
+    Left = 16
+    Height = 404
+    Top = 56
+    Width = 528
+    Anchors = [akTop, akLeft, akBottom]
+    Lines.Strings = (    )
+    TabOrder = 0
+  end
+  object cbSelect: TComboBox
+    Left = 80
+    Height = 20
+    Top = 8
+    Width = 196
+    ItemHeight = 19
+    OnSelect = cbSelectSelect
+    TabOrder = 1
+    Text = 'Advent of code'
+  end
+  object lbResults: TListBox
+    Left = 560
+    Height = 404
+    Top = 56
+    Width = 426
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    Font.Pitch = fpFixed
+    ItemHeight = 0
+    MultiSelect = True
+    ParentFont = False
+    TabOrder = 2
+  end
+  object bExecute: TButton
+    Left = 24
+    Height = 25
+    Top = 480
+    Width = 96
+    Anchors = [akLeft, akBottom]
+    Caption = 'Run'
+    OnClick = bExecuteClick
+    TabOrder = 3
+  end
+end
