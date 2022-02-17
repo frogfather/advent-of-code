@@ -1,9 +1,9 @@
-object Runner: TRunner
+object MainForm: TMainForm
   Left = 141
   Height = 523
   Top = 100
   Width = 1089
-  Caption = 'Runner'
+  Caption = 'MainForm'
   ClientHeight = 523
   ClientWidth = 1089
   OnCreate = FormCreate

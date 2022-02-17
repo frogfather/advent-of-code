@@ -102,7 +102,7 @@ var
   n: longint;
   txt: string;
   begin
-    if not fileExists(fnam) then exit; //Log something?
+    if not fileExists(fnam) then exit;
     txt := '';
     strm := TFileStream.Create(fnam, fmOpenRead);
     try

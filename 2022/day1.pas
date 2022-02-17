@@ -5,51 +5,37 @@ unit day1;
 interface
 
 uses
-  Classes, SysUtils,iAoc,fileUtilities,lazLogger;
+  Classes, SysUtils, aocPuzzle,LazLogger;
 type
   
   { TDayOne }
-  TDayOne = class(TInterfacedObject,iAdvent)
-    private
-    fResults:TStringlist;
-    fData:string;
-    function getResults:TStringlist;
-    procedure runPartOne;
-    procedure runPartTwo;
-    public
-    constructor create(filename:String);
-    procedure run(partOne:boolean=true);
-    property results:TStringlist read getResults;
+  TDayOne = class(TAocPuzzle)
+  private
+  procedure runPartOne; override;
+  procedure runPartTwo; override;
+  public
+  constructor create(filename:string);
   end;
 
 implementation
 
 { TDayOne }
 
-constructor TDayOne.create(filename: String);
+constructor TDayOne.create(filename:string);
 begin
-  fData:=readStream(filename);
-end;
-
-function TDayOne.getResults: TStringlist;
-begin
-  result:=fResults;
-end;
-
-procedure TDayOne.run(partOne: boolean);
-begin
-  if partOne then runPartOne else runPartTwo;
+inherited create(filename);
+//parent loads file as string;
 end;
 
 //Private methods
 procedure TDayOne.runPartOne;
 begin
-
+  DebugLn('run part one');
 end;
 
 procedure TDayOne.runPartTwo;
 begin
-
+  DebugLn('run part two');
 end;
 
 end.

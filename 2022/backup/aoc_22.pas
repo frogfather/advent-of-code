@@ -5,16 +5,16 @@ unit aoc_22;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics,lazLogger,
-  Dialogs, StdCtrls, Math, clipbrd, fgl, DateUtils, fpJSON,
+  Classes, SysUtils, Forms, Controls, Graphics,
+  Dialogs, StdCtrls, Math, clipbrd, DateUtils, fpJSON,
   aocUtils, arrayUtils,iAoc,
   day1;
 
 type
 
-  { TRunner }
+  { TMainForm }
 
-  TRunner = class(TForm)
+  TMainForm = class(TForm)
     bExecute: TButton;
     cbSelect: TComboBox;
     lbResults: TListBox;
@@ -34,15 +34,15 @@ type
   end;
 
 var
-  Runner: TRunner;
+  MainForm: TMainForm;
 
 implementation
 
 {$R *.lfm}
 
-{ TRunner }
+{ TMainForm }
 
-procedure TRunner.bExecuteClick(Sender: TObject);
+procedure TMainForm.bExecuteClick(Sender: TObject);
 var
   startTime, endTime: TDateTime;
   puzzle:iAdvent;
@@ -54,13 +54,12 @@ begin
   day:=(cbselect.ItemIndex div 2) + 1;
   //TODO use format here
   puzzleFile:= 'puzzle_' + day.ToString+ '.txt';
-
   case day of
-   0: puzzle:= TDayOne.Create(puzzleFile);
+   1: puzzle:= TDayOne.Create(puzzleFile);
   end;
 
   lbResults.items.add('Run puzzle '+ formatDateTime('hh:mm:ss:zz', startTime));
-  puzzle.run(cbSelect.ItemIndex mod 2 = 0);
+  puzzle.run(cbSelect.ItemIndex mod 2 = 0); override;
   endTime:=now;
 
   lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
@@ -68,29 +67,28 @@ begin
   //Add results of puzzle to listbox
 end;
 
-procedure TRunner.cbSelectSelect(Sender: TObject);
+procedure TMainForm.cbSelectSelect(Sender: TObject);
 var
   descriptionFile: string;
   day, part: integer;
 begin
-  DebugLn('Select cb item');
   divMod(cbSelect.ItemIndex, 2, day, part);
   descriptionFile := 'puzzle_' + (1 + day).ToString + '_' + (1 + part).ToString + '.txt';
   loadText(descriptionFile);
 end;
 
 
-procedure TRunner.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);
 begin
   clipboard := TClipboard.Create;
 end;
 
-procedure TRunner.FormDestroy(Sender: TObject);
+procedure TMainForm.FormDestroy(Sender: TObject);
 begin
   clipboard.Free;
 end;
 
-procedure TRunner.FormShow(Sender: TObject);
+procedure TMainForm.FormShow(Sender: TObject);
 var
   i: integer;
 begin
@@ -102,7 +100,7 @@ begin
   end;
 end;
 
-procedure TRunner.lbResultsSelectionChange(Sender: TObject; User: boolean);
+procedure TMainForm.lbResultsSelectionChange(Sender: TObject; User: boolean);
 var
   lineNo: integer;
   copiedLines: string;
@@ -119,7 +117,7 @@ begin
   clipboard.AsText := copiedLines;
 end;
 
-procedure TRunner.loadText(fileName: string);
+procedure TMainForm.loadText(fileName: string);
 begin
   memo1.Text := getDescription(fileName);
 end;

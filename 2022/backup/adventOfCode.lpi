@@ -30,7 +30,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="8">
+    <Units Count="9">
       <Unit0>
         <Filename Value="adventOfCode.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -38,7 +38,7 @@
       <Unit1>
         <Filename Value="aoc_22.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="Runner"/>
+        <ComponentName Value="MainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit1>
@@ -57,6 +57,7 @@
       <Unit5>
         <Filename Value="fileutilities.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="fileUtilities"/>
       </Unit5>
       <Unit6>
         <Filename Value="iaoc.pas"/>
@@ -67,6 +68,11 @@
         <Filename Value="day1.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit7>
+      <Unit8>
+        <Filename Value="aocpuzzle.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="aocPuzzle"/>
+      </Unit8>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
