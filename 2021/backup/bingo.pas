@@ -256,8 +256,8 @@ for currLine:=0 to pred(fRowCount) do
   currElements:=input[currLine].Split(' ',TStringSplitOptions.ExcludeEmpty);
   for currCol:=0 to pred(fColCount) do
     begin
-    fCard[currLine][currCol][0]:=currElements[currCol];
-    fCard[currLine][currCol][1]:='0';
+    fCard[currLine][currCol][0]:= currElements[currCol].ToInteger;
+    fCard[currLine][currCol][1]:= 0;
     end;
   end;
 end;

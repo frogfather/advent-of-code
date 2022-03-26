@@ -188,7 +188,7 @@ var
 constructor TPolymer.create(puzzleInput: TStringArray);
 begin
   fTemplate:=puzzleInput[0];
-  deleteFromArray(puzzleInput,0);
+  puzzleInput.splice(0,1);
   initializeInsertionRules(puzzleInput);
   initializePairMap(fTemplate);
   fDistributionMap:=TStringInt64Map.Create;

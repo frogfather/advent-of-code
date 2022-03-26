@@ -7,7 +7,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, advent, bingo, ventMap, arrayUtils, anysort, paintbox, octopus,
+  Forms, advent, bingo, ventMap, anysort, paintbox, octopus,
   origami, polymer, chiton, packet, trickshot, snailfish, cavePassage, treeView,
   node;
 

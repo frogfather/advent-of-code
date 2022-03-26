@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils,fileUtilities,math,arrayUtils;
-const strnumbers: array[0..9] of string = ('0','1','2','3','4','5','6','7','8','9');
+const strnumbers: TStringArray = ('0','1','2','3','4','5','6','7','8','9');
 
 function getPuzzleInputAsStringArray(fileName: String; removeBlankLines: boolean=true): TStringArray;
 function getPuzzleInputAsIntArray(fileName: String; removeBlankLines: boolean=true): TIntArray;
@@ -123,7 +123,7 @@ for element:=0 to pred(entryLength) do
   for entry:=pred(length(input)) downto 0 do
     begin
     if (strToInt(input[entry][element+1]) <> keepValue)
-    then deleteFromArray(input,entry);
+    then input.splice(entry,1);
     if (length(input)=1) then
       begin
       result:=input[0];
@@ -257,7 +257,14 @@ end;
 
 function getDimensionsOfPuzzleInput(input: TStringArray): TPoint;
 begin
-
+  result.X:=0;
+  result.Y:=0;
+  if length(input) = 0 then exit;
+  with result do
+    begin
+    Y:= length(input);
+    X:= length(input[0]);
+    end;
 end;
 
 end.

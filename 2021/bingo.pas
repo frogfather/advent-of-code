@@ -89,7 +89,7 @@ begin
    begin
    currentLine:=puzzleInput[lineNumber];
    if length(currentLine)> 0
-     then addToArray(currentCardData,currentLine) else
+     then currentCardData.splice(currentCardData.size,0,TStringArray.create(currentLine)) else
        begin
          //The current line is blank
          //if the currentCardData is not empty then create a bingo card from it

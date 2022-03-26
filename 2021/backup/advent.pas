@@ -401,7 +401,7 @@ begin
        //now add the new fishes to the existing ones
      for newFishNo := 0 to pred(length(newFishes)) do
        begin
-       addToArray(fishes,newFishes[newFishNo]);
+       fishes.splice(fishes.size,0,TIntArray.create(newFishes[newFishNo]));
        end;
      end;
    lbResults.items.add('number of fish '+length(fishes).ToString);
@@ -582,7 +582,7 @@ begin
    //now find out how many entries have length 2,3,4,7
    for elementNo:=0 to pred(length(outputSeq)) do
      begin
-     if (arrPos(requiredOutputs,length(outputSeq[elementNo]))> -1)
+     if requiredOutputs.indexOf(length(outputSeq[elementNo])) > -1
        then matchingOutputs := matchingOutputs+1;
      end;
    end;
@@ -888,10 +888,10 @@ end;
 { day 10 }
 procedure TmainForm.day10part1;
 const
- openingTags: array [0..3] of string = ('(','[','{','<');
- closingTags: array [0..3] of string = (')',']','}','>');
- tagScore: array[0..3] of integer = (3,57,1197,25137);
- autoCompleteScore: array[0..3] of integer = (1,2,3,4);
+ openingTags: TStringArray = ('(','[','{','<');
+ closingTags: TStringArray = (')',']','}','>');
+ tagScore: TIntArray = (3,57,1197,25137);
+ autoCompleteScore: TIntArray = (1,2,3,4);
 var
   puzzleInput:TStringArray;
   puzzleDimensions:TPoint;
@@ -915,7 +915,7 @@ var
     for index:=0 to pred(length(tags)) do
       begin
       completionTag:=tags.Substring(index,1);
-      completionTagIndex:=arrPos(closingTags,completionTag);
+      completionTagIndex:= closingTags.indexOf(completionTag);
       tagScore:=autocompleteScore[completionTagIndex];
       runningTotal:=(runningTotal*5)+tagScore;
       end;
@@ -934,17 +934,17 @@ var
     for index := 0 to pred(puzzleDimensions.Y) do
       begin
       currentTag:=input.Substring(index,1);
-      openingTagIndex := arrPos(openingTags,currentTag);
+      openingTagIndex := openingTags.indexOf(currentTag);
       //if an opening tag, add the matching closing tag to the array
       if (openingTagIndex > -1)
-        then addToArray(expectedClosingTags,closingTags[openingTagIndex])
+        then expectedClosingTags.splice(expectedClosingTags.size,0,TStringArray.create(closingTags[openingTagIndex]))
       else
         begin
         if (length(expectedClosingTags)=0)
            then expectedClosingTag:=''
         else
           begin
-          expectedClosingTag:=deleteFromArray(expectedClosingTags,pred(length(expectedClosingTags)));
+          expectedClosingTag:= expectedClosingTags.splice(pred(length(expectedClosingTags)),1)[0];
           if expectedClosingTag <> currentTag then
             begin
             result:=currentTag;
@@ -975,11 +975,11 @@ begin
     if incomplete then
       begin
       completionScore:=calculateCompletionScore(tagResult);
-      addToArray(completionScores,completionScore);
+      completionScores.splice(completionScores.size,0,TInt64Array.create(completionScore));
       end
     else if (tagResult <> '') then
       begin
-      illegalIndex:=arrPos(closingTags,tagResult);
+      illegalIndex:=closingTags.indexOf(tagResult);
       tagValue:=tagScore[illegalIndex];
       totalScore:=totalScore + tagValue;
       end;
@@ -1295,7 +1295,7 @@ begin
   //tree version of part 1
   puzzleInput:=getPuzzleInputAsStringArray('day_18_1.txt');
   homework:=THomework.create(puzzleInput);
-  homework.doHomework(true);
+  homework.doHomework;
   lbResults.Items.Add('Sum '+homework.answer.ToString);
 end;
 

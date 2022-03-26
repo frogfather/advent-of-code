@@ -37,16 +37,15 @@ implementation
 procedure TPolymer.updateMap(map: TStringInt64Map; keyVal:string; adjustment: int64);
 var
   currentValue:int64;
-  key:string;
     begin
     //find the key if it exists and increment or add
-    if not map.TryGetData(key,currentValue)
+    if not map.TryGetData(keyVal,currentValue)
       then currentValue:=adjustment
     else currentValue:=currentValue+adjustment;
     //if the adjusted value is 0 we should remove the entry
     if currentValue = 0
-      then map.Remove(key)
-    else map.AddOrSetData(key,currentValue);
+      then map.Remove(keyVal)
+    else map.AddOrSetData(keyVal,currentValue);
     end;
 
 procedure TPolymer.initializeInsertionRules(rules: TStringArray);
