@@ -31,7 +31,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="10">
+    <Units Count="11">
       <Unit0>
         <Filename Value="adventOfCode.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -44,43 +44,49 @@
         <ResourceBaseClass Value="Form"/>
       </Unit1>
       <Unit2>
-        <Filename Value="anysort.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit2>
-      <Unit3>
-        <Filename Value="arrayutils.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit3>
-      <Unit4>
-        <Filename Value="aocutils.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit4>
-      <Unit5>
-        <Filename Value="fileutilities.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="fileUtilities"/>
-      </Unit5>
-      <Unit6>
         <Filename Value="iaoc.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="iAoc"/>
-      </Unit6>
-      <Unit7>
+      </Unit2>
+      <Unit3>
         <Filename Value="day1.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit7>
-      <Unit8>
+      </Unit3>
+      <Unit4>
         <Filename Value="aocpuzzle.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="aocPuzzle"/>
-      </Unit8>
-      <Unit9>
+      </Unit4>
+      <Unit5>
         <Filename Value="visualise.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="fVisualise"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="day2.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="../common/anysort.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="../common/aocutils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="aocUtils"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="../common/arrayutils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="arrayUtils"/>
       </Unit9>
+      <Unit10>
+        <Filename Value="../common/fileutilities.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="fileUtilities"/>
+      </Unit10>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -90,6 +96,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="../common"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

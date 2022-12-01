@@ -1,7 +1,8 @@
 unit arrayUtils;
 
 {$mode objfpc}{$H+}
-
+{$MODESWITCH ADVANCEDRECORDS}
+{$modeswitch TypeHelpers}
 interface
 
 uses
@@ -9,8 +10,8 @@ uses
 type
   //Looks like the built in TintegerArray is a static array
   //so let's define our own dynamic integer array
-  TIntArray = array of integer;
-  TInt64Array = array of int64;
+  TIntArray = specialize Tarray<Integer>;
+  TInt64Array = specialize Tarray<Int64>;
   TStringMap = specialize TFPGMap<String,String>;
   TStringIntMap = specialize TFPGMap<String,Integer>;
   TStringInt64Map = specialize TFPGMap<String,Int64>;
@@ -18,17 +19,47 @@ type
   T3DIntMap = array of array of array of integer;
   T2DStringArray = array of array of string;
   TColours = array of TColor;
+  TPointArray = array of TPoint;
 
-procedure addToArray(var arrInput:TStringArray; item:string;index:integer=-1);
-procedure addToArray(var arrInput:TIntArray;item:integer;index:integer=-1);
-procedure addToArray(var arrInput:TInt64Array;item:int64;index:integer=-1);
-function deleteFromArray(var arrInput:TStringArray; index: integer):string;
-function deleteFromArray(var arrInput:TIntArray; index: integer):integer;
+  { TIntArrayHelper }
+
+  TIntArrayHelper = type helper for TIntArray
+  function size: integer;
+  function push(element:integer):integer;
+  function indexOf(element:integer):integer;
+  function splice(index:integer; deleteCount:integer=0; newItems: TIntArray=nil):TIntArray;
+  end;
+
+  { TInt64ArrayHelper }
+
+  TInt64ArrayHelper = type helper for TInt64Array
+  function size: integer;
+  function push(element:int64):integer;
+  function indexOf(element:int64):integer;
+  function splice(index:integer; deleteCount:integer=0;newItems: TInt64Array=nil):TInt64Array;
+  end;
+
+  { TStringArrayHelper }
+  TStringArrayHelper = type helper for TStringArray
+  function size: integer;
+  function push(element: string):integer;
+  function indexOf(element:string):integer;
+  function splice(index:integer; deleteCount: integer=0; newItems: TStringArray=nil):TStringArray;
+  end;
+
+  { TPointArrayHelper }
+  TPointArrayHelper = type helper for TPointArray
+  function size: integer;
+  function push(element: TPoint):integer;
+  function indexOf(element:TPoint):integer;
+  function splice(index:integer; deleteCount: integer=0; newItems: TPointArray=nil):TPointArray;
+  end;
+
 function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
-function arrPos(arrInput:TIntArray; element:integer):integer;
-function arrPos(arrInput:TStringArray; element:string):integer;
 function containsCharacters(toSearch,toFind:String):boolean;
+function intArrayToCSV(input:TIntArray):string;
+function CSVToIntArray(input:string):TIntArray;
 procedure sort(var arr: array of Integer; count: Integer; ascending:boolean=true);
 procedure sort(var arr: array of int64; count: Integer; ascending:boolean=true);
 procedure sort(var arr: array of string; count: Integer; ascending:boolean=true);
@@ -38,81 +69,6 @@ implementation
 
 const strChars: string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-procedure addToArray(var arrInput: TStringArray; item: string; index: integer);
-var
-  pos,lastItemIndex:integer;
-begin
-  //if index is -1 add at the end
-  setLength(arrInput,length(arrInput)+1);
-  lastItemIndex:= pred(length(arrInput));
-  if (index = -1) then index:=lastItemIndex; //insert at end
-  for pos:=lastItemIndex downto index do
-    begin
-    if (pos > 0) then arrInput[pos]:=arrInput[pos-1];
-    end;
-  arrInput[index]:=item;
-end;
-
-procedure addToArray(var arrInput: TIntArray; item: integer; index: integer
-  );
-var
-  pos,lastItemIndex:integer;
-begin
-  //if index is -1 add at the end
-  setLength(arrInput,length(arrInput)+1);
-  lastItemIndex:= pred(length(arrInput));
-  if (index = -1) then index:=lastItemIndex; //insert at end
-  for pos:=lastItemIndex downto index do
-    begin
-    if (pos > 0) then arrInput[pos]:=arrInput[pos-1];
-    end;
-  arrInput[index]:=item;
-end;
-
-procedure addToArray(var arrInput: TInt64Array; item: int64; index: integer);
-var
-  pos,lastItemIndex:integer;
-begin
-  //if index is -1 add at the end
-  setLength(arrInput,length(arrInput)+1);
-  lastItemIndex:= pred(length(arrInput));
-  if (index = -1) then index:=lastItemIndex; //insert at end
-  for pos:=lastItemIndex downto index do
-    begin
-    if (pos > 0) then arrInput[pos]:=arrInput[pos-1];
-    end;
-  arrInput[lastItemIndex]:=item;
-end;
-
-function deleteFromArray(var arrInput: TStringArray; index: integer):string;
-var
-  position:integer;
-begin
-  result:='';
-  if (index < 0) or (index >= length(arrInput)) then exit;
-  result:=arrInput[index];
-  for position:=index to length(arrInput) - 1 do
-    begin
-      if (position+1 < length(arrInput))
-        then arrInput[position]:=arrInput[position + 1];
-    end;
-  setLength(arrInput, length(arrInput) -1);
-end;
-
-function deleteFromArray(var arrInput: TIntArray; index: integer):integer;
-var
-  position:integer;
-begin
- if (index < 0) or (index >= length(arrInput)) then exit;
- result:=arrInput[index];
-  for position:=index to length(arrInput) - 1 do
-    begin
-      if (position+1 < length(arrInput))
-        then arrInput[position]:=arrInput[position + 1];
-    end;
-  setLength(arrInput, length(arrInput) -1);
-end;
-
 function removeBlankEntriesFromArray(arrInput: TStringArray): TStringArray;
 var
   index: integer;
@@ -121,7 +77,7 @@ begin
   for index:= pred(length(arrInput)) downto 0 do
     begin
       if (length(arrInput[index]) = 0) then
-        deleteFromArray(arrInput,index);
+        arrInput.splice(index,1);
     end;
   result:=arrInput;
 end;
@@ -135,7 +91,7 @@ begin
     try
      arrInput[index].ToString;
     except
-     deleteFromArray(arrInput,index);
+     arrInput.splice(index,1);
     end;
   result:=arrInput;
 end;
@@ -163,38 +119,6 @@ begin
       end;
     end;
   result:=output;
-end;
-
-function arrPos(arrInput: TIntArray; element: integer): integer;
-var
-  index:integer;
-begin
-  result:=-1;
-  if length(arrInput) = 0 then exit;
-  for index:=0 to pred(length(arrInput)) do
-    begin
-    if (arrInput[index] = element) then
-      begin
-      result:=index;
-      exit;
-      end;
-    end;
-end;
-
-function arrPos(arrInput: TStringArray; element: string): integer;
-var
-  index:integer;
-begin
-  result:=-1;
-  if length(arrInput) = 0 then exit;
-  for index:=0 to pred(length(arrInput)) do
-    begin
-    if (arrInput[index] = element) then
-      begin
-      result:=index;
-      exit;
-      end;
-    end;
 end;
 
 function containsCharacters(toSearch, toFind: String): boolean;
@@ -317,6 +241,40 @@ begin
     else result:=comparison div abs(comparison);
 end;
 
+function intArrayToCSV(input: TIntArray): string;
+var
+  index:integer;
+  output:string;
+begin
+  output:='';
+  for index:= 0 to pred(length(input)) do
+    begin
+    output:=output+input[index].ToString;
+    if index < pred(length(input)) then
+      output:=output + ',';
+    end;
+  result:=output;
+end;
+
+function CSVToIntArray(input: string): TIntArray;
+var
+  strArray:TStringArray;
+  output:TIntArray;
+  index:integer;
+begin
+  //should check these are integers
+  result:=nil;
+  if pos(',',input) > 0 then
+    begin
+    strArray:=input.Split(',');
+    output:=TIntArray.create;
+    setLength(output,length(strArray));
+    for index:=0 to pred(length(strArray)) do
+      output[index]:= strArray[index].ToInteger;
+    result:=output;
+    end;
+end;
+
 procedure sort(var arr: array of Integer; count: Integer;ascending:boolean=true);
 begin
   if ascending then
@@ -362,6 +320,151 @@ begin
   for index:=0 to pred(length(charArray)) do
     output:=output+charArray[index];
   str:=output;
+end;
+{ Generic functions for arrays }
+
+generic function GetIndex<T>(aItem:T; aArr: specialize TArray<T>): SizeInt;
+begin
+  for Result := 0 to High(aArr) do
+    if aArr[Result] = aItem then
+      Exit;
+  Result := -1;
+end;
+
+generic function splice<T>(var aArray: specialize TArray<T>; index, deleteCount: sizeInt; var newItems: specialize TArray<T>
+  ): specialize TArray<T>;
+var
+  normalizedCount, normalizedIndex, adjustIndex:sizeInt;
+begin
+ result:= specialize TArray<T>.create;
+ //if index is greater than or equal to the size of the array then adjust it
+  if (index > high(aArray)) then normalizedIndex:= high(aArray)
+    else normalizedIndex:= index;
+  //TODO - if index is negative should start at end of array
+
+  //if the delete normalizedCount would take us off the end of the array then adjust it
+  if (deleteCount > high(aArray) - normalizedIndex) then
+    normalizedCount:= high(aArray) - normalizedIndex
+      else normalizedCount:= deleteCount;
+
+   if(deleteCount > 0) then
+     begin
+     //add the items that are to be deleted to the result array
+     for adjustIndex:=normalizedIndex to normalizedIndex + pred(normalizedCount) do
+       insert(aArray[adjustIndex],result,length(result));
+     for adjustIndex:= normalizedIndex to pred(length(aArray) - normalizedCount) do
+       aArray[adjustIndex]:= aArray[adjustIndex + normalizedCount];
+     setLength(aArray, length(aArray) - normalizedCount);
+     end;
+
+   if (newItems <> nil) then
+     begin
+     setLength(aArray, length(aArray) + length(newItems));
+
+     for adjustIndex:= high(aArray) downTo normalizedIndex + 1 do
+       aArray[adjustIndex]:= aArray[adjustIndex - length(newItems)];
+
+     for adjustIndex:= 0 to high(newItems) do
+       aArray[index+adjustIndex]:= newItems[adjustIndex];
+     end;
+end;
+
+{ TPointArrayHelper }
+
+function TPointArrayHelper.size: integer;
+begin
+  result:=length(self);
+end;
+
+function TPointArrayHelper.push(element: TPoint): integer;
+begin
+  insert(element,self,length(self));
+  result:=self.size;
+end;
+
+function TPointArrayHelper.indexOf(element: TPoint): integer;
+begin
+  result:= specialize getIndex<TPoint>(element,self);
+end;
+
+function TPointArrayHelper.splice(index: integer; deleteCount: integer;
+  newItems: TPointArray): TPointArray;
+begin
+  result:= specialize splice<TPoint>(self,index,deleteCount,newItems);
+end;
+
+{ TStringArrayHelper }
+
+function TStringArrayHelper.size: integer;
+begin
+  result:= length(self);
+end;
+
+function TStringArrayHelper.push(element: string): integer;
+begin
+  insert(element,self,length(self));
+  result:=self.size;
+end;
+
+function TStringArrayHelper.indexOf(element: string): integer;
+begin
+  result:= specialize getIndex<string>(element,self);
+end;
+
+function TStringArrayHelper.splice(index: integer; deleteCount: integer;
+  newItems: TStringArray): TStringArray;
+begin
+  result:= specialize splice<string>(self,index,deleteCount, newItems);
+end;
+
+
+
+{ TInt64ArrayHelper }
+
+function TInt64ArrayHelper.size: integer;
+begin
+  result:= length(self);
+end;
+
+function TInt64ArrayHelper.push(element: int64): integer;
+begin
+  insert(element,self,length(self));
+  result:=self.size;
+end;
+
+function TInt64ArrayHelper.indexOf(element: int64): integer;
+begin
+  result:= specialize getIndex<int64>(element,self);
+end;
+
+function TInt64ArrayHelper.splice(index: integer; deleteCount: integer;
+  newItems: TInt64Array): TInt64Array;
+begin
+  result:= specialize splice<int64>(self,index,deleteCount,newItems);
+end;
+
+{ TIntArrayHelper }
+
+function TIntArrayHelper.size: integer;
+begin
+  result:=length(self);
+end;
+
+function TIntArrayHelper.push(element: integer): integer;
+begin
+  insert(element,self,length(self));
+  result:=self.size;
+end;
+
+function TIntArrayHelper.indexOf(element: integer): integer;
+begin
+  result:= specialize getIndex<integer>(element,self);
+end;
+
+function TIntArrayHelper.splice(index, deleteCount: integer; newItems: TIntArray
+  ): TIntArray;
+begin
+ result:= specialize splice<integer>(self,index,deleteCount,newItems);
 end;
 
 end.

@@ -49,17 +49,19 @@ begin
       if li=mi then ms:=hs;
       if hi=mi then ms:=ls;
       // end fix
-      inc(ls, Stride); inc(li);
-      dec(hs, Stride); dec(hi);
+      inc(ls, Stride); inc(li); //increase ls by stride and li by 1
+      dec(hs, Stride); dec(hi); //decrease hs by stride and hi by 1
     end;
-  until ls>hs;
+  until ls>hs; //continue until ls is greater than hs
   if hi>idxL then AnyQuickSort(Arr, idxL, hi, Stride, CompareFunc, SwapBuf, MedBuf);
   if li<idxH then AnyQuickSort(Arr, li, idxH, Stride, CompareFunc, SwapBuf, MedBuf);
 end;
 
 procedure AnySort(var Arr; Count: Integer; Stride: Integer; CompareFunc: TCompareFunc; start:integer=0);
+type
+  TByteArray = array of byte;
 var
-  buf: array of byte;
+  buf: TByteArray;
 begin
   if Count <= 1 then Exit; // should be more than 1 to be sortable
   SetLength(buf, Stride*2);

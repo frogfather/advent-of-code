@@ -121,7 +121,7 @@ for element:=0 to pred(entryLength) do
   for entry:=pred(length(input)) downto 0 do
     begin
     if (strToInt(input[entry][element+1]) <> keepValue)
-    then input.splice(entry,1);
+    then deleteFromArray(input,entry);
     if (length(input)=1) then
       begin
       result:=input[0];
@@ -241,16 +241,15 @@ end;
 function isNumberString(input: string): boolean;
 var
   index:integer;
+  element:String;
 begin
   result:=true;
   if length(input) = 0 then result:= false else
   for index:=0 to pred(length(input)) do
     begin
-      try
-        input.Substring(index,1).ToInteger;
-      except
-        result:=false;
-      end;
+    element:=input.Substring(index,1);
+    if arrPos(strNumbers,element) = -1
+      then result:=false;
     end;
 end;
 
