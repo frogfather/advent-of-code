@@ -54,6 +54,7 @@
       <Unit4>
         <Filename Value="aocutils.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="aocUtils"/>
       </Unit4>
       <Unit5>
         <Filename Value="fileutilities.pas"/>

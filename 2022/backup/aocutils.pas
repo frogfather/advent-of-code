@@ -146,7 +146,7 @@ end;
 function getDescription(fileName: String): String;
 begin
   try
-    result:=readStream(fileName);
+    result:=readStream(descriptionDir+fileName);
   except
     result:='No description for this puzzle'
   end;

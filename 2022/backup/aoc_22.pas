@@ -22,6 +22,7 @@ type
     Memo1: TMemo;
     clipboard: TClipboard;
     procedure bExecuteClick(Sender: TObject);
+    procedure bVisualiseClick(Sender: TObject);
     procedure cbSelectSelect(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -46,6 +47,10 @@ implementation
 
 { TMainForm }
 
+const aocDirectory = '/Users/cloudsoft/Code/advent-of-code/2022/';
+const puzzleDataDirectory = aocDirectory+'input/';
+const puzzleDescriptionDirectory = aocDirectory+'puzzle_description/';
+
 procedure TMainForm.bExecuteClick(Sender: TObject);
 var
   startTime, endTime: TDateTime;
@@ -60,19 +65,24 @@ begin
 
 end;
 
+procedure TMainForm.bVisualiseClick(Sender: TObject);
+begin
+  fVisualise.Show;
+end;
+
 procedure TMainForm.cbSelectSelect(Sender: TObject);
 var
   day, part: integer;
 begin
   divMod(cbSelect.ItemIndex, 2, day, part);
-  fpuzzleFile:= 'puzzle_' + day.ToString+ '.txt';
+  fpuzzleFile:= puzzleDataDirectory+'puzzle_' + (day+1).ToString+ '.txt';
   part:=succ(part);
   day:=succ(day);
   case day of
    1: fpuzzle:= TDayOne.Create(fpuzzleFile,fVisualise.paintbox1);
   end;
   bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
-  fdescriptionFile := 'puzzle_' + day.ToString + '_' + part.ToString + '.txt';
+  fdescriptionFile := puzzleDescriptionDirectory+'puzzle_' + (day+1).ToString + '_' + part.ToString + '.txt';
   loadText(fdescriptionFile);
 
 end;

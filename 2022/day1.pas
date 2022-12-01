@@ -12,10 +12,10 @@ type
   TDayOne = class(TAocPuzzle)
   private
   fName:string;
-  procedure runPartOne; override;
-  procedure runPartTwo; override;
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
+  procedure runPartOne; override;
+  procedure runPartTwo; override;
   end;
 
 implementation
@@ -25,7 +25,6 @@ implementation
 constructor TDayOne.create(filename:string;paintbox_:TPaintbox);
 begin
 inherited create(filename,paintbox_);
-//if paintbox <> nil then paintbox.OnPaint:=@doPaint;
 fName:= 'Day 1';
 //parent loads file as string;
 end;

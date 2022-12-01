@@ -17,12 +17,13 @@ type
     fResults: TStringList;
     fData: string;
     function getResults: TStringList;
-  public
-    constructor Create(filename: string;paintbox:TPaintBox = nil);
+    procedure setResults(results_:TStringlist);
     procedure runPartOne; virtual abstract;
     procedure runPartTwo; virtual abstract;
+  public
+    constructor Create(filename: string;paintbox:TPaintBox = nil);
     procedure run(partOne: boolean = True);
-    property results: TStringList read getResults;
+    property results: TStringList read getResults write setResults;
     property paintbox: TPaintbox read fPaintbox;
   end;
 
@@ -30,7 +31,7 @@ implementation
 
 { TAocPuzzle }
 
-constructor TAocPuzzle.Create(filename: string; paintbox:TPaintbox);
+constructor TAocPuzzle.Create(filename: string; paintbox: TPaintBox);
 begin
   fPaintbox:=paintbox;
   try
@@ -49,6 +50,11 @@ end;
 function TAocPuzzle.getResults: TStringList;
 begin
   result:=fResults;
+end;
+
+procedure TAocPuzzle.setResults(results_: TStringlist);
+begin
+  if (results_ is TStringlist) then fResults:=results_;
 end;
 
 end.

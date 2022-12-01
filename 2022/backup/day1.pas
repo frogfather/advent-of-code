@@ -12,11 +12,10 @@ type
   TDayOne = class(TAocPuzzle)
   private
   fName:string;
-  procedure runPartOne; override;
-  procedure runPartTwo; override;
-  procedure doPaint(sender:TObject);reintroduce;
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
+  procedure runPartOne; override;
+  procedure runPartTwo; override;
   end;
 
 implementation
@@ -41,28 +40,6 @@ procedure TDayOne.runPartTwo;
 begin
   DebugLn('run part two');
 end;
-
-procedure TDayOne.doPaint(sender: TObject);
-var
-  topLeft,topRight,bottomLeft,bottomRight:TPoint;
-begin
-  topLeft.X:= 0;
-  topLeft.Y:= 0;
-  topRight.X:=paintbox.Canvas.Width;
-  topRight.Y:=0;
-  bottomLeft.X:=0;
-  bottomLeft.Y:=paintbox.Canvas.Height;
-  bottomRight.X:= paintbox.Canvas.width;
-  bottomRight.Y:= paintbox.Canvas.height;
-  with paintbox.Canvas do
-   begin
-     pen.Width:=6;
-     pen.Color:=clGreen;
-     Line(topLeft,bottomRight);
-     Line(bottomLeft,topRight);
-   end;
-end;
-
 
 end.
 
