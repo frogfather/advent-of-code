@@ -25,6 +25,7 @@ type
     procedure run(partOne: boolean = True);
     property results: TStringList read getResults write setResults;
     property paintbox: TPaintbox read fPaintbox;
+    property puzzleInput:string read fData;
   end;
 
 implementation
@@ -33,6 +34,7 @@ implementation
 
 constructor TAocPuzzle.Create(filename: string; paintbox: TPaintBox);
 begin
+  fResults:=TStringlist.Create;
   fPaintbox:=paintbox;
   try
   fData:=readStream(filename);

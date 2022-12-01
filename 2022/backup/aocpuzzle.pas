@@ -18,13 +18,14 @@ type
     fData: string;
     function getResults: TStringList;
     procedure setResults(results_:TStringlist);
-    procedure runPartOne; virtual abstract;
-    procedure runPartTwo; virtual abstract;
   public
     constructor Create(filename: string;paintbox:TPaintBox = nil);
+    procedure runPartOne; virtual abstract;
+    procedure runPartTwo; virtual abstract;
     procedure run(partOne: boolean = True);
     property results: TStringList read getResults write setResults;
     property paintbox: TPaintbox read fPaintbox;
+    property puzzleInput:string read fData;
   end;
 
 implementation

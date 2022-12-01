@@ -57,10 +57,12 @@ var
 begin
   lbresults.Clear;
   startTime := now;
-  lbResults.items.add('Run puzzle '+ formatDateTime('hh:mm:ss:zz', startTime));
+
   fpuzzle.run(cbSelect.ItemIndex mod 2 = 0);
   endTime:=now;
-  lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
+  lbResults.Items:=fPuzzle.getResults;
+  lbResults.items.Insert(0,'Start '+ formatDateTime('hh:mm:ss:zz', startTime));
+  lbResults.items.add('End '+formatDateTime('hh:mm:ss:zz',endTime));
   lbResults.Items.Add('Time: '+inttostr(millisecondsBetween(endTime,startTime))+' ms');
 
 end;
@@ -79,7 +81,7 @@ begin
   day:=succ(day);
   fpuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '.txt';
   case day of
-   1: fpuzzle:= TDayOne.Create(fpuzzleFile,fVisualise.paintbox1);
+   1: fpuzzle:= TDayOne.Create(fpuzzleFile);
   end;
   bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
   fdescriptionFile := puzzleDescriptionDirectory+'puzzle_' + day.ToString + '_' + part.ToString + '.txt';

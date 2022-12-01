@@ -121,7 +121,7 @@ for element:=0 to pred(entryLength) do
   for entry:=pred(length(input)) downto 0 do
     begin
     if (strToInt(input[entry][element+1]) <> keepValue)
-    then deleteFromArray(input,entry);
+    then input.splice(entry,1);
     if (length(input)=1) then
       begin
       result:=input[0];
@@ -146,7 +146,7 @@ end;
 function getDescription(fileName: String): String;
 begin
   try
-    result:=readStream(descriptionDir+fileName);
+    result:=readStream(fileName);
   except
     result:='No description for this puzzle'
   end;

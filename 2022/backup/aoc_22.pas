@@ -57,9 +57,11 @@ var
 begin
   lbresults.Clear;
   startTime := now;
-  lbResults.items.add('Run puzzle '+ formatDateTime('hh:mm:ss:zz', startTime));
+
   fpuzzle.run(cbSelect.ItemIndex mod 2 = 0);
   endTime:=now;
+  lbResults.Items:=fPuzzle.getResults;
+  lbResults.items.Insert(0,'Run puzzle '+ formatDateTime('hh:mm:ss:zz', startTime));
   lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
   lbResults.Items.Add('Time: '+inttostr(millisecondsBetween(endTime,startTime))+' ms');
 
@@ -75,14 +77,14 @@ var
   day, part: integer;
 begin
   divMod(cbSelect.ItemIndex, 2, day, part);
-  fpuzzleFile:= puzzleDataDirectory+'puzzle_' + (day+1).ToString+ '.txt';
   part:=succ(part);
   day:=succ(day);
+  fpuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '.txt';
   case day of
-   1: fpuzzle:= TDayOne.Create(fpuzzleFile,fVisualise.paintbox1);
+   1: fpuzzle:= TDayOne.Create(fpuzzleFile);
   end;
   bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
-  fdescriptionFile := puzzleDescriptionDirectory+'puzzle_' + (day+1).ToString + '_' + part.ToString + '.txt';
+  fdescriptionFile := puzzleDescriptionDirectory+'puzzle_' + day.ToString + '_' + part.ToString + '.txt';
   loadText(fdescriptionFile);
 
 end;
