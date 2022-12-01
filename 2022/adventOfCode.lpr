@@ -7,7 +7,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, aoc_22, iAoc, day1, aocPuzzle
+  Forms, aoc_22, iAoc, day1, aocPuzzle, visualise
   { you can add units after this };
 
 {$R *.res}
@@ -17,6 +17,7 @@ begin
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TMainForm, MainForm);
+  Application.CreateForm(TfVisualise, fVisualise);
   Application.Run;
 end.
 

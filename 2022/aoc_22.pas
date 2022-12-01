@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics,
-  Dialogs, StdCtrls, Math, clipbrd, DateUtils, fpJSON,
-  aocUtils, arrayUtils,iAoc,
+  Dialogs, StdCtrls, Math, clipbrd, ExtCtrls, DateUtils, fpJSON,
+  aocUtils, arrayUtils,iAoc,visualise,
   day1;
 
 type
@@ -16,17 +16,22 @@ type
 
   TMainForm = class(TForm)
     bExecute: TButton;
+    bVisualise: TButton;
     cbSelect: TComboBox;
     lbResults: TListBox;
     Memo1: TMemo;
     clipboard: TClipboard;
     procedure bExecuteClick(Sender: TObject);
+    procedure bVisualiseClick(Sender: TObject);
     procedure cbSelectSelect(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure lbResultsSelectionChange(Sender: TObject; User: boolean);
   private
+    fPuzzleFile: string;
+    fDescriptionFile: string;
+    fPuzzle: iAdvent;
     procedure loadText(fileName: string);
 
   public
@@ -45,36 +50,37 @@ implementation
 procedure TMainForm.bExecuteClick(Sender: TObject);
 var
   startTime, endTime: TDateTime;
-  puzzle:iAdvent;
-  puzzleFile: string;
-  day: integer;
 begin
   lbresults.Clear;
   startTime := now;
-  day:=(cbselect.ItemIndex div 2) + 1;
-  //TODO use format here
-  puzzleFile:= 'puzzle_' + day.ToString+ '.txt';
-  case day of
-   1: puzzle:= TDayOne.Create(puzzleFile);
-  end;
-
   lbResults.items.add('Run puzzle '+ formatDateTime('hh:mm:ss:zz', startTime));
-  puzzle.run(cbSelect.ItemIndex mod 2 = 0);
+  fpuzzle.run(cbSelect.ItemIndex mod 2 = 0);
   endTime:=now;
-
   lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
   lbResults.Items.Add('Time: '+inttostr(millisecondsBetween(endTime,startTime))+' ms');
-  //Add results of puzzle to listbox
+
+end;
+
+procedure TMainForm.bVisualiseClick(Sender: TObject);
+begin
+  fVisualise.Show;
 end;
 
 procedure TMainForm.cbSelectSelect(Sender: TObject);
 var
-  descriptionFile: string;
   day, part: integer;
 begin
   divMod(cbSelect.ItemIndex, 2, day, part);
-  descriptionFile := 'puzzle_' + (1 + day).ToString + '_' + (1 + part).ToString + '.txt';
-  loadText(descriptionFile);
+  fpuzzleFile:= 'puzzle_' + day.ToString+ '.txt';
+  part:=succ(part);
+  day:=succ(day);
+  case day of
+   1: fpuzzle:= TDayOne.Create(fpuzzleFile,fVisualise.paintbox1);
+  end;
+  bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
+  fdescriptionFile := 'puzzle_' + day.ToString + '_' + part.ToString + '.txt';
+  loadText(fdescriptionFile);
+
 end;
 
 

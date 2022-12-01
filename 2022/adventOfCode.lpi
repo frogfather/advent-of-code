@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="11"/>
+    <Version Value="12"/>
     <General>
+      <Flags>
+        <CompatibilityMode Value="True"/>
+      </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <MainUnit Value="0"/>
       <Title Value="adventOfCode"/>
       <Scaled Value="True"/>
       <ResourceType Value="res"/>
@@ -23,14 +25,13 @@
     </PublishOptions>
     <RunParams>
       <FormatVersion Value="2"/>
-      <Modes Count="0"/>
     </RunParams>
     <RequiredPackages Count="1">
       <Item1>
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="9">
+    <Units Count="10">
       <Unit0>
         <Filename Value="adventOfCode.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -73,6 +74,12 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="aocPuzzle"/>
       </Unit8>
+      <Unit9>
+        <Filename Value="visualise.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="fVisualise"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit9>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

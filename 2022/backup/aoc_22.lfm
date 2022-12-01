@@ -1,5 +1,5 @@
 object MainForm: TMainForm
-  Left = 141
+  Left = 249
   Height = 523
   Top = 100
   Width = 1089
@@ -9,14 +9,13 @@ object MainForm: TMainForm
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
-  LCLVersion = '2.0.12.0'
+  LCLVersion = '2.2.2.0'
   object Memo1: TMemo
     Left = 16
     Height = 404
     Top = 56
     Width = 528
     Anchors = [akTop, akLeft, akBottom]
-    Lines.Strings = (    )
     TabOrder = 0
   end
   object cbSelect: TComboBox
@@ -33,7 +32,7 @@ object MainForm: TMainForm
     Left = 560
     Height = 404
     Top = 56
-    Width = 426
+    Width = 492
     Anchors = [akTop, akLeft, akRight, akBottom]
     Font.Pitch = fpFixed
     ItemHeight = 0
@@ -50,5 +49,13 @@ object MainForm: TMainForm
     Caption = 'Run'
     OnClick = bExecuteClick
     TabOrder = 3
+  end
+  object bVisualise: TButton
+    Left = 977
+    Height = 25
+    Top = 480
+    Width = 75
+    Caption = 'Visual'
+    TabOrder = 4
   end
 end
