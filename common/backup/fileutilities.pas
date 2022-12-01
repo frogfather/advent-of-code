@@ -5,74 +5,62 @@ unit fileUtilities;
 interface
 
 uses
-  Classes, SysUtils, fpjson,arrayUtils;
+  Classes,
+  SysUtils,
+  fpjson,
+  arrayUtils,
+  fileUtil
 
 function readStream(fnam: string): string;
 procedure writeStream(fnam: string; txt: string);
-function foundInArray(inputArray: TStringArray; required, startat: integer): boolean;
 function openFileAsArray(fnam: string; separator: char;removeBlankLines:Boolean=true): TStringArray;
-function getUserDir: string;
-function findDirectories(path:string):TStringlist;
+function getUsrDir(dirName:string): string;
+function getPathToDirectory(currentPath,dirName: string):string;
 implementation
 
 //This complete mess is required because getUserDir on MacOS Catalina returns '/'
-function getUserDir: string;
+function getUsrDir(dirName:String): string;
 var
-  userDir:string;
+  currentDir:string;
   directoryList:TStringlist;
   index:integer;
 begin
   directoryList:=TStringlist.create;
-  userDir:=getCurrentDir;
-  if (userDir <> '/') then directoryList.Add(userDir) else
+  currentDir:=getCurrentDir;
+  if (currentDir <> '/') then
+    directoryList.Add(getPathToDirectory(currentDir,dirName))
+    else
     begin
-    directoryList:= fileUtilities.findDirectories('/');
-    if (directoryList.IndexOf('Users') > -1) then
+    directoryList:= findAllDirectories('/',false);
+    if (directoryList.IndexOf('/Users') > -1) then
       begin
       chdir('Users');
-      directoryList:=findDirectories('Users/');
+      directoryList:=findAllDirectories('/Users/',false);
       if (directoryList.IndexOf('Shared') > -1) then directoryList.Delete(directorylist.IndexOf('Shared'));
-      for index := 0 to directoryList.Count - 1 do
+      if (dirName <> '')and(directoryList.IndexOf('/Users/'+dirName)> -1) then
         begin
-        directoryList[index]:='/Users/'+directoryList[index];
+        chdir(dirName);
+        result:='/Users/'+dirName;
+        exit;
         end;
       end;
     end;
   if (directoryList.count > 0) then result:=directoryList[0] else result:='';
 end;
 
-function findDirectories(path:string):TStringlist;
-Var Info : TSearchRec;
-    Count : Longint;
-begin
-result:=TStringlist.Create;
-Count:=0;
-  If FindFirst ('*',faAnyFile and faDirectory,Info)=0 then
-    begin
-    Repeat
-      Inc(Count);
-      With Info do
-        begin
-        If ((Attr and faDirectory) = faDirectory) and (Name <> '.') and (Name <> '..')  then
-          result.Add(Name);
-        end;
-    Until FindNext(info)<>0;
-    end;
-  FindClose(Info);
-end;
-
-function foundInArray(inputArray: TStringArray; required, startat: integer): boolean;
+function getPathToDirectory(currentPath,dirName: string): string;
 var
-  i:integer;
+  pathParts:TStringArray;
+  index:integer;
 begin
-  if (startat > (length(inputArray) -1)) then exit;
-  for i:=startat to length(inputArray)-1 do
+  result:='';
+  pathParts:=currentPath.Split('/');
+  for index:= 0 to pred(pathParts.size) do
     begin
-    if (length(inputArray[i]) > 0) and (strtoint(inputArray[i]) = required) then
-      begin
-        result:=true;
-        exit;
-      end;
+    result:=result + pathParts[index];
+    if (pathParts[index] <> dirName)
+      then result:= result+ '/'
+      else exit;
     end;
 end;
 
@@ -94,7 +82,6 @@ if FileExists(fNam) then
   end;
 end;
 
-
 //File I/O methods
 function readStream(fnam: string): string;
 var
@@ -102,7 +89,6 @@ var
   n: longint;
   txt: string;
   begin
-    if not fileExists(fnam) then exit; //Log something?
     txt := '';
     strm := TFileStream.Create(fnam, fmOpenRead);
     try

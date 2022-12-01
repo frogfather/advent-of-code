@@ -46,16 +46,22 @@ implementation
 
 { TMainForm }
 
+const aocDirectory = '/Users/cloudsoft/Code/advent-of-code/2022/';
+const puzzleDataDirectory = aocDirectory+'input/';
+const puzzleDescriptionDirectory = aocDirectory+'puzzle_description/';
+
 procedure TMainForm.bExecuteClick(Sender: TObject);
 var
   startTime, endTime: TDateTime;
 begin
   lbresults.Clear;
   startTime := now;
-  lbResults.items.add('Run puzzle '+ formatDateTime('hh:mm:ss:zz', startTime));
+
   fpuzzle.run(cbSelect.ItemIndex mod 2 = 0);
   endTime:=now;
-  lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
+  lbResults.Items:=fPuzzle.getResults;
+  lbResults.items.Insert(0,'Start '+ formatDateTime('hh:mm:ss:zz', startTime));
+  lbResults.items.add('End '+formatDateTime('hh:mm:ss:zz',endTime));
   lbResults.Items.Add('Time: '+inttostr(millisecondsBetween(endTime,startTime))+' ms');
 end;
 
@@ -69,15 +75,18 @@ var
   day, part: integer;
 begin
   divMod(cbSelect.ItemIndex, 2, day, part);
-  fpuzzleFile:= 'puzzle_' + day.ToString+ '.txt';
   part:=succ(part);
   day:=succ(day);
+  fpuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '.txt';
   case day of
    1: fpuzzle:= TDayOne.Create(fpuzzleFile);
+<<<<<<< HEAD
    2: fpuzzle:= TDayTwo.Create(fPuzzleFile);
+=======
+>>>>>>> 05493c6400ba7cda9df13935617d32dc6c9dd95f
   end;
   bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
-  fdescriptionFile := 'puzzle_' + day.ToString + '_' + part.ToString + '.txt';
+  fdescriptionFile := puzzleDescriptionDirectory+'puzzle_' + day.ToString + '_' + part.ToString + '.txt';
   loadText(fdescriptionFile);
 
 end;
