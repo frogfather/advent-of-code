@@ -1,63 +1,24 @@
+2022
+Puzzles in FreePascal/Lazarus
 
-2020
-Tried solving these using different languages so organizing as separate folders in the same repo.
-- Day 1: Lazarus/fpc 
-- Day 2: JavaScript
-- Day 3: C#
-- Day 4: Ruby
-- Day 5: Python
-- Day 6: Go
-- Day 7: Rust
-- Day 8: ?
-- Day 9: Kotlin
+There are a lot of files here. Most can be ignored. Here are the ones that may be of interest. 
 
-2021
-This year I'm sticking to fpc/Lazarus. Until 2016 Pascal/Object Pascal was the only language I knew. 
+Puzzle interface iAdvent in file iaoc.pas
+Has a method run which runs the puzzle and a couple of methods to get and set the results
 
-I used a similar development environment to Lazarus for years while barely understanding how it worked - it's interesting to revisit it now that I can (sort of) write proper code.
+Puzzle parent class TAocPuzzle in file aocpuzzle.pas
+- Inherits from TInterfacedObject and implements iAdvent. 
+- Adds two virtual abstract methods runPartOne and runPartTwo which do pretty much what you'd expect them to do.
 
-There is one overall project called 'advent of code' 
-The main unit is advent.pas. 
+Each puzzle is in a class with the day number e.g. TDayOne in file day1.pas
+- Inherits from TAocPuzzle
+- Implements the two virtual abstract methods above.
 
-For the early puzzles the solution is a single method named dayXpart1 or dayXpart2
+The main form, disappointingly called 'MainForm' is in aoc_22.pas (form file aoc_22.lfm). It displays the puzzle instructions, has a dropdown to select the puzzle and a listbox to show the results.
 
-From day 3 there are a few helper methods in addition to these
+There's also a form fVisualise in visualise.pas (form file visualise.lfm) which might get used for drawing stuff in the event that a picture might help with the solution. There were a couple of instances last year when it was helpful. For the moment it can be ignored. 
 
-Day 4: 
-The TBingoCard class creates a 3d string array (fCard) (which should be an integer array)
-where location [x][y][0] is the number at that location and [x][y][1] is a flag which
-indicates if the number has been called. 
-It has a single method 'call' which 
-- accepts an integer (the number called) 
-- updates any entries on fCard which match the number
-- checks to see if any rows or columns are matched
-- calls the event handler (fNotifyCardWin) if the new number causes the card to become a winning card.
+adventOfCode.lpr is the project file which runs the application - like main in a Java application but... different.
+adventOfCode.lpi is project config stuff.
 
-This could be improved a lot! Adding a 'game' class which handles the creation of cards, maintains the list of cards and runs the calling of numbers would be an improvement.
-
-Day 5:
-This was a fun puzzle!
-
-TPoint is a built in class which represents an X,Y coordinate.  
-
-RPath is a record type which has two members: start and finish, both of which are TPoint.
-
-APathArray is an array of RPath records.
- 
-The TVentMap class has properties 
-
-Properties:
-fVentMap: a 2d array of integer
-fPathArray: an APathArray
-
-Public methods:
-- constructor accepts the puzzle input as a TStringlist, sets up the integer array with dimensions based on the maximum x and y values in the puzzle, converts the input lines (x1,y1 -> x2,y2) to APathArray and sets fPathArray to this value  
-- calculateVents has an optional boolean to control whether we include diagonal lines. For each path in the puzzle input it calculates which points in fVentMap that path will pass through. 
-- getOverlapCount does pretty much what you'd expect it to do :)
-
-
-Converting the puzzle input into an array of RPath records makes the rest of the logic a bit simpler.
-
-
-
-
+The folders input and puzzle_description contain the puzzle data and the text of the puzzle respectively.
