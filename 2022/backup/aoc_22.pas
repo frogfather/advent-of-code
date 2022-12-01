@@ -22,6 +22,7 @@ type
     Memo1: TMemo;
     clipboard: TClipboard;
     procedure bExecuteClick(Sender: TObject);
+    procedure bVisualiseClick(Sender: TObject);
     procedure cbSelectSelect(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -32,7 +33,6 @@ type
     fDescriptionFile: string;
     fPuzzle: iAdvent;
     procedure loadText(fileName: string);
-
   public
 
   end;
@@ -57,7 +57,11 @@ begin
   endTime:=now;
   lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
   lbResults.Items.Add('Time: '+inttostr(millisecondsBetween(endTime,startTime))+' ms');
+end;
 
+procedure TMainForm.bVisualiseClick(Sender: TObject);
+begin
+  fVisualise.Show;
 end;
 
 procedure TMainForm.cbSelectSelect(Sender: TObject);
@@ -69,7 +73,8 @@ begin
   part:=succ(part);
   day:=succ(day);
   case day of
-   1: fpuzzle:= TDayOne.Create(fpuzzleFile,fVisualise.paintbox1);
+   1: fpuzzle:= TDayOne.Create(fpuzzleFile);
+   2: fpuzzle:= TDayTwo.Create(fPuzzleFile
   end;
   bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
   fdescriptionFile := 'puzzle_' + day.ToString + '_' + part.ToString + '.txt';
