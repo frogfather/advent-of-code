@@ -28,6 +28,8 @@ implementation
 
 { TfVisualise }
 
+
+
 procedure TfVisualise.doPaint(sender: TObject);
 begin
 

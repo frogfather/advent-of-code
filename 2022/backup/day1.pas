@@ -5,31 +5,29 @@ unit day1;
 interface
 
 uses
-  Classes, SysUtils, ExtCtrls, aocPuzzle,LazLogger,graphics;
+  Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics;
 type
   
   { TDayOne }
   TDayOne = class(TAocPuzzle)
   private
-  fPaintBox:TPaintbox;
   fName:string;
   procedure runPartOne; override;
   procedure runPartTwo; override;
-  procedure paint(sender:TObject);
+  procedure doPaint(sender:TObject);reintroduce;
   public
-  constructor create(filename:string; paintbox:TPaintbox = nil);
+  constructor create(filename:string; paintbox_:TPaintbox = nil);
   end;
 
 implementation
 
 { TDayOne }
 
-constructor TDayOne.create(filename:string;paintbox:TPaintbox);
+constructor TDayOne.create(filename:string;paintbox_:TPaintbox);
 begin
-inherited create(filename);
-fPaintbox:=paintbox;
+inherited create(filename,paintbox_);
+//if paintbox <> nil then paintbox.OnPaint:=@doPaint;
 fName:= 'Day 1';
-if (fPaintbox <> nil) then fPaintbox.OnPaint:=@paint;
 //parent loads file as string;
 end;
 
@@ -37,7 +35,6 @@ end;
 procedure TDayOne.runPartOne;
 begin
   DebugLn('run part one');
-  fPaintbox.Repaint;
 end;
 
 procedure TDayOne.runPartTwo;
@@ -45,15 +42,27 @@ begin
   DebugLn('run part two');
 end;
 
-procedure TDayOne.paint(sender: TObject);
+procedure TDayOne.doPaint(sender: TObject);
+var
+  topLeft,topRight,bottomLeft,bottomRight:TPoint;
 begin
-  with fPaintbox do
-    begin
-    Canvas.Brush.Color:= clRed;
-    Canvas.Rectangle(0,0,100,100);
-    Canvas.TextOut(0,0,fName);
-    end;
+  topLeft.X:= 0;
+  topLeft.Y:= 0;
+  topRight.X:=paintbox.Canvas.Width;
+  topRight.Y:=0;
+  bottomLeft.X:=0;
+  bottomLeft.Y:=paintbox.Canvas.Height;
+  bottomRight.X:= paintbox.Canvas.width;
+  bottomRight.Y:= paintbox.Canvas.height;
+  with paintbox.Canvas do
+   begin
+     pen.Width:=6;
+     pen.Color:=clGreen;
+     Line(topLeft,bottomRight);
+     Line(bottomLeft,topRight);
+   end;
 end;
+
 
 end.
 

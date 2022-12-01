@@ -5,7 +5,7 @@ unit aocPuzzle;
 interface
 
 uses
-  Classes, SysUtils,iAoc,fileUtilities, lazLogger;
+  Classes, SysUtils,iAoc,fileUtilities, lazLogger,graphics,ExtCtrls;
 
 type
   
@@ -13,28 +13,26 @@ type
 
   TAocPuzzle = class(TInterfacedObject, iAdvent)
   private
+    fPaintBox:TPaintbox;
     fResults: TStringList;
     fData: string;
     function getResults: TStringList;
+  public
+    constructor Create(filename: string;paintbox:TPaintBox = nil);
     procedure runPartOne; virtual abstract;
     procedure runPartTwo; virtual abstract;
-  public
-    constructor Create(filename: string);
     procedure run(partOne: boolean = True);
     property results: TStringList read getResults;
+    property paintbox: TPaintbox read fPaintbox;
   end;
 
 implementation
 
 { TAocPuzzle }
 
-function TAocPuzzle.getResults: TStringList;
+constructor TAocPuzzle.Create(filename: string; paintbox:TPaintbox);
 begin
-  result:=fResults;
-end;
-
-constructor TAocPuzzle.Create(filename: string);
-begin
+  fPaintbox:=paintbox;
   try
   fData:=readStream(filename);
   except
@@ -46,6 +44,11 @@ end;
 procedure TAocPuzzle.run(partOne: boolean);
 begin
   if partOne then runPartOne else runPartTwo;
+end;
+
+function TAocPuzzle.getResults: TStringList;
+begin
+  result:=fResults;
 end;
 
 end.
