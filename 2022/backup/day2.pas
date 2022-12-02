@@ -31,7 +31,7 @@ end;
 
 procedure TDayTwo.runPartOne;
 begin
-
+  DebugLn('run part one');
 end;
 
 procedure TDayTwo.runPartTwo;

@@ -50,48 +50,6 @@ const aocDirectory = '/Users/cloudsoft/Code/advent-of-code/2022/';
 const puzzleDataDirectory = aocDirectory+'input/';
 const puzzleDescriptionDirectory = aocDirectory+'puzzle_description/';
 
-procedure TMainForm.bExecuteClick(Sender: TObject);
-var
-  startTime, endTime: TDateTime;
-begin
-  lbresults.Clear;
-  startTime := now;
-
-  fpuzzle.run(cbSelect.ItemIndex mod 2 = 0);
-  endTime:=now;
-  lbResults.Items:=fPuzzle.getResults;
-  lbResults.items.Insert(0,'Start '+ formatDateTime('hh:mm:ss:zz', startTime));
-  lbResults.items.add('End '+formatDateTime('hh:mm:ss:zz',endTime));
-  lbResults.Items.Add('Time: '+inttostr(millisecondsBetween(endTime,startTime))+' ms');
-end;
-
-procedure TMainForm.bVisualiseClick(Sender: TObject);
-begin
-  fVisualise.Show;
-end;
-
-procedure TMainForm.cbSelectSelect(Sender: TObject);
-var
-  day, part: integer;
-begin
-  divMod(cbSelect.ItemIndex, 2, day, part);
-  part:=succ(part);
-  day:=succ(day);
-  fpuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '.txt';
-  case day of
-   1: fpuzzle:= TDayOne.Create(fpuzzleFile);
-<<<<<<< HEAD
-   2: fpuzzle:= TDayTwo.Create(fPuzzleFile);
-=======
->>>>>>> 05493c6400ba7cda9df13935617d32dc6c9dd95f
-  end;
-  bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
-  fdescriptionFile := puzzleDescriptionDirectory+'puzzle_' + day.ToString + '_' + part.ToString + '.txt';
-  loadText(fdescriptionFile);
-
-end;
-
-
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   clipboard := TClipboard.Create;
@@ -112,6 +70,43 @@ begin
     cbSelect.Items.Add('Advent of code day ' + IntToStr(i) + ' part 1');
     cbSelect.Items.Add('Advent of code day ' + IntToStr(i) + ' part 2');
   end;
+end;
+
+procedure TMainForm.cbSelectSelect(Sender: TObject);
+var
+  day, part: integer;
+begin
+  divMod(cbSelect.ItemIndex, 2, day, part);
+  part:=succ(part);
+  day:=succ(day);
+  fpuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '.txt';
+  case day of
+   1: fpuzzle:= TDayOne.Create(fpuzzleFile);
+   2: fpuzzle:= TDayTwo.Create(fPuzzleFile);
+  end;
+  bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
+  fdescriptionFile := puzzleDescriptionDirectory+'puzzle_' + day.ToString + '_' + part.ToString + '.txt';
+  loadText(fdescriptionFile);
+end;
+
+procedure TMainForm.bExecuteClick(Sender: TObject);
+var
+  startTime, endTime: TDateTime;
+begin
+  lbresults.Clear;
+  startTime := now;
+
+  fpuzzle.run(cbSelect.ItemIndex mod 2 = 0);
+  endTime:=now;
+  lbResults.Items:=fPuzzle.getResults;
+  lbResults.items.Insert(0,'Start '+ formatDateTime('hh:mm:ss:zz', startTime));
+  lbResults.items.add('End '+formatDateTime('hh:mm:ss:zz',endTime));
+  lbResults.Items.Add('Time: '+inttostr(millisecondsBetween(endTime,startTime))+' ms');
+end;
+
+procedure TMainForm.bVisualiseClick(Sender: TObject);
+begin
+  fVisualise.Show;
 end;
 
 procedure TMainForm.lbResultsSelectionChange(Sender: TObject; User: boolean);

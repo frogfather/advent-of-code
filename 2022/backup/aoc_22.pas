@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics,
   Dialogs, StdCtrls, Math, clipbrd, ExtCtrls, DateUtils, fpJSON,
   aocUtils, arrayUtils,iAoc,visualise,
-  day1;
+  day1,day2;
 
 type
 
@@ -60,14 +60,9 @@ begin
   fpuzzle.run(cbSelect.ItemIndex mod 2 = 0);
   endTime:=now;
   lbResults.Items:=fPuzzle.getResults;
-  lbResults.items.Insert(0,'Run puzzle '+ formatDateTime('hh:mm:ss:zz', startTime));
-  lbResults.items.add('end '+formatDateTime('hh:mm:ss:zz',endTime));
+  lbResults.items.Insert(0,'Start '+ formatDateTime('hh:mm:ss:zz', startTime));
+  lbResults.items.add('End '+formatDateTime('hh:mm:ss:zz',endTime));
   lbResults.Items.Add('Time: '+inttostr(millisecondsBetween(endTime,startTime))+' ms');
-end;
-
-procedure TMainForm.bVisualiseClick(Sender: TObject);
-begin
-  fVisualise.Show;
 end;
 
 procedure TMainForm.bVisualiseClick(Sender: TObject);
@@ -85,7 +80,10 @@ begin
   fpuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '.txt';
   case day of
    1: fpuzzle:= TDayOne.Create(fpuzzleFile);
-   2: fpuzzle:= TDayTwo.Create(fPuzzleFile
+<<<<<<< HEAD
+   2: fpuzzle:= TDayTwo.Create(fPuzzleFile);
+=======
+>>>>>>> 05493c6400ba7cda9df13935617d32dc6c9dd95f
   end;
   bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
   fdescriptionFile := puzzleDescriptionDirectory+'puzzle_' + day.ToString + '_' + part.ToString + '.txt';
