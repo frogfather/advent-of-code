@@ -27,23 +27,21 @@ constructor TDayOne.create(filename:string;paintbox_:TPaintbox);
 begin
 inherited create(filename,paintbox_);
 fName:= 'Day 1';
-//parent loads the file as a string;
+//parent loads the file as a string and converts to string array;
 end;
 
 //We have a list of groups of numbers separated by blank lines
 //We want to add each group together and then sort to find the largest
 function TDayOne.processAndSort:TIntArray;
 var
-  inputAsLines:TStringArray;
   index,currentElfFood:integer;
 begin
   result:=TIntArray.Create;
   currentElfFood:=0;
-  inputAsLines:=puzzleInput.Split(#$0A); //split on newline
-  for index:= 0 to pred(length(inputAsLines)) do
+  for index:= 0 to pred(length(puzzleInputLines)) do
     begin
-    if (inputAsLines[index]<> '')
-      then currentElfFood:= currentElfFood + inputAsLines[index].ToInteger
+    if (puzzleInputLines[index]<> '')
+      then currentElfFood:= currentElfFood + puzzleInputLines[index].ToInteger
       else
         begin
           result.push(currentElfFood);

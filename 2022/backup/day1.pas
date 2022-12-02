@@ -30,19 +30,18 @@ fName:= 'Day 1';
 //parent loads the file as a string;
 end;
 
+//We have a list of groups of numbers separated by blank lines
+//We want to add each group together and then sort to find the largest
 function TDayOne.processAndSort:TIntArray;
 var
-  inputAsLines:TStringArray;
   index,currentElfFood:integer;
 begin
   result:=TIntArray.Create;
-  results.Clear;
   currentElfFood:=0;
-  inputAsLines:=puzzleInput.Split(#$0A); //split on newline
-  for index:= 0 to pred(length(inputAsLines)) do
+  for index:= 0 to pred(length(puzzleInputLines)) do
     begin
-    if (inputAsLines[index]<> '')
-      then currentElfFood:= currentElfFood + inputAsLines[index].ToInteger
+    if (puzzleInputLines[index]<> '')
+      then currentElfFood:= currentElfFood + puzzleInputLines[index].ToInteger
       else
         begin
           result.push(currentElfFood);
@@ -52,19 +51,22 @@ begin
   sort(result,result.size,false);
 end;
 
-//We have a list of groups of numbers separated by blank lines
-//We want to add each group together and then sort to find the largest
 procedure TDayOne.runPartOne;
-
 begin
-
+  results.Clear;
   results.Add('Elf with most calories has '+processAndSort[0].ToString);
 end;
 
 //Astonishingly I've done part one in a way that makes part two easy
 procedure TDayOne.runPartTwo;
+var
+  sortedElfFood:TIntArray;
+  sumOfTopThree:integer;
 begin
-
+  results.Clear;
+  sortedElfFood:=processAndSort;
+  sumOfTopThree:= sortedElfFood[0]+sortedElfFood[1]+sortedElfFood[2];
+  results.Add('Sum of three elves with most food is '+sumOfTopThree.ToString);
 end;
 
 end.
