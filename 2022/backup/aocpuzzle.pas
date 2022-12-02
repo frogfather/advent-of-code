@@ -16,6 +16,7 @@ type
     fPaintBox:TPaintbox;
     fResults: TStringList;
     fData: string;
+    fDataAsLines: TStringArray;
     function getResults: TStringList;
     procedure setResults(results_:TStringlist);
   public
@@ -26,6 +27,7 @@ type
     property results: TStringList read getResults write setResults;
     property paintbox: TPaintbox read fPaintbox;
     property puzzleInput:string read fData;
+    property puzzleInputLines: TStringArray read fDataAsLines;
   end;
 
 implementation
@@ -34,9 +36,11 @@ implementation
 
 constructor TAocPuzzle.Create(filename: string; paintbox: TPaintBox);
 begin
+  fResults:=TStringlist.Create;
   fPaintbox:=paintbox;
   try
   fData:=readStream(filename);
+  fDataAsLines:=fData.Split(#$0A);
   except
   on E: Exception do
   DebugLn('Error reading puzzle file '+E.Message);
