@@ -58,7 +58,7 @@ begin
     if theirInput = 2 then ourChoice:= 1 else
     ourChoice:= 2;
     result:= ourChoice;
-    end;
+    end else
   if (outcome = 'Y') then //draw
     begin
     ourChoice:= theirInput;
