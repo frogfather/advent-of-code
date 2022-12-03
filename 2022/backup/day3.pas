@@ -13,7 +13,7 @@ type
   private
   fName:string;
   function asciiToIndex(input:char):integer;
-  function commonItems(string1,string2:string):string;
+  function commonItems(string1,string2:string;string3:string = ''):string;
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
   procedure runPartOne; override;
@@ -31,7 +31,7 @@ begin
   else result:= ord(input) - 38;
 end;
 
-function TDayThree.commonItems(string1, string2: string): string;
+function TDayThree.commonItems(string1, string2: string;string3:string): string;
 var
   index: integer;
   element:char;
@@ -41,7 +41,10 @@ begin
   for index:= 1 to length(string1) do
     begin
       element:=string1[index];
-      if (string2.IndexOf(element)> -1) then result:=result + element;
+      //ignore duplicates of the common items
+      if (string2.IndexOf(element)> -1)
+      and((string3 = '') or (string3.IndexOf(element) > -1)) //added for part two
+      and (Result.IndexOf(element) = -1) then result:=result + element;
     end;
 end;
 
@@ -78,9 +81,33 @@ begin
     results.Add('Sum of priorities of duplicated items is '+itemPrioritySum.ToString);
 end;
 
+//Now find items that are common between three lines
 procedure TDayThree.runPartTwo;
+var
+  lineIndex,itemIndex:integer;
+  elf1,elf2,elf3:string;
+  common:string;
+  itemPrioritySum:integer;
 begin
-  DebugLn('Run '+fName+' part two');
+  elf1:='';
+  elf2:='';
+  elf3:='';
+  itemPrioritySum:=0;
+  for lineIndex:=0 to pred(puzzleInputLines.size) do
+    begin
+      if elf1 = '' then elf1:= puzzleInputLines[lineIndex]
+      else if elf2 = '' then elf2:= puzzleInputLines[lineIndex]
+      else elf3:= puzzleInputLines[lineIndex];
+    if (lineIndex + 1) mod 3 = 0 then
+      begin
+      common:= commonItems(elf1,elf2,elf3);
+      for itemIndex:=1 to common.Length do
+        itemPrioritySum:=itemPrioritySum + asciiToIndex(common[itemIndex]);
+      elf1:='';
+      elf2:='';
+      elf3:='';
+      end;
+    end;
 end;
 
 end.
