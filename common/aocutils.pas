@@ -6,11 +6,10 @@ interface
 
 uses
   Classes, SysUtils,fileUtilities,math,arrayUtils;
-const strnumbers: array[0..9] of string = ('0','1','2','3','4','5','6','7','8','9');
 
 function getPuzzleInputAsStringArray(fileName: String; removeBlankLines: boolean=true): TStringArray;
 function getPuzzleInputAsIntArray(fileName: String; removeBlankLines: boolean=true): TIntArray;
-function getPuzzleInputAsString(fileName:string; removeBlankLines: boolean=true):string;
+function getPuzzleInputAsString(fileName:string):string;
 function stringOfBinaryToInteger(input: String): integer;
 function calculateCommonestValue(input: TStringArray; reverse:Boolean=false): TBits;
 function getUniqueEntry(input: TStringArray;reverse:boolean=false):String;
@@ -44,8 +43,7 @@ begin
  result:= toIntArray(fileLines[0].Split(','));
 end;
 
-function getPuzzleInputAsString(fileName: string; removeBlankLines: boolean
-  ): string;
+function getPuzzleInputAsString(fileName: string): string;
 begin
   result:=fileUtilities.readStream(fileName);
 end;
@@ -121,7 +119,7 @@ for element:=0 to pred(entryLength) do
   for entry:=pred(length(input)) downto 0 do
     begin
     if (strToInt(input[entry][element+1]) <> keepValue)
-    then deleteFromArray(input,entry);
+    then input.splice(entry,1);
     if (length(input)=1) then
       begin
       result:=input[0];
@@ -241,16 +239,11 @@ end;
 function isNumberString(input: string): boolean;
 var
   index:integer;
-  element:String;
 begin
   result:=true;
   if length(input) = 0 then result:= false else
-  for index:=0 to pred(length(input)) do
-    begin
-    element:=input.Substring(index,1);
-    if arrPos(strNumbers,element) = -1
-      then result:=false;
-    end;
+  for index:=1 to length(input) do
+    if (ord(input[index]) < 48) or (ord(input[index]) > 57) then result:=false;
 end;
 
 function getDimensionsOfPuzzleInput(input: TStringArray): TPoint;

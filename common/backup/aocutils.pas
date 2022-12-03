@@ -6,7 +6,6 @@ interface
 
 uses
   Classes, SysUtils,fileUtilities,math,arrayUtils;
-const strnumbers: array[0..9] of string = ('0','1','2','3','4','5','6','7','8','9');
 
 function getPuzzleInputAsStringArray(fileName: String; removeBlankLines: boolean=true): TStringArray;
 function getPuzzleInputAsIntArray(fileName: String; removeBlankLines: boolean=true): TIntArray;
@@ -244,14 +243,8 @@ var
 begin
   result:=true;
   if length(input) = 0 then result:= false else
-  for index:=0 to pred(length(input)) do
-    begin
-      try
-        input.Substring(index,1).ToInteger;
-      except
-        result:=false;
-      end;
-    end;
+  for index:=1 to length(input) do
+    if (ord(input[index]) < 48) or (ord(input[index]) > 57) then result:=false;
 end;
 
 function getDimensionsOfPuzzleInput(input: TStringArray): TPoint;
