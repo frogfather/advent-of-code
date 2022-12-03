@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics,
   Dialogs, StdCtrls, Math, clipbrd, ExtCtrls, DateUtils, fpJSON,
   aocUtils, arrayUtils,iAoc,visualise,
-  day1,day2;
+  day1,day2,day3;
 
 type
 
@@ -18,12 +18,14 @@ type
     bExecute: TButton;
     bVisualise: TButton;
     cbSelect: TComboBox;
+    ckTest: TCheckBox;
     lbResults: TListBox;
     Memo1: TMemo;
     clipboard: TClipboard;
     procedure bExecuteClick(Sender: TObject);
     procedure bVisualiseClick(Sender: TObject);
     procedure cbSelectSelect(Sender: TObject);
+    procedure ckTestChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -65,7 +67,7 @@ var
   i: integer;
 begin
   cbSelect.Clear;
-  for i := 1 to 31 do
+  for i := 1 to 25 do
   begin
     cbSelect.Items.Add('Advent of code day ' + IntToStr(i) + ' part 1');
     cbSelect.Items.Add('Advent of code day ' + IntToStr(i) + ' part 2');
@@ -79,14 +81,28 @@ begin
   divMod(cbSelect.ItemIndex, 2, day, part);
   part:=succ(part);
   day:=succ(day);
-  fpuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '.txt';
+  if ckTest.Checked then
+     fPuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '_test.txt'
+     else fpuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '.txt';
   case day of
    1: fpuzzle:= TDayOne.Create(fpuzzleFile);
    2: fpuzzle:= TDayTwo.Create(fPuzzleFile);
+   3: fpuzzle:= TDayThree.Create(fPuzzleFile);
   end;
   bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
+  bExecute.Enabled:=fPuzzle <> nil;
   fdescriptionFile := puzzleDescriptionDirectory+'puzzle_' + day.ToString + '_' + part.ToString + '.txt';
   loadText(fdescriptionFile);
+end;
+
+procedure TMainForm.ckTestChange(Sender: TObject);
+var
+  currentIndex:integer;
+begin
+  currentIndex:=cbSelect.ItemIndex;
+  cbSelectSelect(self);
+  //re-select the item in the combo box to reload the file
+
 end;
 
 procedure TMainForm.bExecuteClick(Sender: TObject);

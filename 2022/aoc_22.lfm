@@ -59,4 +59,13 @@ object MainForm: TMainForm
     OnClick = bVisualiseClick
     TabOrder = 4
   end
+  object ckTest: TCheckBox
+    Left = 295
+    Height = 18
+    Top = 11
+    Width = 102
+    Caption = 'Use test data'
+    OnChange = ckTestChange
+    TabOrder = 5
+  end
 end
