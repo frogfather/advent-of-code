@@ -22,3 +22,5 @@ adventOfCode.lpr is the project file which runs the application - like main in a
 adventOfCode.lpi is project config stuff.
 
 The folders input and puzzle_description contain the puzzle data and the text of the puzzle respectively.
+
+There are some common methods for file and array handling including some array helpers in ../common.
