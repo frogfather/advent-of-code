@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics,
   Dialogs, StdCtrls, Math, clipbrd, ExtCtrls, DateUtils, fpJSON,
   aocUtils, arrayUtils,iAoc,visualise,
-  day1,day2;
+  day1,day2,day3;
 
 type
 
@@ -18,6 +18,7 @@ type
     bExecute: TButton;
     bVisualise: TButton;
     cbSelect: TComboBox;
+    ckTest: TCheckBox;
     lbResults: TListBox;
     Memo1: TMemo;
     clipboard: TClipboard;
@@ -50,6 +51,49 @@ const aocDirectory = '/Users/cloudsoft/Code/advent-of-code/2022/';
 const puzzleDataDirectory = aocDirectory+'input/';
 const puzzleDescriptionDirectory = aocDirectory+'puzzle_description/';
 
+procedure TMainForm.FormCreate(Sender: TObject);
+begin
+  clipboard := TClipboard.Create;
+end;
+
+procedure TMainForm.FormDestroy(Sender: TObject);
+begin
+  clipboard.Free;
+end;
+
+procedure TMainForm.FormShow(Sender: TObject);
+var
+  i: integer;
+begin
+  cbSelect.Clear;
+  for i := 1 to 25 do
+  begin
+    cbSelect.Items.Add('Advent of code day ' + IntToStr(i) + ' part 1');
+    cbSelect.Items.Add('Advent of code day ' + IntToStr(i) + ' part 2');
+  end;
+end;
+
+procedure TMainForm.cbSelectSelect(Sender: TObject);
+var
+  day, part: integer;
+begin
+  divMod(cbSelect.ItemIndex, 2, day, part);
+  part:=succ(part);
+  day:=succ(day);
+  if ckTest.Checked then
+     fPuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '_test.txt'
+     else fpuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '.txt';
+  case day of
+   1: fpuzzle:= TDayOne.Create(fpuzzleFile);
+   2: fpuzzle:= TDayTwo.Create(fPuzzleFile);
+   3: fpuzzle:= TDayThree.Create(fPuzzleFile);
+  end;
+  bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
+  bExecute.Enabled:=fPuzzle <> nil;
+  fdescriptionFile := puzzleDescriptionDirectory+'puzzle_' + day.ToString + '_' + part.ToString + '.txt';
+  loadText(fdescriptionFile);
+end;
+
 procedure TMainForm.bExecuteClick(Sender: TObject);
 var
   startTime, endTime: TDateTime;
@@ -68,50 +112,6 @@ end;
 procedure TMainForm.bVisualiseClick(Sender: TObject);
 begin
   fVisualise.Show;
-end;
-
-procedure TMainForm.cbSelectSelect(Sender: TObject);
-var
-  day, part: integer;
-begin
-  divMod(cbSelect.ItemIndex, 2, day, part);
-  part:=succ(part);
-  day:=succ(day);
-  fpuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '.txt';
-  case day of
-   1: fpuzzle:= TDayOne.Create(fpuzzleFile);
-<<<<<<< HEAD
-   2: fpuzzle:= TDayTwo.Create(fPuzzleFile);
-=======
->>>>>>> 05493c6400ba7cda9df13935617d32dc6c9dd95f
-  end;
-  bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
-  fdescriptionFile := puzzleDescriptionDirectory+'puzzle_' + day.ToString + '_' + part.ToString + '.txt';
-  loadText(fdescriptionFile);
-
-end;
-
-
-procedure TMainForm.FormCreate(Sender: TObject);
-begin
-  clipboard := TClipboard.Create;
-end;
-
-procedure TMainForm.FormDestroy(Sender: TObject);
-begin
-  clipboard.Free;
-end;
-
-procedure TMainForm.FormShow(Sender: TObject);
-var
-  i: integer;
-begin
-  cbSelect.Clear;
-  for i := 1 to 31 do
-  begin
-    cbSelect.Items.Add('Advent of code day ' + IntToStr(i) + ' part 1');
-    cbSelect.Items.Add('Advent of code day ' + IntToStr(i) + ' part 2');
-  end;
 end;
 
 procedure TMainForm.lbResultsSelectionChange(Sender: TObject; User: boolean);
