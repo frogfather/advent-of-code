@@ -25,6 +25,7 @@ type
     procedure bExecuteClick(Sender: TObject);
     procedure bVisualiseClick(Sender: TObject);
     procedure cbSelectSelect(Sender: TObject);
+    procedure ckTestChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -92,6 +93,16 @@ begin
   bExecute.Enabled:=fPuzzle <> nil;
   fdescriptionFile := puzzleDescriptionDirectory+'puzzle_' + day.ToString + '_' + part.ToString + '.txt';
   loadText(fdescriptionFile);
+end;
+
+procedure TMainForm.ckTestChange(Sender: TObject);
+var
+  currentIndex:integer;
+begin
+  currentIndex:=cbSelect.ItemIndex;
+  cbSelectSelect(self);
+  //re-select the item in the combo box to reload the file
+
 end;
 
 procedure TMainForm.bExecuteClick(Sender: TObject);

@@ -74,7 +74,7 @@ begin
       compartment1:= puzzleInputLines[lineIndex].Substring(0,length(puzzleInputLines[lineIndex]) div 2);
       compartment2:= puzzleInputLines[lineIndex].Substring(length(puzzleInputLines[lineIndex]) div 2);
       common:= commonItems(compartment1,compartment2);
-      //Your daily reminder that ANSI strings are 1 indexed!
+      //Your daily reminder that strings are 1 indexed!
       for itemIndex:=1 to common.Length do
         itemPrioritySum:=itemPrioritySum + asciiToIndex(common[itemIndex]);
     end;
@@ -108,6 +108,7 @@ begin
       elf3:='';
       end;
     end;
+  results.Add('Sum of all items common between all elves is '+itemPrioritySum.ToString);
 end;
 
 end.

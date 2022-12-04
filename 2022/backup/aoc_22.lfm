@@ -65,6 +65,7 @@ object MainForm: TMainForm
     Top = 11
     Width = 102
     Caption = 'Use test data'
+    OnChange = ckTestChange
     TabOrder = 5
   end
 end
