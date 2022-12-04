@@ -37,6 +37,7 @@ object MainForm: TMainForm
     Font.Pitch = fpFixed
     ItemHeight = 0
     MultiSelect = True
+    OnSelectionChange = lbResultsSelectionChange
     ParentFont = False
     TabOrder = 2
   end

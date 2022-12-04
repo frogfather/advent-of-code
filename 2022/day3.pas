@@ -23,7 +23,6 @@ type
 implementation
 
 { TDayThree }
-
 //Return the value of the letter indicated in the puzzle
 function TDayThree.asciiToIndex(input: char): integer;
 begin
@@ -49,8 +48,6 @@ begin
 end;
 
 constructor TDayThree.create(filename: string; paintbox_: TPaintbox);
-var
-  index:integer;
 begin
 inherited create(filename,paintbox_);
 fName:= 'Day 3';
@@ -74,7 +71,7 @@ begin
       compartment1:= puzzleInputLines[lineIndex].Substring(0,length(puzzleInputLines[lineIndex]) div 2);
       compartment2:= puzzleInputLines[lineIndex].Substring(length(puzzleInputLines[lineIndex]) div 2);
       common:= commonItems(compartment1,compartment2);
-      //Your daily reminder that ANSI strings are 1 indexed!
+      //Your daily reminder that strings are 1 indexed!
       for itemIndex:=1 to common.Length do
         itemPrioritySum:=itemPrioritySum + asciiToIndex(common[itemIndex]);
     end;
