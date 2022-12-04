@@ -88,6 +88,7 @@ begin
    1: fpuzzle:= TDayOne.Create(fpuzzleFile);
    2: fpuzzle:= TDayTwo.Create(fPuzzleFile);
    3: fpuzzle:= TDayThree.Create(fPuzzleFile);
+   4: fpuzzle:= TDayFour.Create(fPuzzleFile);
   end;
   bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
   bExecute.Enabled:=fPuzzle <> nil;
