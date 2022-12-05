@@ -21,6 +21,7 @@ type
   procedure separateCratesFromInstructions;
   procedure extractCrates(crates:TStringArray);
   procedure moveCrates(quantity,source,destination:integer);
+  procedure moveSingleCrate(source,destination:integer);
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
   procedure runPartOne; override;
@@ -70,11 +71,26 @@ end;
 
 //The column is the first index of the array
 //The row is the second index of the array
+//So column 1 row 4 is [0][3]
 procedure TDayFive.moveCrates(quantity, source, destination: integer);
 var
-  newColumnHeight:integer;
+  index:integer;
 begin
+  //can we assume that we won't be asked to move more crates than there are
+  //in the column?
+  //we move the top crate from the source to the destination
+  //we do this 'quantity' times
+  for index:= 0 to pred(quantity) do
+    moveSingleCrate(source,destination);
+end;
 
+procedure TDayFive.moveSingleCrate(source, destination: integer);
+begin
+  //move the top crate from the source to the destination
+  //and adjust column heights
+  setLength(crates[destination],length(crates[destination])+1);
+  crates[destination][length(crates[destination])-1]:= crates[source][length(crates[source]) - 1];
+  setLength(crates[source],length(crates[source])-1);
 end;
 
 constructor TDayFive.create(filename: string; paintbox_: TPaintbox);
@@ -89,7 +105,7 @@ end;
 
 procedure TDayFive.runPartOne;
 begin
-
+  moveCrates(3,0,8);
 end;
 
 procedure TDayFive.runPartTwo;
