@@ -34,14 +34,37 @@ implementation
 
 { TDayFive }
 
+constructor TDayFive.create(filename: string; paintbox_: TPaintbox);
+begin
+  inherited create(filename,paintbox_);
+  fName:= 'Day 4';
+end;
+
 procedure TDayFive.setup;
+var
+  index,blankLinePosition:integer;
+  columnLabels:TStringArray;
 begin
   //TODO - hard coding the number of columns and number of lines
-  //to the move instructions makes the test data break
+  //to the move instructions means we can't use the test data
   //Should calculate this dynamically instead.
-  setLength(fCrates,9,0);
-  fcrateData:=Copy(puzzleInputLines,0,8);
-  fMoveInstructions:=Copy(puzzleInputLines,10,pred(puzzleInputLines.size));
+  //Find the blank line between crate data and move data
+  index:=0;
+  blankLinePosition:=-1;
+  while (blankLinePosition = -1) and (index < puzzleInputLines.size) do
+    begin
+    if (puzzleInputLines[index].Trim = '')
+      then blankLinePosition:=index
+      else index:=index+1;
+    end;
+  //we'll assume that we've found the blank line -
+  //ideally we'd raise an error if it wasn't found.
+  //the blank line position - 1 gives us the number of columns
+  //the previous line contains the column numbers
+  columnLabels:= puzzleInputLines[blankLinePosition - 1].trim.Split(' ',TStringSplitOptions.ExcludeEmpty);
+  setLength(fCrates,columnLabels.size,0);
+  fcrateData:=Copy(puzzleInputLines,0,blankLinePosition - 1);
+  fMoveInstructions:=Copy(puzzleInputLines,blankLinePosition+1,pred(puzzleInputLines.size));
   extractCrates;
 end;
 
@@ -95,12 +118,6 @@ begin
   crates[destination][length(crates[destination])- groupSize + index]:= groupToMove[index];
 
   setLength(crates[source],length(crates[source])-groupSize);
-end;
-
-constructor TDayFive.create(filename: string; paintbox_: TPaintbox);
-begin
-  inherited create(filename,paintbox_);
-  fName:= 'Day 4';
 end;
 
 procedure TDayFive.runPartOne;

@@ -41,13 +41,22 @@ begin
 end;
 
 procedure TDayFive.setup;
+var
+  index,blankLinePosition:integer;
+  columnLabels:TStringArray;
 begin
-  //TODO - hard coding the number of columns and number of lines
-  //to the move instructions means we can't use the test data
-  //Should calculate this dynamically instead.
-  setLength(fCrates,9,0);
-  fcrateData:=Copy(puzzleInputLines,0,8);
-  fMoveInstructions:=Copy(puzzleInputLines,10,pred(puzzleInputLines.size));
+  index:=0;
+  blankLinePosition:=-1;
+  while (blankLinePosition = -1) and (index < puzzleInputLines.size) do
+    begin
+    if (puzzleInputLines[index].Trim = '')
+      then blankLinePosition:=index
+      else index:=index+1;
+    end;
+  columnLabels:= puzzleInputLines[blankLinePosition - 1].trim.Split(' ',TStringSplitOptions.ExcludeEmpty);
+  setLength(fCrates,columnLabels.size,0);
+  fcrateData:=Copy(puzzleInputLines,0,blankLinePosition - 1);
+  fMoveInstructions:=Copy(puzzleInputLines,blankLinePosition+1,pred(puzzleInputLines.size));
   extractCrates;
 end;
 
@@ -119,7 +128,7 @@ begin
   //Then get the top crate from each column
   for index:= 0 to pred(length(fCrates)) do
     topCrates:=topCrates+crates[index][length(crates[index])-1];
-  results.Add('Top crates after rearranging singly'+topCrates);
+  results.Add('Top crates after rearranging singly '+topCrates);
 end;
 
 procedure TDayFive.runPartTwo;
@@ -138,7 +147,7 @@ begin
   //Then get the top crate from each column
   for index:= 0 to pred(length(fCrates)) do
     topCrates:=topCrates+crates[index][length(crates[index])-1];
-  results.Add('Top crates after rearranging in groups'+topCrates);
+  results.Add('Top crates after rearranging in groups '+topCrates);
 end;
 
 end.
