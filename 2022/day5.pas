@@ -20,8 +20,8 @@ type
   fCrateData:TStringArray;
   fMoveInstructions: TStringArray;
   procedure extractCrates;
-  procedure moveCrates(quantity,source,destination:integer);
-  procedure moveSingleCrate(source,destination:integer);
+  procedure moveCrates(quantity,source,destination:integer;moveSingly:boolean = true);
+  procedure moveCrateGroup(source,destination:integer;groupSize:integer = 1);
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
   procedure runPartOne; override;
@@ -60,30 +60,40 @@ begin
     end;
 end;
 
-//The column is the first index of the array
-//The row is the second index of the array
-//So column 1 row 4 is [0][3]
-procedure TDayFive.moveCrates(quantity, source, destination: integer);
+//Modified to make part two work without affecting part one
+procedure TDayFive.moveCrates(quantity, source, destination: integer;moveSingly:boolean);
 var
   index:integer;
 begin
+  if moveSingly then
   for index:= 0 to pred(quantity) do
-    moveSingleCrate(source,destination);
+    moveCrateGroup(source,destination)
+  else moveCrateGroup(source,destination,quantity);
 end;
 
-procedure TDayFive.moveSingleCrate(source, destination: integer);
+procedure TDayFive.moveCrateGroup(source,destination:integer;groupSize:integer);
+var
+  groupToMove:TStringArray;
+  index:integer;
 begin
-  //move the top crate from the source to the destination
-  //and adjust column heights
   //Does the top crate exist?
   if (length(crates[source]) = 0) then
     begin
     debugln('nothing to move');
     exit;
     end;
-  setLength(crates[destination],length(crates[destination])+1);
-  crates[destination][length(crates[destination])-1]:= crates[source][length(crates[source]) - 1];
-  setLength(crates[source],length(crates[source])-1);
+  groupToMove:=Copy(crates[source],length(crates[source])-(groupSize),groupSize);
+  setLength(crates[destination],length(crates[destination])+groupSize);
+  for index:= 0 to pred(groupSize) do
+
+  //items to move 3
+  //length = 4
+  //1st is 1 (4 - 3 + 0)
+  //2nd is 2 (4 - 3 + 1)
+  //3rd is 3 (4 - 3 + 2)
+  crates[destination][length(crates[destination])- groupSize + index]:= groupToMove[index];
+
+  setLength(crates[source],length(crates[source])-groupSize);
 end;
 
 constructor TDayFive.create(filename: string; paintbox_: TPaintbox);
@@ -100,7 +110,9 @@ var
   instruction:TStringArray;
   topCrates:string;
 begin
+  //Todo - set columns dynamically to allow test data
   setLength(fCrates,9,0);
+  //Todo calculate puzzle lines to allow test data
   fcrateData:=Copy(puzzleInputLines,0,8);
   fMoveInstructions:=Copy(puzzleInputLines,10,pred(puzzleInputLines.size));
   extractCrates;
@@ -113,12 +125,31 @@ begin
   //Then get the top crate from each column
   for index:= 0 to pred(length(fCrates)) do
     topCrates:=topCrates+crates[index][length(crates[index])-1];
-  results.Add('Top crates after rearranging '+topCrates);
+  results.Add('Top crates after rearranging singly'+topCrates);
 end;
 
 procedure TDayFive.runPartTwo;
+var
+  index: integer;
+  instruction:TStringArray;
+  topCrates:string;
 begin
-
+  //Todo - set columns dynamically to allow test data
+  setLength(fCrates,9,0);
+  //Todo calculate puzzle lines to allow test data
+  fcrateData:=Copy(puzzleInputLines,0,8);
+  fMoveInstructions:=Copy(puzzleInputLines,10,pred(puzzleInputLines.size));
+  extractCrates;
+  for index:= 0 to pred(moveInstructions.size) do
+    begin
+      instruction:=moveInstructions[index].Split(' ');
+      moveCrates(instruction[1].ToInteger,instruction[3].ToInteger-1,instruction[5].ToInteger-1,false);
+    end;
+  topCrates:='';
+  //Then get the top crate from each column
+  for index:= 0 to pred(length(fCrates)) do
+    topCrates:=topCrates+crates[index][length(crates[index])-1];
+  results.Add('Top crates after rearranging in groups'+topCrates);
 end;
 
 end.
