@@ -60,6 +60,8 @@ begin
   extractCrates;
 end;
 
+//Take the portion of the input data that contains the crate data
+//and add it to a 2D string array where array[C][R] represents column C row R
 procedure TDayFive.extractCrates;
 var
   crateLineIndex,crateIndex,columnIndex,rowIndex:integer;
@@ -87,7 +89,11 @@ begin
     end;
 end;
 
-//Modified to make part two work without affecting part one
+//If the moveSingly parameter is true it calls moveCrateGroup 'quantity' times
+//with group size defaulting to 1 (puzzle part one)
+
+//If moveSingly is false it calls moveCrateGroup once with the group size set
+//to the quantity. (puzzle part two)
 procedure TDayFive.moveCrates(quantity, source, destination: integer;moveSingly:boolean);
 var
   index:integer;
@@ -98,6 +104,8 @@ begin
   else moveCrateGroup(source,destination,quantity);
 end;
 
+//Called by move crates method above. The default group size is 1 but this
+//can be overridden to move multiple crates
 procedure TDayFive.moveCrateGroup(source,destination:integer;groupSize:integer);
 var
   groupToMove:TStringArray;
@@ -125,7 +133,6 @@ begin
       moveCrates(instruction[1].ToInteger,instruction[3].ToInteger-1,instruction[5].ToInteger-1);
     end;
   topCrates:='';
-  //Then get the top crate from each column
   for index:= 0 to pred(length(fCrates)) do
     topCrates:=topCrates+crates[index][length(crates[index])-1];
   results.Add('Top crates after rearranging singly '+topCrates);
@@ -144,7 +151,6 @@ begin
       moveCrates(instruction[1].ToInteger,instruction[3].ToInteger-1,instruction[5].ToInteger-1,false);
     end;
   topCrates:='';
-  //Then get the top crate from each column
   for index:= 0 to pred(length(fCrates)) do
     topCrates:=topCrates+crates[index][length(crates[index])-1];
   results.Add('Top crates after rearranging in groups '+topCrates);
