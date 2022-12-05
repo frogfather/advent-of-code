@@ -102,9 +102,8 @@ var
   currentIndex:integer;
 begin
   currentIndex:=cbSelect.ItemIndex;
-  cbSelectSelect(self);
   //re-select the item in the combo box to reload the file
-
+  cbSelectSelect(self);
 end;
 
 procedure TMainForm.bExecuteClick(Sender: TObject);
