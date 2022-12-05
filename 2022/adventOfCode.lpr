@@ -8,7 +8,7 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, aoc_22, iAoc, day1, day2, aocPuzzle, visualise, anysort, aocUtils,
-  arrayUtils, fileUtilities, day3, day4
+  arrayUtils, fileUtilities, day3, day4, day5
   { you can add units after this };
 
 {$R *.res}

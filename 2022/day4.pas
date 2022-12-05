@@ -8,10 +8,8 @@ uses
   Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics, arrayUtils;
 
 type
-{ TDay Four }
-  
-  { TDayFour }
 
+  { TDay Four }
   TDayFour = class(TAocPuzzle)
   private
   fName:string;

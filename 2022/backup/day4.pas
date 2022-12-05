@@ -43,7 +43,7 @@ begin
       exit;
     end;
   result:= ((first.X <= second.X) and (first.Y >= second.X))
-     or ((second.X <= first.X) and (second.Y >= first.Y))
+     or ((second.X <= first.X) and (second.Y >= first.X))
 end;
 
 constructor TDayFour.create(filename: string; paintbox_: TPaintbox);
