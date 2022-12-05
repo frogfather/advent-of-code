@@ -17,9 +17,9 @@ type
   private
   fName:string;
   fCrates:T2DStringArray;
+  fCrateData:TStringArray;
   fMoveInstructions: TStringArray;
-  procedure separateCratesFromInstructions;
-  procedure extractCrates(crates:TStringArray);
+  procedure extractCrates;
   procedure moveCrates(quantity,source,destination:integer);
   procedure moveSingleCrate(source,destination:integer);
   public
@@ -33,24 +33,15 @@ implementation
 
 { TDayFive }
 
-procedure TDayFive.separateCratesFromInstructions;
-var
-  crateData:TStringArray;
-begin
-  crateData:=Copy(puzzleInputLines,0,8);
-  fMoveInstructions:=Copy(puzzleInputLines,10,pred(puzzleInputLines.size));
-  extractCrates(crateData);
-end;
-
-procedure TDayFive.extractCrates(crates: TStringArray);
+procedure TDayFive.extractCrates;
 var
   crateLineIndex,crateIndex,columnIndex,rowIndex:integer;
   crateLine,crate:string;
 begin
   rowIndex:=0; //index of 2nd level array
-  for crateLineIndex:= pred(crates.size) downTo 0 do
+  for crateLineIndex:= pred(fcrateData.size) downTo 0 do
     begin
-    crateLine:=crates[crateLineIndex];
+    crateLine:=fcrateData[crateLineIndex];
     crateIndex:=1; //actual position in the string;
     //Spaces are important here - some columns may be empty
     //the letters are 4 spaces apart
@@ -74,21 +65,22 @@ end;
 //So column 1 row 4 is [0][3]
 procedure TDayFive.moveCrates(quantity, source, destination: integer);
 var
-  srcColumnHeight,destColumnHeight:integer;
   index:integer;
 begin
-  //can we assume that we won't be asked to move more crates than there are
-  //in the column?
-  //we move the top crate from the source to the destination
-  //we do this 'quantity' times
-
-
+  for index:= 0 to pred(quantity) do
+    moveSingleCrate(source,destination);
 end;
 
 procedure TDayFive.moveSingleCrate(source, destination: integer);
 begin
   //move the top crate from the source to the destination
   //and adjust column heights
+  //Does the top crate exist?
+  if (length(crates[source]) = 0) then
+    begin
+    debugln('nothing to move');
+    exit;
+    end;
   setLength(crates[destination],length(crates[destination])+1);
   crates[destination][length(crates[destination])-1]:= crates[source][length(crates[source]) - 1];
   setLength(crates[source],length(crates[source])-1);
@@ -100,13 +92,27 @@ begin
   fName:= 'Day 4';
   //set the 2D array to an initial size of 9 columns
   //the height of each column will be set dynamically
-  setLength(fCrates,9,0);
-  separateCratesFromInstructions;
 end;
 
 procedure TDayFive.runPartOne;
+var
+  index: integer;
+  instruction:TStringArray;
+  topCrates:string;
 begin
-
+  setLength(fCrates,9,0);
+  fcrateData:=Copy(puzzleInputLines,0,8);
+  fMoveInstructions:=Copy(puzzleInputLines,10,pred(puzzleInputLines.size));
+  extractCrates;
+  for index:= 0 to pred(moveInstructions.size) do
+    begin
+      instruction:=moveInstructions[index].Split(' ');
+      moveCrates(instruction[1].ToInteger,instruction[3].ToInteger-1,instruction[5].ToInteger-1);
+    end;
+  topCrates:='';
+  //Then get the top crate from each column
+  for index:= 0 to pred(length(fCrates)) do
+  topCrates:=topCrates+crates[index][length(crates[index])-1];
 end;
 
 procedure TDayFive.runPartTwo;
