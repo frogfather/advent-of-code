@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics,
   Dialogs, StdCtrls, Math, clipbrd, ExtCtrls, DateUtils, fpJSON,
   aocUtils, arrayUtils,iAoc,visualise,
-  day1,day2,day3,day4,day5;
+  day1,day2,day3,day4,day5, day6;
 
 type
 
@@ -90,6 +90,8 @@ begin
    3: fpuzzle:= TDayThree.Create(fPuzzleFile);
    4: fpuzzle:= TDayFour.Create(fPuzzleFile);
    5: fpuzzle:= TDayFive.Create(fPuzzleFile);
+   6: fpuzzle:= TDaySix.Create(fPuzzleFile);
+
   end;
   bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
   bExecute.Enabled:=fPuzzle <> nil;
