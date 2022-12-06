@@ -8,9 +8,6 @@ uses
   Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics, arrayUtils;
 
 type
-
-  { TDay Five }
-  
   { TDayFive }
 
   TDayFive = class(TAocPuzzle)
@@ -37,7 +34,7 @@ implementation
 constructor TDayFive.create(filename: string; paintbox_: TPaintbox);
 begin
   inherited create(filename,paintbox_);
-  fName:= 'Day 4';
+  fName:= 'Day 5';
 end;
 
 procedure TDayFive.setup;
