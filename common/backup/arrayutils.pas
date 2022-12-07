@@ -10,7 +10,6 @@ uses
 type
   //Looks like the built in TintegerArray is a static array
   //so let's define our own dynamic integer array
-  TCharArray = specialize Tarray<Char>;
   TIntArray = specialize Tarray<Integer>;
   TInt64Array = specialize Tarray<Int64>;
   TStringMap = specialize TFPGMap<String,String>;
@@ -344,7 +343,7 @@ begin
   //TODO - if index is negative should start at end of array
 
   //if the delete normalizedCount would take us off the end of the array then adjust it
-  if (deleteCount > high(aArray) - normalizedIndex) then
+  if (deleteCount > length(aArray) - normalizedIndex) then
     normalizedCount:= high(aArray) - normalizedIndex
       else normalizedCount:= deleteCount;
 
