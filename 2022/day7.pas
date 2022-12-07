@@ -132,27 +132,22 @@ end;
 
 procedure TDaySeven.runPartTwo;
 var
-  requiredFreeSpace:integer;
+  spaceToFree:integer;
   index,difference,closest,closestIndex:integer;
 begin
-  //required size for update is 30,000,000
-  //overall space is 70,000,000
-  //so, get the size of /
-  //and work out how much space we need to free up
   calculateDirectorySizes;
-  requiredFreeSpace:= 30000000 - (70000000 - directorySizes.Data[0]);
-  //closest but larger
+  spaceToFree:= 30000000 - (70000000 - directorySizes.Data[0]);
   closest:=70000000; //needs to be larger than the largest value we'll find
   for index:=0 to pred(directorySizes.Count) do
     begin
-    difference:=directorySizes.Data[index] - requiredFreeSpace;
-    if (difference > 0) and (difference < closest) then
+    difference:=spaceToFree - directorySizes.Data[index];
+    if (difference < 0) and (abs(difference) < closest) then
       begin
-      closest:=difference;
+      closest:=abs(difference);
       closestIndex:=index;
       end;
     end;
-  results.add('Item to delete is '+directorySizes.Keys[index]+' with size'+ directorySizes.Data[index].ToString);
+  results.add('Item to delete is '+directorySizes.Keys[closestIndex]+' with size '+ directorySizes.Data[closestIndex].ToString);
   end;
 
 end.
