@@ -13,7 +13,6 @@ type
 
   TDaySeven = class(TAocPuzzle)
   private
-    fName: string;
     fDirectorySizes: TStringIntMap;
     fPathsToUpdate: TStringArray;
     fCurrentPath: string;
@@ -103,8 +102,7 @@ end;
 
 constructor TDaySeven.Create(filename: string; paintbox_: TPaintbox);
 begin
-  inherited Create(filename, paintbox_);
-  fName := 'Day 7';
+  inherited Create(filename,'Day 7',paintbox_);
   fDirectorySizes := TStringIntMap.Create;
   fDirectorySizes.Sorted := True;
   fPathsToUpdate := TStringArray.Create;

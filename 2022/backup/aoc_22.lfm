@@ -2,10 +2,10 @@ object MainForm: TMainForm
   Left = 59
   Height = 523
   Top = 107
-  Width = 1340
+  Width = 1096
   Caption = 'MainForm'
   ClientHeight = 523
-  ClientWidth = 1340
+  ClientWidth = 1096
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
@@ -32,7 +32,7 @@ object MainForm: TMainForm
     Left = 560
     Height = 404
     Top = 56
-    Width = 743
+    Width = 499
     Anchors = [akTop, akLeft, akRight, akBottom]
     Font.Pitch = fpFixed
     ItemHeight = 0

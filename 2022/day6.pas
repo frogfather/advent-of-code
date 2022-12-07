@@ -12,7 +12,6 @@ type
 
   TDaySix = class(TAocPuzzle)
   private
-  fName:string;
   function noRepeats(buffersize,index:integer):boolean;
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
@@ -26,8 +25,7 @@ implementation
 
 constructor TDaySix.create(filename: string; paintbox_: TPaintbox);
 begin
-  inherited create(filename,paintbox_);
-  fName:= 'Day 6';
+  inherited create(filename,'Day 6',paintbox_);
 end;
 
 function TDaySix.noRepeats(buffersize, index: integer): boolean;

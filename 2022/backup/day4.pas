@@ -8,10 +8,8 @@ uses
   Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics, arrayUtils;
 
 type
-{ TDay Four }
-  
-  { TDayFour }
 
+  { TDay Four }
   TDayFour = class(TAocPuzzle)
   private
   fName:string;
@@ -48,8 +46,7 @@ end;
 
 constructor TDayFour.create(filename: string; paintbox_: TPaintbox);
 begin
-inherited create(filename,paintbox_);
-fName:= 'Day 4';
+inherited create(filename,'Day 4',paintbox_);
 end;
 
 procedure TDayFour.runPartOne;

@@ -11,7 +11,6 @@ type
 { TDayThree }
   TDayThree = class(TAocPuzzle)
   private
-  fName:string;
   function asciiToIndex(input:char):integer;
   function commonItems(string1,string2:string;string3:string = ''):string;
   public
@@ -49,8 +48,7 @@ end;
 
 constructor TDayThree.create(filename: string; paintbox_: TPaintbox);
 begin
-inherited create(filename,paintbox_);
-fName:= 'Day 3';
+inherited create(filename,'Day 3',paintbox_);
 end;
 
 procedure TDayThree.runPartOne;

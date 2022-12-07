@@ -12,7 +12,6 @@ type
   { TDay Four }
   TDayFour = class(TAocPuzzle)
   private
-  fName:string;
   public
   function encloses(first,second:TPoint):boolean;
   function overlaps(first,second:TPoint):boolean;
@@ -46,8 +45,7 @@ end;
 
 constructor TDayFour.create(filename: string; paintbox_: TPaintbox);
 begin
-inherited create(filename,paintbox_);
-fName:= 'Day 4';
+inherited create(filename,'Day 4',paintbox_);
 end;
 
 procedure TDayFour.runPartOne;

@@ -23,7 +23,6 @@ type
 implementation
 
 { TDayThree }
-
 //Return the value of the letter indicated in the puzzle
 function TDayThree.asciiToIndex(input: char): integer;
 begin
@@ -49,11 +48,8 @@ begin
 end;
 
 constructor TDayThree.create(filename: string; paintbox_: TPaintbox);
-var
-  index:integer;
 begin
-inherited create(filename,paintbox_);
-fName:= 'Day 3';
+inherited create(filename,'Day 3',paintbox_);
 end;
 
 procedure TDayThree.runPartOne;

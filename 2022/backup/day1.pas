@@ -25,9 +25,8 @@ implementation
 
 constructor TDayOne.create(filename:string;paintbox_:TPaintbox);
 begin
-inherited create(filename,paintbox_);
-fName:= 'Day 1';
-//parent loads the file as a string;
+inherited create(filename,'Day 1',paintbox_);
+//parent loads the file as a string and converts to string array;
 end;
 
 //We have a list of groups of numbers separated by blank lines

@@ -13,6 +13,7 @@ type
 
   TAocPuzzle = class(TInterfacedObject, iAdvent)
   private
+    fName:string;
     fPaintBox:TPaintbox;
     fResults: TStringList;
     fData: string;
@@ -20,10 +21,11 @@ type
     function getResults: TStringList;
     procedure setResults(results_:TStringlist);
   public
-    constructor Create(filename: string;paintbox:TPaintBox = nil);
+    constructor Create(filename,name_: string;paintbox:TPaintBox = nil);
     procedure runPartOne; virtual abstract;
     procedure runPartTwo; virtual abstract;
     procedure run(partOne: boolean = True);
+    property name: string read fName;
     property results: TStringList read getResults write setResults;
     property paintbox: TPaintbox read fPaintbox;
     property puzzleInput:string read fData;
@@ -34,8 +36,9 @@ implementation
 
 { TAocPuzzle }
 
-constructor TAocPuzzle.Create(filename: string; paintbox: TPaintBox);
+constructor TAocPuzzle.Create(filename,name_: string; paintbox: TPaintBox);
 begin
+  fName:=name_;
   fResults:=TStringlist.Create;
   fPaintbox:=paintbox;
   try

@@ -26,8 +26,7 @@ implementation
 
 constructor TDaySix.create(filename: string; paintbox_: TPaintbox);
 begin
-  inherited create(filename,paintbox_);
-  fName:= 'Day 6';
+  inherited create(filename,'Day 6',paintbox_);
 end;
 
 function TDaySix.noRepeats(buffersize, index: integer): boolean;
@@ -64,8 +63,17 @@ begin
 end;
 
 procedure TDaySix.runPartTwo;
+var
+  index:integer;
 begin
-
+  for index:=13 to Pred(length(puzzleInput)) do
+    begin
+      if noRepeats(14,index) then
+        begin
+        results.Add('Start of packet marker at '+(index+1).ToString);
+        exit;
+        end;
+    end;
 end;
 
 end.

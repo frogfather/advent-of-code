@@ -11,7 +11,6 @@ type
   { TDayTwo }
   TDayTwo = class(TAocPuzzle)
   private
-  fName:string;
   function gamePoints(input,response:string):integer;
   function gamePoints2(input,outcome:string):integer;
   public
@@ -80,8 +79,7 @@ end;
 
 constructor TDayTwo.create(filename:string;paintbox_:TPaintbox);
 begin
-inherited create(filename,paintbox_);
-fName:= 'Day 2';
+inherited create(filename,'Day 2',paintbox_);
 //Create a string int map to convert the items played to values
 scoring:= TStringIntMap.Create;
 scoring.Add('A',1);

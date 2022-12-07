@@ -25,6 +25,12 @@ var
   scoring: TStringIntMap;
 { TDayOne }
 
+//Note: William Feng's solution maps the inputs to 0,1,2 and then uses mod3 to determine the
+//outcome. This is a cleaner solution than mine, but since I didn't think of it I'll leave mine as it is,
+//https://www.youtube.com/watch?v=oNAChDCtk9Q
+//Jonathan Paulsons approach is a little different
+//https://www.youtube.com/watch?v=X1XH774hId0
+
 function TDayTwo.gamePoints(input, response: string): integer;
   var
     theirInput,ourInput:integer;
@@ -74,8 +80,7 @@ end;
 
 constructor TDayTwo.create(filename:string;paintbox_:TPaintbox);
 begin
-inherited create(filename,paintbox_);
-fName:= 'Day 2';
+inherited create(filename,'Day 2',paintbox_);
 //Create a string int map to convert the items played to values
 scoring:= TStringIntMap.Create;
 scoring.Add('A',1);

@@ -11,7 +11,6 @@ type
   { TDayOne }
   TDayOne = class(TAocPuzzle)
   private
-  fName:string;
   function processAndSort:TIntArray;
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
@@ -25,8 +24,7 @@ implementation
 
 constructor TDayOne.create(filename:string;paintbox_:TPaintbox);
 begin
-inherited create(filename,paintbox_);
-fName:= 'Day 1';
+inherited create(filename,'Day 1',paintbox_);
 //parent loads the file as a string and converts to string array;
 end;
 

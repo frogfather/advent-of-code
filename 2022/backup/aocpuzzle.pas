@@ -40,7 +40,7 @@ begin
   fPaintbox:=paintbox;
   try
   fData:=readStream(filename);
-  fDataAsLines:=fData.Split(#$0A);
+  fDataAsLines:=fData.Split(#$0A,TStringSplitOptions.ExcludeLastEmpty);
   except
   on E: Exception do
   DebugLn('Error reading puzzle file '+E.Message);
