@@ -133,7 +133,7 @@ end;
 procedure TDaySeven.runPartTwo;
 var
   spaceToFree:integer;
-  index,difference,closest,closestIndex,dirSize:integer;
+  index,difference,closest,closestIndex:integer;
 begin
   calculateDirectorySizes;
   spaceToFree:= 30000000 - (70000000 - directorySizes.Data[0]);
