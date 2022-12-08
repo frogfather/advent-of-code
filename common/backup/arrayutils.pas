@@ -344,7 +344,7 @@ begin
 
   //if the delete normalizedCount would take us off the end of the array then adjust it
   if (deleteCount > length(aArray) - normalizedIndex) then
-    normalizedCount:= high(aArray) - normalizedIndex
+    normalizedCount:= length(aArray) - normalizedIndex
       else normalizedCount:= deleteCount;
 
    if(deleteCount > 0) then

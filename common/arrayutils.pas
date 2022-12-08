@@ -55,6 +55,12 @@ type
   function splice(index:integer; deleteCount: integer=0; newItems: TPointArray=nil):TPointArray;
   end;
 
+  { T3DIntMapHelper }
+  T3DIntMapHelper = type helper for T3DIntMap
+  function max(xStart,xEnd,yStart,yEnd,zStart,zEnd:integer):integer;
+  function min(xStart,xEnd,yStart,yEnd,zStart,zEnd:integer):integer;
+  end;
+
 function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
 function containsCharacters(toSearch,toFind:String):boolean;
@@ -367,6 +373,40 @@ begin
      for adjustIndex:= 0 to high(newItems) do
        aArray[index+adjustIndex]:= newItems[adjustIndex];
      end;
+end;
+
+{ T3DIntMapHelper }
+
+function T3DIntMapHelper.max(xStart, xEnd, yStart, yEnd, zStart, zEnd: integer
+  ): integer;
+var
+  x,y,z:integer;
+begin
+  result:=self[xStart][yStart][zStart];
+  for x:=xStart to xEnd do
+    for y:=yStart to yEnd do
+      for z:= zStart to zEnd do
+        try
+          if (self[x][y][z]) > result then result:= self[x][y][z];
+        finally
+          //do nothing - if the contents of the array isn't an integer ignore
+        end;
+end;
+
+function T3DIntMapHelper.min(xStart, xEnd, yStart, yEnd, zStart, zEnd: integer
+  ): integer;
+var
+  x,y,z:integer;
+begin
+  result:=self[xStart][yStart][zStart];
+  for x:=xStart to xEnd do
+    for y:=yStart to yEnd do
+      for z:= zStart to zEnd do
+        try
+          if (self[x][y][z]) < result then result:= self[x][y][z];
+        finally
+          //do nothing - if the contents of the array isn't an integer ignore
+        end;
 end;
 
 { TPointArrayHelper }
