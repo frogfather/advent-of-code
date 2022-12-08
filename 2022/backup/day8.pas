@@ -47,7 +47,6 @@ begin
       map[x][y][0]:=puzzleInputLines[y].Substring(x,1).ToInteger;
       map[x][y][1]:=0; //Part 1: 0 = no view and 1 = view. Part 2: score
     end;
-  results.add('puzzle is '+ x.toString+' wide and '+y.toString+' high '+(x*y).ToString);
 end;
 
 procedure TDayEight.findThisTreeScore(x, y: integer);
@@ -98,7 +97,6 @@ end;
 procedure TDayEight.checkIfThisTreeHasView(x,y:integer);
 var
   thisTreeHeight,checkTreeHeight,xIndex,yIndex:integer;
-  viewInThisDirection:boolean;
 begin
   thisTreeHeight:=map[x][y][0];
   if (x=0) or (y=0) then
@@ -106,62 +104,22 @@ begin
       map[x][y][1]:=1;
       exit;
     end;
-  viewInThisDirection:=true;
-  for xIndex:=(x-1) downTo 0 do
-    begin
-      checkTreeHeight:= map[xIndex][y][0];
-    if (checkTreeHeight >= thisTreeHeight) then
-      begin
-      viewInThisDirection:=false;
-      break;
-      end;
-    end;
-  if viewInThisDirection then
+  If map.max(0,x-1,y,y,0,0) < thisTreeHeight then
     begin
       map[x][y][1]:=1;
       exit;
     end;
-  viewInThisDirection:=true;
-  for xIndex:=(x+1) to pred(length(map)) do
-    begin
-    checkTreeHeight:= map[xIndex][y][0];
-    if (checkTreeHeight >= thisTreeHeight) then
-      begin
-      viewInThisDirection:=false;
-      break;
-      end;
-    end;
-  if viewInThisDirection then
+  if map.max(x+1,pred(length(map)),y,y,0,0) < thisTreeHeight then
     begin
       map[x][y][1]:=1;
       exit;
     end;
-  viewInThisDirection:=true;
-  for yIndex:=(y-1) downto 0 do
-    begin
-    checkTreeHeight:= map[x][yIndex][0];
-    if (checkTreeHeight >= thisTreeHeight) then
-      begin
-      viewInThisDirection:=false;
-      break;
-      end;
-    end;
-  if viewInThisDirection then
+  if map.max(x,x,0,y-1,0,0) < thisTreeHeight then
     begin
       map[x][y][1]:=1;
       exit;
     end;
-  viewInThisDirection:=true;
-  for yIndex:= (y+1) to pred(length(map[x])) do
-    begin
-    checkTreeHeight:= map[x][yIndex][0];
-    if (checkTreeHeight >= thisTreeHeight) then
-      begin
-      viewInThisDirection:=false;
-      break;
-      end;
-    end;
-  if viewInThisDirection then
+  if map.max(x,x,y+1,pred(Length(map[x])),0,0) < thisTreeHeight then
     begin
       map[x][y][1]:=1;
       exit;
