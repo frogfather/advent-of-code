@@ -29,6 +29,13 @@ implementation
 
 { TDayEight }
 
+constructor TDayEight.Create(filename: string; paintbox_: TPaintbox);
+begin
+  inherited Create(filename,'Day 8',paintbox_);
+  fTreeMap:=T3DIntMap.Create;
+end;
+
+
 procedure TDayEight.initializeMap;
 var
   x,y:integer;
@@ -38,7 +45,7 @@ begin
     for y:=0 to pred(puzzleInputLines.size) do
     begin
       map[x][y][0]:=puzzleInputLines[y].Substring(x,1).ToInteger;
-      map[x][y][1]:=0; //no view initially
+      map[x][y][1]:=0; //Part 1: 0 = no view and 1 = view. Part 2: score
     end;
 end;
 
@@ -46,10 +53,7 @@ procedure TDayEight.findThisTreeScore(x, y: integer);
 var
   thisTreeHeight,thisTreeScore,xIndex,yIndex,dirScore:integer;
 begin
- //we find how many trees in each direction are smaller than this one
- //if a tree is bigger or the same size we stop (and include that one)
  thisTreeHeight:=map[x][y][0];
-
  thisTreeScore:=1;
  //North
  dirScore:=0;
@@ -87,8 +91,6 @@ begin
     if (map[xIndex][y][0] >= thisTreeHeight) then break;
     end;
  thisTreeScore:=thisTreeScore * dirScore;
-
- results.add('tree at '+x.toString+' '+y.ToString+' has score '+thisTreeScore.toString);
  map[x][y][1]:=thisTreeScore;
 end;
 
@@ -198,12 +200,6 @@ begin
   for x:=0 to pred(length(map)) do
     for y:=0 to pred(length(map[x])) do
       if (map[x][y][1] > result) then result:= map[x][y][1];
-end;
-
-constructor TDayEight.Create(filename: string; paintbox_: TPaintbox);
-begin
-  inherited Create(filename,'Day 8',paintbox_);
-  fTreeMap:=T3DIntMap.Create;
 end;
 
 procedure TDayEight.runPartOne;
