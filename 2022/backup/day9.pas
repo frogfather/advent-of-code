@@ -78,9 +78,6 @@ var
   direction:String;
   steps,stepCount,knotNumber:integer;
   tailKnot:TPoint;
-
-  testLog:string;
-  testIndex:integer;
 begin
   tailKnot:=fknots[pred(fknots.size)];
   map[tailKnot.X][tailKnot.Y][1]:=1; //mark initial tail position

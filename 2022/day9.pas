@@ -66,7 +66,6 @@ begin
   results.add('Grid is '+length(fgrid).toString+':'+length(fGrid[0]).toString);
   //update for part two instead of using fTail and fHead we use
   //an array of points
-  results.add('Initial location of all knots '+(headMin.X * -1).ToString+':'+(headMin.Y * -1).ToString);
   for knotIndex:=0 to pred(knots) do
     fKnots.push(TPoint.Create((headMin.X * -1),(headMin.Y * -1)));
 end;
