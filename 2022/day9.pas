@@ -35,6 +35,7 @@ begin
   fGrid:=T3DIntMap.create;
 end;
 
+//This method determines the size of the map and sets the starting point of the head
 procedure TDayNine.setupGrid(knots:integer);
 var
   headPos,headMax,headMin:TPoint;
@@ -92,6 +93,7 @@ begin
     end;
 end;
 
+//Moves the head knot one step in the required direction
 procedure TDayNine.moveSingleStep(direction: string);
 begin
   case direction of
@@ -102,6 +104,7 @@ begin
   end;
 end;
 
+//Updates a single knot based on the position of the previous knot in the array
 procedure TDayNine.updateKnot(knotIndex:integer);
 var
   xDisp,yDisp:integer;
