@@ -63,7 +63,6 @@ begin
     if headPos.X > headMax.X then headMax.X:=headPos.X;
   end;
   setLength(fGrid,(headMax.X - headMin.X)+1,(headMax.Y - headMin.Y)+1,2);
-  results.add('Grid is '+length(fgrid).toString+':'+length(fGrid[0]).toString);
   //update for part two instead of using fTail and fHead we use
   //an array of points
   for knotIndex:=0 to pred(knots) do
