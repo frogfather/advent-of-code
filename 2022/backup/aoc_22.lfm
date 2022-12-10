@@ -2,10 +2,10 @@ object MainForm: TMainForm
   Left = 59
   Height = 523
   Top = 107
-  Width = 1144
+  Width = 1343
   Caption = 'MainForm'
   ClientHeight = 523
-  ClientWidth = 1144
+  ClientWidth = 1343
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
@@ -32,7 +32,7 @@ object MainForm: TMainForm
     Left = 560
     Height = 404
     Top = 56
-    Width = 547
+    Width = 746
     Anchors = [akTop, akLeft, akRight, akBottom]
     Font.Pitch = fpFixed
     ItemHeight = 0
@@ -52,7 +52,7 @@ object MainForm: TMainForm
     TabOrder = 3
   end
   object bVisualise: TButton
-    Left = 1032
+    Left = 1231
     Height = 25
     Top = 480
     Width = 75
