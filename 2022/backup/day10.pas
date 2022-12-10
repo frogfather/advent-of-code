@@ -58,6 +58,8 @@ begin
   done:=false;
   getNext:=true;
   fTotalValue:=0;
+  displayX:=0;
+  displayY:=0;
   while not done do
     begin
     cycle:=cycle + 1;
@@ -76,7 +78,7 @@ begin
     //Used in part 1
     signalStrength:=X * cycle;
     if (cyclesToAdd.indexOf(cycle) > -1) then
-       fTotalValue:=totalValue + signalStrength;
+       fTotalValue:=fTotalValue + signalStrength;
 
     //Used in part 2
     //if the current pixel ((cycle-1) mod 40) is in range (x-1, x+1) then we draw # otherwise we draw '.'
