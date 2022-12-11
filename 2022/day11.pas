@@ -24,13 +24,13 @@ type
     fNotifyThrowItem: TNotifyEvent;
     fThrownItem: int64;
     fThrowTo: integer;
-    procedure doRound(reduceWorryIfNotDamaged:boolean);
+    procedure doRound(reduceWorryIfNotDamaged: boolean);
   public
     constructor Create(id, opMultiply, opAdd, testDivisor, testTrue, testFalse: integer;
       items: TInt64Array; throwHandler: TNotifyEvent);
     property thrownItem: int64 read fThrownItem;
     property throwTo: integer read fThrowTo;
-    property inspectedItems:integer read fInspected;
+    property inspectedItems: integer read fInspected;
   end;
 
   { TMonkeys }
@@ -48,7 +48,7 @@ type
     fMonkeys: TMonkeys;
     procedure generateMonkeys;
     procedure handleThrownItem(Sender: TObject);
-    function runPuzzle(rounds:integer;reduceWorryIfNotDamaged:boolean=true):TIntArray;
+    function runPuzzle(rounds: integer; reduceWorryIfNotDamaged: boolean = True): TIntArray;
   public
     constructor Create(filename: string; paintbox_: TPaintbox = nil);
     procedure runPartOne; override;
@@ -57,14 +57,15 @@ type
 
 implementation
 
-var commonFactor: Integer;
+var
+  commonFactor: integer;
 
 { TDayEleven }
 constructor TDayEleven.Create(filename: string; paintbox_: TPaintbox);
 begin
   inherited Create(filename, 'Day 11', paintbox_);
   fMonkeys := TMonkeys.Create;
-  commonFactor:=1;
+  commonFactor := 1;
 end;
 
 procedure TDayEleven.generateMonkeys;
@@ -115,10 +116,10 @@ begin
           end;
         end;
         'Test:':
-          begin
+        begin
           testDivisor := lineElements[pred(lineElements.size)].ToInteger;
-          commonFactor:=commonFactor * testDivisor;
-          end;
+          commonFactor := commonFactor * testDivisor;
+        end;
         'If':
         begin
           if (lineElements[1] = 'true:') then
@@ -153,54 +154,57 @@ begin
       begin
         writeln('blah');
       end;
-    fMonkeys[throwTo].fItems.push(thrownItem);
+      fMonkeys[throwTo].fItems.push(thrownItem);
     end;
 
 end;
 
-function TDayEleven.runPuzzle(rounds:integer;reduceWorryIfNotDamaged:boolean=true):TIntArray;
+function TDayEleven.runPuzzle(rounds: integer;
+  reduceWorryIfNotDamaged: boolean = True): TIntArray;
 var
   monkeyIndex: integer;
-  roundNo:integer;
-  testIndex:integer;
-  str:string;
+  roundNo: integer;
+  testIndex: integer;
+  str: string;
 begin
   generateMonkeys;
-  results.add('common scaling factor is '+commonFactor.ToString);
-  for roundNo:=0 to pred(rounds) do
-    begin
-    writeLn('round '+roundNo.ToString);
+  results.add('common scaling factor is ' + commonFactor.ToString);
+  for roundNo := 0 to pred(rounds) do
+  begin
+    writeLn('round ' + roundNo.ToString);
     for monkeyIndex := 0 to pred(fMonkeys.size) do
       fMonkeys[monkeyIndex].doRound(reduceWorryIfNotDamaged);
-    end;
+  end;
 
-  result:=TIntArray.create;
+  Result := TIntArray.Create;
 
-  for monkeyIndex:=0 to pred(fMonkeys.size) do
-    result.push(fMonkeys[monkeyIndex].inspectedItems);
+  for monkeyIndex := 0 to pred(fMonkeys.size) do
+    Result.push(fMonkeys[monkeyIndex].inspectedItems);
 
-    results.Add('After '+rounds.tostring+' rounds:');
-    str:='';
-    for testIndex:= 0 to pred(fMonkeys.size) do
-      str:=str+fMonkeys[testIndex].inspectedItems.toString+' ';
-    results.add(str);
-  sort(result,result.size,false);
+  results.Add('After ' + rounds.tostring + ' rounds:');
+  str := '';
+  for testIndex := 0 to pred(fMonkeys.size) do
+    str := str + fMonkeys[testIndex].inspectedItems.toString + ' ';
+  results.add(str);
+  sort(Result, Result.size, False);
 end;
 
 procedure TDayEleven.runPartOne;
 var
-  inspectCount:TIntArray;
+  inspectCount: TIntArray;
 begin
-  inspectCount:=runPuzzle(20);
-  results.add('Most active monkeys multiplied '+(inspectCount[0]*inspectCount[1]).toString);
+  inspectCount := runPuzzle(20);
+  results.add('Most active monkeys multiplied ' +
+    (inspectCount[0] * inspectCount[1]).toString);
 end;
 
 procedure TDayEleven.runPartTwo;
 var
-  inspectCount:TIntArray;
+  inspectCount: TIntArray;
 begin
-  inspectCount:=runPuzzle(10000,false);
-  results.add('Most active monkeys multiplied '+(inspectCount[0]*inspectCount[1]).toString);
+  inspectCount := runPuzzle(10000, False);
+  results.add('Most active monkeys multiplied ' +
+    (inspectCount[0] * inspectCount[1]).toString);
 end;
 
 //=====================================
@@ -221,7 +225,7 @@ begin
   fNotifyThrowItem := throwHandler;
 end;
 
-procedure TMonkey.doRound(reduceWorryIfNotDamaged:boolean);
+procedure TMonkey.doRound(reduceWorryIfNotDamaged: boolean);
 var
   index: integer;
   multiplier: int64;
@@ -233,29 +237,25 @@ begin
     fThrownItem := fItems.shift;
     //to avoid the numbers getting insanely huge we need to find the product
     //of the divisor of all the monkeys and get our number mod that product
-    fThrownItem:= fThrownItem mod commonFactor;
+    fThrownItem := fThrownItem mod commonFactor;
 
-    if (fMultiply = -1)
-      then multiplier := fThrownItem
-    else multiplier := fMultiply;
+    if (fMultiply = -1) then multiplier := fThrownItem
+    else
+      multiplier := fMultiply;
 
     fThrownItem := (fThrownItem * multiplier) + fAdd;
 
     if reduceWorryIfNotDamaged then fThrownItem := fThrownItem div 3;
 
-    if (fThrownItem < 0 )then
-      begin
-        writeln('value '+fThrownItem.ToString+' monkey '+fId.toString+' item '+index.ToString);
-      end;
+    if (fThrownItem < 0) then
+    begin
+      writeln('value ' + fThrownItem.ToString + ' monkey ' + fId.toString +
+        ' item ' + index.ToString);
+    end;
 
-    if (fThrownItem mod fDivide = 0)
-      then fThrowTo := fIfTrue
-    else fThrowTo := fIfFalse;
-
-    if (fThrownItem > 2147483647) then
-      begin
-        writeln('well crap');
-      end;
+    if (fThrownItem mod fDivide = 0) then fThrowTo := fIfTrue
+    else
+      fThrowTo := fIfFalse;
 
     fNotifyThrowItem(self);
   end;

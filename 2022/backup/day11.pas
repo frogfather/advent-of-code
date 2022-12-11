@@ -252,6 +252,11 @@ begin
       then fThrowTo := fIfTrue
     else fThrowTo := fIfFalse;
 
+    if (fThrownItem > 2147483647) then
+      begin
+        writeln('well crap');
+      end;
+
     fNotifyThrowItem(self);
   end;
 end;
