@@ -19,16 +19,16 @@ type
     fDivide: integer;
     fIfTrue: integer;
     fIfFalse: integer;
-    fItems: TIntArray;
+    fItems: TInt64Array;
     fInspected: integer;
     fNotifyThrowItem: TNotifyEvent;
-    fThrownItem: integer;
+    fThrownItem: int64;
     fThrowTo: integer;
-    procedure doRound;
+    procedure doRound(reduceWorryIfNotDamaged:boolean);
   public
     constructor Create(id, opMultiply, opAdd, testDivisor, testTrue, testFalse: integer;
-      items: TIntArray; throwHandler: TNotifyEvent);
-    property thrownItem: integer read fThrownItem;
+      items: TInt64Array; throwHandler: TNotifyEvent);
+    property thrownItem: int64 read fThrownItem;
     property throwTo: integer read fThrowTo;
     property inspectedItems:integer read fInspected;
   end;
@@ -48,7 +48,7 @@ type
     fMonkeys: TMonkeys;
     procedure generateMonkeys;
     procedure handleThrownItem(Sender: TObject);
-    function runPuzzle(rounds:integer):TIntArray;
+    function runPuzzle(rounds:integer;reduceWorryIfNotDamaged:boolean=true):TIntArray;
   public
     constructor Create(filename: string; paintbox_: TPaintbox = nil);
     procedure runPartOne; override;
@@ -57,23 +57,25 @@ type
 
 implementation
 
+var commonFactor: Integer;
+
 { TDayEleven }
 constructor TDayEleven.Create(filename: string; paintbox_: TPaintbox);
 begin
   inherited Create(filename, 'Day 11', paintbox_);
   fMonkeys := TMonkeys.Create;
+  commonFactor:=1;
 end;
 
 procedure TDayEleven.generateMonkeys;
 var
   index: integer;
   monkeyId, opMultiply, opAdd, testDivisor, testTrue, testFalse: integer;
-  stringItems: TStringArray;
-  items: TIntArray;
+  items: TInt64Array;
   lineElements: TStringArray;
   firstWord: string;
 begin
-  items := TIntArray.Create;
+  items := TInt64Array.Create;
   monkeyId := -1;
   opMultiply := 1;
   opAdd := 0;
@@ -91,8 +93,8 @@ begin
             .ToInteger;
         'Starting':
         begin
-          //take the item after the colon and convert to intArray
-          items := csvToIntArray(puzzleInputLines[index].Substring(
+          //take the item after the colon and convert to int64Array
+          items := csvToInt64Array(puzzleInputLines[index].Substring(
             puzzleInputLines[index].IndexOf(':') + 1).Trim);
         end;
         'Operation:':
@@ -112,7 +114,11 @@ begin
             opMultiply := 1;
           end;
         end;
-        'Test:': testDivisor := lineElements[pred(lineElements.size)].ToInteger;
+        'Test:':
+          begin
+          testDivisor := lineElements[pred(lineElements.size)].ToInteger;
+          commonFactor:=commonFactor * testDivisor;
+          end;
         'If':
         begin
           if (lineElements[1] = 'true:') then
@@ -138,29 +144,46 @@ begin
   end;
 end;
 
+//When a monkey throws an item this catches it and gives it to the specified monkey
 procedure TDayEleven.handleThrownItem(Sender: TObject);
 begin
   if Sender is TMonkey then with Sender as TMonkey do
+    begin
+      if (thrownItem < 0) then
+      begin
+        writeln('blah');
+      end;
     fMonkeys[throwTo].fItems.push(thrownItem);
+    end;
+
 end;
 
-function TDayEleven.runPuzzle(rounds: integer): TIntArray;
+function TDayEleven.runPuzzle(rounds:integer;reduceWorryIfNotDamaged:boolean=true):TIntArray;
 var
   monkeyIndex: integer;
   roundNo:integer;
+  testIndex:integer;
+  str:string;
 begin
   generateMonkeys;
-
-  for roundNo:=0 to 19 do
+  results.add('common scaling factor is '+commonFactor.ToString);
+  for roundNo:=0 to pred(rounds) do
     begin
+    writeLn('round '+roundNo.ToString);
     for monkeyIndex := 0 to pred(fMonkeys.size) do
-      fMonkeys[monkeyIndex].doRound;
+      fMonkeys[monkeyIndex].doRound(reduceWorryIfNotDamaged);
     end;
+
   result:=TIntArray.create;
 
   for monkeyIndex:=0 to pred(fMonkeys.size) do
     result.push(fMonkeys[monkeyIndex].inspectedItems);
 
+    results.Add('After '+rounds.tostring+' rounds:');
+    str:='';
+    for testIndex:= 0 to pred(fMonkeys.size) do
+      str:=str+fMonkeys[testIndex].inspectedItems.toString+' ';
+    results.add(str);
   sort(result,result.size,false);
 end;
 
@@ -173,9 +196,11 @@ begin
 end;
 
 procedure TDayEleven.runPartTwo;
-
+var
+  inspectCount:TIntArray;
 begin
-
+  inspectCount:=runPuzzle(10000,false);
+  results.add('Most active monkeys multiplied '+(inspectCount[0]*inspectCount[1]).toString);
 end;
 
 //=====================================
@@ -183,7 +208,7 @@ end;
 { TMonkey }
 
 constructor TMonkey.Create(id, opMultiply, opAdd, testDivisor, testTrue,
-  testFalse: integer; items: TIntArray; throwHandler: TNotifyEvent);
+  testFalse: integer; items: TInt64Array; throwHandler: TNotifyEvent);
 begin
   fId := id;
   fmultiply := opMultiply;
@@ -196,25 +221,42 @@ begin
   fNotifyThrowItem := throwHandler;
 end;
 
-procedure TMonkey.doRound;
+procedure TMonkey.doRound(reduceWorryIfNotDamaged:boolean);
 var
   index: integer;
-  multiplier: integer;
+  multiplier: int64;
 begin
   if (fItems.size = 0) then exit;
   for index := 0 to pred(fItems.size) do
   begin
     fInspected := fInspected + 1;
     fThrownItem := fItems.shift;
-    if (fMultiply = -1) then multiplier := fThrownItem
-    else
-      multiplier := fMultiply;
+    //to avoid the numbers getting insanely huge we need to find the product
+    //of the divisor of all the monkeys and get our number mod that product
+    fThrownItem:= fThrownItem mod commonFactor;
+
+    if (fMultiply = -1)
+      then multiplier := fThrownItem
+    else multiplier := fMultiply;
+
     fThrownItem := (fThrownItem * multiplier) + fAdd;
-    fThrownItem := fThrownItem div 3;
-    if (fThrownItem mod fDivide = 0) then
-      fThrowTo := fIfTrue
-    else
-      fThrowTo := fIfFalse;
+
+    if reduceWorryIfNotDamaged then fThrownItem := fThrownItem div 3;
+
+    if (fThrownItem < 0 )then
+      begin
+        writeln('value '+fThrownItem.ToString+' monkey '+fId.toString+' item '+index.ToString);
+      end;
+
+    if (fThrownItem mod fDivide = 0)
+      then fThrowTo := fIfTrue
+    else fThrowTo := fIfFalse;
+
+    if (fThrownItem > 2147483647) then
+      begin
+        writeln('well crap');
+      end;
+
     fNotifyThrowItem(self);
   end;
 end;
