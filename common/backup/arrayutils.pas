@@ -27,6 +27,7 @@ type
   function size: integer;
   function push(element:integer):integer;
   function indexOf(element:integer):integer;
+  function shift:integer;
   function splice(index:integer; deleteCount:integer=0; newItems: TIntArray=nil):TIntArray;
   end;
 
@@ -36,6 +37,7 @@ type
   function size: integer;
   function push(element:int64):integer;
   function indexOf(element:int64):integer;
+  function shift:int64;
   function splice(index:integer; deleteCount:integer=0;newItems: TInt64Array=nil):TInt64Array;
   end;
 
@@ -55,11 +57,18 @@ type
   function splice(index:integer; deleteCount: integer=0; newItems: TPointArray=nil):TPointArray;
   end;
 
+  { T3DIntMapHelper }
+  T3DIntMapHelper = type helper for T3DIntMap
+  function max(xStart,xEnd,yStart,yEnd,zStart,zEnd:integer):integer;
+  function min(xStart,xEnd,yStart,yEnd,zStart,zEnd:integer):integer;
+  end;
+
 function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
 function containsCharacters(toSearch,toFind:String):boolean;
 function intArrayToCSV(input:TIntArray):string;
 function CSVToIntArray(input:string):TIntArray;
+function CSVToInt64Array(input:string):TInt64Array;
 procedure sort(var arr: array of Integer; count: Integer; ascending:boolean=true);
 procedure sort(var arr: array of int64; count: Integer; ascending:boolean=true);
 procedure sort(var arr: array of string; count: Integer; ascending:boolean=true);
@@ -259,20 +268,26 @@ end;
 function CSVToIntArray(input: string): TIntArray;
 var
   strArray:TStringArray;
-  output:TIntArray;
   index:integer;
 begin
   //should check these are integers
-  result:=nil;
-  if pos(',',input) > 0 then
-    begin
-    strArray:=input.Split(',');
-    output:=TIntArray.create;
-    setLength(output,length(strArray));
-    for index:=0 to pred(length(strArray)) do
-      output[index]:= strArray[index].ToInteger;
-    result:=output;
-    end;
+  result:=TIntArray.create;
+  strArray:=input.Split(',');
+  setLength(result,length(strArray));
+  for index:=0 to pred(length(strArray)) do
+    result[index]:= strArray[index].ToInteger;
+end;
+
+function CSVToInt64Array(input: string): TInt64Array;
+var
+  strArray:TStringArray;
+  index:integer;
+begin
+  result:=TInt64Array.create;
+  strArray:=input.Split(',');
+  setLength(result,length(strArray));
+  for index:=0 to pred(length(strArray)) do
+    result[index]:= strArray[index].ToInt64;
 end;
 
 procedure sort(var arr: array of Integer; count: Integer;ascending:boolean=true);
@@ -369,6 +384,41 @@ begin
      end;
 end;
 
+
+{ T3DIntMapHelper }
+
+function T3DIntMapHelper.max(xStart, xEnd, yStart, yEnd, zStart, zEnd: integer
+  ): integer;
+var
+  x,y,z:integer;
+begin
+  result:=self[xStart][yStart][zStart];
+  for x:=xStart to xEnd do
+    for y:=yStart to yEnd do
+      for z:= zStart to zEnd do
+        try
+          if (self[x][y][z]) > result then result:= self[x][y][z];
+        finally
+          //do nothing - if the contents of the array isn't an integer ignore
+        end;
+end;
+
+function T3DIntMapHelper.min(xStart, xEnd, yStart, yEnd, zStart, zEnd: integer
+  ): integer;
+var
+  x,y,z:integer;
+begin
+  result:=self[xStart][yStart][zStart];
+  for x:=xStart to xEnd do
+    for y:=yStart to yEnd do
+      for z:= zStart to zEnd do
+        try
+          if (self[x][y][z]) < result then result:= self[x][y][z];
+        finally
+          //do nothing - if the contents of the array isn't an integer ignore
+        end;
+end;
+
 { TPointArrayHelper }
 
 function TPointArrayHelper.size: integer;
@@ -437,6 +487,19 @@ begin
   result:= specialize getIndex<int64>(element,self);
 end;
 
+function TInt64ArrayHelper.shift: integer;
+var
+  index:integer;
+begin
+  if (self.size > 0) then
+    begin
+    result:=self[0];
+    if (self.size > 1) then for index:= 0 to pred(self.size) do
+      self[index]:=self[index+1];
+    setLength(self,pred(self.size));
+    end;
+end;
+
 function TInt64ArrayHelper.splice(index: integer; deleteCount: integer;
   newItems: TInt64Array): TInt64Array;
 begin
@@ -461,8 +524,21 @@ begin
   result:= specialize getIndex<integer>(element,self);
 end;
 
-function TIntArrayHelper.splice(index, deleteCount: integer; newItems: TIntArray
-  ): TIntArray;
+function TIntArrayHelper.shift: integer;
+var
+  index:integer;
+begin
+  if (self.size > 0) then
+    begin
+    result:=self[0];
+    if (self.size > 1) then for index:= 0 to pred(self.size) do
+      self[index]:=self[index+1];
+    setLength(self,pred(self.size));
+    end;
+end;
+
+function TIntArrayHelper.splice(index: integer; deleteCount: integer;
+  newItems: TIntArray): TIntArray;
 begin
  result:= specialize splice<integer>(self,index,deleteCount,newItems);
 end;
