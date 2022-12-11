@@ -149,14 +149,7 @@ end;
 procedure TDayEleven.handleThrownItem(Sender: TObject);
 begin
   if Sender is TMonkey then with Sender as TMonkey do
-    begin
-      if (thrownItem < 0) then
-      begin
-        writeln('blah');
-      end;
       fMonkeys[throwTo].fItems.push(thrownItem);
-    end;
-
 end;
 
 function TDayEleven.runPuzzle(rounds: integer;
@@ -171,7 +164,6 @@ begin
   results.add('common scaling factor is ' + commonFactor.ToString);
   for roundNo := 0 to pred(rounds) do
   begin
-    writeLn('round ' + roundNo.ToString);
     for monkeyIndex := 0 to pred(fMonkeys.size) do
       fMonkeys[monkeyIndex].doRound(reduceWorryIfNotDamaged);
   end;
@@ -246,12 +238,6 @@ begin
     fThrownItem := (fThrownItem * multiplier) + fAdd;
 
     if reduceWorryIfNotDamaged then fThrownItem := fThrownItem div 3;
-
-    if (fThrownItem < 0) then
-    begin
-      writeln('value ' + fThrownItem.ToString + ' monkey ' + fId.toString +
-        ' item ' + index.ToString);
-    end;
 
     if (fThrownItem mod fDivide = 0) then fThrowTo := fIfTrue
     else
