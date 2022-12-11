@@ -65,7 +65,6 @@ constructor TDayEleven.Create(filename: string; paintbox_: TPaintbox);
 begin
   inherited Create(filename, 'Day 11', paintbox_);
   fMonkeys := TMonkeys.Create;
-  commonFactor := 1;
 end;
 
 procedure TDayEleven.generateMonkeys;
@@ -76,6 +75,7 @@ var
   lineElements: TStringArray;
   firstWord: string;
 begin
+  commonFactor := 1;
   items := TInt64Array.Create;
   monkeyId := -1;
   opMultiply := 1;
@@ -160,6 +160,7 @@ var
   testIndex: integer;
   str: string;
 begin
+  fMonkeys:=nil;
   generateMonkeys;
   results.add('common scaling factor is ' + commonFactor.ToString);
   for roundNo := 0 to pred(rounds) do
