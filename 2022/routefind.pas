@@ -14,15 +14,17 @@ type
     private
     fNodeId:integer;
     fNodePos:TPoint;
-    fRisk:integer;
+    fValue:integer; //weighting of each path
+    fSteps:integer; //how many steps has it taken to get to this point
     fSource:integer;
     fInfinity:boolean;
     fVisited:boolean;
     public
-    constructor create(position,mapDimensions:TPoint;initialRisk:integer=0;source:integer=0);
+    constructor create(position,mapDimensions:TPoint; initialSteps: integer=0;initialValue:integer=0;source:integer=0);
     property nodeId: integer read fNodeId;
     property nodePos: TPoint read fNodePos;
-    property risk: integer read fRisk write fRisk;
+    property value: integer read fValue write fValue;
+    property steps: integer read fSteps write fSteps;
     property source: integer read fSource write fSource;
     property infinity: boolean read fInfinity write fInfinity;
     property visited:boolean read fVisited write fVisited;
@@ -43,7 +45,7 @@ type
     procedure initializeMap(puzzleInput:TStringArray);
     function processNode(startPoint,endPoint:TPoint):TPoint;
     function findQueueEntryPosition(queueEntry:TQueueEntry):integer;
-    procedure updateRisk(queueEntry,sourceEntry:TQueueEntry);
+    procedure updateValue(queueEntry,sourceEntry:TQueueEntry);
     procedure removeFromQueue(queueEntry:TQueueEntry);
     procedure addToQueue(queueEntry:TQueueEntry);
     function visitable(point,refPoint:TPoint):boolean;
@@ -54,6 +56,7 @@ type
     property finishPoint:TPoint read fFinishPoint write fFinishPoint;
     public
     constructor create(puzzleInput:TStringArray);
+    constructor create(puzzleInput:T3DIntMap);
     procedure findShortestPath(startPoint,endPoint:TPoint);
     property shortest:integer read fShortest;
     property mapDimensions: TPoint read getMapDimensions;
@@ -69,6 +72,13 @@ begin
   fQueue:=TQueue.create;
   fFinishPoint:=TPoint.Create(0,0);
   initializeMap(puzzleInput);
+end;
+
+constructor TRouteFinder.create(puzzleInput: T3DIntMap);
+begin
+  fMap:= puzzleInput;
+  fQueue:=TQueue.create;
+  fFinishPoint:=TPoint.Create(0,0);
 end;
 
 function TRouteFinder.getQueueLength: integer;
@@ -104,11 +114,11 @@ var
   startEntry,visitedEntry:TQueueEntry;
   visitingPoint:TPoint;
   xOffset,yOffset:integer;
-  updatedRisk:integer;
+  updatedValue,updatedSteps:integer;
 begin
   startEntry:=findQueueEntry(startPoint);
   if (startPoint = endPoint) and (startEntry <> nil)
-    then fShortest:= startEntry.fRisk
+    then fShortest:= startEntry.fValue
   else
     begin
     fMap[startPoint.X][startPoint.Y][1]:=1;
@@ -119,12 +129,13 @@ begin
         visitingPoint.Y := startEntry.nodePos.Y + yOffset;
         if visitable(visitingPoint,startEntry.nodePos) then
           begin
-          //calculate the new risk value and add a queue entry
-          updatedRisk:=startEntry.risk + fMap[visitingPoint.X][visitingPoint.Y][0];
+          //calculate the new value and add a queue entry
+          updatedValue:=startEntry.value + fMap[visitingPoint.X][visitingPoint.Y][0];
+          updatedSteps:=startEntry.steps + 1;
           visitedEntry:= findQueueEntry(visitingPoint);
           if visitedEntry = nil
-            then addToQueue(TQueueEntry.create(visitingPoint,mapDimensions,updatedRisk,startEntry.nodeId))
-          else updateRisk(visitedEntry,startEntry);
+            then addToQueue(TQueueEntry.create(visitingPoint,mapDimensions,updatedSteps,updatedValue,startEntry.nodeId))
+          else updateValue(visitedEntry,startEntry);
           end;
         end;
     writeln('remove from queue ' +startPoint.X.ToString+':'+startPoint.Y.ToString);
@@ -148,8 +159,7 @@ begin
     until done;
   endEntry:= findQueueEntry(endPoint);
   if endEntry <> nil then
-  fShortest:=endEntry.risk;
-
+  fShortest:=endEntry.value;
 end;
 
 function TRouteFinder.findQueueEntry(atPoint: TPoint): TQueueEntry;
@@ -188,16 +198,16 @@ begin
     end;
 end;
 
-procedure TRouteFinder.updateRisk(queueEntry,sourceEntry: TQueueEntry);
+procedure TRouteFinder.updateValue(queueEntry,sourceEntry: TQueueEntry);
 var
-  riskToVisitingPoint:integer;
+  valueToVisitingPoint:integer;
 begin
-  riskToVisitingPoint:= sourceEntry.risk + fMap[queueEntry.nodePos.X][queueEntry.nodePos.Y][0];
-  if queueEntry.infinity or (riskToVisitingPoint < queueEntry.risk)
+  valueToVisitingPoint:= sourceEntry.value + fMap[queueEntry.nodePos.X][queueEntry.nodePos.Y][0];
+  if queueEntry.infinity or (valueToVisitingPoint < queueEntry.value)
     then
       begin
       queueEntry.infinity:=false;
-      queueEntry.risk:=riskToVisitingPoint;
+      queueEntry.value:=valueToVisitingPoint;
       queueEntry.source:=sourceEntry.nodeId;
       end;
 end;
@@ -224,6 +234,7 @@ begin
   fQueue[queueLength - 1]:=queueEntry;
 end;
 
+//This should be overridable a bit like a comparator in a sort method
 function TRouteFinder.visitable(point, refPoint: TPoint): boolean;
 begin
   result:= ((point.X = refPoint.X)
@@ -241,7 +252,6 @@ var
   minRisk:integer;
   minRiskIndex:integer;
   firstFound:boolean;
-  thisItem:TQueueEntry;
 begin
   firstFound:=false;
   result:=nil;
@@ -251,10 +261,10 @@ begin
   for index:=0 to pred(queueLength) do
     if (not fQueue[index].infinity)
     and ((not fQueue[index].visited) or (fQueue[index].nodePos = finishPoint))
-    and ((firstFound = false) or (fQueue[index].risk < minRisk)) then
+    and ((firstFound = false) or (fQueue[index].value < minRisk)) then
       begin
       firstFound:=true;
-      minRisk:=fQueue[index].risk;
+      minRisk:=fQueue[index].value;
       minRiskIndex:=index;
       end;
   if minRiskIndex > -1 then result:=fQueue[minRiskIndex];
@@ -262,14 +272,15 @@ end;
 
 { TQueueEntry }
 
-constructor TQueueEntry.create(position,mapDimensions:TPoint; initialRisk:integer=0;source:integer=0);
+constructor TQueueEntry.create(position,mapDimensions:TPoint; initialSteps: integer=0;initialValue:integer=0;source:integer=0);
 begin
-  fInfinity:= initialRisk = 0;
+  fInfinity:= initialValue = 0;
   fNodeId:= (position.Y * mapDimensions.X) + position.X;
   fNodePos:= position;
   fVisited:=false;
   fSource:= source;
-  fRisk:= initialRisk;
+  fSteps:=initialSteps;
+  fValue:= initialValue;
 end;
 
 end.
