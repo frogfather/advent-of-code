@@ -12,7 +12,6 @@ type
   TDayTwelve = class(TAocPuzzle)
   private
     fStartPoint,fEndPoint:TPoint;
-    fShortestPath:integer;
     fRouteFinder:TRouteFinder;
     function convertMap:T3DIntMap;
   public
@@ -32,6 +31,7 @@ var
   currentChar:char;
   charValue:integer;
 begin
+  result:=T3DIntMap.create;
   setLength(result,length(puzzleInputLines[0]),length(puzzleInputLines),2);
   //convert the letters a-z into numbers
   //chr - 96 for small letters
@@ -44,12 +44,12 @@ begin
       currentChar:= currentLine[charNo+1]; //strings 1 indexed!!
       if currentChar = 'S' then
         begin
-        charValue:= 0;
+        charValue:= 1;
         fStartPoint:= TPoint.Create(charNo,LineNo);
         end
       else if currentChar = 'E' then
         begin
-        charValue:= 27;
+        charValue:= 26;
         fEndPoint:= TPoint.Create(charNo, LineNo);
         end else
       charValue:=ord(currentChar) - 96;
@@ -67,11 +67,42 @@ end;
 procedure TDayTwelve.runPartOne;
 begin
   fRouteFinder:= TRouteFinder.create(convertMap);
+  fRouteFinder.findShortestPath(fStartPoint,fEndPoint);
+  results.add('shortest path has '+fRouteFinder.shortestSteps.ToString+' steps');
 end;
 
 procedure TDayTwelve.runPartTwo;
+var
+  aArray:TPointArray;
+  resultArray:TIntArray;
+  map:T3DIntMap;
+  x,y,index:integer;
+  thisPoint:TPoint;
+  pathLength:integer;
 begin
+  //create an array of points that are 'a' (including S)
+  aArray:=TPointArray.Create;
+  resultArray:= TIntArray.create;
+  map:=convertMap;
+  fRouteFinder:= TRouteFinder.create(map);
 
+  for x:=0 to pred(length(map)) do
+    for y:=0 to pred(Length(map[x])) do
+      if (map[x][y][0] = 1)or(map[x][y][0] = 0) then
+        aArray.push(TPoint.Create(x,y));
+  results.add('Number of a in the grid '+aArray.size.toString);
+  for index:= 0 to pred(aArray.size) do
+    begin
+    thisPoint:=aArray[index];
+    fRouteFinder.findShortestPath(thisPoint,fEndPoint);
+    if (fRouteFinder.pathFound) then
+      begin
+      pathLength:=fRouteFinder.shortestSteps;
+      resultArray.push(pathLength);
+      end;
+    end;
+  sort(resultArray,resultArray.size);
+  results.add('Shortest path from any point a '+resultArray[0].ToString);
 end;
 
 end.
