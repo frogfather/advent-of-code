@@ -75,10 +75,12 @@ var
   nextPoint:TPoint;
   nextheight:integer;
   nextVisited:boolean;
+  pathCount:integer;
 begin
   currentHeight:= fMap[startPoint.X][startPoint.Y][0];
-
+  pathCount:=pointsVisited;
   fMap[startPoint.X][startPoint.Y][1]:=1; //mark this point as visited
+  Results.Add('Point '+startPoint.X.ToString+','+startPoint.Y.ToString+' visited = '+pathCount.ToString);
   //If we are at 26 next to value 27 we are finished
   if (currentHeight = 26)and(((startPoint.X > 0) and (fMap[startPoint.X -1][startPoint.Y][0] = 27))
   or ((startPoint.X < pred(Length(fMap))) and (fMap[startPoint.X + 1][startPoint.Y][0] = 27))
@@ -86,8 +88,8 @@ begin
   or ((startPoint.Y < pred(Length(fMap[startPoint.Y]))) and (fMap[startPoint.X][startPoint.Y + 1][0] = 27)))
   then
     begin
-    Results.add('found endpoint with path length '+(pointsVisited).ToString);
-    if (pointsVisited + 1 < fShortestPath) then fShortestPath:=pointsVisited + 1;
+    Results.add('found endpoint with path length '+(pathCount).ToString);
+    if (pathCount < fShortestPath) then fShortestPath:=pathCount;
     fMap[startPoint.X][startPoint.Y][1]:=0;
     exit;
     end;
@@ -106,7 +108,11 @@ begin
     nextVisited:= (fMap[nextPoint.X][nextPoint.Y][1] = 1);
     if ((nextHeight = currentHeight)or(nextHeight = currentHeight + 1)) and (nextVisited = false)
       then
-        doTraverseMap(nextPoint,pointsVisited + 1,depth+1);
+        begin
+        pathCount:=pathCount + 1;
+        doTraverseMap(nextPoint,pathCount,depth+1);
+        pathCount:=pathCount - 1;
+        end;
     end;
 
   //Go North
@@ -117,7 +123,12 @@ begin
     nextHeight:=fMap[nextPoint.X][nextPoint.Y][0];
     nextVisited:= (fMap[nextPoint.X][nextPoint.Y][1] = 1);
     if ((nextHeight = currentHeight)or(nextHeight = currentHeight + 1)) and (nextVisited = false)
-      then doTraverseMap(nextPoint,pointsVisited + 1,depth+1);
+      then
+        begin
+        pathCount:=pathCount + 1;
+        doTraverseMap(nextPoint,pathCount,depth+1);
+        pathCount:=pathCount - 1;
+        end;
     end;
 
   //Go East
@@ -128,7 +139,12 @@ begin
     nextHeight:=fMap[nextPoint.X][nextPoint.Y][0];
     nextVisited:= (fMap[nextPoint.X][nextPoint.Y][1] = 1);
     if ((nextHeight = currentHeight)or(nextHeight = currentHeight + 1)) and (nextVisited = false)
-      then doTraverseMap(nextPoint,pointsVisited + 1,depth+1);
+      then
+        begin
+        pathCount:=pathCount + 1;
+        doTraverseMap(nextPoint,pathCount,depth+1);
+        pathCount:=pathCount - 1;
+        end;
     end;
 
   //Go South
@@ -139,10 +155,15 @@ begin
     nextHeight:=fMap[nextPoint.X][nextPoint.Y][0];
     nextVisited:= (fMap[nextPoint.X][nextPoint.Y][1] = 1);
     if ((nextHeight = currentHeight)or(nextHeight = currentHeight + 1)) and (nextVisited = false)
-      then doTraverseMap(nextPoint,pointsVisited + 1,depth+1);
+      then
+        begin
+        pathCount:=pathCount + 1;
+        doTraverseMap(nextPoint,pathCount,depth+1);
+        pathCount:=pathCount - 1;
+        end;
     end;
   fMap[startPoint.X][startPoint.Y][1]:=0;
-  results.add('no path from '+startpoint.X.ToString+','+startpoint.Y.ToString+' at level '+depth.ToString);
+  results.Add('Dead end ');
 end;
 
 constructor TDayTwelve.Create(filename: string; paintbox_: TPaintbox);

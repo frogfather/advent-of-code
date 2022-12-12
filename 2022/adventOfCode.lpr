@@ -9,7 +9,7 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, aoc_22, iAoc, day1, day2, aocPuzzle, visualise, anysort, aocUtils,
   arrayUtils, fileUtilities, day3, day4, day5, day6, day7, day8, day9, day10,
-  day12
+  day12, routeFind
   { you can add units after this };
 
 {$R *.res}
