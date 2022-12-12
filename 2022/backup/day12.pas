@@ -99,7 +99,7 @@ begin
       begin
       pathLength:=fRouteFinder.shortestSteps;
       resultArray.push(pathLength);
-      end;
+      end else results.add('No path '+thispoint.X.toString+','+thisPoint.Y.ToString);
     end;
   sort(resultArray,resultArray.size);
   results.add('Shortest path from any point a '+resultArray[0].ToString);
