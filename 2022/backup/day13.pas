@@ -26,11 +26,12 @@ type
     procedure getPackets;
     procedure runPuzzle;
     procedure sortPackets(var arr: array of string; count: Integer);
-    function separateNumbers(entry:TPacketData):TPacketDataArray;
-    function doSeparateNumber(entry:string):TStringArray;
+    class function separateNumbers(entry:TPacketData):TPacketDataArray;static;
+    class function doSeparateNumber(entry:string):TStringArray;static;
     function testPacket(packetIndex:integer):integer;
-    function doProcessEntries(entry:TPacketData):integer;
-    function isNumber(input:string):boolean;
+    class function doProcessEntries(entry:TPacketData):integer;static;
+    class function CompareStr(const d1,d2): integer;static;
+    class function isNumber(input:string):boolean;static;
   public
     constructor Create(filename: string; paintbox_: TPaintbox = nil);
     procedure runPartOne; override;
@@ -97,86 +98,20 @@ begin
   results.add('valid indices '+validIndices.toString);
 end;
 
-function CompareStr(const d1,d2): integer;
+class function TDayThirteen.CompareStr(const d1,d2): integer;static;
 var
   s1 : string absolute d1;
   s2 : string absolute d2;
-  currentS1,currentS2:char;
-  snumber1,snumber2:string;
-  numbers1,numbers2:TIntArray;
-  index,longestString,mostNumbers:integer;
-  openBrS1,openBrS2:integer;
+  packet:TPacketData;
 begin
-  result:=0;
-  numbers1:=TIntArray.create;
-  numbers2:=TIntArray.create;
-  sNumber1:='';
-  sNumber2:='';
-  openBrS1:=0;
-  openBrS2:=0;
-  if s1.Length > s2.Length
-    then longestString:=s1.Length
-    else longestString:=s2.Length;
-  for index:= 1 to longestString do //strings 1 indexed!!!
-    begin
-    if (index <= s1.Length) then
-      begin
-      currentS1:=s1[index];
-      if ord(currentS1) = 91 then openBrS1:= openBrS1+1 else
-      if (ord(currentS1)>47)and(ord(currentS1)<58) then sNumber1:=sNumber1+s1.Substring(index-1,1) else
-      if ((ord(currentS1)=44)or(ord(currentS1) = 93))then
-        begin
-        if (sNumber1.Length > 0) then
-        numbers1.push(sNumber1.ToInteger) else numbers1.push(-1);
-        sNumber1:='';
-        end;
-      end;
-    if (index <= s2.Length) then
-      begin
-      currentS2:=s2[index];
-      if ord(currentS2) = 91 then openBrS2:= openBrS2+1 else //open square bracket
-      if (ord(currentS2)>47)and(ord(currentS2)<58) then sNumber2:=sNumber2+s2.Substring(index-1,1) else //number
-
-      if ((ord(currentS2)=44)or(ord(currentS2) = 93))and(sNumber2.Length > 0)then
-        begin
-        numbers2.push(sNumber2.ToInteger);
-        sNumber2:='';
-        end;
-      end;
-
-    end;
-  //Now we have info about the two strings
-
-  //if neither has numbers then the one with more brackets is bigger
-  if (numbers1.size = 0) and (numbers2.size = 0) and (openBrS1 <> openBrS2)  then
-    result:= (openBrS1 - openBrS2) div abs(openBrS1 - openBrS2) else
-
-  //if one has numbers and the other has none then the one with numbers is bigger
-  if (numbers1.size = 0)and(numbers2.size > 0) then result:= -1
-  else if (numbers1.size > 0)and(numbers2.size = 0) then result:= 1;
-  //if the result is still 0 (neither bigger) then compare the numbers
-  if (result = 0) then
-    begin
-    if numbers1.size > numbers2.size then mostNumbers:= numbers1.size
-    else mostNumbers:=numbers2.size;
-    for index:=0 to pred(mostNumbers) do
-      begin
-      if (index = numbers1.size)then result:= -1 else //1 has no more numbers
-      if (index = numbers2.size) then result:= 1 else //2 has no more numbers
-      if result = 0 then
-        begin
-        if (numbers1[index] <> numbers2[index]) then
-          result:= (numbers1[index] - numbers2[index]) div abs(numbers1[index] - numbers2[index]);
-        if (result <> 0) then exit;
-
-        end;
-      end;
-    end;
+  packet.left:=s1;
+  packet.right:=s2;
+  result:= TDayThirteen.doProcessEntries(packet);
 end;
 
 procedure TDayThirteen.sortPackets(var arr: array of string; count: Integer);
   begin
-    anysort.AnySort(arr, Count, sizeof(string), @CompareStr)
+    anysort.AnySort(arr, Count, sizeof(string), @TDayThirteen.CompareStr)
   end;
 
 function TDayThirteen.testPacket(packetIndex: integer): integer;
@@ -188,7 +123,7 @@ begin
   result:= doProcessEntries(entry);
 end;
 
-function TDayThirteen.doProcessEntries(entry: TPacketData):integer;
+class function TDayThirteen.doProcessEntries(entry: TPacketData):integer;static;
 var
   subPackets:TPacketDataArray;
   index:integer;
@@ -196,13 +131,13 @@ var
   leftNoValue,rightNoValue:boolean;
 begin
   result:=0;
-  subPackets:=separateNumbers(entry);
+  subPackets:=TDayThirteen.separateNumbers(entry);
   for index:=0 to pred(subPackets.size) do
     begin
     leftNoValue:= subPackets[index].left.Length = 0;
     rightNoValue:=subPackets[index].right.Length = 0;
-    leftIsNumber:=isNumber(subPackets[index].left);
-    rightIsNumber:=isNumber(subPackets[index].right);
+    leftIsNumber:=TDayThirteen.isNumber(subPackets[index].left);
+    rightIsNumber:=TDayThirteen.isNumber(subPackets[index].right);
     if leftNoValue and not rightNoValue then //if lhs runs out of numbers
       begin
       result:=1;
@@ -243,7 +178,7 @@ end;
 
 //a not very accurate check - just ensures no square brackets or commas
 //good enough for this purpose
-function TDayThirteen.isNumber(input: string): boolean;
+class function TDayThirteen.isNumber(input: string): boolean;static;
 begin
   result:=(input.Length > 0)
   and(input.IndexOf('[') = -1)
@@ -252,15 +187,15 @@ begin
 end;
 
 //Takes a TPacketData record and returns an array of TPacketData
-function TDayThirteen.separateNumbers(entry: TPacketData): TPacketDataArray;
+class function TDayThirteen.separateNumbers(entry: TPacketData): TPacketDataArray;static;
 var
   leftElements,rightElements:TStringArray;
   largest,index:integer;
   packet:TPacketData;
 begin
   result:=TPacketDataArray.create;
-  leftElements:=doSeparateNumber(entry.left);
-  rightElements:=doSeparateNumber(entry.right);
+  leftElements:=TDayThirteen.doSeparateNumber(entry.left);
+  rightElements:=TDayThirteen.doSeparateNumber(entry.right);
   if (leftElements.size > rightElements.size)
     then largest:=leftElements.size
     else largest:=rightElements.size;
@@ -277,7 +212,7 @@ begin
 end;
 
 //separates the supplied string
-function TDayThirteen.doSeparateNumber(entry: string): TStringArray;
+class function TDayThirteen.doSeparateNumber(entry: string): TStringArray;static;
 var
   Input,sepNum,character:string;
   index,bracketCount:Integer;
