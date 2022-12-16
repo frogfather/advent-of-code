@@ -114,7 +114,6 @@ end;
 
 function TDayFourteen.spaceFree(atPoint: TPoint;part1:boolean): boolean;
 begin
-  //is it in range and is there space
   result:= fFilled.indexOf(atPoint) = -1;
 end;
 
@@ -133,10 +132,11 @@ begin
   generatePoints;
   done:=false;
   counter:=0;
+  results.add('MaxY '+fMaxY.toString);
   while not done do
     begin
     sandAt:=runSand;
-    done:= (sandAt.X < fMinX) or (sandAt.Y > fMaxY);
+    done:= (sandAt.X < fMinX) or (sandAt.Y >= fMaxY);
     if not done then
       begin
       if (fFilled.indexOf(sandAt)= -1) then fFilled.push(sandAt);
@@ -147,9 +147,26 @@ begin
 end;
 
 procedure TDayFourteen.runPartTwo;
-
+var
+  done:boolean;
+  sandAt:TPoint;
+  counter:integer;
 begin
-
+  generatePoints;
+  done:=false;
+  counter:=0;
+  fMaxY:=fMaxY + 1; //floor is 1 lower
+  while not done do
+    begin
+    sandAt:=runSand;
+    counter:=counter+1;
+    done:= (sandAt.X = 500)and(sandAt.Y = 0) or (counter = 10000);
+    if not done then
+      begin
+      if (fFilled.indexOf(sandAt)= -1) then fFilled.push(sandAt);
+      end;
+    end;
+  results.add('sand units '+counter.toString);
 end;
 
 end.
