@@ -5,7 +5,7 @@ unit day14;
 interface
 
 uses
-  Classes, SysUtils, aocPuzzle, LazLogger, ExtCtrls, Graphics, arrayUtils,routeFind,anysort;
+  Classes, SysUtils, aocPuzzle, LazLogger, ExtCtrls, Graphics, arrayUtils;
 type
 
   { TDayFourteen }
@@ -17,8 +17,8 @@ type
    fMinX:integer;
    procedure generatePoints;
    procedure addRange(point1,point2:TStringArray);
-   function runSand(part1:boolean=true):TPoint;
-   function spaceFree(atPoint:TPoint;part1:boolean=true):boolean;
+   function runSand:TPoint;
+   function spaceFree(atPoint:TPoint):boolean;
   public
     constructor Create(filename: string; paintbox_: TPaintbox = nil);
     procedure runPartOne; override;
@@ -90,7 +90,7 @@ begin
     if (yEnd > fMaxY) then fMaxY:= yEnd;
 end;
 
-function TDayFourteen.runSand(part1: boolean): TPoint;
+function TDayFourteen.runSand: TPoint;
 begin
   result:=TPoint.Create(500,0);
   while result.Y < fMaxY do
@@ -112,7 +112,7 @@ begin
     end;
 end;
 
-function TDayFourteen.spaceFree(atPoint: TPoint;part1:boolean): boolean;
+function TDayFourteen.spaceFree(atPoint: TPoint): boolean;
 begin
   result:= fFilled.indexOf(atPoint) = -1;
 end;
@@ -160,7 +160,7 @@ begin
     begin
     sandAt:=runSand;
     counter:=counter+1;
-    done:= (sandAt.X = 500)and(sandAt.Y = 0) or (counter = 30000);
+    done:= (sandAt.X = 500)and(sandAt.Y = 0);
     if not done then
       begin
       if (fFilled.indexOf(sandAt)= -1) then fFilled.push(sandAt);

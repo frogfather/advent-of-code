@@ -5,7 +5,7 @@ unit day14;
 interface
 
 uses
-  Classes, SysUtils, aocPuzzle, LazLogger, ExtCtrls, Graphics, arrayUtils,routeFind,anysort;
+  Classes, SysUtils, aocPuzzle, LazLogger, ExtCtrls, Graphics, arrayUtils;
 type
 
   { TDayFourteen }
@@ -160,7 +160,7 @@ begin
     begin
     sandAt:=runSand;
     counter:=counter+1;
-    done:= (sandAt.X = 500)and(sandAt.Y = 0) or (counter = 10000);
+    done:= (sandAt.X = 500)and(sandAt.Y = 0);
     if not done then
       begin
       if (fFilled.indexOf(sandAt)= -1) then fFilled.push(sandAt);
