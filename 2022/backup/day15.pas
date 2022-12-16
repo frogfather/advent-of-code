@@ -5,7 +5,7 @@ unit day15;
 interface
 
 uses
-  Classes, SysUtils, aocPuzzle, LazLogger, ExtCtrls, Graphics, arrayUtils;
+  Classes, SysUtils, aocPuzzle, LazLogger, ExtCtrls, Graphics, arrayUtils,math;
 type
 
   { TDayFifteen }
@@ -19,6 +19,29 @@ type
   end;
 
 implementation
+
+{ TDayFifteen }
+
+constructor TDayFifteen.Create(filename: string; paintbox_: TPaintbox);
+begin
+  inherited Create(filename, 'Day 15', paintbox_);
+end;
+
+procedure TDayFifteen.runPartOne;
+var
+  pointArray:TPointArray;
+  index:integer;
+begin
+  pointArray:=TPointArray.create;
+  for index:=0 to 300 do
+  pointArray.push(TPoint.Create(random(200),random(400)));
+  sort(pointArray,pointArray.size);
+end;
+
+procedure TDayFifteen.runPartTwo;
+begin
+
+end;
 
 end.
 

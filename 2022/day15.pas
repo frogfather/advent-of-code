@@ -5,7 +5,7 @@ unit day15;
 interface
 
 uses
-  Classes, SysUtils, aocPuzzle, LazLogger, ExtCtrls, Graphics, arrayUtils;
+  Classes, SysUtils, aocPuzzle, LazLogger, ExtCtrls, Graphics, arrayUtils,math;
 type
 
   { TDayFifteen }
