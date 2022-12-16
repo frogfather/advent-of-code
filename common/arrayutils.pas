@@ -74,6 +74,7 @@ procedure sort(var arr: array of int64; count: Integer; ascending:boolean=true);
 procedure sort(var arr: array of string; count: Integer; ascending:boolean=true);
 procedure sort(var str: string; count: Integer;ascending:boolean=true);
 procedure sort(var arr: array of char; count: Integer; ascending:boolean=true);
+procedure sort(var arr: array of TPoint;count: Integer;ascending:boolean=true);
 implementation
 
 const strChars: string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -250,6 +251,30 @@ begin
     else result:=comparison div abs(comparison);
 end;
 
+function ComparePointAsc(const d1,d2):integer;
+var
+  s1: TPoint absolute d1;
+  s2: TPoint absolute d2;
+  comparison:integer;
+begin
+  comparison:= s1.X - s2.X;
+  if comparison = 0 then comparison:= s1.Y - s2.Y;
+  if comparison = 0 then result:=0
+    else result:= comparison div abs(comparison);
+end;
+
+function ComparePointDesc(const d1,d2):integer;
+var
+  s1: TPoint absolute d1;
+  s2: TPoint absolute d2;
+  comparison:integer;
+begin
+  comparison:= s2.X - s1.X;
+  if comparison = 0 then comparison:= s2.Y - s1.Y;
+  if comparison = 0 then result:=0
+    else result:= comparison div abs(comparison);
+end;
+
 function intArrayToCSV(input: TIntArray): string;
 var
   index:integer;
@@ -320,6 +345,14 @@ begin
     anysort.AnySort(arr, Count, sizeof(char), @CompareCharAsc)
   else
     anysort.AnySort(arr, Count, sizeof(char), @CompareCharDesc)
+end;
+
+procedure sort(var arr: array of TPoint; count: Integer; ascending: boolean);
+begin
+  if ascending then
+    anysort.AnySort(arr, Count, sizeof(TPoint), @ComparePointAsc)
+  else
+    anysort.AnySort(arr, Count, sizeof(TPoint), @ComparePointDesc)
 end;
 
 procedure sort(var str: string; count: Integer; ascending: boolean);
