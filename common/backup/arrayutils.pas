@@ -20,6 +20,7 @@ type
   T2DStringArray = array of array of string;
   TColours = array of TColor;
   TPointArray = array of TPoint;
+  TIntPointMap = specialize TFPGMap<Integer,TPointArray>;
 
   { TIntArrayHelper }
 
@@ -63,6 +64,15 @@ type
   function min(xStart,xEnd,yStart,yEnd,zStart,zEnd:integer):integer;
   end;
 
+  { TIntPointMap }
+  
+  { TIntPointMapHelper }
+
+  TIntPointMapHelper = type helper for TIntPointMap
+  function included(itemToFind:TPoint):boolean;
+  procedure addItem(item:TPoint);
+  end;
+
 function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
 function containsCharacters(toSearch,toFind:String):boolean;
@@ -74,6 +84,7 @@ procedure sort(var arr: array of int64; count: Integer; ascending:boolean=true);
 procedure sort(var arr: array of string; count: Integer; ascending:boolean=true);
 procedure sort(var str: string; count: Integer;ascending:boolean=true);
 procedure sort(var arr: array of char; count: Integer; ascending:boolean=true);
+procedure sort(var arr: array of TPoint;count: Integer;ascending:boolean=true);
 implementation
 
 const strChars: string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -250,6 +261,30 @@ begin
     else result:=comparison div abs(comparison);
 end;
 
+function ComparePointAsc(const d1,d2):integer;
+var
+  s1: TPoint absolute d1;
+  s2: TPoint absolute d2;
+  comparison:integer;
+begin
+  comparison:= s1.X - s2.X;
+  if comparison = 0 then comparison:= s1.Y - s2.Y;
+  if comparison = 0 then result:=0
+    else result:= comparison div abs(comparison);
+end;
+
+function ComparePointDesc(const d1,d2):integer;
+var
+  s1: TPoint absolute d1;
+  s2: TPoint absolute d2;
+  comparison:integer;
+begin
+  comparison:= s2.X - s1.X;
+  if comparison = 0 then comparison:= s2.Y - s1.Y;
+  if comparison = 0 then result:=0
+    else result:= comparison div abs(comparison);
+end;
+
 function intArrayToCSV(input: TIntArray): string;
 var
   index:integer;
@@ -322,6 +357,14 @@ begin
     anysort.AnySort(arr, Count, sizeof(char), @CompareCharDesc)
 end;
 
+procedure sort(var arr: array of TPoint; count: Integer; ascending: boolean);
+begin
+  if ascending then
+    anysort.AnySort(arr, Count, sizeof(TPoint), @ComparePointAsc)
+  else
+    anysort.AnySort(arr, Count, sizeof(TPoint), @ComparePointDesc)
+end;
+
 procedure sort(var str: string; count: Integer; ascending: boolean);
 var
   charArray:TCharArray;
@@ -382,6 +425,35 @@ begin
      for adjustIndex:= 0 to high(newItems) do
        aArray[index+adjustIndex]:= newItems[adjustIndex];
      end;
+end;
+
+{ TIntPointMapHelper }
+
+function TIntPointMapHelper.included(itemToFind: TPoint): boolean;
+var
+  points:TPointArray;
+begin
+  if self.TryGetData(itemToFind.X,points) = false then
+    begin
+    result:=false;
+    exit;
+    end;
+  result:=points.indexOf(itemToFind) > -1;
+end;
+
+procedure TIntPointMapHelper.addItem(item: TPoint);
+var
+  keyIndex:integer;
+  points:TPointArray;
+begin
+  //if the x value does not exist as a key then add it
+  self.Find(item.X,keyIndex);
+  if keyIndex > 0 then
+  points:= self.Data[keyIndex]
+  else points:=TPointArray.create;
+
+  points.push(item);
+  self.AddOrSetData(item.X,points);
 end;
 
 
@@ -487,7 +559,7 @@ begin
   result:= specialize getIndex<int64>(element,self);
 end;
 
-function TInt64ArrayHelper.shift: integer;
+function TInt64ArrayHelper.shift: int64;
 var
   index:integer;
 begin
