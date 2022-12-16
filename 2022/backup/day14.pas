@@ -12,13 +12,14 @@ type
 
   TDayFourteen = class(TAocPuzzle)
   private
-   fFilled:TPointArray; //better solution
+   //fFilled:TPointArray; //better solution
+   fIntPointMap: TIntPointMap;
    fMaxY:Integer;
    fMinX:integer;
    procedure generatePoints;
    procedure addRange(point1,point2:TStringArray);
-   function runSand(part1:boolean=true):TPoint;
-   function spaceFree(atPoint:TPoint;part1:boolean=true):boolean;
+   function runSand:TPoint;
+   function spaceFree(atPoint:TPoint):boolean;
   public
     constructor Create(filename: string; paintbox_: TPaintbox = nil);
     procedure runPartOne; override;
@@ -83,14 +84,13 @@ begin
       for y:=yStart to yEnd do
         begin
         thisPoint:=TPoint.Create(x,y);
-        if (fFilled.indexOf(thisPoint) = -1) then
-          fFilled.push(thisPoint);
+        if not (fintPointMap.included(thisPoint)) then fintPointMap.AddItem(thisPoint);
         end;
     if (xStart < fMinX) then fMinX:= xStart;
     if (yEnd > fMaxY) then fMaxY:= yEnd;
 end;
 
-function TDayFourteen.runSand(part1: boolean): TPoint;
+function TDayFourteen.runSand: TPoint;
 begin
   result:=TPoint.Create(500,0);
   while result.Y < fMaxY do
@@ -112,15 +112,16 @@ begin
     end;
 end;
 
-function TDayFourteen.spaceFree(atPoint: TPoint;part1:boolean): boolean;
+function TDayFourteen.spaceFree(atPoint: TPoint): boolean;
 begin
-  result:= fFilled.indexOf(atPoint) = -1;
+  result:= not fIntPointMap.included(atPoint);
 end;
 
 constructor TDayFourteen.Create(filename: string; paintbox_: TPaintbox);
 begin
   inherited Create(filename, 'Day 14', paintbox_);
-  fFilled:=TPointArray.create;
+  fIntPointMap:= TIntPointMap.Create;
+  //fFilled:=TPointArray.create;
 end;
 
 procedure TDayFourteen.runPartOne;
@@ -139,7 +140,7 @@ begin
     done:= (sandAt.X < fMinX) or (sandAt.Y >= fMaxY);
     if not done then
       begin
-      if (fFilled.indexOf(sandAt)= -1) then fFilled.push(sandAt);
+      if not (fIntPointMap.included(sandAt)) then fIntPointMap.AddItem(sandAt);
       counter:=counter+1;
       end;
     end;
@@ -156,6 +157,7 @@ begin
   done:=false;
   counter:=0;
   fMaxY:=fMaxY + 1; //floor is 1 lower
+  results.add('Max y is '+fMaxY.ToString);
   while not done do
     begin
     sandAt:=runSand;
@@ -163,7 +165,7 @@ begin
     done:= (sandAt.X = 500)and(sandAt.Y = 0);
     if not done then
       begin
-      if (fFilled.indexOf(sandAt)= -1) then fFilled.push(sandAt);
+      if (not fIntPointMap.included(sandAt)) then fIntPointMap.additem(sandAt);
       end;
     end;
   results.add('sand units '+counter.toString);

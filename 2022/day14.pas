@@ -12,7 +12,8 @@ type
 
   TDayFourteen = class(TAocPuzzle)
   private
-   fFilled:TPointArray; //better solution
+   //fFilled:TPointArray; //better solution
+   fIntPointMap: TIntPointMap;
    fMaxY:Integer;
    fMinX:integer;
    procedure generatePoints;
@@ -83,8 +84,7 @@ begin
       for y:=yStart to yEnd do
         begin
         thisPoint:=TPoint.Create(x,y);
-        if (fFilled.indexOf(thisPoint) = -1) then
-          fFilled.push(thisPoint);
+        if not (fintPointMap.included(thisPoint)) then fintPointMap.AddItem(thisPoint);
         end;
     if (xStart < fMinX) then fMinX:= xStart;
     if (yEnd > fMaxY) then fMaxY:= yEnd;
@@ -114,13 +114,15 @@ end;
 
 function TDayFourteen.spaceFree(atPoint: TPoint): boolean;
 begin
-  result:= fFilled.indexOf(atPoint) = -1;
+  result:= not fIntPointMap.included(atPoint);
 end;
 
 constructor TDayFourteen.Create(filename: string; paintbox_: TPaintbox);
 begin
   inherited Create(filename, 'Day 14', paintbox_);
-  fFilled:=TPointArray.create;
+  fIntPointMap:= TIntPointMap.Create;
+  fIntPointMap.Sorted:=true;
+  //fFilled:=TPointArray.create;
 end;
 
 procedure TDayFourteen.runPartOne;
@@ -139,7 +141,7 @@ begin
     done:= (sandAt.X < fMinX) or (sandAt.Y >= fMaxY);
     if not done then
       begin
-      if (fFilled.indexOf(sandAt)= -1) then fFilled.push(sandAt);
+      if not (fIntPointMap.included(sandAt)) then fIntPointMap.AddItem(sandAt);
       counter:=counter+1;
       end;
     end;
@@ -156,6 +158,7 @@ begin
   done:=false;
   counter:=0;
   fMaxY:=fMaxY + 1; //floor is 1 lower
+  results.add('Max y is '+fMaxY.ToString);
   while not done do
     begin
     sandAt:=runSand;
@@ -163,7 +166,7 @@ begin
     done:= (sandAt.X = 500)and(sandAt.Y = 0);
     if not done then
       begin
-      if (fFilled.indexOf(sandAt)= -1) then fFilled.push(sandAt);
+      if (not fIntPointMap.included(sandAt)) then fIntPointMap.additem(sandAt);
       end;
     end;
   results.add('sand units '+counter.toString);
