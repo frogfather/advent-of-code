@@ -20,6 +20,7 @@ type
   T2DStringArray = array of array of string;
   TColours = array of TColor;
   TPointArray = array of TPoint;
+  TIntPointMap = specialize TFPGMap<Integer,TPointArray>;
 
   { TIntArrayHelper }
 
@@ -61,6 +62,15 @@ type
   T3DIntMapHelper = type helper for T3DIntMap
   function max(xStart,xEnd,yStart,yEnd,zStart,zEnd:integer):integer;
   function min(xStart,xEnd,yStart,yEnd,zStart,zEnd:integer):integer;
+  end;
+
+  { TIntPointMap }
+  
+  { TIntPointMapHelper }
+
+  TIntPointMapHelper = type helper for TIntPointMap
+  function included(itemToFind:TPoint):boolean;
+  procedure addItem(item:TPoint);
   end;
 
 function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
@@ -415,6 +425,34 @@ begin
      for adjustIndex:= 0 to high(newItems) do
        aArray[index+adjustIndex]:= newItems[adjustIndex];
      end;
+end;
+
+{ TIntPointMapHelper }
+
+function TIntPointMapHelper.included(itemToFind: TPoint): boolean;
+var
+  points:TPointArray;
+begin
+  if self.TryGetData(itemToFind.X,points) = false then
+    begin
+    result:=false;
+    exit;
+    end;
+  result:=points.indexOf(itemToFind) > -1;
+end;
+
+procedure TIntPointMapHelper.addItem(item: TPoint);
+var
+  keyIndex:integer;
+  points:TPointArray;
+begin
+  //if the x value does not exist as a key then add it
+  if self.Find(item.X,keyIndex) then
+  points:= self.Data[keyIndex]
+  else points:=TPointArray.create;
+
+  points.push(item);
+  self.AddOrSetData(item.X,points);
 end;
 
 
