@@ -274,7 +274,6 @@ begin
     begin
     if (fAllPackets[index]='[[2]]')then divider1:=index+1 else
     if (fAllPackets[index]='[[6]]')then divider2:=index+1;
-    results.add(fAllPackets[index]);
     end;
   if (divider1 > 0)and(divider2 > 0) then
       begin

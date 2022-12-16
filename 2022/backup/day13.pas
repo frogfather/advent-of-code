@@ -106,7 +106,7 @@ var
 begin
   packet.left:=s1;
   packet.right:=s2;
-  result:= TDayThirteen.doProcessEntries(packet);
+  result:= -1 * TDayThirteen.doProcessEntries(packet);
 end;
 
 procedure TDayThirteen.sortPackets(var arr: array of string; count: Integer);
