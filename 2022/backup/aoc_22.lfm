@@ -1,5 +1,5 @@
 object MainForm: TMainForm
-  Left = -9
+  Left = 0
   Height = 523
   Top = 188
   Width = 1343
@@ -9,7 +9,7 @@ object MainForm: TMainForm
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
-  LCLVersion = '2.2.2.0'
+  LCLVersion = '2.2.6.0'
   object Memo1: TMemo
     Left = 16
     Height = 404

@@ -48,7 +48,7 @@ implementation
 
 { TMainForm }
 
-const aocDirectory = '/Users/cloudsoft/Code/advent-of-code/2022/';
+const aocDirectory = '/Users/john/Developer/advent-of-code/2022/';
 const puzzleDataDirectory = aocDirectory+'input/';
 const puzzleDescriptionDirectory = aocDirectory+'puzzle_description/';
 
