@@ -1,0 +1,73 @@
+object MainForm: TMainForm
+  Left = 203
+  Height = 523
+  Top = 316
+  Width = 1343
+  Caption = 'MainForm'
+  ClientHeight = 523
+  ClientWidth = 1343
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  LCLVersion = '2.2.6.0'
+  object Memo1: TMemo
+    Left = 16
+    Height = 404
+    Top = 56
+    Width = 528
+    Anchors = [akTop, akLeft, akBottom]
+    TabOrder = 0
+  end
+  object cbSelect: TComboBox
+    Left = 80
+    Height = 20
+    Top = 8
+    Width = 196
+    ItemHeight = 19
+    OnSelect = cbSelectSelect
+    TabOrder = 1
+    Text = 'Advent of code'
+  end
+  object lbResults: TListBox
+    Left = 560
+    Height = 404
+    Top = 56
+    Width = 746
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    Font.Pitch = fpFixed
+    ItemHeight = 0
+    MultiSelect = True
+    OnSelectionChange = lbResultsSelectionChange
+    ParentFont = False
+    TabOrder = 2
+  end
+  object bExecute: TButton
+    Left = 24
+    Height = 25
+    Top = 480
+    Width = 96
+    Anchors = [akLeft, akBottom]
+    Caption = 'Run'
+    OnClick = bExecuteClick
+    TabOrder = 3
+  end
+  object bVisualise: TButton
+    Left = 1231
+    Height = 25
+    Top = 480
+    Width = 75
+    Anchors = [akTop, akRight]
+    Caption = 'Visual'
+    OnClick = bVisualiseClick
+    TabOrder = 4
+  end
+  object ckTest: TCheckBox
+    Left = 295
+    Height = 18
+    Top = 11
+    Width = 102
+    Caption = 'Use test data'
+    OnChange = ckTestChange
+    TabOrder = 5
+  end
+end
