@@ -94,11 +94,11 @@ begin
    7: fpuzzle:= TDaySeven.Create(fPuzzleFile);
    8: fpuzzle:= TDayEight.Create(fPuzzleFile);
    9: fpuzzle:= TDayNine.Create(fPuzzlefile);
-   10:fpuzzle:= TDayTen.Create(fPuzzleFile,fVisualise.PaintBox1);
+   10:fpuzzle:= TDayTen.Create(fPuzzleFile);
    11:fpuzzle:= TDayEleven.Create(fPuzzlefile);
    12:fpuzzle:= TDayTwelve.Create(fPuzzlefile);
    13:fpuzzle:= TDayThirteen.Create(fPuzzlefile);
-   14:fpuzzle:= TDayFourteen.Create(fPuzzlefile,fVisualise.PaintBox1);
+   14:fpuzzle:= TDayFourteen.Create(fPuzzlefile);
    15:fpuzzle:= TDayFifteen.Create(fPuzzlefile);
 
   end;
@@ -109,10 +109,7 @@ begin
 end;
 
 procedure TMainForm.ckTestChange(Sender: TObject);
-var
-  currentIndex:integer;
 begin
-  currentIndex:=cbSelect.ItemIndex;
   //re-select the item in the combo box to reload the file
   cbSelectSelect(self);
 end;

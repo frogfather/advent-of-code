@@ -9,7 +9,6 @@ object MainForm: TMainForm
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
-  LCLVersion = '2.2.6.0'
   object Memo1: TMemo
     Left = 16
     Height = 404
@@ -65,7 +64,7 @@ object MainForm: TMainForm
     Left = 295
     Height = 18
     Top = 11
-    Width = 102
+    Width = 107
     Caption = 'Use test data'
     OnChange = ckTestChange
     TabOrder = 5
