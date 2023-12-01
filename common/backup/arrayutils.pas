@@ -447,8 +447,7 @@ var
   points:TPointArray;
 begin
   //if the x value does not exist as a key then add it
-  self.Find(item.X,keyIndex);
-  if keyIndex > 0 then
+  if self.Find(item.X,keyIndex) then
   points:= self.Data[keyIndex]
   else points:=TPointArray.create;
 
