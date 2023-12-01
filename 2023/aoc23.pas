@@ -72,6 +72,7 @@ begin
     cbSelect.Items.Add('Advent of code day ' + IntToStr(i) + ' part 1');
     cbSelect.Items.Add('Advent of code day ' + IntToStr(i) + ' part 2');
   end;
+  ckTest.Enabled:=false;
 end;
 
 procedure TMainForm.cbSelectSelect(Sender: TObject);
@@ -104,6 +105,7 @@ begin
   end;
   bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
   bExecute.Enabled:=fPuzzle <> nil;
+  ckTest.Enabled:=fPuzzle <> nil;
   fdescriptionFile := puzzleDescriptionDirectory+'puzzle_' + day.ToString + '_' + part.ToString + '.txt';
   loadText(fdescriptionFile);
 end;
