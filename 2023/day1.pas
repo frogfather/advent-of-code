@@ -57,6 +57,12 @@ function TDayOne.getFirstAndLastNumbers(input: String): String;
 var
   index:integer;
   firstFound,lastFound:boolean;
+
+    function isNumber(element:char):boolean;
+      begin
+      result:=(ord(element) > 47) and (ord(element) < 58);
+      end;
+
 begin
   //Find the first character that is between ascii 48 and 57
   index:=1; //*** Your regular reminder that strings are 1 indexed *** !
@@ -65,8 +71,7 @@ begin
   while not firstFound do
     begin
     if (index > input.Length) then exit; //Shouldn't happen but, well y'know...
-    firstFound:= (ord(input[index]) > 47) and (ord(input[index]) < 58);
-    if firstFound then
+    if isNumber(input[index]) then
       begin
         result:=result+input[index];
         break;
@@ -77,8 +82,7 @@ begin
   while not lastFound do
     begin
     if (index = 0) then exit;
-    lastFound:= (ord(input[index]) > 47) and (ord(input[index]) < 58); //Could be nested function to avoid duplication
-    if lastFound then
+    if isNumber(input[index]) then
       begin
         result:=result+input[index];
         break;
