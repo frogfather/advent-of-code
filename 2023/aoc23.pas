@@ -82,7 +82,7 @@ begin
   part:=succ(part);
   day:=succ(day);
   if ckTest.Checked then
-     fPuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '_test.txt'
+     fPuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+'_'+part.ToString+ '_test.txt'
      else fpuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '.txt';
   case day of
    1: fpuzzle:= TDayOne.Create(fpuzzleFile);
