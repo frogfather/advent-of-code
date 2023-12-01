@@ -72,6 +72,7 @@ begin
     cbSelect.Items.Add('Advent of code day ' + IntToStr(i) + ' part 1');
     cbSelect.Items.Add('Advent of code day ' + IntToStr(i) + ' part 2');
   end;
+  ckTest.Enabled:=false;
 end;
 
 procedure TMainForm.cbSelectSelect(Sender: TObject);
@@ -82,7 +83,7 @@ begin
   part:=succ(part);
   day:=succ(day);
   if ckTest.Checked then
-     fPuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+_+part.ToString+ '_test.txt'
+     fPuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+'_'+part.ToString+ '_test.txt'
      else fpuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '.txt';
   case day of
    1: fpuzzle:= TDayOne.Create(fpuzzleFile);
@@ -102,6 +103,7 @@ begin
    15:fpuzzle:= TDayFifteen.Create(fPuzzlefile);
 
   end;
+  ckTest.Enabled:=cbSelect.ItemIndex > -1;
   bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
   bExecute.Enabled:=fPuzzle <> nil;
   fdescriptionFile := puzzleDescriptionDirectory+'puzzle_' + day.ToString + '_' + part.ToString + '.txt';
