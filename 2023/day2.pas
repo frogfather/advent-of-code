@@ -33,65 +33,54 @@ end;
 //Add game Ids
 procedure TDayTwo.runPartOne;
 var
-  lineIndex,gameIndex: integer;
-  lineParts: TStringArray;
+  gameIndex: integer;
   sum:integer;
-  allGamesPossible:boolean;
 begin
   results.Clear;
   sum:=0;
-  for lineIndex:=0 to pred(puzzleinputlines.size) do
-    begin
-    allGamesPossible:=true;
-    //First split the line on colon and semicolon
-    lineParts:=puzzleinputlines[lineIndex].Split([':',';']);
-    for gameIndex:=1 to pred(lineparts.size) do
-      begin
-      if not gamePossible(lineparts[gameIndex]) then
-        begin
-          allGamesPossible:=false;
-          break;
-        end;
-      end;
-    if allGamesPossible then sum:=sum+lineIndex+1; //lineIndex is always 1 less than the game id
-    end;
+  for gameIndex:=0 to pred(puzzleinputlines.size) do
+    if gamePossible(puzzleInputLines[gameIndex]) then sum:=sum+gameIndex+1;
   results.Add('The sum is '+sum.ToString);
+end;
+
+//Find min cubes required for each game and multiply
+//Add above for each game
+procedure TDayTwo.runPartTwo;
+var
+  gameIndex: integer;
+  sum:integer;
+begin
+  results.Clear;
+  sum:=0;
+  for gameIndex:=0 to pred(puzzleinputlines.size) do
+    sum:=sum + findGamePower(puzzleinputlines[gameIndex]);
+  results.add('The sum is '+sum.toString);
 end;
 
 function TDayTwo.gamePossible(game_: string): boolean;
 var
-  index,quantity:integer;
-  numberColourPairs,quantityAndColour:TStringArray;
+  index,quantity,partIndex:integer;
+  numberColourPairs,quantityAndColour,gameParts: TStringArray;
   sColour:string;
 begin
-  //the input will be in the form: number colour,
-  result:=true;
-  numberColourPairs:=game_.Split([',']);
-  for index:=0 to pred(numberColourPairs.size) do
-    //split further into quantity and colour
+  result:=false;
+  gameParts:=game_.Split([':',';']);
+  for partIndex:=1 to pred(gameParts.size) do
     begin
-    quantityAndColour:=numberColourPairs[index].Trim.Split([' ']);
-    //first element is number, second is colour
-    sColour:=quantityAndColour[1];
-    quantity:=quantityAndColour[0].Trim.ToInteger;
-      case sColour of
-        'red': if (quantity > 12) then
-          begin
-            result:=false;
-            exit;
-          end;
-        'green': if (quantity > 13) then
-          begin
-            result:=false;
-            exit;
-          end;
-        'blue': if (quantity > 14) then
-          begin
-            result:=false;
-            exit;
-          end;
+    numberColourPairs:=gameParts[partIndex].Split([',']);
+    for index:=0 to pred(numberColourPairs.size) do
+      begin
+      quantityAndColour:=numberColourPairs[index].Trim.Split([' ']);
+      sColour:=quantityAndColour[1];
+      quantity:=quantityAndColour[0].Trim.ToInteger;
+        case sColour of
+          'red': if (quantity > 12) then exit;
+          'green': if (quantity > 13) then exit;
+          'blue': if (quantity > 14) then exit;
+        end;
       end;
     end;
+  result:=true; //only reach this point if we don't exit in the case statement
 end;
 
 function TDayTwo.findGamePower(game_: string): integer;
@@ -105,13 +94,10 @@ begin
   minRed:=1;
   minGreen:=1;
   minBlue:=1;
-  //initializing these with 1 avoids getting a zero result if
-  //a game doesn't include that colour
+
   for index:=1 to pred(numberColourPairs.size) do
-    //split further into quantity and colour
     begin
     quantityAndColour:=numberColourPairs[index].Trim.Split([' ']);
-    //first element is number, second is colour
     sColour:=quantityAndColour[1];
     quantity:=quantityAndColour[0].Trim.ToInteger;
     case sColour of
@@ -121,22 +107,6 @@ begin
       end;
     end;
   result:=minRed * minGreen * minBlue;
-end;
-
-
-//Find the minimum numbers of cubes required for each game
-//multiply these together to get the power for each game
-//add all the powers together
-procedure TDayTwo.runPartTwo;
-var
-  lineIndex: integer;
-  sum:integer;
-begin
-  results.Clear;
-  sum:=0;
-  for lineIndex:=0 to pred(puzzleinputlines.size) do
-    sum:=sum+findGamePower(puzzleinputlines[lineIndex]);
-  results.add('The sum is '+sum.toString);
 end;
 
 end.
