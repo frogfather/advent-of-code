@@ -45,7 +45,7 @@ begin
   fData:=readStream(filename);
   fDataAsLines:=fData.Split(#$0A,TStringSplitOptions.ExcludeLastEmpty);
   except
-  on E: Exception do
+  on E: Exception do //Check actual exception type
   DebugLn('Error reading puzzle file '+E.Message);
   end;
 end;
@@ -62,7 +62,7 @@ end;
 
 procedure TAocPuzzle.setResults(results_: TStringlist);
 begin
-  if (results_ is TStringlist) then fResults:=results_;
+  fResults:=results_;
 end;
 
 end.
