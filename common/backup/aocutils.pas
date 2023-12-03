@@ -21,6 +21,7 @@ function binStringToInt64(binString:string):int64;
 function findCharPos(input,substring:string;startIndex:integer=0):integer;
 function isNumberString(input:string):boolean;
 function getDimensionsOfPuzzleInput(input:TStringArray):TPoint;
+function isNumber(element:char):boolean;
 implementation
 
 const numbers: array[0..9] of integer = (0,1,2,3,4,5,6,7,8,9);
@@ -43,8 +44,7 @@ begin
  result:= toIntArray(fileLines[0].Split(','));
 end;
 
-function getPuzzleInputAsString(fileName: string; removeBlankLines: boolean
-  ): string;
+function getPuzzleInputAsString(fileName: string): string;
 begin
   result:=fileUtilities.readStream(fileName);
 end;
@@ -257,6 +257,12 @@ begin
     Y:= length(input);
     X:= length(input[0]);
     end;
+end;
+
+//Is it between ascii 48 and 57?
+function isNumber(element: char): boolean;
+begin
+  result:=(ord(element) > 47) and (ord(element) < 58);
 end;
 
 end.

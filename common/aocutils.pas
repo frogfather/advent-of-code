@@ -21,6 +21,8 @@ function binStringToInt64(binString:string):int64;
 function findCharPos(input,substring:string;startIndex:integer=0):integer;
 function isNumberString(input:string):boolean;
 function getDimensionsOfPuzzleInput(input:TStringArray):TPoint;
+function isNumber(element:char):boolean;
+function isNumber(element:string):boolean;
 implementation
 
 const numbers: array[0..9] of integer = (0,1,2,3,4,5,6,7,8,9);
@@ -256,6 +258,17 @@ begin
     Y:= length(input);
     X:= length(input[0]);
     end;
+end;
+
+//Is it between ascii 48 and 57?
+function isNumber(element: char): boolean;
+begin
+  result:=(ord(element) > 47) and (ord(element) < 58);
+end;
+
+function isNumber(element: string): boolean;
+begin
+  result:= (element.Length = 1)and isNumber(element[1]);
 end;
 
 end.
