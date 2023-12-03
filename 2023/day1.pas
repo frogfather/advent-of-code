@@ -5,7 +5,7 @@ unit day1;
 interface
 
 uses
-  Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics,arrayUtils;
+  Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics,arrayUtils,aocUtils;
 type
 
   { TDayOne }
@@ -13,7 +13,6 @@ type
   private
   function getFirstAndLastNumbers(input:String):String;
   function getFirstAndLastNumbersIncludingWords(input:String):String;
-  function isNumber(element:char):boolean;
   function firstNumberWord(input:string; startAtEnd:boolean=false):string;
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
@@ -106,12 +105,6 @@ begin
   firstNumber:=firstNumberWord(input);
   lastNumber:=firstNumberWord(input,true);
   result:=firstNumber+lastNumber;
-end;
-
-//Is it between ascii 48 and 57?
-function TDayOne.isNumber(element: char): boolean;
-begin
-  result:=(ord(element) > 47) and (ord(element) < 58);
 end;
 
 function TDayOne.firstNumberWord(input:string; startAtEnd:boolean=false):string;
