@@ -13,6 +13,10 @@ type
   private
   function findNextNumber(currentLine:string; linePos:integer; out numberStart:integer; out numberEnd: integer):string;
   function isValidPartNumber(prev_,curr_, next_:string; start_,end_: integer):boolean;
+  function findPositionOfNextAsterisk(currentLine:string; linePos:integer):integer;
+  function findAdjacentNumbers(prev_,current_,next_: string; pos_:integer):TStringList;
+  function extractNumber(input_:string; pos_: integer; backwards:boolean = false):string;
+  function findStartOfNumber(input_:string;pos_:integer):integer;
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
   procedure runPartOne; override;
@@ -141,10 +145,153 @@ begin
     end;
 end;
 
+function TDayThree.findPositionOfNextAsterisk(currentLine:string; linePos:integer):integer;
+var
+  index:integer;
+  done:boolean;
+begin
+  result:=-1;
+  index:=linePos;
+  done:=false;
+  while not done do
+    begin
+    if (currentLine.Substring(index,1) = '*') then
+      begin
+        result:=index;
+        exit;
+      end;
+    done := (index = pred(currentLine.Length));
+    if not done then index:=index + 1;
+    end;
+end;
+
+function TDayThree.findAdjacentNumbers(prev_, current_, next_: string;
+  pos_: integer): TStringList;
+begin
+  result:=TStringlist.Create;
+  //First, are there adjacent numbers in the current line?
+  if (isNumber(current_.Substring(pos_,1)))
+    then result.Add(extractNumber(current_,findStartOfNumber(current_,pos_))) else
+    begin
+    if (pos_ > 0) and (isNumber(current_.Substring(pos_-1,1)))
+      then result.Add(extractNumber(current_,pos_,true));
+    if ((pos_ < pred(current_.Length)) and (isNumber(current_.Substring(pos_+1,1))))
+      then result.Add(extractNumber(current_,pos_));
+    end;
+  //Next are there adjacent numbers in the line above?
+  if (isNumber(prev_.Substring(pos_,1)))
+    then result.Add(extractNumber(prev_,findStartOfNumber(prev_,pos_))) else
+    begin
+    if (pos_ > 0) and (isNumber(prev_.Substring(pos_-1,1)))
+      then result.Add(extractNumber(prev_,pos_,true));
+    if ((pos_ < pred(prev_.Length)) and (isNumber(prev_.Substring(pos_+1,1))))
+      then result.Add(extractNumber(prev_,pos_));
+    end;
+  //Finally are there adjacent numbers in the next line?
+  if (isNumber(next_.Substring(pos_,1)))
+    then result.Add(extractNumber(next_,findStartOfNumber(next_,pos_))) else
+    begin
+    if (pos_ > 0) and (isNumber(next_.Substring(pos_-1,1)))
+      then result.Add(extractNumber(next_,pos_,true));
+    if ((pos_ < pred(next_.Length)) and (isNumber(next_.Substring(pos_+1,1))))
+      then result.Add(extractNumber(next_,pos_));
+    end;
+end;
+
+function TDayThree.extractNumber(input_: string; pos_: integer;
+  backwards: boolean): string;
+var
+  index,offset:integer;
+  done:boolean;
+  element:string;
+begin
+  //From the specified position return characters that are numbers
+  result:= '';
+  if backwards then offset:=-1 else offset:= 1;
+  done:=false;
+  index:=pos_;
+  while not done do
+    begin
+    element:=input_.Substring(index,1);
+    if isNumber(element) then
+      begin
+        if backwards then result:= element+result
+        else result:=result+element;
+      end else if (result <> '') then exit;
+    index:=index+offset;
+    done:= (backwards and (index < 0)) or (not backwards and (index = input_.Length));
+    end;
+end;
+
+function TDayThree.findStartOfNumber(input_: string; pos_: integer): integer;
+var
+  index,offset:integer;
+  onNumber,done:boolean;
+begin
+  //If we're not currently on a number move forward til we find one
+  //or move backwards
+  result:=-1;
+  onNumber:=isNumber(input_.substring(pos_,1));
+  if not onNumber then offset:=1 else offset:=-1;
+  done:=false;
+  index:=pos_;
+  while not done do
+    begin
+    if (not isNumber(input_.Substring(index,1))) or (index = 0) or (index = pred(input_.Length)) then
+      begin
+      if onNumber then
+        begin
+        result:=index - offset;
+        exit;
+        end;
+      end else onNumber:=true;
+    index:=index+offset;
+    done:=(index < 0) or (index = input_.Length);
+    end;
+end;
+
 
 procedure TDayThree.runPartTwo;
+var
+  lineNo,linePos:integer;
+  prevLine,currentLine,nextLine:string;
+  asteriskPos:integer;
+  foundAllAsterisks:boolean;
+  total:integer;
+  adjacentNumbers:TStringList;
 begin
   results.Clear;
+  total:=0;
+  prevLine:='';
+  for lineNo:=0 to pred(puzzleInputLines.size) do
+    begin
+      //Set the lines
+      if (lineNo > 0) then prevLine:=puzzleInputLines[lineNo - 1]
+        else prevLine:='';
+      currentLine:=puzzleInputLines[lineNo];
+      if (lineNo < pred(puzzleInputLines.size)) then nextLine:= puzzleInputLines[lineNo + 1]
+        else nextLine:='';
+
+      //Look for asterisks on the current line
+      foundAllAsterisks:=false;
+      linePos:=0;
+      while not foundAllAsterisks do
+        begin
+        //Find how many numbers are next to this asterisk
+        asteriskPos:=findPositionOfNextAsterisk(currentLine,linePos);
+        if (asteriskPos > -1)
+          then
+            begin
+            adjacentNumbers:=findAdjacentNumbers(prevLine,currentLine,nextLine,asteriskPos);
+            if (adjacentNumbers.Count = 2)
+              then total:=total+ (adjacentNumbers[0].ToInteger * adjacentNumbers[1].ToInteger);
+            end;
+
+        linePos:=asteriskPos + 1;
+        foundAllAsterisks:= (asteriskPos = -1);
+        end;
+    end;
+  results.add('Total is '+total.ToString);
 end;
 
 end.
