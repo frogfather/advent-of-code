@@ -33,11 +33,6 @@ inherited create(filename,'Day 3',paintbox_);
 //parent loads the file as a string and converts to string array;
 end;
 
-//For each line there may be numbers, dots or other symbols
-//Include a line if:
-//- There is a symbol next to it on the same line
-//- There is a symbol on the previous or next line that occupies
-//- the same position or the position before or the position after
 procedure TDayThree.runPartOne;
 var
   lineNo,linePos:integer;
@@ -49,26 +44,21 @@ var
 begin
   results.Clear;
   total:=0;
-  prevLine:='';
   for lineNo:=0 to pred(puzzleInputLines.size) do
     begin
-      //Set the lines
       if (lineNo > 0) then prevLine:=puzzleInputLines[lineNo - 1]
         else prevLine:='';
       currentLine:=puzzleInputLines[lineNo];
       if (lineNo < pred(puzzleInputLines.size)) then nextLine:= puzzleInputLines[lineNo + 1]
         else nextLine:='';
 
-      //Look for numbers on the current line
       foundAllNumbers:=false;
       linePos:=0;
       while not foundAllNumbers do
         begin
         sNumberToCheck:= findNextNumber(currentLine, linePos, numberStart, numberEnd);
-        //Now check if this number has a symbol which is not a number and not a dot:
-        //between numberStart - 1 and numberEnd + 1 on
-        //the previous line, the current line or the next line
-        if isValidPartNumber(prevLine, currentLine, nextLine, numberStart,numberEnd) then total:=total + sNumberToCheck.ToInteger;
+        if isValidPartNumber(prevLine, currentLine, nextLine, numberStart,numberEnd)
+          then total:=total + sNumberToCheck.ToInteger;
 
         linePos:=numberEnd + 1;
         foundAllNumbers:= (numberStart = -1);
@@ -76,6 +66,48 @@ begin
     end;
   results.add('Total is '+total.ToString);
 end;
+
+procedure TDayThree.runPartTwo;
+var
+  lineNo,linePos:integer;
+  prevLine,currentLine,nextLine:string;
+  asteriskPos:integer;
+  foundAllAsterisksOnLine:boolean;
+  total:integer;
+  adjacentNumbers:TStringList;
+begin
+  results.Clear;
+  total:=0;
+  prevLine:='';
+  for lineNo:=0 to pred(puzzleInputLines.size) do
+    begin
+      if (lineNo > 0) then prevLine:=puzzleInputLines[lineNo - 1]
+        else prevLine:='';
+      currentLine:=puzzleInputLines[lineNo];
+      if (lineNo < pred(puzzleInputLines.size)) then nextLine:= puzzleInputLines[lineNo + 1]
+        else nextLine:='';
+
+      foundAllAsterisksOnLine:=false;
+      linePos:=0;
+      while not foundAllAsterisksOnLine do
+        begin
+        asteriskPos:=findPositionOfNextAsterisk(currentLine,linePos);
+        if (asteriskPos > -1)
+          then
+            begin
+            adjacentNumbers:=findAdjacentNumbers(prevLine,currentLine,nextLine,asteriskPos);
+            if (adjacentNumbers.Count = 2)
+              then total:=total+ (adjacentNumbers[0].ToInteger * adjacentNumbers[1].ToInteger);
+            end;
+
+        linePos:=asteriskPos + 1;
+        foundAllAsterisksOnLine:= (asteriskPos = -1);
+        end;
+    end;
+  results.add('Total is '+total.ToString);
+end;
+
+//-----------Methods for part one --------------
 
 //Returns the next number found on the string. The two out parameters hold the start and end
 function TDayThree.findNextNumber(currentLine: string; linePos: integer; out
@@ -120,20 +152,15 @@ var
   stringToSearch,element:string;
   index:integer;
 begin
-  //for each of the three inputs look for a character which is not a number
-  //and is not a dot
   result:=false;
   if (start_ = -1) or (end_ = -1) then exit;
-  //adjust start and end if possible
   startLimit:=start_;
   if (startLimit > 0) then startLimit:=startLimit - 1;
   endLimit:= end_;
-  //Assuming all lines the same length - they look as if they are
   if (endLimit < pred(curr_.Length)) then endLimit:=endLimit + 1;
   stringToSearch:= prev_.Substring(startLimit, 1 + endLimit - startLimit);
   stringToSearch:=stringToSearch + curr_.Substring(startLimit, 1 + endLimit - startLimit);
   stringToSearch:=stringToSearch + next_.Substring(startLimit, 1 + endLimit - startLimit);
-  //Now look for character that is neither number or dot
   for index:= 0 to pred(stringToSearch.Length) do
     begin
     element:= stringToSearch.Substring(index,1);
@@ -145,6 +172,7 @@ begin
     end;
 end;
 
+//------Methods for part two --------------------
 function TDayThree.findPositionOfNextAsterisk(currentLine:string; linePos:integer):integer;
 var
   index:integer;
@@ -169,7 +197,7 @@ function TDayThree.findAdjacentNumbers(prev_, current_, next_: string;
   pos_: integer): TStringList;
 begin
   result:=TStringlist.Create;
-  //First, are there adjacent numbers in the current line?
+  //1) are there adjacent numbers in the current line?
   if (isNumber(current_.Substring(pos_,1)))
     then result.Add(extractNumber(current_,findStartOfNumber(current_,pos_))) else
     begin
@@ -178,7 +206,7 @@ begin
     if ((pos_ < pred(current_.Length)) and (isNumber(current_.Substring(pos_+1,1))))
       then result.Add(extractNumber(current_,pos_));
     end;
-  //Next are there adjacent numbers in the line above?
+  //2) are there adjacent numbers in the line above?
   if (isNumber(prev_.Substring(pos_,1)))
     then result.Add(extractNumber(prev_,findStartOfNumber(prev_,pos_))) else
     begin
@@ -187,7 +215,7 @@ begin
     if ((pos_ < pred(prev_.Length)) and (isNumber(prev_.Substring(pos_+1,1))))
       then result.Add(extractNumber(prev_,pos_));
     end;
-  //Finally are there adjacent numbers in the next line?
+  //3) are there adjacent numbers in the next line?
   if (isNumber(next_.Substring(pos_,1)))
     then result.Add(extractNumber(next_,findStartOfNumber(next_,pos_))) else
     begin
@@ -205,7 +233,7 @@ var
   done:boolean;
   element:string;
 begin
-  //From the specified position return characters that are numbers
+  //From the specified position return characters that are numbers up to the next non numerical character
   result:= '';
   if backwards then offset:=-1 else offset:= 1;
   done:=false;
@@ -229,7 +257,7 @@ var
   onNumber,done:boolean;
 begin
   //If we're not currently on a number move forward til we find one
-  //or move backwards
+  //otherwise move backwards
   result:=-1;
   onNumber:=isNumber(input_.substring(pos_,1));
   if not onNumber then offset:=1 else offset:=-1;
@@ -248,50 +276,6 @@ begin
     index:=index+offset;
     done:=(index < 0) or (index = input_.Length);
     end;
-end;
-
-
-procedure TDayThree.runPartTwo;
-var
-  lineNo,linePos:integer;
-  prevLine,currentLine,nextLine:string;
-  asteriskPos:integer;
-  foundAllAsterisks:boolean;
-  total:integer;
-  adjacentNumbers:TStringList;
-begin
-  results.Clear;
-  total:=0;
-  prevLine:='';
-  for lineNo:=0 to pred(puzzleInputLines.size) do
-    begin
-      //Set the lines
-      if (lineNo > 0) then prevLine:=puzzleInputLines[lineNo - 1]
-        else prevLine:='';
-      currentLine:=puzzleInputLines[lineNo];
-      if (lineNo < pred(puzzleInputLines.size)) then nextLine:= puzzleInputLines[lineNo + 1]
-        else nextLine:='';
-
-      //Look for asterisks on the current line
-      foundAllAsterisks:=false;
-      linePos:=0;
-      while not foundAllAsterisks do
-        begin
-        //Find how many numbers are next to this asterisk
-        asteriskPos:=findPositionOfNextAsterisk(currentLine,linePos);
-        if (asteriskPos > -1)
-          then
-            begin
-            adjacentNumbers:=findAdjacentNumbers(prevLine,currentLine,nextLine,asteriskPos);
-            if (adjacentNumbers.Count = 2)
-              then total:=total+ (adjacentNumbers[0].ToInteger * adjacentNumbers[1].ToInteger);
-            end;
-
-        linePos:=asteriskPos + 1;
-        foundAllAsterisks:= (asteriskPos = -1);
-        end;
-    end;
-  results.add('Total is '+total.ToString);
 end;
 
 end.
