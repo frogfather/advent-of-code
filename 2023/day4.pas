@@ -56,7 +56,6 @@ var
 begin
   results.Clear;
   total:=0;
-  lineNo:=0;
   cardDataArray:=TCardDataArray.create;
   for lineNo:=0 to pred(puzzleInputLines.size) do
     begin
