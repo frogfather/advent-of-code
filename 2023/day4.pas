@@ -5,19 +5,8 @@ unit day4;
 interface
 
 uses
-  Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics,arrayUtils,math;
+  Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics,arrayUtils,math,cardData;
 type
-
-  TCardData = Record
-    cardId: integer;
-    cardCount: integer;
-    matchCount:integer;
-    winning: TStringArray;
-    candidates: TStringArray;
-  end;
-
-  TCardDataArray = array of TCardData;
-
   { TDayFour}
   TDayFour = class(TAocPuzzle)
   private
@@ -89,9 +78,7 @@ begin
     cardData.matchCount:=0;
     cardData.winning:=winningNumbers;
     cardData.candidates:=ourNumbers;
-    //Todo - add array methods for this type
-    setLength(cardDataArray,length(cardDataArray)+1);
-    cardDataArray[length(cardDataArray)-1]:=cardData;
+    cardDataArray.push(cardData);
     end;
 
   //If card n has 3 matches
@@ -110,7 +97,7 @@ begin
       cardDataArray[incIndex].cardCount:=cardDataArray[incIndex].cardCount + cardDataArray[lineNo].cardCount;
     end;
   //Add the card counts
-  for lineNo:= 0 to pred(length(cardDataArray)) do
+  for lineNo:= 0 to pred(cardDataArray.size) do
     total:=total+(cardDataArray[lineNo].cardCount);
   results.Add('There are '+total.toString+' cards');
 end;

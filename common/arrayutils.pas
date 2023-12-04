@@ -6,7 +6,7 @@ unit arrayUtils;
 interface
 
 uses
-  Classes, SysUtils,anysort,graphics,fgl;
+  Classes, SysUtils,anysort,graphics,fgl,cardData;
 type
   //Looks like the built in TintegerArray is a static array
   //so let's define our own dynamic integer array
@@ -21,6 +21,7 @@ type
   TColours = array of TColor;
   TPointArray = array of TPoint;
   TIntPointMap = specialize TFPGMap<Integer,TPointArray>;
+  TCardDataArray = array of TCardData;
 
   { TIntArrayHelper }
 
@@ -72,6 +73,13 @@ type
   function included(itemToFind:TPoint):boolean;
   procedure addItem(item:TPoint);
   end;
+
+  { TCardDataArrayHelper }
+  TCardDataArrayHelper = type helper for TCardDataArray
+  function size: integer;
+  function push(element: TCardData):integer;
+  end;
+
 
 function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
@@ -425,6 +433,19 @@ begin
      for adjustIndex:= 0 to high(newItems) do
        aArray[index+adjustIndex]:= newItems[adjustIndex];
      end;
+end;
+
+{ TCardDataArrayHelper }
+
+function TCardDataArrayHelper.size: integer;
+begin
+  result:=length(self);
+end;
+
+function TCardDataArrayHelper.push(element: TCardData): integer;
+begin
+  insert(element,self,length(self));
+  result:=self.size;
 end;
 
 { TIntPointMapHelper }

@@ -11,7 +11,7 @@ uses
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, aoc23, iAoc, aocPuzzle, visualise, arrayUtils, aocUtils, anysort,
-  fileUtilities
+  fileUtilities, cardData
   { you can add units after this };
 
 {$R *.res}
