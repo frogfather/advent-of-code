@@ -71,7 +71,6 @@ begin
     cardDataArray.push(cardData);
     end;
 
-  lineNo:=0;
   for lineNo:= 0 to pred(length(cardDataArray)) do
     begin
     cardNo:=cardDataArray[lineNo].cardId;
