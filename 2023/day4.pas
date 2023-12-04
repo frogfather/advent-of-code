@@ -46,15 +46,6 @@ begin
   results.Add('Total is '+total.ToString);
 end;
 
-//Find total number of cards
-//n wins adds the n cards after this one
-//so card n with 3 winning numbers adds cards n+1,n+2,n+3
-//need to record the card index along with the numbers
-
-//We have to add all the entries to a structure
-//Then go through each entry calculating the number of winning items
-//and adding the appropriate number of following entries
-//Something like int, stringArray, stringArray
 procedure TDayFour.runPartTwo;
 var
   total,lineNo:integer;
@@ -81,8 +72,6 @@ begin
     cardDataArray.push(cardData);
     end;
 
-  //If card n has 3 matches
-  //increment card count on cards n+1,n+2,n+3
   lineNo:=0;
   for lineNo:= 0 to pred(length(cardDataArray)) do
     begin
@@ -118,8 +107,6 @@ function TDayFour.scoreForMatchingNumbers(input_: TStringArray): integer;
 begin
   result:= round(power(2,(input_.size - 1)));
 end;
-
-//--- methods for part two ----
 
 
 end.
