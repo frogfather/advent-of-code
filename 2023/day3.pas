@@ -75,10 +75,15 @@ var
   foundAllAsterisksOnLine:boolean;
   total:integer;
   adjacentNumbers:TStringList;
+
+  function adjacentNumbersProduct:integer;
+  begin
+    result:=adjacentNumbers[0].ToInteger * adjacentNumbers[1].ToInteger;
+  end;
+
 begin
   results.Clear;
   total:=0;
-  prevLine:='';
   for lineNo:=0 to pred(puzzleInputLines.size) do
     begin
       if (lineNo > 0) then prevLine:=puzzleInputLines[lineNo - 1]
@@ -97,7 +102,7 @@ begin
             begin
             adjacentNumbers:=findAdjacentNumbers(prevLine,currentLine,nextLine,asteriskPos);
             if (adjacentNumbers.Count = 2)
-              then total:=total+ (adjacentNumbers[0].ToInteger * adjacentNumbers[1].ToInteger);
+              then total:=total+ adjacentNumbersProduct;
             end;
 
         linePos:=asteriskPos + 1;
