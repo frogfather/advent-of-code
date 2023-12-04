@@ -136,6 +136,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
+      <Unit>
+        <Filename Value="carddata.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="cardData"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
