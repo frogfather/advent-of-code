@@ -1,4 +1,4 @@
-2022
+2023
 Puzzles in FreePascal/Lazarus
 
 There are a lot of files here. Most can be ignored. Here are the ones that may be of interest. 
@@ -14,7 +14,7 @@ Each puzzle is in a class with the day number e.g. TDayOne in file day1.pas
 - Inherits from TAocPuzzle
 - Implements the two virtual abstract methods above.
 
-The main form, disappointingly called 'MainForm' is in aoc_22.pas (form file aoc_22.lfm). It displays the puzzle instructions, has a dropdown to select the puzzle and a listbox to show the results.
+The main form, disappointingly called 'MainForm' is in aoc_23.pas (form file aoc_23.lfm). It displays the puzzle instructions, has a dropdown to select the puzzle and a listbox to show the results.
 
 There's also a form fVisualise in visualise.pas (form file visualise.lfm) which might get used for drawing stuff in the event that a picture might help with the solution. There were a couple of instances last year when it was helpful. For the moment it can be ignored. 
 
@@ -24,3 +24,7 @@ adventOfCode.lpi is project config stuff.
 The folders input and puzzle_description contain the puzzle data and the text of the puzzle respectively.
 
 There are some common methods for file and array handling including some array helpers in ../common.
+
+The guitestrunner.pas file is there for reference because it has a 3 year old bug when run on macos which is detailed here https://gitlab.com/freepascal.org/lazarus/lazarus/-/issues/29283
+
+TODO: add a small application to generate the puzzle files and maybe to make adding the puzzle input and description a little easier.
