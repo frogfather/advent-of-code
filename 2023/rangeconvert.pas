@@ -14,6 +14,11 @@ type
     dest: int64;
   end;
 
+  TRange = record
+    rangeStart: int64;
+    rangeEnd: int64;
+  end;
+
 implementation
 
 end.
