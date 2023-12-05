@@ -97,9 +97,6 @@ begin
   setupConverters;
 
   sortRangeArray(seedRange,seedRange.size);
-  results.Add('Sorted seeds');
-  for index:= 0 to pred(seedRange.size) do
-    results.add(seedRange[index].rangeStart.ToString);
   convert(seedRange,soilRange,seedToSoil);
   sortRangeArray(soilRange,soilRange.size);
   convert(soilRange,fertilizerRange,soilToFertilizer);
@@ -160,7 +157,6 @@ var
   lineNo:integer;
   currentLine:string;
   section:integer;
-  index:integer;
 begin
   //Start with seeds
   //record start, range and offset
@@ -200,36 +196,6 @@ begin
   sort(lightToTemp,lightToTemp.size);
   sort(tempToHumidity,tempToHumidity.size);
   sort(HumidityToLocation,humidityToLocation.size);
-
-  results.Add('Sorted seedToSoil');
-  for index:= 0 to pred(seedToSoil.size) do
-    results.add(seedToSoil[index].start.ToString+' '+seedToSoil[index].dest.ToString+' '+seedToSoil[index].length.ToString);
-
-  results.Add('Sorted soil to fertilizer');
-  for index:= 0 to pred(soilToFertilizer.size) do
-    results.add(soilToFertilizer[index].start.ToString);
-
-  results.Add('Sorted fertilizer to water');
-  for index:= 0 to pred(fertilizerToWater.size) do
-    results.add(fertilizerToWater[index].start.ToString);
-
-  results.Add('Sorted water to light');
-  for index:= 0 to pred(WatertoLight.size) do
-    results.add(WatertoLight[index].start.ToString);
-
-  results.Add('Sorted light to temp');
-  for index:= 0 to pred(lightToTemp.size) do
-    results.add(lightToTemp[index].start.ToString);
-
-  results.Add('Sorted temp to humidity');
-  for index:= 0 to pred(tempToHumidity.size) do
-    results.add(tempToHumidity[index].start.ToString);
-
-  results.Add('Sorted humidity to location');
-  for index:= 0 to pred(humidityToLocation.size) do
-    results.add(humidityToLocation[index].start.ToString);
-
-
 end;
 
 procedure TDayFive.resetArrays;
