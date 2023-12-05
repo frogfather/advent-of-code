@@ -314,7 +314,7 @@ function CompareRangeConverterAsc(const d1,d2):integer;
 var
   s1: TRangeConverter absolute d1;
   s2: TRangeConverter absolute d2;
-  comparison:integer;
+  comparison:int64;
 begin
   comparison:= s1.start - s2.start;
   if comparison = 0 then result:=0
@@ -325,7 +325,7 @@ function CompareRangeConverterDesc(const d1,d2):integer;
 var
   s1: TRangeConverter absolute d1;
   s2: TRangeConverter absolute d2;
-  comparison:integer;
+  comparison:int64;
 begin
   comparison:= s2.start - s1.start;
   if comparison = 0 then result:=0
@@ -336,7 +336,7 @@ function CompareRangeAsc(const d1,d2):integer;
 var
   s1: TRange absolute d1;
   s2: TRange absolute d2;
-  comparison:integer;
+  comparison:int64;
 begin
   comparison:= s1.rangeStart - s2.rangeStart;
   if comparison = 0 then result:=0
@@ -347,7 +347,7 @@ function CompareRangeDesc(const d1,d2):integer;
 var
   s1: TRange absolute d1;
   s2: TRange absolute d2;
-  comparison:integer;
+  comparison:int64;
 begin
   comparison:= s2.rangeStart - s1.rangeStart;
   if comparison = 0 then result:=0

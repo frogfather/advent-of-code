@@ -203,7 +203,7 @@ begin
 
   results.Add('Sorted seedToSoil');
   for index:= 0 to pred(seedToSoil.size) do
-    results.add(seedToSoil[index].start.ToString);
+    results.add(seedToSoil[index].start.ToString+' '+seedToSoil[index].dest.ToString+' '+seedToSoil[index].length.ToString);
 
   results.Add('Sorted soil to fertilizer');
   for index:= 0 to pred(soilToFertilizer.size) do
