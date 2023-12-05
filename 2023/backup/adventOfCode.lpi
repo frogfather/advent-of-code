@@ -141,6 +141,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="cardData"/>
       </Unit>
+      <Unit>
+        <Filename Value="rangeconvert.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="rangeConvert"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

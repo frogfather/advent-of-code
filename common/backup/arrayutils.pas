@@ -6,7 +6,7 @@ unit arrayUtils;
 interface
 
 uses
-  Classes, SysUtils,anysort,graphics,fgl,cardData;
+  Classes, SysUtils,anysort,graphics,fgl,cardData,rangeConvert;
 type
   //Looks like the built in TintegerArray is a static array
   //so let's define our own dynamic integer array
@@ -22,6 +22,7 @@ type
   TPointArray = array of TPoint;
   TIntPointMap = specialize TFPGMap<Integer,TPointArray>;
   TCardDataArray = array of TCardData;
+  TRangeConverterArray = array of TRangeConverter;
 
   { TIntArrayHelper }
 
@@ -79,7 +80,15 @@ type
   function size: integer;
   function push(element: TCardData):integer;
   function indexOf(element:TCardData):integer;
-  function splice(index:integer; deleteCount: integer=0; newItems: TCardDataArray=nil):TCardDataArray;
+  end;
+
+  { TRangeConverterArray }
+  
+  { TRangeConverterArrayHelper }
+
+  TRangeConverterArrayHelper = type helper for TRangeConverterArray
+  function size: integer;
+  function push(element: TRangeConverter):integer;
   end;
 
 
@@ -437,6 +446,20 @@ begin
      end;
 end;
 
+{ TRangeConverterArrayHelper }
+
+function TRangeConverterArrayHelper.size: integer;
+begin
+  result:=length(self);
+end;
+
+function TRangeConverterArrayHelper.push(element: TRangeConverterArray
+  ): integer;
+begin
+  insert(element,self,length(self));
+  result:=self.size;
+end;
+
 { TCardDataArrayHelper }
 
 function TCardDataArrayHelper.size: integer;
@@ -452,13 +475,7 @@ end;
 
 function TCardDataArrayHelper.indexOf(element: TCardData): integer;
 begin
-  result:= specialize getIndex<TCardData>(element,self);
-end;
-
-function TCardDataArrayHelper.splice(index: integer; deleteCount: integer;
-  newItems: TCardDataArray): TCardDataArray;
-begin
-  result:= specialize splice<TCardData>(self,index,deleteCount,newItems);
+  result:= specialize getIndex < TCardData>(element,self);
 end;
 
 { TIntPointMapHelper }
