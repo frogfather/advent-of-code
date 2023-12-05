@@ -23,6 +23,7 @@ type
   TIntPointMap = specialize TFPGMap<Integer,TPointArray>;
   TCardDataArray = array of TCardData;
   TRangeConverterArray = array of TRangeConverter;
+  TRangeArray = array of TRange;
 
   { TIntArrayHelper }
 
