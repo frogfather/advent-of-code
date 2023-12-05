@@ -45,7 +45,7 @@ begin
   fData:=readStream(filename);
   fDataAsLines:=fData.Split(#$0A,TStringSplitOptions.ExcludeLastEmpty);
   except
-  on E: Exception do //Check actual exception type
+  on E: EFOpenError do
   DebugLn('Error reading puzzle file '+E.Message);
   end;
 end;

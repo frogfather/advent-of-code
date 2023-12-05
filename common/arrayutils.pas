@@ -6,7 +6,7 @@ unit arrayUtils;
 interface
 
 uses
-  Classes, SysUtils,anysort,graphics,fgl,cardData;
+  Classes, SysUtils,anysort,graphics,fgl,cardData,rangeConvert;
 type
   //Looks like the built in TintegerArray is a static array
   //so let's define our own dynamic integer array
@@ -22,6 +22,7 @@ type
   TPointArray = array of TPoint;
   TIntPointMap = specialize TFPGMap<Integer,TPointArray>;
   TCardDataArray = array of TCardData;
+  TRangeConverterArray = array of TRangeConverter;
 
   { TIntArrayHelper }
 
@@ -78,6 +79,16 @@ type
   TCardDataArrayHelper = type helper for TCardDataArray
   function size: integer;
   function push(element: TCardData):integer;
+  function indexOf(element:TCardData):integer;
+  end;
+
+  { TRangeConverterArray }
+  
+  { TRangeConverterArrayHelper }
+
+  TRangeConverterArrayHelper = type helper for TRangeConverterArray
+  function size: integer;
+  function push(element: TRangeConverter):integer;
   end;
 
 
@@ -435,6 +446,20 @@ begin
      end;
 end;
 
+{ TRangeConverterArrayHelper }
+
+function TRangeConverterArrayHelper.size: integer;
+begin
+  result:=length(self);
+end;
+
+function TRangeConverterArrayHelper.push(element: TRangeConverter
+  ): integer;
+begin
+  insert(element,self,length(self));
+  result:=self.size;
+end;
+
 { TCardDataArrayHelper }
 
 function TCardDataArrayHelper.size: integer;
@@ -446,6 +471,11 @@ function TCardDataArrayHelper.push(element: TCardData): integer;
 begin
   insert(element,self,length(self));
   result:=self.size;
+end;
+
+function TCardDataArrayHelper.indexOf(element: TCardData): integer;
+begin
+  result:= specialize getIndex < TCardData>(element,self);
 end;
 
 { TIntPointMapHelper }
