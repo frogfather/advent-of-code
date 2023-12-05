@@ -95,25 +95,19 @@ begin
   results.Clear;
   resetArrays;
   setupConverters;
-  results.add('--- convert seeds to soil --- ');
+
   sortRangeArray(seedRange,seedRange.size);
   convert(seedRange,soilRange,seedToSoil);
-  results.add('--- convert soil to fertilizer --- ');
   sortRangeArray(soilRange,soilRange.size);
   convert(soilRange,fertilizerRange,soilToFertilizer);
-  results.add('--- convert fertilizer to water --- ');
   sortRangeArray(fertilizerRange,fertilizerRange.size);
   convert(fertilizerRange,waterRange,fertilizerToWater);
-  results.add('--- convert water to light --- ');
   sortRangeArray(waterRange,waterRange.size);
   convert(waterRange,lightRange,waterToLight);
-  results.add('--- convert light to temp --- ');
   sortRangeArray(lightRange,lightRange.size);
   convert(lightRange,tempRange,lightToTemp);
-  results.add('--- convert temp to humidity --- ');
   sortRangeArray(tempRange,tempRange.size);
   convert(tempRange,humidityRange,tempToHumidity);
-  results.add('--- convert humidity to location --- ');
   sortRangeArray(humidityRange,humidityRange.size);
   convert(humidityRange,locationRange,humidityToLocation);
 
@@ -233,7 +227,6 @@ var
   newRange:TRange;
   converterStart,converterEnd,offset:int64;
   rangeProcessed: boolean;
-  loopCount:integer;
 begin
   //Iterate through the entries in input_
   //check overlaps with each line of the converter
@@ -244,19 +237,15 @@ begin
     rangeEnd:=input_[rangeIndex].rangeEnd;
     converterIndex:= 0;
     rangeProcessed:=false;
-    loopCount:=0;
     while not rangeProcessed do
       begin
-      results.Add('Range is '+rangeStart.ToString+' -> '+rangeEnd.ToString);
       converterStart:=converter[converterIndex].start;
       converterEnd:= (converter[converterIndex].start + converter[converterIndex].length - 1);
       offset:=converter[converterIndex].dest - converter[converterIndex].start;
-      results.Add('Comparing input to converter '+converterStart.ToString+' -> '+converterEnd.ToString+' offset: '+offset.ToString);
 
       //1) is the input start less than the converter start?
       if (rangeStart < converterStart) then
         begin
-        results.Add('start of range before converter');
         //add unconverted range to output
         newRange.rangeStart:=rangeStart;
         if (rangeEnd < converterStart) then
@@ -269,7 +258,6 @@ begin
           newRange.rangeEnd:=converterStart - 1;
           rangeStart:=converterStart; //Stay on this converter
           end;
-        results.add('add output range '+newRange.rangeStart.ToString +' -> '+newRange.rangeEnd.ToString);
         output_.push(newRange);
         end else
       //2) is the rangeStart in range of this converter
@@ -289,7 +277,6 @@ begin
           newRange.rangeEnd:=rangeEnd + offset;
           rangeProcessed:=true;
           end;
-        results.add('add output range '+newRange.rangeStart.ToString +' -> '+newRange.rangeEnd.ToString);
         output_.push(newRange);
         end else
         //3) range start is after the end of the converter. If there are other converters increment and don't add anything
@@ -298,16 +285,9 @@ begin
           begin
           newRange.rangeStart:=rangeStart;
           newRange.rangeEnd:=rangeEnd;
-          results.add('add output range '+newRange.rangeStart.ToString +' -> '+newRange.rangeEnd.ToString);
           output_.push(newRange);
           rangeProcessed:=true;
           end else converterIndex:=converterIndex+1;
-        end;
-      loopCount:=loopCount+1;
-      if (loopCount > 100) then
-        begin
-        results.Add('Oops!');
-        exit;
         end;
       end;
     end;
