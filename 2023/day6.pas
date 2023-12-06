@@ -11,6 +11,8 @@ type
   { TDaySix}
   TDaySix = class(TAocPuzzle)
   private
+  function getFirstWinningTime(availableTime,distance:int64;fromEnd:boolean=false):int64;
+  function timeWins(availableTime,time,winningDistance:int64):boolean;
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
   procedure runPartOne; override;
@@ -68,137 +70,49 @@ procedure TDaySix.runPartTwo;
 var
   availableTime,winningDistance:int64;
   firstTimeThatWins,lastTimeThatWins:int64;
-  segmentStart,segmentEnd:int64;
-  done,startWins,endWins:boolean;
-  loopCount:integer;
-
-   function timeWins(time:int64):boolean;
-   begin
-     result:=((availableTime - time)*time > winningDistance);
-   end;
-
 begin
   results.Clear;
   availableTime:=puzzleInputlines[0].split([':'],(TstringSplitOptions.ExcludeEmpty))[1].Replace(' ','').Trim.ToInt64;
   winningDistance:=puzzleInputlines[1].split([':'],(TstringSplitOptions.ExcludeEmpty))[1].Replace(' ','').Trim.ToInt64;
-  results.add('Distance: '+winningDistance.ToString+' time: '+availableTime.ToString);
-  firstTimeThatWins:=0;
-  lastTimeThatWins:=0;
-  //Find first winning availableTime
-  done:=false;
-  loopCount:=0;
-  segmentStart:=0;
-  segmentEnd:=availableTime div 2;
+  results.add('Available time '+availableTime.ToString);
+  results.add('winning distance '+winningDistance.ToString);
+  firstTimeThatWins:=getFirstWinningTime(availableTime,winningDistance);
+  lastTimeThatwins:=getFirstWinningTime(availableTime,winningDistance,true);
+  results.add('First winning time '+firstTimeThatWins.ToString);
+  results.add('Last winning time '+lastTimeThatWins.toString);
+  results.add('Winning times '+(lastTimeThatWins - firstTimeThatWins +1).toString);
+end;
+
+function TDaySix.getFirstWinningTime(availableTime, distance: int64;
+  fromEnd: boolean): int64;
+var
+  direction,directionIfWon:integer;
+  interval,currentTime:int64;
+  adjusted:boolean;
+begin
+  //Start in the middle regardless
+  currentTime:=availableTime div 2;
+  interval:=availableTime div 2;
+  if fromEnd then direction:=1 else direction:=-1;
+    repeat
+    if timeWins(availableTime,currentTime,distance) then directionIfWon:=1
+    else directionIfWon:=-1;
+    interval:=interval div 2;
+    currentTime:=currentTime + (direction * directionIfWon * interval);
+    until interval = 1;
+  //This gets us pretty close, but need to adjust to find exact value
+  adjusted:=false;
   repeat
-  //keep dividing until both times win
-  startWins:=timeWins(segmentStart);
-  endWins:=timeWins(segmentEnd);
+  adjusted:= timeWins(availableTime,currentTime,distance);
+  if not adjusted then currentTime:=currentTime - direction;
+  until adjusted;
 
-  results.Add('start: '+segmentStart.ToString+' win? '+startWins.ToString+' end: '+segmentEnd.ToString+' win? '+endWins.ToString);
-  if (startWins and endWins) then
-    begin
-    //move to previous segment if possible otherwise we're done
-    if (segmentEnd - segmentStart > 1) then
-      begin
-      segmentEnd:=segmentStart - 1;
-      segmentStart:=segmentEnd div 2;
-      end else
-      begin
-      firstTimeThatWins:=segmentStart;
-      done:=true;
-      end;
-    end else
-    if ((not startWins) and endWins )then
-    begin
-    //split in two and move to the higher segment
-    if (segmentEnd - segmentStart > 1) then
-      begin
-      segmentStart:=segmentEnd - ((segmentEnd - segmentStart) div 2);
-      end else
-      begin
-      firstTimeThatWins:=segmentEnd;
-      done:=true;
-      end;
-    end else
-    if ((not endWins) and startWins) then
-      begin
-      //move to previous segment if possible
-      if (segmentStart > 0) then
-        begin
-        segmentEnd:=segmentStart - 1;
-        segmentStart:=segmentEnd div 2;
-        end else
-        begin
-        firstTimeThatWins:=segmentStart;
-        done:=true;
-        end;
-      end;
-    results.Add('Start now '+segmentStart.ToString+' end now '+segmentEnd.ToString);
-    loopCount:=loopCount+1;
-    if (loopCount = 1000) then
-      begin
-      results.add('loop count exceeded');
-      exit;
-      end;
-  until done;
+  result:=currentTime;
+end;
 
-  //Now much the same for the end time
-  done:=false;
-  loopCount:=0;
-  segmentStart:=availableTime div 2;
-  segmentEnd:=availableTime;
-  repeat
-  //keep dividing until both times win
-  startWins:=timeWins(segmentStart);
-  endWins:=timeWins(segmentEnd);
-
-  results.Add('start: '+segmentStart.ToString+' win? '+startWins.ToString+' end: '+segmentEnd.ToString+' win? '+endWins.ToString);
-  if (startWins and endWins) then
-    begin
-    //Unless the segment width is very small we should move to the next segment
-    if (segmentEnd - segmentStart > 1) then
-      begin
-      segmentStart:=segmentEnd+1;
-      segmentEnd:= availableTime;
-      end else
-      begin
-      lastTimeThatWins:=segmentEnd;
-      done:=true;
-      end;
-    end else
-    if ((not startWins) and endWins )then
-    begin
-    //move to the next segment if possible
-    if (segmentEnd < availableTime) then
-      begin
-      segmentStart:=segmentEnd+1;
-      segmentEnd:=segmentStart+(availableTime-segmentStart)div 2;
-      end else
-      begin
-      lastTimeThatWins:=segmentEnd;
-      done:=true;
-      end;
-    end else
-    if ((not endWins) and startWins) then
-      begin
-      //half segment
-      if (segmentEnd - SegmentStart > 1) then
-        begin
-        segmentEnd:=segmentStart+((SegmentEnd - segmentStart) div 2)
-        end else
-        begin
-        lastTimeThatWins:=segmentStart;
-        done:=true;
-        end;
-      end;
-    results.Add('Start now '+segmentStart.ToString+' end now '+segmentEnd.ToString);
-    loopCount:=loopCount+1;
-    if (loopCount = 1000) then
-      begin
-      results.add('loop count exceeded');
-      exit;
-      end;
-  until done;
+function TDaySix.timeWins(availableTime,time,winningDistance:int64): boolean;
+begin
+  result:=((availableTime - time)*time > winningDistance);
 end;
 
 end.
