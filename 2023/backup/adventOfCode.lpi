@@ -146,6 +146,10 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="rangeConvert"/>
       </Unit>
+      <Unit>
+        <Filename Value="hand.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

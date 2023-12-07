@@ -22,6 +22,8 @@ type
   TPointArray = array of TPoint;
   TIntPointMap = specialize TFPGMap<Integer,TPointArray>;
   TCardDataArray = array of TCardData;
+
+  //Used in day 5 puzzle
   TRangeConverterArray = array of TRangeConverter;
   TRangeArray = array of TRange;
 
@@ -96,6 +98,8 @@ type
   function size: integer;
   function push(element: TRange):integer;
   end;
+
+
 function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
 function containsCharacters(toSearch,toFind:String):boolean;
@@ -353,6 +357,7 @@ begin
   if comparison = 0 then result:=0
     else result:= comparison div abs(comparison);
 end;
+
 
 function intArrayToCSV(input: TIntArray): string;
 var

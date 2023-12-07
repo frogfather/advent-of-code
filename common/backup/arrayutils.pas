@@ -22,6 +22,8 @@ type
   TPointArray = array of TPoint;
   TIntPointMap = specialize TFPGMap<Integer,TPointArray>;
   TCardDataArray = array of TCardData;
+
+  //Used in day 5 puzzle
   TRangeConverterArray = array of TRangeConverter;
   TRangeArray = array of TRange;
 
