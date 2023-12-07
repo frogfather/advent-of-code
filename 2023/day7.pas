@@ -77,6 +77,7 @@ begin
   setLength(handArray,0);
   for lineNo:=0 to pred(puzzleInputLines.size) do
   begin
+  //Generate an array of hands which contain the cards, type and bid
   parts:=puzzleInputLines[lineNo].Split([' '],(TstringSplitOptions.ExcludeEmpty));
   cards:=parts[0].Trim;
   bid:=parts[1].Trim.ToInteger;
@@ -85,6 +86,7 @@ begin
   newHand.bid:=bid;
   handArray.push(newHand);
   end;
+  //This sort method, in unit 'hand' does most of the work in this puzzle
   sortHandArray(handArray,handArray.size, cardRank);
 
   sum:=0;
@@ -107,6 +109,7 @@ begin
     cardCount:=cardCount+1;
     cardGroupings.AddOrSetData(card,cardCount);
     end;
+  //In part 2 we modify this grouping to improve the strength of the hand
   if jokers then cardGroupings:= applyJokers(cardGroupings);
 
   //If we have five entries then it's high card
@@ -136,11 +139,9 @@ var
   index,mostCardsCount:integer;
 begin
   result:=grouping;
-  //We have the groupings. Let's see how many jokers we have
+  //We have the groupings. Let's see how many jokers (J) we have
   if result.TryGetData('J',jokerCount) then
     begin
-    results.Add('Applying '+jokerCount.toString+' jokers');
-    result.Delete(result.IndexOf('J'));
     //now find the largest remaining group
     mostCards:='';
     mostCardsCount:=0;
@@ -151,7 +152,6 @@ begin
         mostCards:=result.Keys[index];
         end;
     //and add the number of jokers to that
-    results.Add('There are '+mostCardsCount.toString+' '+mostCards+'. Updating');
     mostCardsCount:=mostCardsCount + jokerCount;
     result.AddOrSetData(mostCards,mostCardsCount);
     end;
