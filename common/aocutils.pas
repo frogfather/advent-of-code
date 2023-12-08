@@ -23,6 +23,8 @@ function isNumberString(input:string):boolean;
 function getDimensionsOfPuzzleInput(input:TStringArray):TPoint;
 function isNumber(element:char):boolean;
 function isNumber(element:string):boolean;
+function gcd(num1,num2:int64):int64;
+function lcd(num1,num2:int64):int64;
 implementation
 
 const numbers: array[0..9] of integer = (0,1,2,3,4,5,6,7,8,9);
@@ -269,6 +271,20 @@ end;
 function isNumber(element: string): boolean;
 begin
   result:= (element.Length = 1)and isNumber(element[1]);
+end;
+
+function gcd(num1, num2: int64): int64;
+begin
+  if (num1 = 0) then result:=num2
+  else if (num2 = 0) then result:=num1
+  else result:= gcd(num2 mod num1, num1);
+end;
+
+function lcd(num1, num2: int64): int64;
+begin
+  if (num1 = 0) then result:=num2
+  else if (num2 = 0) then result:= num1
+  else result:= (num1 div gcd(num1, num2)) * num2;
 end;
 
 end.
