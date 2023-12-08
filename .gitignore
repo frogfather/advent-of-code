@@ -15,11 +15,13 @@
 fp.ini
 fp.cfg
 fp.dsk
-/2023/backup
-/2023/lib/
+/2023/backup/*
+/2023/lib/*
 .DS_Store
 /2023/.DS_Store
 /2022/.DS_Store
-/common/backup
+/common/backup/*
+/common/tests/lib/
+/common/tests/backup/
 adventOfCode
 # End of https://www.toptal.com/developers/gitignore/api/freepascal
