@@ -21,4 +21,5 @@ fp.dsk
 2023/.DS_Store
 2022/.DS_Store
 common/backup
+common/backup/arrayutils.pas
 # End of https://www.toptal.com/developers/gitignore/api/freepascal

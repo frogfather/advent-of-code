@@ -11,6 +11,7 @@ type
   { TDayNine}
   TDayNine = class(TAocPuzzle)
   private
+  procedure loadMap(lineNo:integer);
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
   procedure runPartOne; override;
@@ -23,6 +24,7 @@ var
   history:TInt64Array;
 { TDayNine }
 
+
 constructor TDayNine.create(filename:string;paintbox_:TPaintbox);
 begin
 inherited create(filename,'Day 9',paintbox_);
@@ -34,10 +36,7 @@ end;
 procedure TDayNine.runPartOne;
 var
   lineNo:integer;
-  mapIndex,mapLineIndex,partIndex,historyIndex:integer;
-  parts:TStringArray;
-  allResultsZero:boolean;
-  difference:Int64;
+  mapIndex,historyIndex:integer;
   historySum:int64;
 begin
   results.Clear;
@@ -45,24 +44,7 @@ begin
   //clear the map for each line. Record the results elsewhere
   for lineNo:= 0 to pred(puzzleInputLines.size) do
     begin
-    map.clear;
-    //Split into individual numbers and add to the array;
-    mapIndex:=0;
-    parts:=puzzleInputLines[lineNo].Split([' '],(TstringSplitOptions.ExcludeEmpty));
-    for partIndex:=0 to pred(parts.size)do
-      map.push(mapIndex,parts[partIndex].ToInt64);
-    //Now calculate the differences until they are all zeros
-    repeat
-    allResultsZero:=true;
-    for mapLineIndex:=1 to pred(map.size(mapIndex)) do
-      begin
-      difference:=map[mapIndex][mapLineIndex]-map[mapIndex][mapLineIndex - 1];
-      if difference <> 0 then allresultsZero:=false;
-      map.push(mapIndex+1,difference);
-      end;
-    mapIndex:=mapIndex+1;
-    until allResultsZero;
-    map.push(mapIndex,0);
+    loadMap(lineNo);
     //Now calculate the history value
     historySum:=0;
     for mapIndex:=pred(map.rows) downTo 0 do
@@ -80,10 +62,7 @@ end;
 procedure TDayNine.runPartTwo;
 var
   lineNo:integer;
-  mapIndex,mapLineIndex,partIndex,historyIndex:integer;
-  parts:TStringArray;
-  allResultsZero:boolean;
-  difference:Int64;
+  mapIndex,historyIndex:integer;
   historySum:int64;
 begin
   results.Clear;
@@ -91,24 +70,7 @@ begin
   //clear the map for each line. Record the results elsewhere
   for lineNo:= 0 to pred(puzzleInputLines.size) do
     begin
-    map.clear;
-    //Split into individual numbers and add to the array;
-    mapIndex:=0;
-    parts:=puzzleInputLines[lineNo].Split([' '],(TstringSplitOptions.ExcludeEmpty));
-    for partIndex:=0 to pred(parts.size)do
-      map.push(mapIndex,parts[partIndex].ToInt64);
-    //Now calculate the differences until they are all zeros
-    repeat
-    allResultsZero:=true;
-    for mapLineIndex:=1 to pred(map.size(mapIndex)) do
-      begin
-      difference:=map[mapIndex][mapLineIndex]-map[mapIndex][mapLineIndex - 1];
-      if difference <> 0 then allresultsZero:=false;
-      map.push(mapIndex+1,difference);
-      end;
-    mapIndex:=mapIndex+1;
-    until allResultsZero;
-    map.push(mapIndex,0);
+    loadMap(lineNo);
     //Now calculate the history value
     historySum:=0;
     for mapIndex:=pred(map.rows) downTo 0 do
@@ -121,6 +83,33 @@ begin
   for historyIndex:=0 to pred(length(history)) do
     historySum:=historySum + history[historyIndex];
   results.add('The sum is '+historySum.ToString);
+end;
+
+procedure TDayNine.loadMap(lineNo:integer);
+var
+  mapIndex,mapLineIndex,partIndex,historyIndex:integer;
+  parts:TStringArray;
+  allResultsZero:boolean;
+  difference:Int64;
+begin
+  map.clear;
+  //Split into individual numbers and add to the array;
+  mapIndex:=0;
+  parts:=puzzleInputLines[lineNo].Split([' '],(TstringSplitOptions.ExcludeEmpty));
+  for partIndex:=0 to pred(parts.size)do
+    map.push(mapIndex,parts[partIndex].ToInt64);
+  //Now calculate the differences until they are all zeros
+  repeat
+  allResultsZero:=true;
+  for mapLineIndex:=1 to pred(map.size(mapIndex)) do
+    begin
+    difference:=map[mapIndex][mapLineIndex]-map[mapIndex][mapLineIndex - 1];
+    if difference <> 0 then allresultsZero:=false;
+    map.push(mapIndex+1,difference);
+    end;
+  mapIndex:=mapIndex+1;
+  until allResultsZero;
+  map.push(mapIndex,0);
 end;
 
 end.

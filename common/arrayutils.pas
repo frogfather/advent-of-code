@@ -483,51 +483,6 @@ begin
   setLength(self,0);
 end;
 
-{ TRangeArrayHelper }
-
-function TRangeArrayHelper.size: integer;
-begin
-  result:=length(self);
-end;
-
-function TRangeArrayHelper.push(element: TRange): integer;
-begin
-  insert(element,self,length(self));
-  result:=self.size;
-end;
-
-{ TRangeConverterArrayHelper }
-
-function TRangeConverterArrayHelper.size: integer;
-begin
-  result:=length(self);
-end;
-
-function TRangeConverterArrayHelper.push(element: TRangeConverter
-  ): integer;
-begin
-  insert(element,self,length(self));
-  result:=self.size;
-end;
-
-{ TCardDataArrayHelper }
-
-function TCardDataArrayHelper.size: integer;
-begin
-  result:=length(self);
-end;
-
-function TCardDataArrayHelper.push(element: TCardData): integer;
-begin
-  insert(element,self,length(self));
-  result:=self.size;
-end;
-
-function TCardDataArrayHelper.indexOf(element: TCardData): integer;
-begin
-  result:= specialize getIndex < TCardData>(element,self);
-end;
-
 { TIntPointMapHelper }
 
 function TIntPointMapHelper.included(itemToFind: TPoint): boolean;
