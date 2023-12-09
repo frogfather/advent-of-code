@@ -64,9 +64,27 @@ object MainForm: TMainForm
     Left = 295
     Height = 18
     Top = 11
-    Width = 107
+    Width = 102
     Caption = 'Use test data'
     OnChange = ckTestChange
     TabOrder = 5
+  end
+  object cbTestFile: TComboBox
+    Left = 425
+    Height = 20
+    Top = 10
+    Width = 231
+    ItemHeight = 19
+    TabOrder = 6
+    Visible = False
+  end
+  object ET: TEpikTimer
+    StringPrecision = 6
+    WantMilliseconds = True
+    WantDays = True
+    TimebaseSource = SystemTimebase
+    CorrelationMode = OnTimebaseSelect
+    Left = 713
+    Top = 12
   end
 end

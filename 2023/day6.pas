@@ -29,8 +29,6 @@ inherited create(filename,'Day 6',paintbox_);
 //parent loads the file as a string and converts to string array;
 end;
 
-//Time     x x x
-//distance y y y
 procedure TDaySix.runPartOne;
 var
   times,distances:TStringArray;
@@ -38,11 +36,6 @@ var
   beatRecordCount,totalBeatRecordCount:integer;
 begin
   results.Clear;
-  //Total time = t
-  //Time held = x
-  //Time running = t - x
-  //speed = x
-  //get the puzzle input
   times:=puzzleInputLines[0].Split([' '],(TstringSplitOptions.ExcludeEmpty));
   distances:=puzzleInputLines[1].Split([' '],(TstringSplitOptions.ExcludeEmpty));
   raceCount:=times.size - 1;
@@ -56,7 +49,6 @@ begin
       begin
       speed:=timeHeld;
       distanceTravelled:= (availableTime - timeHeld) * speed;
-      results.add('Race: '+raceNo.ToString+' - Speed: '+speed.ToString+', distance: '+distanceTravelled.ToString);
       if (distanceTravelled > recordDistance) then beatRecordCount:=beatRecordCount+1;
       end;
     if (beatRecordCount = 0) then break; //Don't multiply by zero!
@@ -74,12 +66,8 @@ begin
   results.Clear;
   availableTime:=puzzleInputlines[0].split([':'],(TstringSplitOptions.ExcludeEmpty))[1].Replace(' ','').Trim.ToInt64;
   winningDistance:=puzzleInputlines[1].split([':'],(TstringSplitOptions.ExcludeEmpty))[1].Replace(' ','').Trim.ToInt64;
-  results.add('Available time '+availableTime.ToString);
-  results.add('winning distance '+winningDistance.ToString);
   firstTimeThatWins:=getFirstWinningTime(availableTime,winningDistance);
   lastTimeThatwins:=getFirstWinningTime(availableTime,winningDistance,true);
-  results.add('First winning time '+firstTimeThatWins.ToString);
-  results.add('Last winning time '+lastTimeThatWins.toString);
   results.add('Winning times '+(lastTimeThatWins - firstTimeThatWins +1).toString);
 end;
 

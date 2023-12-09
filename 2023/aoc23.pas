@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics,
-  Dialogs, StdCtrls, Math, clipbrd, ExtCtrls, DateUtils, fpJSON,
+  Dialogs, StdCtrls, Math, clipbrd, ExtCtrls, EpikTimer, DateUtils, fpJSON,
   aocUtils, arrayUtils,iAoc,visualise,
   day1,day2,day3,day4,day5, day6,day7, day8,day9,day10,day11,day12,day13,day14,day15;
 
@@ -19,6 +19,8 @@ type
     bVisualise: TButton;
     cbSelect: TComboBox;
     ckTest: TCheckBox;
+    cbTestFile: TComboBox;
+    ET: TEpikTimer;
     lbResults: TListBox;
     Memo1: TMemo;
     clipboard: TClipboard;
@@ -60,6 +62,7 @@ end;
 procedure TMainForm.FormDestroy(Sender: TObject);
 begin
   clipboard.Free;
+  ET.Free;
 end;
 
 procedure TMainForm.FormShow(Sender: TObject);
@@ -83,8 +86,11 @@ begin
   part:=succ(part);
   day:=succ(day);
   if ckTest.Checked then
-     fPuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+'_'+part.ToString+ '_test.txt'
-     else fpuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '.txt';
+    begin
+    //TODO: If there's only one test file then use that, otherwise let the user select
+
+    fPuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+'_'+part.ToString+ '_test.txt';
+    end else fpuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '.txt';
   case day of
    1: fpuzzle:= TDayOne.Create(fpuzzleFile);
    2: fpuzzle:= TDayTwo.Create(fPuzzleFile);
@@ -117,18 +123,14 @@ begin
 end;
 
 procedure TMainForm.bExecuteClick(Sender: TObject);
-var
-  startTime, endTime: TDateTime;
 begin
   lbresults.Clear;
-  startTime := now;
-
+  ET.Clear;
+  ET.Start;
   fpuzzle.run(cbSelect.ItemIndex mod 2 = 0);
-  endTime:=now;
+  ET.Stop;
   lbResults.Items:=fPuzzle.getResults;
-  lbResults.items.Insert(0,'Start '+ formatDateTime('hh:mm:ss:zz', startTime));
-  lbResults.items.add('End '+formatDateTime('hh:mm:ss:zz',endTime));
-  lbResults.Items.Add('Time: '+inttostr(millisecondsBetween(endTime,startTime))+' ms');
+  lbResults.Items.Add('Time: '+(ET.Elapsed*1000000).ToString+' microseconds');
 end;
 
 procedure TMainForm.bVisualiseClick(Sender: TObject);
