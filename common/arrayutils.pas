@@ -41,6 +41,7 @@ type
   function indexOf(element:int64):integer;
   function shift:int64;
   function splice(index:integer; deleteCount:integer=0;newItems: TInt64Array=nil):TInt64Array;
+  procedure clear;
   end;
 
   { TStringArrayHelper }
@@ -51,19 +52,22 @@ type
   function splice(index:integer; deleteCount: integer=0; newItems: TStringArray=nil):TStringArray;
   end;
 
-  { TPointArrayHelper }
-  TPointArrayHelper = type helper for TPointArray
-  function size: integer;
-  function push(element: TPoint):integer;
-  function indexOf(element:TPoint):integer;
-  function splice(index:integer; deleteCount: integer=0; newItems: TPointArray=nil):TPointArray;
-  end;
-
   { T3DIntMapHelper }
   T3DIntMapHelper = type helper for T3DIntMap
   function max(xStart,xEnd,yStart,yEnd,zStart,zEnd:integer):integer;
   function min(xStart,xEnd,yStart,yEnd,zStart,zEnd:integer):integer;
   end;
+
+  { T2DIntMapHelper }
+  T2DIntMapHelper = type helper for T2DIntMap
+  function rows:integer;
+  function size(row:integer):integer;
+  function push(row:integer;value:integer):integer;
+  function getLast(row:integer):integer;
+  function getFirst(row:integer):integer;
+  procedure clear;
+  end;
+
 
   { T2DInt64MapHelper }
   T2DInt64MapHelper = type helper for T2DInt64Map
@@ -75,10 +79,15 @@ type
   procedure clear;
   end;
 
-  { TIntPointMap }
+  { TPointArrayHelper }
+  TPointArrayHelper = type helper for TPointArray
+  function size: integer;
+  function push(element: TPoint):integer;
+  function indexOf(element:TPoint):integer;
+  function splice(index:integer; deleteCount: integer=0; newItems: TPointArray=nil):TPointArray;
+  end;
   
   { TIntPointMapHelper }
-
   TIntPointMapHelper = type helper for TIntPointMap
   function included(itemToFind:TPoint):boolean;
   procedure addItem(item:TPoint);
@@ -440,6 +449,49 @@ begin
      end;
 end;
 
+{ T2DIntMapHelper }
+
+function T2DIntMapHelper.rows: integer;
+begin
+  result:=length(self);
+end;
+
+function T2DIntMapHelper.size(row: integer): integer;
+begin
+  result:=0;
+  if (self.rows <= row) then exit;
+  result:=length(self[row]);
+end;
+
+function T2DIntMapHelper.push(row: integer; value: integer): integer;
+begin
+  //if the number of rows does not match then create
+  if (self.rows < row) then setLength(self,rows+1);
+  setLength(self,row+1);
+  setLength(self[row],self.size(row)+1);
+  self[row][self.size(row) -1]:=value;
+  result:=self.size(row);
+end;
+
+function T2DIntMapHelper.getLast(row: integer): integer;
+begin
+  result:=0;
+  if self.rows <= row then exit;
+  result:=self[row][self.size(row) - 1];
+end;
+
+function T2DIntMapHelper.getFirst(row: integer): integer;
+begin
+  result:=0;
+  if self.rows <= row then exit;
+  result:=self[row][0];
+end;
+
+procedure T2DIntMapHelper.clear;
+begin
+  setLength(self,0);
+end;
+
 { T2DInt64MapHelper }
 
 function T2DInt64MapHelper.rows: integer;
@@ -631,6 +683,11 @@ function TInt64ArrayHelper.splice(index: integer; deleteCount: integer;
   newItems: TInt64Array): TInt64Array;
 begin
   result:= specialize splice<int64>(self,index,deleteCount,newItems);
+end;
+
+procedure TInt64ArrayHelper.clear;
+begin
+  setLength(self,0);
 end;
 
 { TIntArrayHelper }

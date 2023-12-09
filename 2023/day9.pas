@@ -40,7 +40,7 @@ var
   historySum:int64;
 begin
   results.Clear;
-  setLength(history,0);
+  history.clear;
   //clear the map for each line. Record the results elsewhere
   for lineNo:= 0 to pred(puzzleInputLines.size) do
     begin
@@ -49,8 +49,7 @@ begin
     historySum:=0;
     for mapIndex:=pred(map.rows) downTo 0 do
       historySum:=historySum+map.getLast(mapIndex);
-    setLength(history,length(history)+1);
-    history[length(history)-1]:=historySum
+    history.push(historySum);
     end;
   //Now add all the entries in history
   historySum:=0;
@@ -87,7 +86,7 @@ end;
 
 procedure TDayNine.loadMap(lineNo:integer);
 var
-  mapIndex,mapLineIndex,partIndex,historyIndex:integer;
+  mapIndex,mapLineIndex,partIndex:integer;
   parts:TStringArray;
   allResultsZero:boolean;
   difference:Int64;
