@@ -76,6 +76,7 @@ type
   function size(row:integer):integer;
   function push(row:integer;value:int64):integer;
   function getLast(row:integer):int64;
+  function getFirst(row:integer):int64;
   procedure clear;
   end;
 
@@ -558,6 +559,13 @@ begin
   result:=0;
   if self.rows <= row then exit;
   result:=self[row][self.size(row) - 1];
+end;
+
+function T2DInt64MapHelper.getFirst(row: integer): int64;
+begin
+  result:=0;
+  if self.rows <= row then exit;
+  result:=self[row][0];
 end;
 
 procedure T2DInt64MapHelper.clear;
