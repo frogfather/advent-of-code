@@ -6,7 +6,7 @@ unit arrayUtils;
 interface
 
 uses
-  Classes, SysUtils,anysort,graphics,fgl,cardData,rangeConvert;
+  Classes, SysUtils,anysort,graphics,fgl;
 type
   //Looks like the built in TintegerArray is a static array
   //so let's define our own dynamic integer array
@@ -22,11 +22,6 @@ type
   TColours = array of TColor;
   TPointArray = array of TPoint;
   TIntPointMap = specialize TFPGMap<Integer,TPointArray>;
-  TCardDataArray = array of TCardData;
-
-  //Used in day 5 puzzle
-  TRangeConverterArray = array of TRangeConverter;
-  TRangeArray = array of TRange;
 
   { TIntArrayHelper }
 
@@ -89,27 +84,6 @@ type
   procedure addItem(item:TPoint);
   end;
 
-  { TCardDataArrayHelper }
-  TCardDataArrayHelper = type helper for TCardDataArray
-  function size: integer;
-  function push(element: TCardData):integer;
-  function indexOf(element:TCardData):integer;
-  end;
-
-  { TRangeConverterArrayHelper }
-
-  TRangeConverterArrayHelper = type helper for TRangeConverterArray
-  function size: integer;
-  function push(element: TRangeConverter):integer;
-  end;
-
-  { TRangeArrayHelper }
-
-  TRangeArrayHelper = type helper for TRangeArray
-  function size: integer;
-  function push(element: TRange):integer;
-  end;
-
 
 function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
@@ -123,8 +97,7 @@ procedure sort(var arr: array of string; count: Integer; ascending:boolean=true)
 procedure sort(var str: string; count: Integer;ascending:boolean=true);
 procedure sort(var arr: array of char; count: Integer; ascending:boolean=true);
 procedure sort(var arr: array of TPoint;count: Integer;ascending:boolean=true);
-procedure sort(var arr: array of TRangeConverter; count: Integer; ascending: boolean=true);
-procedure sortRangeArray(var arr: array of TRange; count:Integer; ascending: boolean=true);
+
 implementation
 
 const strChars: string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -325,51 +298,6 @@ begin
     else result:= comparison div abs(comparison);
 end;
 
-function CompareRangeConverterAsc(const d1,d2):integer;
-var
-  s1: TRangeConverter absolute d1;
-  s2: TRangeConverter absolute d2;
-  comparison:int64;
-begin
-  comparison:= s1.start - s2.start;
-  if comparison = 0 then result:=0
-    else result:= comparison div abs(comparison);
-end;
-
-function CompareRangeConverterDesc(const d1,d2):integer;
-var
-  s1: TRangeConverter absolute d1;
-  s2: TRangeConverter absolute d2;
-  comparison:int64;
-begin
-  comparison:= s2.start - s1.start;
-  if comparison = 0 then result:=0
-    else result:= comparison div abs(comparison);
-end;
-
-function CompareRangeAsc(const d1,d2):integer;
-var
-  s1: TRange absolute d1;
-  s2: TRange absolute d2;
-  comparison:int64;
-begin
-  comparison:= s1.rangeStart - s2.rangeStart;
-  if comparison = 0 then result:=0
-    else result:= comparison div abs(comparison);
-end;
-
-function CompareRangeDesc(const d1,d2):integer;
-var
-  s1: TRange absolute d1;
-  s2: TRange absolute d2;
-  comparison:int64;
-begin
-  comparison:= s2.rangeStart - s1.rangeStart;
-  if comparison = 0 then result:=0
-    else result:= comparison div abs(comparison);
-end;
-
-
 function intArrayToCSV(input: TIntArray): string;
 var
   index:integer;
@@ -448,24 +376,6 @@ begin
     anysort.AnySort(arr, Count, sizeof(TPoint), @ComparePointAsc)
   else
     anysort.AnySort(arr, Count, sizeof(TPoint), @ComparePointDesc)
-end;
-
-procedure sort(var arr: array of TRangeConverter; count: Integer;
-  ascending: boolean);
-begin
-  if ascending then
-    anysort.AnySort(arr, Count, sizeof(TRangeConverter), @CompareRangeConverterAsc)
-  else
-    anysort.AnySort(arr, Count, sizeof(TRangeConverter), @CompareRangeConverterDesc)
-end;
-
-procedure sortRangeArray(var arr: array of TRange; count: Integer;
-  ascending: boolean);
-begin
-  if ascending then
-    anysort.AnySort(arr, Count, sizeof(TRange), @CompareRangeAsc)
-  else
-    anysort.AnySort(arr, Count, sizeof(TRange), @CompareRangeDesc)
 end;
 
 procedure sort(var str: string; count: Integer; ascending: boolean);

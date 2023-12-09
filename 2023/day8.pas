@@ -61,7 +61,7 @@ begin
   //the lcd of running total and next entry
   runningTotal:=0;
   for index:=0 to pred(stepsForPaths.size) do
-    runningTotal:=lcd(runningtotal,stepsForPaths[index]);
+    runningTotal:=lcm(runningtotal,stepsForPaths[index]);
   results.add('Steps taken is '+runningTotal.ToString);
 end;
 

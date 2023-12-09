@@ -1,7 +1,8 @@
 unit cardData;
 
 {$mode ObjFPC}{$H+}
-
+{$MODESWITCH ADVANCEDRECORDS}
+{$modeswitch TypeHelpers}
 interface
 
 uses
@@ -15,7 +16,16 @@ type
     winning: TStringArray;
     candidates: TStringArray;
   end;
-  operator = (a, b: TCardData): Boolean;
+
+  TCardDataArray = array of TCardData;
+
+  { TCardDataArrayHelper }
+  TCardDataArrayHelper = type helper for TCardDataArray
+  function size: integer;
+  function push(element: TCardData):integer;
+  end;
+
+operator = (a, b: TCardData): Boolean;
 
 implementation
 
@@ -23,6 +33,19 @@ implementation
 operator=(a, b: TCardData): Boolean;
 begin
   result:= a.cardId = b.cardId;
+end;
+
+{ TCardDataArrayHelper }
+
+function TCardDataArrayHelper.size: integer;
+begin
+  result:=length(self);
+end;
+
+function TCardDataArrayHelper.push(element: TCardData): integer;
+begin
+  insert(element,self,length(self));
+  result:=self.size;
 end;
 
 end.
