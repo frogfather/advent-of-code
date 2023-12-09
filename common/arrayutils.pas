@@ -16,6 +16,7 @@ type
   TStringIntMap = specialize TFPGMap<String,Integer>;
   TStringInt64Map = specialize TFPGMap<String,Int64>;
   T2DIntMap = array of array of integer;
+  T2DInt64Map = array of array of int64;
   T3DIntMap = array of array of array of integer;
   T2DStringArray = array of array of string;
   TColours = array of TColor;
@@ -62,6 +63,16 @@ type
   T3DIntMapHelper = type helper for T3DIntMap
   function max(xStart,xEnd,yStart,yEnd,zStart,zEnd:integer):integer;
   function min(xStart,xEnd,yStart,yEnd,zStart,zEnd:integer):integer;
+  end;
+
+  { T2DInt64MapHelper }
+  T2DInt64MapHelper = type helper for T2DInt64Map
+  function rows:integer;
+  function size(row:integer):integer;
+  function push(row:integer;value:int64):integer;
+  function getLast(row:integer):int64;
+  function getFirst(row:integer):int64;
+  procedure clear;
   end;
 
   { TIntPointMap }
@@ -427,6 +438,94 @@ begin
      for adjustIndex:= 0 to high(newItems) do
        aArray[index+adjustIndex]:= newItems[adjustIndex];
      end;
+end;
+
+{ T2DInt64MapHelper }
+
+function T2DInt64MapHelper.rows: integer;
+begin
+  result:=length(self);
+end;
+
+function T2DInt64MapHelper.size(row: integer): integer;
+begin
+  result:=0;
+  if (self.rows <= row) then exit;
+  result:=length(self[row]);
+end;
+
+function T2DInt64MapHelper.push(row: integer; value: int64): integer;
+begin
+  //if the number of rows does not match then create
+  if (self.rows < row) then setLength(self,rows+1);
+  setLength(self,row+1);
+  setLength(self[row],self.size(row)+1);
+  self[row][self.size(row) -1]:=value;
+  result:=self.size(row);
+end;
+
+function T2DInt64MapHelper.getLast(row: integer): int64;
+begin
+  result:=0;
+  if self.rows <= row then exit;
+  result:=self[row][self.size(row) - 1];
+end;
+
+function T2DInt64MapHelper.getFirst(row: integer): int64;
+begin
+  result:=0;
+  if self.rows <= row then exit;
+  result:=self[row][0];
+end;
+
+procedure T2DInt64MapHelper.clear;
+begin
+  setLength(self,0);
+end;
+
+{ TRangeArrayHelper }
+
+function TRangeArrayHelper.size: integer;
+begin
+  result:=length(self);
+end;
+
+function TRangeArrayHelper.push(element: TRange): integer;
+begin
+  insert(element,self,length(self));
+  result:=self.size;
+end;
+
+{ TRangeConverterArrayHelper }
+
+function TRangeConverterArrayHelper.size: integer;
+begin
+  result:=length(self);
+end;
+
+function TRangeConverterArrayHelper.push(element: TRangeConverter
+  ): integer;
+begin
+  insert(element,self,length(self));
+  result:=self.size;
+end;
+
+{ TCardDataArrayHelper }
+
+function TCardDataArrayHelper.size: integer;
+begin
+  result:=length(self);
+end;
+
+function TCardDataArrayHelper.push(element: TCardData): integer;
+begin
+  insert(element,self,length(self));
+  result:=self.size;
+end;
+
+function TCardDataArrayHelper.indexOf(element: TCardData): integer;
+begin
+  result:= specialize getIndex < TCardData>(element,self);
 end;
 
 { TIntPointMapHelper }
