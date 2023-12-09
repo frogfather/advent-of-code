@@ -76,6 +76,7 @@ type
   function size(row:integer):integer;
   function push(row:integer;value:int64):integer;
   function getLast(row:integer):int64;
+  procedure clear;
   end;
 
   { TIntPointMap }
@@ -546,8 +547,9 @@ function T2DInt64MapHelper.push(row: integer; value: int64): integer;
 begin
   //if the number of rows does not match then create
   if (self.rows < row) then setLength(self,rows+1);
+  setLength(self,row+1);
   setLength(self[row],self.size(row)+1);
-  self[row][self.size(row -1)]:=value;
+  self[row][self.size(row) -1]:=value;
   result:=self.size(row);
 end;
 
@@ -556,6 +558,11 @@ begin
   result:=0;
   if self.rows <= row then exit;
   result:=self[row][self.size(row) - 1];
+end;
+
+procedure T2DInt64MapHelper.clear;
+begin
+  setLength(self,0);
 end;
 
 { TRangeArrayHelper }
