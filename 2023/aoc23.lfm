@@ -9,6 +9,7 @@ object MainForm: TMainForm
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
+  LCLVersion = '2.2.6.0'
   object Memo1: TMemo
     Left = 16
     Height = 404
