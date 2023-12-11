@@ -38,6 +38,7 @@ Type
   function width:integer;
   procedure setDistance(x,y,distance_:integer);
   procedure setVisited(x,y:integer);
+  procedure setSymbol(x,y:integer;symbol_:string);
   end;
 
 implementation
@@ -169,6 +170,11 @@ end;
 procedure TPipeNodeMapHelper.setVisited(x, y:integer);
 begin
   self[y][x].visited:=true;
+end;
+
+procedure TPipeNodeMapHelper.setSymbol(x, y: integer; symbol_: string);
+begin
+  self[y][x].symbol:=symbol_;
 end;
 
 end.
