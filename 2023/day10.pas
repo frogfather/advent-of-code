@@ -13,6 +13,7 @@ type
   private
   function loadMap:TPipeNode;
   procedure reset;
+  function crossings(x,y:integer):integer;
   procedure drawScreen(sender:TObject);
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
@@ -46,7 +47,6 @@ begin
   results.Clear;
   reset;
   startNode:=loadMap;
-
   //Add start node to queue
   queue.push(startNode);
   //Now for each node, get the neighbours
@@ -66,9 +66,30 @@ begin
 end;
 
 procedure TDayTen.runPartTwo;
+var
+  outside,inside:integer;
+  x,y:integer;
+  nodeToTest:TPipeNode;
 begin
   runPartOne;//It's the same map
-  //For each point with value 0
+  //For each point with value 0 check number of line crossings
+  //If it's 0 try another direction
+  outside:=0;
+  inside:=0;
+  for y:=0 to pred(pipeNodeMap.height) do
+    begin
+    for x:=0 to pred(pipeNodeMap.width) do
+      begin
+      nodeToTest:=pipeNodeMap.getNodeAt(x,y);
+      if (not nodeToTest.visited) then
+        begin
+        if (crossings(x,y) mod 2 = 1) then inside:=inside+1
+        else outside:=outside+1;
+        end;
+      end;
+    end;
+  results.Add('Nodes outside loop '+outside.ToString);
+  results.Add('Nodes inside loop '+inside.ToString);
 end;
 
 function TDayTen.loadMap:TPipeNode;
@@ -78,6 +99,7 @@ var
 begin
   setLength(pipeNodeMap,puzzleInputLines.size,puzzleInputLines[0].Length);
   for y:=0 to pred(puzzleInputLines.size) do
+    begin
     for x:=0 to pred(puzzleInputLines[0].Length) do
       begin
       newNode.visited:= false;
@@ -88,6 +110,7 @@ begin
       if (newNode.symbol = 'S') then result:=newNode;
       pipeNodeMap[y][x]:=newNode;
       end;
+    end;
 end;
 
 procedure TDayTen.reset;
@@ -96,32 +119,51 @@ begin
   setLength(queue,0);
 end;
 
+function TDayTen.crossings(x, y: integer): integer;
+const allowedChars: TStringArray = ('J','L','|');
+var
+  xPos,yPos:integer;
+  nodeToCheck:TPipeNode;
+
+begin
+  result:=0;
+  if (x=0) then exit;
+  xPos:=x;
+  yPos:=y;
+
+  for xPos:=x-1 downTo 0 do
+  begin
+  nodeToCheck:=pipeNodeMap.getNodeAt(xPos,yPos);
+  if (nodeToCheck.visited) and (allowedChars.indexOf(nodeToCheck.symbol) > -1) then result:=result+1;
+  end;
+end;
+
 procedure TDayTen.drawScreen(sender: TObject);
 var
   x,y,cellLeft,cellTop,cellWidth,cellHeight:integer;
   node:TPipeNode;
+  scale:integer;
 begin
   if Sender is TPaintbox then with Sender as TPaintbox do
     begin
-    cellWidth:=canvas.Width div (pipeNodeMap.width div 2);
-    cellHeight:= canvas.Height div (pipeNodeMap.height div 2);
-    canvas.Font.Height:=cellHeight - 1;
-    canvas.Brush.Color:=clBlue;
-    for y:=0 to pred(pipeNodeMap.height div 2) do
-      for x:=0 to pred(pipenodeMap.width div 2) do
+    scale:=4;
+    cellWidth:=canvas.Width div (pipeNodeMap.width div scale);
+    cellHeight:= canvas.Height div (pipeNodeMap.height div scale);
+    canvas.Font.Height:=cellHeight div 2;
+    canvas.Brush.Color:=clYellow;
+    for y:=0 to pred(pipeNodeMap.height div scale) do
+      for x:=0 to pred(pipenodeMap.width div scale) do
         begin
         node:=pipeNodeMap[y][x];
         cellLeft:=(x * cellWidth);
         cellTop:=(y * cellHeight);
         if (node.symbol='S') then canvas.brush.Color:=clYellow else
-          if (node.distance > 0) then canvas.Brush.Color:=clTeal else canvas.Brush.Color:=clBlue;
+          if (node.visited) then canvas.Brush.Color:=clTeal else canvas.Brush.Color:=clYellow;
         canvas.Rectangle(cellLeft,cellTop,cellLeft+cellWidth,cellTop+cellHeight);
-        canvas.TextOut(cellLeft,cellTop,node.distance.ToString);
+        canvas.TextOut(cellLeft+1,cellTop,node.symbol+' '+node.distance.toString);
         end;
     end;
 end;
-
-
 
 end.
 
