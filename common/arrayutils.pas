@@ -50,6 +50,7 @@ type
   function push(element: string):integer;
   function indexOf(element:string):integer;
   function splice(index:integer; deleteCount: integer=0; newItems: TStringArray=nil):TStringArray;
+  function toIntArray:TIntArray;
   end;
 
   { T3DIntMapHelper }
@@ -644,6 +645,22 @@ function TStringArrayHelper.splice(index: integer; deleteCount: integer;
   newItems: TStringArray): TStringArray;
 begin
   result:= specialize splice<string>(self,index,deleteCount, newItems);
+end;
+
+function TStringArrayHelper.toIntArray: TIntArray;
+var
+  index:integer;
+  output:TIntArray;
+begin
+  result:=TIntArray.create;
+  for index:=0 to pred(length(self)) do
+    begin
+      try
+      result.push(self[index].ToInteger)
+      except
+      //do nothing atm
+      end;
+    end;
 end;
 
 
