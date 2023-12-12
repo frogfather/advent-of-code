@@ -10,14 +10,14 @@ type
 
   { TDayTwelve}
   TDayTwelve = class(TAocPuzzle)
-  private
+  protected
   procedure setupSpringData;
   procedure reset;
   function getPermutationsForEntry(data_,groups_:string):integer;
   function findFirstPositionForGroup(data_:string;groupSize,startPosition:integer):integer;
-  function arrangementIsLegal(data_:string;groupInfo,positions:TIntArray):boolean;
+  function arrangementIsLegal(data_:string;groupInfo,positions,groupOffsets:TIntArray):boolean;
   function updateGroupOffsets(var offsets:TIntArray; groups: TIntArray;dataLength:integer):boolean;
-  function outOfRange(offsets,groups:TIntArray;offsetId,dataLength:integer):boolean;
+  function sequenceIsTooLong(offsets,groups:TIntArray;offsetId,dataLength:integer):boolean;
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
   procedure runPartOne; override;
@@ -95,8 +95,8 @@ var
   totalGroupSize,dataLength:integer;
   allPositionsTried:boolean;
 begin
+  results.Add('Get permutations for '+data_);
   result:=0;
-  //.??..??...?##. 1,1,3 (for reference)
   groups:=groups_.Split([',']).toIntArray;
   groupOffsets:=TintArray.create;
   currentGroupPositions:=TIntArray.create;
@@ -109,31 +109,27 @@ begin
     totalGroupSize:=totalGroupSize + groups[index];
     if (index < pred(groups.size)) then totalGroupSize:=totalGroupSize+1;
     end;
-  allPositionsTried:=false;
-
-  while not allPositionsTried do
-  begin
-  //Set up legal arrangement
-  //Starting at the left hand side, how far left can we fit the first item?
+  //Set up start positions at start
   startPosition:=0;
   setLength(currentGroupPositions,0); //clear method would be nice here
   for index:=0 to pred(groups.size)do
     begin
     groupSize:=groups[index];
-    groupOffset:=groupOffsets[index];
+    groupOffset:=groupOffsets[index];//initially 0
     groupPosition:=findFirstPositionForGroup(data_,groupSize,startPosition + groupOffset);
-    //If we can't place the group then it's not valid
     if (groupPosition > -1) then
       begin
       currentGroupPositions.push(groupPosition);
       startPosition:=groupPosition+groupSize+1;
       end else break;
     end;
-  if arrangementIsLegal(data_, groups,currentGroupPositions) then result:=result + 1;
-  //how do we determine that we're done?
-  //If the offset of the first item + the total length of the groups is > length of data
-  allPositionsTried:= (groupOffsets[0] + totalGroupSize > dataLength);
-  if not allPositionsTried then updateGroupOffsets(groupOffsets,groups,dataLength);
+
+  allPositionsTried:=false;
+
+  while not allPositionsTried do
+  begin
+  if arrangementIsLegal(data_, groups,currentGroupPositions,groupOffsets) then result:=result + 1;
+  allPositionsTried:= not updateGroupOffsets(groupOffsets,groups,dataLength);
   end;
 
 end;
@@ -157,64 +153,98 @@ begin
     done:= enoughSpace and leftLegal and rightLegal and spaceLegal;
     if not done then
       begin
-      if (index < data_.Length) then index:=index + 1 else exit;
+      if (index < data_.Length) then
+        begin
+        index:=index + 1;
+        end else exit;
       end;
     end;
   result:=index;
 end;
 
-function TDayTwelve.arrangementIsLegal(data_: string; groupInfo,positions: TIntArray
+function TDayTwelve.arrangementIsLegal(data_: string; groupInfo,positions,groupOffsets: TIntArray
   ): boolean;
+var
+   index,element,laterEntryIndex:integer;
+   copyData:String;
+   testStart,testSize:integer;
 begin
+  copyData:=data_;
   result:=false;
   if (positions.size <> groupInfo.size) then exit;
-  //Check where specified groupInfo would result in groups being
-  //and see if it would result in an illegal arrangement
+  //does the range of any group contain a dot?
+  for index:=0 to pred(positions.size)do
+    begin
+    //Invalid if there are dots in the range selected
+    testStart:=positions[index]+groupOffsets[index];
+    testSize:=groupInfo[index];
+    if (data_.Substring(testStart,testSize).IndexOf('.') > -1) then exit;
+
+    //Overlap check - is a given position + offset > a later position
+    if (index < pred(positions.size)) then
+      for laterEntryIndex:=index + 1 to pred(positions.size) do
+      begin
+      if (testStart+testSize >= positions[laterEntryIndex]+groupOffsets[laterEntryIndex]) then
+        begin
+        results.add('Exclude sequence '+positions.toString(',')+' '+groupOffsets.toString(',')+' because entry '+index.toString+' collides with '+laterEntryIndex.ToString);
+        exit;
+        end;
+      end;
+
+    for element:=testStart to testStart+ pred(testSize) do
+      copyData[element+1]:='?';
+    end;
+  if (copyData.IndexOf('#') > -1) then exit;
+
+
+
+
+  results.add('Sequence '+positions.toString(',')+' '+groupOffsets.toString(',')+' is valid');
+  result:=true;
+
 end;
 
 function TDayTwelve.updateGroupOffsets(var offsets:TIntArray; groups: TIntArray;
   dataLength: integer):boolean;
 var
-   offsetId,startOfGroup:integer;
+   offsetId:integer;
    index:integer;
-   done,outRange:boolean;
+   done,outOfRange:boolean;
 begin
   offsetId:=pred(offsets.size);
-  //Repeat this until we find an offset we can update
-  //or until we can't move the first one
+  offsets[offsetId]:=offsets[offsetId]+1;
+  //increment the specified offset and see if it's legal
   done:=false;
-  repeat
   index:=0;
-  startOfGroup:=0;
-  while index <= offsetId do
+  repeat
+  outOfRange:=sequenceIsTooLong(offsets, groups,offsetId,dataLength);
+
+  If outOfRange then
     begin
-    startOfGroup:=startOfGroup + offsets[index];
-    if index < offsetId then startOfGroup:=startOfGroup + groups[index]+ 1;
-    index:=index + 1;
+    offsetId:= offsetId -1; //move to previous offsetId
+    if (offsetId > -1) then
+      begin
+      offsets[offsetId]:=offsets[offsetId]+1; //and increment it by 1
+      for index:=offsetId+1 to pred(offsets.size) do
+        offsets[index]:=0;
+      end;
     end;
-  outRange:=outOfRange(offsets, groups,offsetId,dataLength);
-  //If incrementing the current offset would not make us out of range then we can do it
-  If outRange then offsetId:= offsetId -1
-    else offsets[offsetId]:=offsets[offsetId]+1;
-  done:= (not outRange) or(offsetId < 0);
+  done:= (not outOfRange) or(offsetId < 0);
   until done;
-  //If we're done then either offsetId is < 0 or we're able to update the offset
-  result:= not outRange;
+  result:= not outOfRange;
 end;
 
-function TDayTwelve.outOfRange(offsets, groups: TIntArray; offsetId, dataLength: integer
+function TDayTwelve.sequenceIsTooLong(offsets, groups: TIntArray; offsetId, dataLength: integer
   ): boolean;
 var
    index:integer;
    totalLength:integer;
 begin
-  //takes a set of offsets and works out if the total length is too long
-  //add all the offsets and groups. If we're on the offsetId that is to be incremented then add one
-  totalLength:=0;
+  //Would incrementing the specified offset make the sequence length greater than the dataLength?
+  totalLength:=groups.size - 1; //each group needs a minimum of one space between
   for index:=0 to pred(offsets.size) do
     begin
-    totalLength:=totalLength + offsets[index] + groups[index] -1;
-    if (index < pred(offsets.size)) then totalLength:=totalLength + 1;
+    totalLength:=totalLength + offsets[index] + groups[index];
     if index = offsetId then totalLength:=totalLength+1;
     end;
   result:=totalLength > dataLength;

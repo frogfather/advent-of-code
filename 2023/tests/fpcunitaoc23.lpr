@@ -1,9 +1,10 @@
-program aoc23Tests;
+program fpcunitaoc23;
 
 {$mode objfpc}{$H+}
 
 uses
-  Interfaces, Forms, GuiTestRunner, day1, unit1;
+  Interfaces, Forms, GuiTestRunner, day12, fileUtilities, arrayUtils, aocUtils,
+  anysort, testday12;
 
 {$R *.res}
 
