@@ -127,6 +127,7 @@ results.add('*** No reflection found - your code is probably wrong!');
 result:=-1; //shouldn't get here
 end;
 
+//return the number of mismatches between two supplied strings
 function TDayThirteen.getMismatches(string1, string2: string): integer;
 var
   elementId:integer;
@@ -138,6 +139,7 @@ begin
       then result:=result+1;
 end;
 
+//For vertical lines
 function TDayThirteen.getLine(mirror_: TStringArray; lineId: integer
   ): string;
 var
