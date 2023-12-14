@@ -52,6 +52,7 @@ type
   function indexOf(element:string):integer;
   function splice(index:integer; deleteCount: integer=0; newItems: TStringArray=nil):TStringArray;
   function toIntArray:TIntArray;
+  procedure clear;
   end;
 
   { T3DIntMapHelper }
@@ -662,6 +663,11 @@ begin
       //do nothing atm
       end;
     end;
+end;
+
+procedure TStringArrayHelper.clear;
+begin
+  setLength(self,0);
 end;
 
 
