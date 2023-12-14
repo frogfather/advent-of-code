@@ -4,7 +4,7 @@
     <Version Value="12"/>
     <General>
       <SessionStorage Value="InProjectDir"/>
-      <Title Value="aoc23Tests"/>
+      <Title Value="fpcunitaoc23"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
       <Icon Value="0"/>
@@ -32,11 +32,34 @@
     </RequiredPackages>
     <Units>
       <Unit>
-        <Filename Value="aoc23Tests.lpr"/>
+        <Filename Value="fpcunitaoc23.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="day1.pas"/>
+        <Filename Value="testday12.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../day12.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../common/fileutilities.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="fileUtilities"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../common/arrayutils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="arrayUtils"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../common/aocutils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="aocUtils"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../common/anysort.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
@@ -44,10 +67,11 @@
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="aoc23Tests"/>
+      <Filename Value="fpcunitaoc23"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="..;../../common"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

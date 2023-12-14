@@ -5,7 +5,7 @@ unit day7;
 interface
 
 uses
-  Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics,arrayUtils,hand,TypInfo;
+  Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics,arrayUtils,hand;
 type
 
   { TDaySeven}

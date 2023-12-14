@@ -31,6 +31,7 @@ type
   function indexOf(element:integer):integer;
   function shift:integer;
   function splice(index:integer; deleteCount:integer=0; newItems: TIntArray=nil):TIntArray;
+  function toString(separator:string):string;
   end;
 
   { TInt64ArrayHelper }
@@ -50,6 +51,7 @@ type
   function push(element: string):integer;
   function indexOf(element:string):integer;
   function splice(index:integer; deleteCount: integer=0; newItems: TStringArray=nil):TStringArray;
+  function toIntArray:TIntArray;
   end;
 
   { T3DIntMapHelper }
@@ -646,6 +648,22 @@ begin
   result:= specialize splice<string>(self,index,deleteCount, newItems);
 end;
 
+function TStringArrayHelper.toIntArray: TIntArray;
+var
+  index:integer;
+  output:TIntArray;
+begin
+  result:=TIntArray.create;
+  for index:=0 to pred(length(self)) do
+    begin
+      try
+      result.push(self[index].ToInteger)
+      except
+      //do nothing atm
+      end;
+    end;
+end;
+
 
 
 { TInt64ArrayHelper }
@@ -725,6 +743,19 @@ function TIntArrayHelper.splice(index: integer; deleteCount: integer;
   newItems: TIntArray): TIntArray;
 begin
  result:= specialize splice<integer>(self,index,deleteCount,newItems);
+end;
+
+function TIntArrayHelper.toString(separator: string): string;
+var
+  index:integer;
+begin
+ result:='';
+  for index:=0 to pred(self.size) do
+    begin
+    result:= result + self[index].toString;
+    if (index < pred(self.size)) then result:=result+separator;
+    end;
+
 end;
 
 end.
