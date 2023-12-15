@@ -28,8 +28,29 @@ inherited create(filename,'Day 14',paintbox_);
 end;
 
 procedure TDayFourteen.runPartOne;
+var
+  total:integer;
+  section:integer;
+  sections:TStringArray;
+
+  function hash(input:string):integer;
+  var
+    chrindex:integer;
+    sectionSum:integer;
+  begin
+  sectionSum:=0;
+  for chrIndex:= 1 to input.Length do
+    sectionSum:=((sectionSum+ord(input[chrIndex]))*17) mod 256;
+  result:=sectionSum;
+  end;
+
 begin
   results.Clear;
+  sections:=puzzleInputLines[0].Split([',']);
+  total:=0;
+  for section:=0 to pred(sections.size) do
+  total:=total+hash(sections[section]);
+  results.add('Total is '+total.ToString);
 end;
 
 procedure TDayFourteen.runPartTwo;
