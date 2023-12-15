@@ -52,6 +52,7 @@ type
   function indexOf(element:string):integer;
   function splice(index:integer; deleteCount: integer=0; newItems: TStringArray=nil):TStringArray;
   function toIntArray:TIntArray;
+  function toString(separator:string):String;
   procedure clear;
   end;
 
@@ -661,6 +662,21 @@ begin
       result.push(self[index].ToInteger)
       except
       //do nothing atm
+      end;
+    end;
+end;
+
+function TStringArrayHelper.toString(separator: string): String;
+var
+  index:integer;
+begin
+  result:='';
+  for index:=0 to pred(self.size) do
+    begin
+    if self[index].Length > 0 then
+      begin
+      result:=result+self[index];
+      if (index < pred(self.size)) then result:=result+separator;
       end;
     end;
 end;
