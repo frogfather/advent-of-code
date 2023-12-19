@@ -25,6 +25,12 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="dcpcrypt"/>
+      </Item>
+      <Item>
+        <PackageName Value="HashLib4PascalPackage"/>
+      </Item>
+      <Item>
         <PackageName Value="etpackage"/>
       </Item>
       <Item>
