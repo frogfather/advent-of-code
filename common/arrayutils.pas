@@ -15,6 +15,7 @@ type
   TStringMap = specialize TFPGMap<String,String>;
   TStringIntMap = specialize TFPGMap<String,Integer>;
   TStringInt64Map = specialize TFPGMap<String,Int64>;
+  TIntStringMap = specialize TFPGMap<Integer,string>;
   T2DIntMap = array of array of integer;
   T2DInt64Map = array of array of int64;
   T3DIntMap = array of array of array of integer;
@@ -51,6 +52,8 @@ type
   function push(element: string):integer;
   function indexOf(element:string):integer;
   function splice(index:integer; deleteCount: integer=0; newItems: TStringArray=nil):TStringArray;
+  function longest:integer;
+  function rotate(quadrants:integer;anticlockwise:boolean=true):TStringArray;
   function toIntArray:TIntArray;
   function toString(separator:string):String;
   procedure clear;
@@ -95,6 +98,13 @@ type
   TIntPointMapHelper = type helper for TIntPointMap
   function included(itemToFind:TPoint):boolean;
   procedure addItem(item:TPoint);
+  end;
+
+  { TIntStringMapHelper }
+  TIntStringMapHelper = type helper for TIntStringMap
+  function included(itemToFind: string):boolean;
+  procedure addItem(index:integer;item:string);
+  function keyOfItem(itemToFind:string):integer;
   end;
 
 
@@ -453,6 +463,29 @@ begin
      end;
 end;
 
+{ TIntStringMapHelper }
+
+function TIntStringMapHelper.included(itemToFind: string): boolean;
+begin
+ result:=false;
+  if self.IndexOfData(itemToFind) > -1 then
+    begin
+    result:=true;
+    exit;
+    end;
+end;
+
+procedure TIntStringMapHelper.addItem(index: integer; item: string);
+begin
+  if (self.IndexOf(index) = -1) then
+  self.AddOrSetData(index,item);
+end;
+
+function TIntStringMapHelper.keyOfItem(itemToFind: string): integer;
+begin
+  result:=self.IndexOfData(itemToFind);
+end;
+
 { T2DIntMapHelper }
 
 function T2DIntMapHelper.rows: integer;
@@ -648,6 +681,65 @@ function TStringArrayHelper.splice(index: integer; deleteCount: integer;
   newItems: TStringArray): TStringArray;
 begin
   result:= specialize splice<string>(self,index,deleteCount, newItems);
+end;
+
+function TStringArrayHelper.longest: integer;
+var
+  index:integer;
+begin
+  result:=0;
+  for index:=0 to pred(self.size) do
+    if self[index].Length > result then result:=self[index].Length;
+end;
+
+function TStringArrayHelper.rotate(quadrants: integer; anticlockwise: boolean
+  ):TStringArray;
+var
+  x,y,xLimit,yLimit,xOffset,yOffset:integer;
+  actualRotation:integer;
+  newLine:string;
+begin
+  actualRotation:=quadrants mod 4;
+  if actualRotation = 0 then
+    begin
+    result:=self;
+    exit;
+    end;
+  result:=TStringArray.create;
+  //If rotation is > 1 then lets do a half turn first
+  //Half turn - reverse each line and make top = bottom etc
+
+  //Then if actual rotation is an odd number then add a quarter turn
+  if actualRotation mod 2 = 1 then
+  begin
+  if anticlockwise then
+    begin
+    for x:=self.longest -1 downto 0 do
+      begin
+      newLine:='';
+      for y:=0 to pred(self.size) do
+        begin
+        if (self[y].Length > x)
+          then newLine:=newLine+ self[y].Substring(x,1)
+          else newLine:=newline+' ';
+        end;
+      result.push(newline);
+      end;
+    end else
+    begin
+    for x:=0 to self.longest - 1 do
+      begin
+      newLine:='';
+      for y:=pred(self.size) downTo 0 do
+        begin
+        if (self[y].Length > x)
+          then newLine:=newLine+ self[y].Substring(x,1)
+          else newLine:=newline+' ';
+        end;
+      result.push(newline);
+      end;
+    end;
+  end;
 end;
 
 function TStringArrayHelper.toIntArray: TIntArray;

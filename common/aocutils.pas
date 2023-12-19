@@ -5,8 +5,7 @@ unit aocUtils;
 interface
 
 uses
-  Classes, SysUtils,fileUtilities,math,arrayUtils;
-
+  Classes, SysUtils,fileUtilities,math,arrayUtils,HlpIHashInfo, HlpConverters, HlpHashFactory,DCPsha256;
 function getPuzzleInputAsStringArray(fileName: String; removeBlankLines: boolean=true): TStringArray;
 function getPuzzleInputAsIntArray(fileName: String; removeBlankLines: boolean=true): TIntArray;
 function getPuzzleInputAsString(fileName:string):string;
@@ -25,6 +24,7 @@ function isNumber(element:char):boolean;
 function isNumber(element:string):boolean;
 function gcd(num1,num2:int64):int64;
 function lcm(num1,num2:int64):int64;
+function sha256(input:string):string;
 implementation
 
 const numbers: array[0..9] of integer = (0,1,2,3,4,5,6,7,8,9);
@@ -288,6 +288,30 @@ begin
   if (num1 = 0) then result:=num2
   else if (num2 = 0) then result:= num1
   else result:= (num1 div gcd(num1, num2)) * num2;
+end;
+
+function sha256(input: string): string;
+type
+  TDigest = array[0..31] of byte;
+var
+    DCP_sha256_1:TDCP_Sha256;
+    Digest: TDigest;
+    i: integer;
+    str1: string;
+begin
+    result:='';
+    if input <> '' then
+    begin
+      FillByte(Digest, SizeOf(Digest), 0);
+      DCP_sha256_1:= TDCP_sha256.Create(nil);
+      DCP_sha256_1.Init;
+      DCP_sha256_1.UpdateStr(input);
+      DCP_sha256_1.Final(Digest);
+      str1:= '';
+      for i:= 0 to 31 do
+        str1:= str1 + IntToHex(Digest[i],2);
+      result:=str1;
+    end;
 end;
 
 end.
