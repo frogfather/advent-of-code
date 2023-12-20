@@ -10,9 +10,9 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, etpackage, aoc23, iAoc, aocPuzzle, visualise,
-  arrayUtils, aocUtils, anysort, fileUtilities, cardData, rangeConvert, hand,
-  pipenode
+  Forms, etpackage, aoc23, iAoc, aocPuzzle, visualise, arrayUtils, aocUtils,
+  anysort, fileUtilities, cardData, rangeConvert, hand, pipenode, day16, day17,
+  day18, day19, day20, day21, day22, day23, day24, day25, commModule
   { you can add units after this };
 
 {$R *.res}
