@@ -23,6 +23,7 @@ type
   TColours = array of TColor;
   TPointArray = array of TPoint;
   TIntPointMap = specialize TFPGMap<Integer,TPointArray>;
+  TStringBoolMap = specialize TFPGMap<String,Boolean>;
 
   { TIntArrayHelper }
 
