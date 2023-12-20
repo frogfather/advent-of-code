@@ -8,7 +8,8 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics,
   Dialogs, StdCtrls, Math, clipbrd, ExtCtrls, EpikTimer, DateUtils, fpJSON,
   aocUtils, arrayUtils,iAoc,visualise,
-  day1,day2,day3,day4,day5, day6,day7, day8,day9,day10,day11,day12,day13,day14,day15;
+  day1,day2,day3,day4,day5, day6,day7, day8,day9,day10,day11,day12,day13,day14,day15,
+  day16,day17,day18,day19,day20,day21,day22,day23,day24,day25;
 
 type
 
@@ -107,6 +108,16 @@ begin
    13:fpuzzle:= TDayThirteen.Create(fPuzzlefile);
    14:fpuzzle:= TDayFourteen.Create(fPuzzlefile);
    15:fpuzzle:= TDayFifteen.Create(fPuzzlefile);
+   16:fpuzzle:= TDaySixteen.Create(fPuzzlefile);
+   17:fpuzzle:= TDaySeventeen.Create(fPuzzlefile);
+   18:fpuzzle:= TDayEighteen.Create(fPuzzlefile);
+   19:fpuzzle:= TDayNineteen.Create(fPuzzlefile);
+   20:fpuzzle:= TDayTwenty.Create(fPuzzlefile);
+   21:fpuzzle:= TDayTwentyOne.Create(fPuzzlefile);
+   22:fpuzzle:= TDayTwentyTwo.Create(fPuzzlefile);
+   23:fpuzzle:= TDayTwentyThree.Create(fPuzzlefile);
+   24:fpuzzle:= TDayTwentyFour.Create(fPuzzlefile);
+   25:fpuzzle:= TDayTwentyFive.Create(fPuzzlefile);
 
   end;
   bVisualise.Visible:=fVisualise.PaintBox1.OnPaint <> nil;
