@@ -203,11 +203,6 @@
         <Filename Value="day25.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
-      <Unit>
-        <Filename Value="commmodule.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="commModule"/>
-      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -10,14 +10,10 @@ type
 
   { TDayTwelve}
   TDayTwelve = class(TAocPuzzle)
-  protected
-  procedure setupSpringData;
-  procedure reset;
-  function getPermutationsForEntry(data_,groups_:string):integer;
-  function findFirstPositionForGroup(data_:string;groupSize,startPosition:integer):integer;
-  function arrangementIsLegal(data_:string;groupInfo,positions,groupOffsets:TIntArray):boolean;
-  function updateGroupOffsets(var offsets:TIntArray; groups: TIntArray;dataLength:integer):boolean;
-  function sequenceIsTooLong(offsets,groups:TIntArray;offsetId,dataLength:integer):boolean;
+  private
+  function count(config:string;nums:TIntArray):int64;
+  function multiplyConfig(config_:string):string;
+  function multiplyNums(nums_:string):string;
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
   procedure runPartOne; override;
@@ -25,229 +21,128 @@ type
   end;
 
 implementation
-var
-  springData:TStringArray;
-  brokenSpringGroups: TStringArray;
 
 { TDayTwelve }
+
+//Need a cache to store results
+//key is config+nums.toString
+//value is value
+//so string -> int
+var
+  cache: TStringInt64Map;
+const
+  workingOptions: TStringArray = ('.','?');
+  brokenOptions:TStringArray = ('#','?');
+
+function TDayTwelve.count(config: string; nums: TIntArray): int64;
+var
+  firstBlock,elementAfterFirstBlock:string;
+  remainderOfNums:TIntArray;
+  cachedResult:int64;
+begin
+  result:=0;
+
+  if ((config = '')
+  or(config.IndexOf('#') = -1))and(nums.size = 0 ) then
+    begin
+    result:= 1;
+    exit;
+    end;
+
+  if (nums.size = 0) then exit;
+
+  if cache.TryGetData(config+nums.toString(''),cachedResult) then
+    begin
+    result:=cachedResult;
+    end else
+    begin
+
+    if (workingOptions.indexOf(config.Substring(0,1)) > -1) then
+      result:=result + count(config.Substring(1),nums);
+
+    if (brokenOptions.indexOf(config.Substring(0,1)) > -1) then
+      begin
+      firstBlock:= config.Substring(0,nums[0]);
+      elementAfterFirstBlock:=config.Substring(nums[0],1);
+      remainderOfNums:=nums.slice(1,nums.size);
+
+      if (nums[0] <= config.Length)
+      and (firstBlock.IndexOf('.') = -1)
+      and ((nums[0] = config.Length)or(elementAfterFirstBlock <> '#')) then
+        result:= result + count(config.Substring(nums[0]+1),remainderOfNums);
+      end;
+    cache.AddOrSetData(config+nums.toString(''),result);
+    end;
+end;
 
 constructor TDayTwelve.create(filename:string;paintbox_:TPaintbox);
 begin
 inherited create(filename,'Day 12',paintbox_);
+cache:=TStringInt64Map.Create;
 //parent loads the file as a string and converts to string array;
 end;
 
 procedure TDayTwelve.runPartOne;
 var
-  lineNo:integer;
-  springDataEntry:string;
-  brokenSpringGroupEntry:string;
-  totalPermutations:integer;
+  lineTotal:integer;
+  total,index:integer;
+  parts:TStringArray;
 begin
   results.Clear;
-  //Separate each line into data and blocks of broken springs
-  //Start with all options as far left as they'll go
-  //examine positions for rhs option
-  //then move second rh option to next available space and repeat
-  //until no more space
-  setupSpringData;
-  //now for each entry in spring data get all possible permutations
-  totalPermutations:=0;
-  for lineNo:= 0 to pred(springData.size) do
+  total := 0;
+  for index:= 0 to pred(puzzleInputLines.size) do
     begin
-    springDataEntry:=springData[lineNo];
-    brokenSpringGroupEntry:= brokenSpringGroups[lineNo];
-    totalPermutations:= totalPermutations + getPermutationsForEntry(springDataEntry,brokenSpringGroupEntry)
+    cache.Clear;
+    parts:=puzzleInputLines[index].Split([' '],TStringSplitOptions.ExcludeEmpty);
+    lineTotal:=count(parts[0],parts[1].Split([','],TStringSplitOptions.ExcludeEmpty).toIntArray);
+    results.add('total for '+puzzleInputLines[index]+' '+lineTotal.ToString);
+    total:=total+ lineTotal;
     end;
+  results.Add('Total is '+total.ToString);
 end;
 
 procedure TDayTwelve.runPartTwo;
-begin
-  results.Clear;
-end;
-
-procedure TDayTwelve.setupSpringData;
 var
+  lineTotal,total:int64;
   index:integer;
   parts:TStringArray;
 begin
-springData:=TStringArray.create;
-brokenSpringGroups:=TStringArray.create;
-for index:= 0 to pred(puzzleInputLines.size) do
-  begin
-  parts:=puzzleInputLines[index].Split([' ']);
-  springData.push(parts[0]);
-  brokenSpringGroups.push(parts[1]);
-  end;
+  results.Clear;
+  total := 0;
+  for index:= 0 to pred(puzzleInputLines.size) do
+    begin
+    cache.Clear;
+    parts:=puzzleInputLines[index].Split([' '],TStringSplitOptions.ExcludeEmpty);
+    lineTotal:=count(multiplyConfig(parts[0]),multiplyNums(parts[1]).Split([','],TStringSplitOptions.ExcludeEmpty).toIntArray);
+    writeln('line '+index.toString);
+    total:=total+ lineTotal;
+    end;
+  results.Add('Total is '+total.ToString);
 end;
 
-procedure TDayTwelve.reset;
-begin
-  setLength(springData,0);
-  setLength(brokenSpringGroups,0);
-end;
-
-function TDayTwelve.getPermutationsForEntry(data_, groups_: string): integer;
+function TDayTwelve.multiplyConfig(config_: string): string;
 var
-  groups:TIntArray;
-  groupOffsets,currentGroupPositions:TIntArray;
-  index,groupSize,groupOffset,startPosition,groupPosition:integer;
-  totalGroupSize,dataLength:integer;
-  allPositionsTried:boolean;
+  count_:integer;
 begin
-  results.Add('Get permutations for '+data_);
-  result:=0;
-  groups:=groups_.Split([',']).toIntArray;
-  groupOffsets:=TintArray.create;
-  currentGroupPositions:=TIntArray.create;
-  totalGroupSize:=0;
-  dataLength:=data_.Length;
-  //Set up offsets for each group
-  for index:=0 to pred(groups.size) do
+  //repeat 5x with ? between
+  result:='';
+  for count_:=1 to 5 do
     begin
-    groupOffsets.push(0);
-    totalGroupSize:=totalGroupSize + groups[index];
-    if (index < pred(groups.size)) then totalGroupSize:=totalGroupSize+1;
+    result:=result+config_;
+    if (count_ < 5) then result:=result+'?';
     end;
-  //Set up start positions at start
-  startPosition:=0;
-  setLength(currentGroupPositions,0); //clear method would be nice here
-  for index:=0 to pred(groups.size)do
-    begin
-    groupSize:=groups[index];
-    groupOffset:=groupOffsets[index];//initially 0
-    groupPosition:=findFirstPositionForGroup(data_,groupSize,startPosition + groupOffset);
-    if (groupPosition > -1) then
-      begin
-      currentGroupPositions.push(groupPosition);
-      startPosition:=groupPosition+groupSize+1;
-      end else break;
-    end;
-
-  allPositionsTried:=false;
-
-  while not allPositionsTried do
-  begin
-  if arrangementIsLegal(data_, groups,currentGroupPositions,groupOffsets) then result:=result + 1;
-  allPositionsTried:= not updateGroupOffsets(groupOffsets,groups,dataLength);
-  end;
-
 end;
 
-function TDayTwelve.findFirstPositionForGroup(data_: string; groupSize,
-  startPosition: integer): integer;
-const legalBoundingChars: TStringArray = ('?','.');
+function TDayTwelve.multiplyNums(nums_: string): string;
 var
-   index:integer;
-   done,enoughSpace,leftLegal,rightLegal,spaceLegal:boolean;
+  count_:integer;
 begin
-  result:=-1;
-  index:=startPosition;
-  done:=false;
-  while not done do
+  result:='';
+  for count_:=1 to 5 do
     begin
-    enoughSpace:=index + groupSize <= data_.Length;
-    leftLegal:=((index = 0) or (legalBoundingChars.indexOf(data_.Substring(index-1,1))> -1));
-    rightLegal:=((index + groupSize = data_.Length)or(legalBoundingChars.indexOf(data_.Substring(index+groupSize,1))>-1));
-    spaceLegal:=(data_.Substring(index,groupSize).IndexOf('.') = -1);
-    done:= enoughSpace and leftLegal and rightLegal and spaceLegal;
-    if not done then
-      begin
-      if (index < data_.Length) then
-        begin
-        index:=index + 1;
-        end else exit;
-      end;
+    result:=result+nums_;
+    if (count_ < 5) then result:=result+',';
     end;
-  result:=index;
-end;
-
-function TDayTwelve.arrangementIsLegal(data_: string; groupInfo,positions,groupOffsets: TIntArray
-  ): boolean;
-var
-   index,element,laterEntryIndex:integer;
-   copyData:String;
-   testStart,testSize:integer;
-begin
-  copyData:=data_;
-  result:=false;
-  if (positions.size <> groupInfo.size) then exit;
-  //does the range of any group contain a dot?
-  for index:=0 to pred(positions.size)do
-    begin
-    //Invalid if there are dots in the range selected
-    testStart:=positions[index]+groupOffsets[index];
-    testSize:=groupInfo[index];
-    if (data_.Substring(testStart,testSize).IndexOf('.') > -1) then exit;
-
-    //Overlap check - is a given position + offset > a later position
-    if (index < pred(positions.size)) then
-      for laterEntryIndex:=index + 1 to pred(positions.size) do
-      begin
-      if (testStart+testSize >= positions[laterEntryIndex]+groupOffsets[laterEntryIndex]) then
-        begin
-        results.add('Exclude sequence '+positions.toString(',')+' '+groupOffsets.toString(',')+' because entry '+index.toString+' collides with '+laterEntryIndex.ToString);
-        exit;
-        end;
-      end;
-
-    for element:=testStart to testStart+ pred(testSize) do
-      copyData[element+1]:='?';
-    end;
-  if (copyData.IndexOf('#') > -1) then exit;
-
-
-
-
-  results.add('Sequence '+positions.toString(',')+' '+groupOffsets.toString(',')+' is valid');
-  result:=true;
-
-end;
-
-function TDayTwelve.updateGroupOffsets(var offsets:TIntArray; groups: TIntArray;
-  dataLength: integer):boolean;
-var
-   offsetId:integer;
-   index:integer;
-   done,outOfRange:boolean;
-begin
-  offsetId:=pred(offsets.size);
-  offsets[offsetId]:=offsets[offsetId]+1;
-  //increment the specified offset and see if it's legal
-  done:=false;
-  index:=0;
-  repeat
-  outOfRange:=sequenceIsTooLong(offsets, groups,offsetId,dataLength);
-
-  If outOfRange then
-    begin
-    offsetId:= offsetId -1; //move to previous offsetId
-    if (offsetId > -1) then
-      begin
-      offsets[offsetId]:=offsets[offsetId]+1; //and increment it by 1
-      for index:=offsetId+1 to pred(offsets.size) do
-        offsets[index]:=0;
-      end;
-    end;
-  done:= (not outOfRange) or(offsetId < 0);
-  until done;
-  result:= not outOfRange;
-end;
-
-function TDayTwelve.sequenceIsTooLong(offsets, groups: TIntArray; offsetId, dataLength: integer
-  ): boolean;
-var
-   index:integer;
-   totalLength:integer;
-begin
-  //Would incrementing the specified offset make the sequence length greater than the dataLength?
-  totalLength:=groups.size - 1; //each group needs a minimum of one space between
-  for index:=0 to pred(offsets.size) do
-    begin
-    totalLength:=totalLength + offsets[index] + groups[index];
-    if index = offsetId then totalLength:=totalLength+1;
-    end;
-  result:=totalLength > dataLength;
 end;
 
 end.
