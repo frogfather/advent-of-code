@@ -23,6 +23,7 @@ type
   TColours = array of TColor;
   TPointArray = array of TPoint;
   TIntPointMap = specialize TFPGMap<Integer,TPointArray>;
+  TStringBoolMap = specialize TFPGMap<String,Boolean>;
 
   { TIntArrayHelper }
 
@@ -31,6 +32,7 @@ type
   function push(element:integer):integer;
   function indexOf(element:integer):integer;
   function shift:integer;
+  function slice(start_,end_:integer):TIntArray;
   function splice(index:integer; deleteCount:integer=0; newItems: TIntArray=nil):TIntArray;
   function toString(separator:string):string;
   end;
@@ -423,6 +425,41 @@ begin
     if aArr[Result] = aItem then
       Exit;
   Result := -1;
+end;
+
+generic function slice<T>(var aArray: specialize TArray<T>; start_, end_: integer):specialize TArray<T>;
+var
+  index:integer;
+  normalisedStart,normalisedEnd:integer;
+  actualStart,actualEnd:integer;
+begin
+result:= specialize TArray<T>.create;
+//return items starting at start_ and up to but not including end_
+//if either start_ or end_ is greater than the length of the array return empty array
+if (start_ > length(aArray)) then exit;
+if (end_ > length(aArray)) then normalisedEnd:=length(aArray);
+
+if (start_ < 0) then normalisedStart:= length(aArray) - start_ else normalisedStart:= start_;
+if (normalisedStart < 0) then normalisedStart := 0;
+
+if (end_ < 0) then normalisedEnd:= length(aArray) - end_ else normalisedEnd:= end_;
+if (normalisedEnd < 0 ) then normalisedEnd:= 0;
+
+if (normalisedStart < normalisedEnd) then
+  begin
+  actualStart:=normalisedStart;
+  actualEnd:=normalisedEnd;
+  end else
+  begin
+  actualStart:=normalisedEnd;
+  actualEnd:=normalisedStart;
+  end;
+
+for index:= actualStart to pred(actualEnd) do
+  begin
+  setLength(result,length(result)+1);
+  result[length(result) - 1]:=aArray[index];
+  end;
 end;
 
 generic function splice<T>(var aArray: specialize TArray<T>; index, deleteCount: sizeInt; var newItems: specialize TArray<T>
@@ -851,6 +888,11 @@ begin
       self[index]:=self[index+1];
     setLength(self,pred(self.size));
     end;
+end;
+
+function TIntArrayHelper.slice(start_, end_: integer): TIntArray;
+begin
+  result:=specialize slice<integer>(self,start_,end_);
 end;
 
 function TIntArrayHelper.splice(index: integer; deleteCount: integer;
