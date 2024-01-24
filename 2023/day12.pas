@@ -21,59 +21,15 @@ type
   end;
 
 implementation
-
+//This is entirely based on HyperNeutrino's recursive solution
+//
 { TDayTwelve }
 
-//Need a cache to store results
-//key is config+nums.toString
-//value is value
-//so string -> int
 var
   cache: TStringInt64Map;
 const
   workingOptions: TStringArray = ('.','?');
   brokenOptions:TStringArray = ('#','?');
-
-function TDayTwelve.count(config: string; nums: TIntArray): int64;
-var
-  firstBlock,elementAfterFirstBlock:string;
-  remainderOfNums:TIntArray;
-  cachedResult:int64;
-begin
-  result:=0;
-
-  if ((config = '')
-  or(config.IndexOf('#') = -1))and(nums.size = 0 ) then
-    begin
-    result:= 1;
-    exit;
-    end;
-
-  if (nums.size = 0) then exit;
-
-  if cache.TryGetData(config+nums.toString(''),cachedResult) then
-    begin
-    result:=cachedResult;
-    end else
-    begin
-
-    if (workingOptions.indexOf(config.Substring(0,1)) > -1) then
-      result:=result + count(config.Substring(1),nums);
-
-    if (brokenOptions.indexOf(config.Substring(0,1)) > -1) then
-      begin
-      firstBlock:= config.Substring(0,nums[0]);
-      elementAfterFirstBlock:=config.Substring(nums[0],1);
-      remainderOfNums:=nums.slice(1,nums.size);
-
-      if (nums[0] <= config.Length)
-      and (firstBlock.IndexOf('.') = -1)
-      and ((nums[0] = config.Length)or(elementAfterFirstBlock <> '#')) then
-        result:= result + count(config.Substring(nums[0]+1),remainderOfNums);
-      end;
-    cache.AddOrSetData(config+nums.toString(''),result);
-    end;
-end;
 
 constructor TDayTwelve.create(filename:string;paintbox_:TPaintbox);
 begin
@@ -118,6 +74,47 @@ begin
     total:=total+ lineTotal;
     end;
   results.Add('Total is '+total.ToString);
+end;
+
+function TDayTwelve.count(config: string; nums: TIntArray): int64;
+var
+  firstBlock,elementAfterFirstBlock:string;
+  remainderOfNums:TIntArray;
+  cachedResult:int64;
+begin
+  result:=0;
+
+  if ((config = '')
+  or(config.IndexOf('#') = -1))and(nums.size = 0 ) then
+    begin
+    result:= 1;
+    exit;
+    end;
+
+  if (nums.size = 0) then exit;
+
+  if cache.TryGetData(config+nums.toString(''),cachedResult) then
+    begin
+    result:=cachedResult;
+    end else
+    begin
+
+    if (workingOptions.indexOf(config.Substring(0,1)) > -1) then
+      result:=result + count(config.Substring(1),nums);
+
+    if (brokenOptions.indexOf(config.Substring(0,1)) > -1) then
+      begin
+      firstBlock:= config.Substring(0,nums[0]);
+      elementAfterFirstBlock:=config.Substring(nums[0],1);
+      remainderOfNums:=nums.slice(1,nums.size);
+
+      if (nums[0] <= config.Length)
+      and (firstBlock.IndexOf('.') = -1)
+      and ((nums[0] = config.Length)or(elementAfterFirstBlock <> '#')) then
+        result:= result + count(config.Substring(nums[0]+1),remainderOfNums);
+      end;
+    cache.AddOrSetData(config+nums.toString(''),result);
+    end;
 end;
 
 function TDayTwelve.multiplyConfig(config_: string): string;
