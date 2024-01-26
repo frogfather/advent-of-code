@@ -203,6 +203,11 @@
         <Filename Value="day25.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="gridelement.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gridElement"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
