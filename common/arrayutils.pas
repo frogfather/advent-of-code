@@ -88,6 +88,7 @@ type
   procedure clear;
   end;
 
+
   { TPointArrayHelper }
   TPointArrayHelper = type helper for TPointArray
   function size: integer;
