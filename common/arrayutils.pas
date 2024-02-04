@@ -565,7 +565,7 @@ end;
 
 function T2DIntMapHelper.inRange(row, col: integer): boolean;
 begin
-  result:= (row > 0) and (row < self.rows) and (col > 0) and (col < self.size(row));
+  result:= (row >= 0) and (row < self.rows) and (col >= 0) and (col < self.size(row));
 end;
 
 procedure T2DIntMapHelper.clear;
