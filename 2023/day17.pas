@@ -7,7 +7,7 @@ unit day17;
 interface
 
 uses
-  Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics,arrayUtils,lgPriorityQueue,lgList,md5;
+  Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics,arrayUtils,lgPriorityQueue,lgList,md5,hmac;
 type
 
   TPriorityQueueEntry = record
@@ -59,8 +59,11 @@ var
 { TSeenEqRel }
 
 class function TSeenEqRel.HashCode(const aValue: TSeenQueueEntry): SizeInt;
+var
+md5str:string;
 begin
-  result:=0;
+  md5Str:=hmacSha1('key',aValue.col.ToString+aValue.row.toString+aValue.coldir.ToString+aValue.rowdir.ToString);
+  result:=strToInt64('0x'+md5str.Substring(0,10));
 end;
 
 class function TSeenEqRel.Equal(const L, R: TSeenQueueEntry): Boolean;
@@ -116,12 +119,23 @@ end;
 
 procedure TDaySeventeen.runPartOne;
 var
-  test:TSeenQueueEntry;
+  test,test2:TSeenQueueEntry;
   output:sizeInt;
   mstr:string;
 begin
   results.Clear;
-
+  test.row:=7;
+  test.col:=3;
+  test.rowdir:=1;
+  test.coldir:=0;
+  test2.row:=1;
+  test2.col:=0;
+  test2.rowdir:=0;
+  test2.coldir:=1;
+  results.add(TSeenEqRel.HashCode(test).ToString);
+  seenq_.Add(test);
+  results.add('index of item '+seenq_.IndexOf(test).ToString);
+  results.Add('Index of item that isn''t there '+seenq_.IndexOf(test2).ToString);
 end;
 
 procedure TDaySeventeen.runPartTwo;
