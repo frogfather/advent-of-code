@@ -181,15 +181,18 @@ begin
     seenEntry:=seenQueueEntry(minEntry);
     if (seenq_.IndexOf(seenEntry) >- 1) then continue;
     seenq_.Add(seenEntry);
-    if (minEntry.steps < 3) and (minEntry.rowdir <> 0) and (minEntry.coldir <> 0) then
+    if (minEntry.steps < 3) and not( (minEntry.rowdir = 0) and (minEntry.coldir = 0) )then
       begin
       nextEntry.row:=minEntry.row + minEntry.rowdir;
       nextEntry.col:=minEntry.col + minEntry.coldir;
       nextEntry.rowdir:=minEntry.rowdir;
       nextEntry.coldir:=minEntry.coldir;
       nextEntry.steps:=minEntry.steps+1;
-      nextEntry.heatloss:=minEntry.heatloss+grid_[nextEntry.row][nextEntry.col];
-      if inRange(nextEntry) then pq_.Enqueue(nextEntry);
+      if inRange(nextEntry) then
+          begin
+          nextEntry.heatloss:=minEntry.heatloss+grid_[nextEntry.row][nextEntry.col];
+          pq_.Enqueue(nextEntry);
+          end;
       end;
     for dirNo:=0 to pred(directions_.size) do
       begin
@@ -201,8 +204,11 @@ begin
         nextEntry.rowdir:=direction.Y;
         nextEntry.coldir:=direction.X;
         nextEntry.steps:=0;
-        nextEntry.heatloss:=minEntry.heatloss+grid_[nextEntry.row][nextEntry.col];
-        if inRange(nextEntry) then pq_.Enqueue(nextEntry);
+        if inRange(nextEntry) then
+          begin
+          nextEntry.heatloss:=minEntry.heatloss+grid_[nextEntry.row][nextEntry.col];
+          pq_.Enqueue(nextEntry);
+          end;
         end;
       end;
 
