@@ -41,6 +41,11 @@ type
   private
   procedure setupGrid;
   procedure clearQueues;
+  function pqEntry(hl,r,c,dr,dc,s:integer):TPriorityQueueEntry;
+  function seenQueueEntry(pqEntry_:TPriorityQueueEntry):TSeenQueueEntry;
+  function inRange(pqEntry_:TPriorityQueueEntry):boolean;
+  function atEnd(pqEntry_:TPriorityQueueEntry):boolean;
+  function atRightAngles(pqEntry_:TPriorityQueueEntry;direction:TPoint):boolean;
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
   procedure runPartOne; override;
@@ -102,7 +107,45 @@ begin
   seenq_.Clear;
 end;
 
+function TDaySeventeen.pqEntry(hl, r, c, dr, dc, s: integer
+  ): TPriorityQueueEntry;
+begin
+  result.heatloss:=hl;
+  result.row:=r;
+  result.col:=c;
+  result.rowdir:=dr;
+  result.coldir:=dc;
+  result.steps:=s;
+end;
 
+function TDaySeventeen.seenQueueEntry(pqEntry_: TPriorityQueueEntry
+  ): TSeenQueueEntry;
+begin
+  result.row:=pqEntry_.row;
+  result.col:=pqEntry_.col;
+  result.rowdir:=pqEntry_.rowdir;
+  result.coldir:=pqEntry_.coldir;
+  result.steps:=pqEntry_.steps;
+end;
+
+function TDaySeventeen.inRange(pqEntry_: TPriorityQueueEntry): boolean;
+begin
+  result:= (pqEntry_.row >= 0)
+    and (pqEntry_.row < grid_.rows)
+    and (pqEntry_.col >= 0)
+    and (pqEntry_.col < grid_.size(pqEntry_.row));
+end;
+
+function TDaySeventeen.atEnd(pqEntry_: TPriorityQueueEntry): boolean;
+begin
+  result:= (pqEntry_.col = pred(grid_.size(pqEntry_.row))) and (pqEntry_.row = pred(grid_.rows));
+end;
+
+function TDaySeventeen.atRightAngles(pqEntry_: TPriorityQueueEntry;
+  direction: TPoint): boolean;
+begin
+  result:=(pqEntry_.coldir * direction.X = 0) and (pqEntry_.rowdir * direction.Y = 0);
+end;
 
 constructor TDaySeventeen.create(filename:string;paintbox_:TPaintbox);
 begin
@@ -119,23 +162,54 @@ end;
 
 procedure TDaySeventeen.runPartOne;
 var
-  test,test2:TSeenQueueEntry;
-  output:sizeInt;
-  mstr:string;
+  minEntry,nextEntry:TPriorityQueueEntry;
+  seenEntry:TSeenQueueEntry;
+  dirNo:integer;
+  direction:TPoint;
 begin
   results.Clear;
-  test.row:=7;
-  test.col:=3;
-  test.rowdir:=1;
-  test.coldir:=0;
-  test2.row:=1;
-  test2.col:=0;
-  test2.rowdir:=0;
-  test2.coldir:=1;
-  results.add(TSeenEqRel.HashCode(test).ToString);
-  seenq_.Add(test);
-  results.add('index of item '+seenq_.IndexOf(test).ToString);
-  results.Add('Index of item that isn''t there '+seenq_.IndexOf(test2).ToString);
+  clearQueues;
+  pq_.Enqueue(pqEntry(0,0,0,0,0,0));
+  while not pq_.IsEmpty do
+    begin
+    minEntry:=pq_.Dequeue;
+    if atEnd(minEntry) then
+      begin
+      results.Add('Total heat loss '+minEntry.heatloss.ToString);
+      exit;
+      end;
+    seenEntry:=seenQueueEntry(minEntry);
+    if (seenq_.IndexOf(seenEntry) >- 1) then continue;
+    seenq_.Add(seenEntry);
+    if (minEntry.steps < 3) and (minEntry.rowdir <> 0) and (minEntry.coldir <> 0) then
+      begin
+      nextEntry.row:=minEntry.row + minEntry.rowdir;
+      nextEntry.col:=minEntry.col + minEntry.coldir;
+      nextEntry.rowdir:=minEntry.rowdir;
+      nextEntry.coldir:=minEntry.coldir;
+      nextEntry.steps:=minEntry.steps+1;
+      nextEntry.heatloss:=minEntry.heatloss+grid_[nextEntry.row][nextEntry.col];
+      if inRange(nextEntry) then pq_.Enqueue(nextEntry);
+      end;
+    for dirNo:=0 to pred(directions_.size) do
+      begin
+      direction:=directions_[dirNo];
+      if atRightAngles(minEntry,direction) then
+        begin
+        nextEntry.row:=minEntry.row + direction.Y;
+        nextEntry.col:=minEntry.col + direction.X;
+        nextEntry.rowdir:=direction.Y;
+        nextEntry.coldir:=direction.X;
+        nextEntry.steps:=0;
+        nextEntry.heatloss:=minEntry.heatloss+grid_[nextEntry.row][nextEntry.col];
+        if inRange(nextEntry) then pq_.Enqueue(nextEntry);
+        end;
+      end;
+
+    end;
+
+
+
 end;
 
 procedure TDaySeventeen.runPartTwo;
