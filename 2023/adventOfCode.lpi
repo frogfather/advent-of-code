@@ -25,6 +25,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="LGenerics"/>
+      </Item>
+      <Item>
         <PackageName Value="dcpcrypt"/>
       </Item>
       <Item>

@@ -74,6 +74,7 @@ type
   function push(row:integer;value:integer):integer;
   function getLast(row:integer):integer;
   function getFirst(row:integer):integer;
+  function inRange(row,col:integer):boolean;
   procedure clear;
   end;
 
@@ -560,6 +561,11 @@ begin
   result:=0;
   if self.rows <= row then exit;
   result:=self[row][0];
+end;
+
+function T2DIntMapHelper.inRange(row, col: integer): boolean;
+begin
+  result:= (row >= 0) and (row < self.rows) and (col >= 0) and (col < self.size(row));
 end;
 
 procedure T2DIntMapHelper.clear;
