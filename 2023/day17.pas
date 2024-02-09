@@ -67,7 +67,7 @@ class function TSeenEqRel.HashCode(const aValue: TSeenQueueEntry): SizeInt;
 var
 md5str:string;
 begin
-  md5Str:=hmacSha1('key',aValue.col.ToString+aValue.row.toString+aValue.coldir.ToString+aValue.rowdir.ToString);
+  md5Str:=hmacSha1('key',aValue.col.ToString+aValue.row.toString+aValue.coldir.ToString+aValue.rowdir.ToString+aValue.steps.ToString);
   result:=strToInt64('0x'+md5str.Substring(0,10));
 end;
 
@@ -80,8 +80,15 @@ begin
 end;
 
 class operator TPriorityQueueEntry.< (a, b: TPriorityQueueEntry): Boolean;
+var
+diff:integer;
 begin
-  result:= a.heatloss < b.heatloss;
+  diff := a.heatloss - b.heatloss;
+  if (diff = 0) then diff:= a.row - b.row;
+  if (diff = 0) then diff:= a.col - b.col;
+  if (diff = 0) then diff:= a.rowdir - b.rowdir;
+  if (diff = 0) then diff:= a.coldir - b.coldir;
+  result:= diff < 0;
 end;
 
 class operator TSeenQueueEntry.< (a, b: TSeenQueueEntry): Boolean;
@@ -179,7 +186,10 @@ begin
       exit;
       end;
     seenEntry:=seenQueueEntry(minEntry);
-    if (seenq_.IndexOf(seenEntry) >- 1) then continue;
+    if (seenq_.IndexOf(seenEntry) >- 1) then
+      begin
+      continue;
+      end;
     seenq_.Add(seenEntry);
     if (minEntry.steps < 3) and not( (minEntry.rowdir = 0) and (minEntry.coldir = 0) )then
       begin
@@ -203,7 +213,7 @@ begin
         nextEntry.col:=minEntry.col + direction.X;
         nextEntry.rowdir:=direction.Y;
         nextEntry.coldir:=direction.X;
-        nextEntry.steps:=0;
+        nextEntry.steps:=1;
         if inRange(nextEntry) then
           begin
           nextEntry.heatloss:=minEntry.heatloss+grid_[nextEntry.row][nextEntry.col];
