@@ -221,16 +221,66 @@ begin
           end;
         end;
       end;
-
     end;
-
-
-
 end;
 
 procedure TDaySeventeen.runPartTwo;
+var
+  minEntry,nextEntry:TPriorityQueueEntry;
+  seenEntry:TSeenQueueEntry;
+  dirNo:integer;
+  direction:TPoint;
 begin
   results.Clear;
+  clearQueues;
+  pq_.Enqueue(pqEntry(0,0,0,0,0,0));
+  while not pq_.IsEmpty do
+    begin
+    minEntry:=pq_.Dequeue;
+    if atEnd(minEntry) and (minEntry.steps >= 4) then
+      begin
+      results.Add('Total heat loss '+minEntry.heatloss.ToString);
+      exit;
+      end;
+    seenEntry:=seenQueueEntry(minEntry);
+    if (seenq_.IndexOf(seenEntry) >- 1) then
+      begin
+      continue;
+      end;
+    seenq_.Add(seenEntry);
+    if (minEntry.steps < 10) and not( (minEntry.rowdir = 0) and (minEntry.coldir = 0) )then
+      begin
+      nextEntry.row:=minEntry.row + minEntry.rowdir;
+      nextEntry.col:=minEntry.col + minEntry.coldir;
+      nextEntry.rowdir:=minEntry.rowdir;
+      nextEntry.coldir:=minEntry.coldir;
+      nextEntry.steps:=minEntry.steps+1;
+      if inRange(nextEntry) then
+          begin
+          nextEntry.heatloss:=minEntry.heatloss+grid_[nextEntry.row][nextEntry.col];
+          pq_.Enqueue(nextEntry);
+          end;
+      end;
+    //If we have gone at least 4 blocks we can turn
+    if (minEntry.steps >= 4) or ((minEntry.rowdir = 0) and (minEntry.coldir = 0)) then
+      for dirNo:=0 to pred(directions_.size) do
+        begin
+        direction:=directions_[dirNo];
+        if atRightAngles(minEntry,direction) then
+          begin
+          nextEntry.row:=minEntry.row + direction.Y;
+          nextEntry.col:=minEntry.col + direction.X;
+          nextEntry.rowdir:=direction.Y;
+          nextEntry.coldir:=direction.X;
+          nextEntry.steps:=1;
+          if inRange(nextEntry) then
+            begin
+            nextEntry.heatloss:=minEntry.heatloss+grid_[nextEntry.row][nextEntry.col];
+            pq_.Enqueue(nextEntry);
+            end;
+          end;
+        end;
+    end;
 end;
 
 
