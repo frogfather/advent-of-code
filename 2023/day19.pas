@@ -444,6 +444,8 @@ begin
   results.add('Sum: '+workflowRunner.sumAcceptedParts.ToString);
 end;
 
+//Count method heavily influenced by HyperNeutrino's solution
+//https://www.youtube.com/watch?v=3RwIpUegdU4&t=19s
 procedure TDayNineteen.runPartTwo;
 var
   initialRanges:TRanges;
