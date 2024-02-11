@@ -6,7 +6,7 @@ unit day19;
 interface
 
 uses
-  Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics,arrayUtils;
+  Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics,arrayUtils,math;
 type
 
   { TPart }
@@ -71,6 +71,13 @@ type
   function findByName(name_:string):TWorkflow;
   end;
 
+  TRanges = record
+  xRange: TPoint;
+  mRange: TPoint;
+  aRange: TPoint;
+  sRange: TPoint;
+  end;
+
   { TWorkflowRunner }
 
   TWorkflowRunner = class(TInterfacedObject)
@@ -79,12 +86,17 @@ type
   fAccepted:TParts;
   fRejected:TParts;
   fWorkflows:TWorkflows;
+  function rangesToString(ranges_:TRanges):string;
+  function rangeNonZero(range_:TPoint):boolean;
+  function copyRanges(ranges_:TRanges):TRanges;
+  function updateRanges(ranges_:TRanges;element:string;newRange:TPoint):TRanges;
   public
   property workflows: TWorkflows read fWorkflows;
   constructor create;
   procedure setUp(input_:TStringArray);
   procedure processParts;
   function sumAcceptedParts:integer;
+  function count(ranges:TRanges; name:string='in'):Int64;
   end;
 
 
@@ -102,6 +114,41 @@ var
   workflowRunner:TWorkflowRunner;
 
 { TWorkflowRunner }
+
+function TWorkflowRunner.rangesToString(ranges_: TRanges): string;
+begin
+  //{'x': (1, 4000), 'm': (1, 4000), 'a': (1, 4000), 's': (1, 4000)}
+  result:='{';
+  result:=result+'''x'': ('+ranges_.xRange.X.ToString+', '+ranges_.xRange.Y.toString+'), ';
+  result:=result+'''m'': ('+ranges_.mRange.X.ToString+', '+ranges_.mRange.Y.toString+'), ';
+  result:=result+'''a'': ('+ranges_.aRange.X.ToString+', '+ranges_.aRange.Y.toString+'), ';
+  result:=result+'''s'': ('+ranges_.sRange.X.ToString+', '+ranges_.sRange.Y.toString+')';
+end;
+
+function TWorkflowRunner.rangeNonZero(range_: TPoint): boolean;
+begin
+  result:=range_.X <= range_.Y ;
+end;
+
+function TWorkflowRunner.copyRanges(ranges_: TRanges): TRanges;
+begin
+  result.xRange:=TPoint.Create(ranges_.xRange.X,ranges_.xRange.Y);
+  result.mRange:=TPoint.Create(ranges_.mRange.X,ranges_.mRange.Y);
+  result.aRange:=TPoint.Create(ranges_.aRange.X,ranges_.aRange.Y);
+  result.sRange:=TPoint.Create(ranges_.sRange.X,ranges_.sRange.Y);
+end;
+
+function TWorkflowRunner.updateRanges(ranges_:TRanges;element: string; newRange: TPoint
+  ): TRanges;
+begin
+  result:=ranges_;
+  case element of
+    'x': result.xRange:=newRange;
+    'm': result.mRange:=newRange;
+    'a': result.aRange:=newRange;
+    's': result.sRange:=newRange;
+  end;
+end;
 
 constructor TWorkflowRunner.create;
 begin
@@ -124,7 +171,6 @@ begin
        parts:=true;
        continue;
        end;
-    writeln('Index: '+index.ToString);
     if not parts then fWorkflows.push(TWorkflow.Create(input_[index]))
     else fUnprocessed.push(TPart.create(input_[index]));
     end;
@@ -175,6 +221,73 @@ begin
     result:=result+fAccepted[index].sumOfAttributes;
 end;
 
+function TWorkflowRunner.count(ranges: TRanges; name: string): Int64;
+var
+  currentWorkflow:TWorkflow;
+  currentRules:TWorkflowRules;
+  rangesCopy:TRanges;
+  currentNextAction:string;
+  currentRange,trueRange,falseRange:TPoint;
+  ruleNo:integer;
+  el,op,nextWf:string;
+  val:integer;
+begin
+  if (name = 'R') then
+     begin
+     result:=0;
+     exit;
+     end;
+  if (name = 'A') then
+     begin
+     result:=(ranges.xRange.Y - ranges.xRange.X +1)*(ranges.mRange.Y - ranges.mRange.X +1)*(ranges.aRange.Y - ranges.aRange.X +1)*(ranges.sRange.Y - ranges.sRange.X +1);
+     exit;
+     end;
+  currentWorkflow:=fWorkflows.findByName(name);
+  currentRules:=currentWorkflow.fRules;
+  currentNextAction:=currentWorkflow.fNextAction;
+  result:=0;
+  for ruleNo:=0 to pred(currentRules.size) do
+    begin
+    el:=currentRules[ruleNo].element;
+    op:=currentRules[ruleNo].op;
+    val:=currentRules[ruleNo].value;
+    nextWf:= currentRules[ruleNo].nextWorkflow;
+
+    case el of
+      'x': currentRange:=ranges.xRange;
+      'm': currentRange:=ranges.mRange;
+      'a': currentRange:=ranges.aRange;
+      's': currentRange:=ranges.sRange;
+    end;
+    if op = '<' then
+       begin
+       trueRange.X:=currentRange.X;
+       trueRange.Y:=math.min(val-1,currentRange.Y);
+       falseRange.X:=math.Max(val,currentRange.X);
+       falseRange.Y:=currentRange.Y;
+       end else
+    if op = '>' then
+       begin
+       trueRange.X:=math.Max(val+1,currentRange.X);
+       trueRange.Y:=currentRange.Y;
+       falseRange.X:=currentRange.X;
+       falseRange.Y:=math.Min(val,currentRange.Y);
+       end;
+    if rangeNonZero(trueRange) then
+       begin
+       rangesCopy:= updateRanges(copyRanges(ranges),el,trueRange);
+       result:=result + count(rangesCopy,nextWf);
+       end;
+    if rangeNonZero(falseRange) then
+       begin
+       ranges:=updateRanges(copyRanges(ranges),el,falseRange);
+       end else exit;
+    end;
+    //If we've got this far then we've processed all the rules but there are still items in range
+    result:=result + count(ranges,currentNextAction);
+
+end;
+
 { TPart }
 
 function TPart.getSumOfAttributes: integer;
@@ -186,9 +299,6 @@ constructor TPart.create(input_:string);
 var
   parts:TStringArray;
 begin
-  //process the string
-  //{x=1691,m=2832,a=1861,s=2722}
-  //split on {}and ,
   fx:=0;
   fm:=0;
   fa:=0;
@@ -335,8 +445,20 @@ begin
 end;
 
 procedure TDayNineteen.runPartTwo;
+var
+  initialRanges:TRanges;
+  total:int64;
 begin
   results.Clear;
+  workflowRunner:= TWorkflowRunner.create;
+  workflowRunner.setUp(puzzleInputLines);
+  initialRanges.xRange:=TPoint.Create(1,4000);
+  initialRanges.mRange:=TPoint.Create(1,4000);
+  initialRanges.aRange:=TPoint.Create(1,4000);
+  initialRanges.sRange:=TPoint.Create(1,4000);
+
+  total:=workflowRunner.count(initialRanges);
+  results.Add('Total: '+total.ToString);
 end;
 
 
