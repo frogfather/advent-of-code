@@ -69,6 +69,14 @@ type
   procedure pulseFrom(pulse_:TPulse);
   end;
 
+  { TButtonModule }
+
+  TButtonModule = class(TModule)
+  public
+  procedure press;
+  constructor create(sendPulse_,receivePulse_:TNotifyEvent);
+  end;
+
   TModules = array of TModule;
 
   { TModulesHelper }
@@ -92,6 +100,7 @@ type
   fCycles:integer;
   procedure moduleOutputChanged(sender:TObject);
   procedure moduleReceivedPulse(sender:TObject);
+  procedure runSingle;
   public
   constructor create;
   procedure setUpModules(inputLines:TStringArray);
@@ -115,6 +124,18 @@ implementation
 var
   queue_:TQueueManager;
 
+{ TButtonModule }
+
+procedure TButtonModule.press;
+begin
+if assigned(fSendPulse) then fSendPulse(TPulse.create(false,fname));
+end;
+
+constructor TButtonModule.create(sendPulse_, receivePulse_: TNotifyEvent);
+begin
+inherited create(TModuleType.button,'button',sendPulse_,receivePulse_);
+end;
+
 { TModulesHelper }
 
 function TModulesHelper.size: integer;
@@ -132,6 +153,7 @@ function TModulesHelper.findByName(name_: String): TModule;
 var
   index:integer;
 begin
+  result:=nil;
   for index:=0 to pred(length(self)) do
     if (self[index].fName = name_) then
     begin
@@ -174,6 +196,7 @@ function TModuleInputsHelper.findByName(name_: string): TModuleInput;
 var
   index:integer;
 begin
+  result:=nil;
   for index:=0 to pred(length(self)) do
     if (self[index].name = name_) then
     begin
@@ -205,7 +228,7 @@ begin
   fSendPulse:=sendPulse_;
   fReceivePulse:=receivePulse_;
   fInputs:=TModuleInputs.create;
-  fOutput:=false;
+  fOutput:=type_ = TModuleType.conjunction; //conjunction modules are high initially
 end;
 
 procedure TModule.addInput(input_: TModuleInput);
@@ -222,7 +245,7 @@ var
 begin
   input:=fInputs.findByName(pulse_.fSource);
   //quit if no corresponding input
-  if assigned(input) then input.value:=pulse_.high else exit;
+  if assigned(input) and (pulse_.fSource <> fName) then input.value:=pulse_.high else exit;
   //signal that a pulse was received to allow the queueManager to count them
   if assigned(fReceivePulse) then fReceivePulse(pulse_);
   if (moduleType = TModuleType.flipflop)and not pulse_.high then
@@ -257,6 +280,27 @@ begin
     begin
     if fHigh then fHighCount:=fHighCount + 1 else
       fLowCount:=fLowCount + 1;
+    writeln('Pulse received from '+fSource + ' with value '+fHigh.ToString+' High count '+fHighCount.ToString+' low count '+fLowCount.ToString);
+    end;
+end;
+
+procedure TQueueManager.runSingle;
+var
+  buttonModule:TButtonModule;
+  currentPulse:TPulse;
+  moduleId:integer;
+begin
+  //Push the button once
+  buttonModule:=fModules.findByName('button') as TButtonModule;
+  if not assigned(buttonModule) then exit;
+  buttonModule.press;
+  while not fQueue.IsEmpty do
+    begin
+    //get the item out of the queue
+    currentPulse:=pop;
+    //and send it to each module
+    for moduleId:=0 to pred(fModules.size) do
+      fModules[moduleId].pulseFrom(currentPulse);
     end;
 end;
 
@@ -276,11 +320,12 @@ var
   moduleDestinations:TStringArray;
   moduleType:string;
   moduleName:string;
+  currentModule:TModule;
 begin
   //clear fModules and fQueue
   setLength(fModules,0);
   fQueue.Clear;
-  fModules.push(TModule.create(TModuleType.button,'button',@moduleOutputChanged,@moduleReceivedPulse));
+  fModules.push(TButtonModule.create(@moduleOutputChanged,@moduleReceivedPulse));
   fModules.push(TModule.create(TModuleType.broadcaster,'broadcaster',@moduleOutputChanged,@moduleReceivedPulse));
   fModules.push(TModule.create(TModuleType.output,'output',@moduleOutputChanged,@moduleReceivedPulse));
   for lineNo:=0 to pred(inputLines.size) do
@@ -294,6 +339,7 @@ begin
       else fModules.push(TModule.create(TModuleType.conjunction, moduleName,@moduleOutputChanged,@moduleReceivedPulse));
       end;
     end;
+  fModules.findByName('broadcaster').addInput(TModuleInput.create('button'));
   for lineNo:=0 to pred(inputLines.size) do
     begin
     moduleName:=inputLines[lineNo].Split('->',TStringSplitOptions.ExcludeEmpty)[0].Trim;
@@ -301,19 +347,76 @@ begin
     moduleDestinations:=inputLines[lineNo].Split('->',TStringSplitOptions.ExcludeEmpty)[1].Trim.Split(',',TStringSplitOptions.ExcludeEmpty);
     for destNo:=0 to pred(moduleDestinations.size) do
       begin
-      fModules.findByName(moduleDestinations[destNo].Trim).addInput(TModuleInput.create(moduleName));
+      //Look for the module. If it doesn't exist then add it
+      currentModule:= fModules.findByName(moduleDestinations[destNo].Trim);
+      if currentModule = nil then
+        begin
+        currentModule:=TModule.create(TModuleType.output, moduleDestinations[destNo].Trim,@moduleOutputChanged,@moduleReceivedPulse);
+        fModules.push(currentModule);
+        end;
+      currentModule.addInput(TModuleInput.create(moduleName));
       end;
     end;
+  //Conjunction modules are initially high because they initially have low inputs
   //Now note the initial state
+
   fInitialState:=fModules.getState;
 end;
 
 procedure TQueueManager.run(buttonPushes: integer);
+var
+  cycleLength,cycleCount:integer;
+  remainingPushes:integer;
+  done:boolean;
+
+  function bitsToString(bits_:TBits):string;
+  var
+    i:integer;
+  begin
+    result:='';
+  for i:=0 to pred(bits_.Size) do
+    begin
+    if bits_[i] then result:=result+'T' else result:=result+'F';
+    end;
+  end;
+
+  function modulesToString(modules_:TModules):string;
+  var
+    i:integer;
+  begin
+   result:='';
+   for i:=0 to pred(modules_.Size) do
+     begin
+     result:=result+modules_[i].fName+' ';
+     end;
+  end;
+
 begin
-//We have the initial state
-//Push the button which will cause a pulse to be received at the broadcaster
-//and added to the queue
-//
+//push the button either until the specified number of button pushes
+//or until the state is the same as the initial state
+writeln('modules '+modulesToString(fModules));
+
+cycleLength:=0;
+cycleCount:=0;
+remainingPushes:=buttonPushes;
+done:=false;
+repeat
+runSingle;
+cycleLength:=cycleLength+1;
+remainingPushes:=remainingPushes - 1;
+writeln('Cycle length '+cycleLength.ToString+' initial state '+bitsToString(fInitialState)+' currentState '+bitstostring(fModules.getState));
+
+if (fInitialState = fModules.getState) then
+  begin
+  //We can divide the number of buttonPushes by the cycle count to get the number of cycles
+  cycleCount:=buttonPushes div cycleLength;
+  //Now multiply the high count and low count by the cycle count
+  fHighCount:=fHighCount * cycleCount;
+  fLowCount:=fLowCount * cycleCount;
+  remainingPushes:=remainingPushes - (cycleLength * (cycleCount - 1)) //since we've already done one full cycle
+  end;
+done:=remainingPushes = 0;
+until done;
 end;
 
 procedure TQueueManager.push(entry_:TPulse);
@@ -345,18 +448,16 @@ queue_:=TQueueManager.create;
 end;
 
 procedure TDayTwenty.runPartOne;
+var
+  highPulses,lowPulses:int64;
 begin
   results.Clear;
   queue_:=TQueueManager.create;
   queue_.setUpModules(puzzleInputLines);
-
-  //Want a runner class that will note the initial state and work out how many iterations
-  //will return to that state
-  //Set up the modules
-  //while there are pulses in the queue
-    //retrieve the pulse
-    //Add to all modules - they will work out if the pulse is destined for them
-  //Once done, count the high and low pulses and multiply (int64)
+  queue_.run(1000);
+  highPulses:=queue_.fHighCount;
+  lowPulses:=queue_.fLowCount;
+  results.Add('High pulses '+highPulses.ToString+' low pulses '+lowPulses.ToString+' product '+(highPulses*lowPulses).ToString);
 end;
 
 procedure TDayTwenty.runPartTwo;
