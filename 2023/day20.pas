@@ -1,12 +1,106 @@
 unit day20;
 
 {$mode objfpc}{$H+}
+{$MODESWITCH ADVANCEDRECORDS}
+{$modeswitch TypeHelpers}
 
 interface
 
 uses
-  Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics,arrayUtils;
+  Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics,arrayUtils,lgQueue;
 type
+
+  TModuleType = (button,broadcaster,flipflop,conjunction,output);
+
+  { TPulse }
+
+  TPulse = class(TInterfacedObject)
+  private
+  fSource:string;
+  fHigh:boolean;
+  public
+  property source:string read fSource;
+  property high:boolean read fHigh;
+  constructor create(high_:boolean; source_:string);
+  end;
+
+  { TModuleInput }
+
+  TModuleInput = class(TInterfacedObject)
+  private
+  fname: string;
+  fValue:boolean;
+  public
+  constructor create(name_:string);
+  property name: string read fName;
+  property value: boolean read fValue write fValue;
+  end;
+
+  TModuleInputs = array of TModuleInput;
+
+  { TModuleInputsHelper }
+
+  TModuleInputsHelper = type helper for TModuleInputs
+  function size: integer;
+  function push(element:TModuleInput):integer;
+  function findByName(name_:string):TModuleInput;
+  function allHigh:boolean;
+  end;
+
+
+  //flip flops just need a list of inputs
+  //conjunction modules need to keep track of their previous value
+
+  { TModule }
+
+  TModule = class(TInterfacedObject)
+  private
+  fType: TModuleType;
+  fName:string;
+  fInputs:TModuleInputs;
+  fOutput:boolean;
+  fSendPulse:TNotifyEvent;
+  fReceivePulse:TNotifyEvent;
+  public
+  constructor create(type_:TModuleType;name_:string;sendPulse_,receivePulse_:TNotifyEvent);
+  property moduleType:TModuleType read fType;
+  property output:boolean read fOutput;
+  procedure addInput(input_:TModuleInput);
+  procedure pulseFrom(pulse_:TPulse);
+  end;
+
+  TModules = array of TModule;
+
+  { TModulesHelper }
+
+  TModulesHelper = type helper for TModules
+  function size: integer;
+  function push(element:TModule):integer;
+  function findByName(name_:String):TModule;
+  function getState:TBits;
+  end;
+
+  { TQueueManager }
+
+  TQueueManager = class(TInterfacedObject)
+  private
+  fQueue: specialize TGObjectQueue<TPulse>;
+  fModules:TModules;
+  fLowCount:integer;
+  fHighCount:integer;
+  fInitialState:TBits;
+  fCycles:integer;
+  procedure moduleOutputChanged(sender:TObject);
+  procedure moduleReceivedPulse(sender:TObject);
+  public
+  constructor create;
+  procedure setUpModules(inputLines:TStringArray);
+  procedure run(buttonPushes:integer);
+  procedure push(entry_:TPulse);
+  function pop: TPulse;
+  property lowCount:integer read fLowCount;
+  property highCount:integer read fHighCount;
+  end;
 
   { TDayTwenty}
   TDayTwenty = class(TAocPuzzle)
@@ -18,6 +112,228 @@ type
   end;
 
 implementation
+var
+  queue_:TQueueManager;
+
+{ TModulesHelper }
+
+function TModulesHelper.size: integer;
+begin
+  result:=length(self);
+end;
+
+function TModulesHelper.push(element: TModule): integer;
+begin
+  insert(element,self,length(self));
+  result:=self.size;
+end;
+
+function TModulesHelper.findByName(name_: String): TModule;
+var
+  index:integer;
+begin
+  for index:=0 to pred(length(self)) do
+    if (self[index].fName = name_) then
+    begin
+      result:=self[index];
+      exit;
+    end;
+end;
+
+function TModulesHelper.getState: TBits;
+var
+  index:integer;
+begin
+  result:=TBits.Create(self.size);
+  for index:=0 to pred(self.size) do
+    result[index]:=self[index].output;
+end;
+
+{ TModuleInput }
+
+constructor TModuleInput.create(name_: string);
+begin
+  fName:=name_;
+  fValue:=false;//remembered state only used in conjunction modules
+end;
+
+{ TModuleInputsHelper }
+
+function TModuleInputsHelper.size: integer;
+begin
+  result:=length(self);
+end;
+
+function TModuleInputsHelper.push(element: TModuleInput): integer;
+begin
+  insert(element,self,length(self));
+  result:=self.size;
+end;
+
+function TModuleInputsHelper.findByName(name_: string): TModuleInput;
+var
+  index:integer;
+begin
+  for index:=0 to pred(length(self)) do
+    if (self[index].name = name_) then
+    begin
+      result:=self[index];
+      exit;
+    end;
+
+end;
+
+function TModuleInputsHelper.allHigh: boolean;
+var
+  index:integer;
+begin
+  result:=true;
+  for index:=0 to pred(self.size) do
+    if not self[index].value then
+    begin
+      result:=false;
+      exit;
+    end;
+end;
+
+{ TModule }
+
+constructor TModule.create(type_:TModuleType;name_: string;sendPulse_,receivePulse_:TNotifyEvent);
+begin
+  fType:=type_;
+  fName:=name_;
+  fSendPulse:=sendPulse_;
+  fReceivePulse:=receivePulse_;
+  fInputs:=TModuleInputs.create;
+  fOutput:=false;
+end;
+
+procedure TModule.addInput(input_: TModuleInput);
+begin
+  fInputs.push(input_);
+end;
+
+//This is the ONLY place we determine if the module should send a pulse
+//Also the module should signal that it has received a valid pulse so the
+//queue manager can increment its count
+procedure TModule.pulseFrom(pulse_:TPulse);
+var
+  input:TModuleInput;
+begin
+  input:=fInputs.findByName(pulse_.fSource);
+  //quit if no corresponding input
+  if assigned(input) then input.value:=pulse_.high else exit;
+  //signal that a pulse was received to allow the queueManager to count them
+  if assigned(fReceivePulse) then fReceivePulse(pulse_);
+  if (moduleType = TModuleType.flipflop)and not pulse_.high then
+    begin
+    fOutput:=not fOutput;
+    if assigned(fSendPulse) then fSendPulse(TPulse.create(fOutput,fName));
+    end else
+  if (moduleType = TModuleType.conjunction) then
+    begin
+    fOutput:= not fInputs.allHigh;
+    if assigned(fSendPulse) then fSendPulse(TPulse.create(fOutput,fName));
+    end else
+  if (moduleType = TModuleType.broadcaster) then
+    begin
+    //just pass it on
+    fOutput:=pulse_.fHigh;
+    if assigned(fSendPulse) then fSendPulse(TPulse.create(fOutput,fName));
+    end;
+end;
+
+{ TQueueManager }
+//If a module sends a pulse this method adds it to the queue
+procedure TQueueManager.moduleOutputChanged(sender: TObject);
+begin
+  if sender is TPulse then push(sender as TPulse);
+end;
+
+//Called when a module signals that it has received a pulse
+procedure TQueueManager.moduleReceivedPulse(sender: TObject);
+begin
+  if sender is TPulse then with Sender as TPulse do
+    begin
+    if fHigh then fHighCount:=fHighCount + 1 else
+      fLowCount:=fLowCount + 1;
+    end;
+end;
+
+constructor TQueueManager.create;
+begin
+  fQueue:= specialize TGObjectQueue<TPulse>.Create;
+  fModules:= TModules.create;
+  fLowCount:=0;
+  fHighCount:=0;
+  fCycles:=0;
+end;
+
+procedure TQueueManager.setUpModules(inputLines: TStringArray);
+var
+  lineNo,destNo:integer;
+  moduleId:string;
+  moduleDestinations:TStringArray;
+  moduleType:string;
+  moduleName:string;
+begin
+  //clear fModules and fQueue
+  setLength(fModules,0);
+  fQueue.Clear;
+  fModules.push(TModule.create(TModuleType.button,'button',@moduleOutputChanged,@moduleReceivedPulse));
+  fModules.push(TModule.create(TModuleType.broadcaster,'broadcaster',@moduleOutputChanged,@moduleReceivedPulse));
+  fModules.push(TModule.create(TModuleType.output,'output',@moduleOutputChanged,@moduleReceivedPulse));
+  for lineNo:=0 to pred(inputLines.size) do
+    begin
+    moduleId:=inputLines[lineNo].Split('->')[0].Trim;
+    if (moduleId <> 'broadcaster') then
+      begin
+      moduleType:=moduleId.Substring(0,1);
+      moduleName:=moduleId.Substring(1).Trim;
+      if (moduleType = '%') then fModules.push(TModule.create(TModuleType.flipflop, moduleName,@moduleOutputChanged,@moduleReceivedPulse))
+      else fModules.push(TModule.create(TModuleType.conjunction, moduleName,@moduleOutputChanged,@moduleReceivedPulse));
+      end;
+    end;
+  for lineNo:=0 to pred(inputLines.size) do
+    begin
+    moduleName:=inputLines[lineNo].Split('->',TStringSplitOptions.ExcludeEmpty)[0].Trim;
+    if (moduleName <> 'broadcaster') then moduleName:= moduleName.Substring(1);
+    moduleDestinations:=inputLines[lineNo].Split('->',TStringSplitOptions.ExcludeEmpty)[1].Trim.Split(',',TStringSplitOptions.ExcludeEmpty);
+    for destNo:=0 to pred(moduleDestinations.size) do
+      begin
+      fModules.findByName(moduleDestinations[destNo].Trim).addInput(TModuleInput.create(moduleName));
+      end;
+    end;
+  //Now note the initial state
+  fInitialState:=fModules.getState;
+end;
+
+procedure TQueueManager.run(buttonPushes: integer);
+begin
+//We have the initial state
+//Push the button which will cause a pulse to be received at the broadcaster
+//and added to the queue
+//
+end;
+
+procedure TQueueManager.push(entry_:TPulse);
+begin
+fQueue.Enqueue(entry_);
+end;
+
+function TQueueManager.pop: TPulse;
+begin
+result:= fQueue.Dequeue;
+end;
+
+
+{ TQueueEntry }
+
+constructor TPulse.create(high_: boolean; source_:string);
+begin
+  fHigh:=high_;
+  fSource:=source_;
+end;
 
 { TDayTwenty }
 
@@ -25,11 +341,22 @@ constructor TDayTwenty.create(filename:string;paintbox_:TPaintbox);
 begin
 inherited create(filename,'Day 16',paintbox_);
 //parent loads the file as a string and converts to string array;
+queue_:=TQueueManager.create;
 end;
 
 procedure TDayTwenty.runPartOne;
 begin
   results.Clear;
+  queue_:=TQueueManager.create;
+  queue_.setUpModules(puzzleInputLines);
+
+  //Want a runner class that will note the initial state and work out how many iterations
+  //will return to that state
+  //Set up the modules
+  //while there are pulses in the queue
+    //retrieve the pulse
+    //Add to all modules - they will work out if the pulse is destined for them
+  //Once done, count the high and low pulses and multiply (int64)
 end;
 
 procedure TDayTwenty.runPartTwo;
