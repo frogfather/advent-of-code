@@ -111,6 +111,12 @@ type
   function keyOfItem(itemToFind:string):integer;
   end;
 
+  { T2DStringArrayHelper }
+  T2DStringArrayHelper = type helper for T2DStringArray
+  function size: integer;
+  function push(input_:string):integer;
+  end;
+
 
 function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
@@ -500,6 +506,21 @@ begin
      for adjustIndex:= 0 to high(newItems) do
        aArray[index+adjustIndex]:= newItems[adjustIndex];
      end;
+end;
+
+{ T2DStringArrayHelper }
+
+function T2DStringArrayHelper.size: integer;
+begin
+  result:=length(self);
+end;
+
+function T2DStringArrayHelper.push(input_:string): integer;
+begin
+  //if the number of rows does not match then create
+  setLength(self,self.size+1);
+  self[pred(self.size)]:=input_.Split(['']);
+  result:=self.size;
 end;
 
 { TIntStringMapHelper }

@@ -105,8 +105,6 @@ type
   constructor create;
   procedure setUpModules(inputLines:TStringArray);
   procedure run(buttonPushes:integer);
-  procedure push(entry_:TPulse);
-  function pop: TPulse;
   property lowCount:integer read fLowCount;
   property highCount:integer read fHighCount;
   end;
@@ -237,8 +235,8 @@ begin
 end;
 
 //This is the ONLY place we determine if the module should send a pulse
-//Also the module should signal that it has received a valid pulse so the
-//queue manager can increment its count
+//Module will fire event handler if it sends a pulse
+//and also that it has received a valid pulse so the count can be incremented
 procedure TModule.pulseFrom(pulse_:TPulse);
 var
   input:TModuleInput;
@@ -276,7 +274,8 @@ begin
   if sender is TPulse then
     begin
     pulse_:=sender as TPulse;
-    push(pulse_);
+    fQueue.Enqueue(pulse_);
+    //This rather unsatisfactory arrangement handles part 2. Needs refactored
     if (fModules.findByName(pulse_.fSource).moduleType = TModuletype.conjunction) and pulse_.fHigh
     and (ofInterest.indexOf(pulse_.fSource)>-1) then
     writeln('Module '+pulse_.fSource+' high at count '+fPush.ToString);
@@ -290,7 +289,6 @@ begin
     begin
     if fHigh then fHighCount:=fHighCount + 1 else
       fLowCount:=fLowCount + 1;
-    //writeln('Pulse received from '+fSource + ' with value '+fHigh.ToString+' High count '+fHighCount.ToString+' low count '+fLowCount.ToString);
     end;
 end;
 
@@ -306,9 +304,8 @@ begin
   buttonModule.press;
   while not fQueue.IsEmpty do
     begin
-    //get the item out of the queue
-    currentPulse:=pop;
-    //and send it to each module
+    currentPulse:=fQueue.Dequeue;
+    //Send to every module - each module works out if the pulse is for it
     for moduleId:=0 to pred(fModules.size) do
       fModules[moduleId].pulseFrom(currentPulse);
     end;
@@ -385,17 +382,6 @@ remainingPushes:=remainingPushes - 1;
 done:=remainingPushes = 0;
 until done;
 end;
-
-procedure TQueueManager.push(entry_:TPulse);
-begin
-fQueue.Enqueue(entry_);
-end;
-
-function TQueueManager.pop: TPulse;
-begin
-result:= fQueue.Dequeue;
-end;
-
 
 { TQueueEntry }
 
