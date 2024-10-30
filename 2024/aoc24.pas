@@ -1,4 +1,4 @@
-unit aoc23;
+unit aoc24;
 
 {$mode objfpc}{$H+}
 

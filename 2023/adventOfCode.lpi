@@ -25,6 +25,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="etpackage"/>
+      </Item>
+      <Item>
         <PackageName Value="LGenerics"/>
       </Item>
       <Item>
@@ -32,9 +35,6 @@
       </Item>
       <Item>
         <PackageName Value="HashLib4PascalPackage"/>
-      </Item>
-      <Item>
-        <PackageName Value="etpackage"/>
       </Item>
       <Item>
         <PackageName Value="LCL"/>
