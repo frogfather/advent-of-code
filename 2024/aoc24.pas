@@ -51,7 +51,7 @@ implementation
 
 { TMainForm }
 
-const aocDirectory = '/Users/johncampbell/Code/advent-of-code/2023/';
+const aocDirectory = '/Users/johncampbell/Code/advent-of-code/2024/';
 const puzzleDataDirectory = aocDirectory+'input/';
 const puzzleDescriptionDirectory = aocDirectory+'puzzle_description/';
 
@@ -92,6 +92,10 @@ begin
 
     fPuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+'_'+part.ToString+ '_test.txt';
     end else fpuzzleFile:= puzzleDataDirectory+'puzzle_' + day.ToString+ '.txt';
+    if not fileexists(fpuzzleFile) then
+      begin
+      lbresults.Items.add('Puzzle file '+fpuzzleFile+' does not exist');
+      end;
   case day of
    1: fpuzzle:= TDayOne.Create(fpuzzleFile);
    2: fpuzzle:= TDayTwo.Create(fPuzzleFile);
