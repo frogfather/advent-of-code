@@ -35,6 +35,7 @@ type
   function slice(start_,end_:integer):TIntArray;
   function splice(index:integer; deleteCount:integer=0; newItems: TIntArray=nil):TIntArray;
   function toString(separator:string):string;
+  procedure clear;
   end;
 
   { TInt64ArrayHelper }
@@ -919,6 +920,11 @@ begin
     if (index < pred(self.size)) then result:=result+separator;
     end;
 
+end;
+
+procedure TIntArrayHelper.clear;
+begin
+  setLength(self,0);
 end;
 
 end.

@@ -10,7 +10,7 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, aoc24, anysort, aocUtils, arrayUtils, fileUtilities
+  Forms, aoc24, day1, visualise, anysort, aocUtils, arrayUtils, fileUtilities
   { you can add units after this };
 
 {$R *.res}
@@ -19,7 +19,8 @@ begin
   RequireDerivedFormResource:=True;
   Application.Scaled:=True;
   Application.Initialize;
-  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TMainForm, MainForm);
+  Application.CreateForm(TfVisualise, fVisualise);
   Application.Run;
 end.
 
