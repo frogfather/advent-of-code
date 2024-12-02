@@ -12,6 +12,7 @@ type
   TDayTwo = class(TAocPuzzle)
   private
   function reportIsSafe(report: string):boolean;
+  function safeWithExcludedElement(report: string):boolean;
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
   procedure runPartOne; override;
@@ -49,6 +50,27 @@ begin
     end;
 end;
 
+function TDayTwo.safeWithExcludedElement(report: string): boolean;
+var
+  index,excluded:integer;
+  originalReport, modifiedReport:TStringArray;
+begin
+  result:=false;
+  originalReport:=report.split(' ',TStringSplitOptions.ExcludeEmpty);
+  modifiedReport:=TStringArray.create;
+  for excluded:=0 to pred(originalReport.size) do
+    begin
+    modifiedReport.clear;
+    for index:= 0 to pred(originalReport.size) do
+      if not(index = excluded) then modifiedReport.push(originalReport[index]);
+    if (reportIsSafe(modifiedReport.toString(' '))) then
+      begin
+      result:=true;
+      exit;
+      end;
+    end;
+end;
+
 constructor TDayTwo.create(filename:string;paintbox_:TPaintbox);
 begin
 inherited create(filename,'Day 2',paintbox_);
@@ -67,8 +89,15 @@ begin
 end;
 
 procedure TDayTwo.runPartTwo;
+var
+  index, safeReports:integer;
 begin
   results.Clear;
+  safeReports:=0;
+  //Need to run each entry excluding one element in turn
+  for index:=0 to pred(puzzleInputLines.size) do
+    if safeWithExcludedElement(puzzleInputLines[index]) then safeReports:= safeReports + 1;
+  results.add('Safe reports '+safeReports.toString);
 end;
 
 
