@@ -96,7 +96,8 @@ begin
   safeReports:=0;
   //Need to run each entry excluding one element in turn
   for index:=0 to pred(puzzleInputLines.size) do
-    if safeWithExcludedElement(puzzleInputLines[index]) then safeReports:= safeReports + 1;
+    if reportIsSafe(puzzleInputLines[index])
+    or safeWithExcludedElement(puzzleInputLines[index]) then safeReports:= safeReports + 1;
   results.add('Safe reports '+safeReports.toString);
 end;
 
