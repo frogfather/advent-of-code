@@ -100,8 +100,7 @@ end;
 
 procedure TDayFour.runPartTwo;
 var
-  rowNo,colNo,dirNo:integer;
-  sWord:String;
+  rowNo,colNo:integer;
   runningTotal:integer;
 begin
   results.Clear;

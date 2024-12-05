@@ -31,6 +31,7 @@ type
   function size: integer;
   function push(element:integer):integer;
   function indexOf(element:integer):integer;
+  function lastIndexOf(element:integer):integer;
   function shift:integer;
   function slice(start_,end_:integer):TIntArray;
   function splice(index:integer; deleteCount:integer=0; newItems: TIntArray=nil):TIntArray;
@@ -428,6 +429,14 @@ begin
     if aArr[Result] = aItem then
       Exit;
   Result := -1;
+end;
+
+generic function GetLastIndex<T>(aItem:T; aArr: specialize TArray<T>): SizeInt;
+begin
+  for Result:= High(aArr) downTo 0 do
+    if aArr[Result] = aItem then
+      Exit;
+  Result:= -1;
 end;
 
 generic function slice<T>(var aArray: specialize TArray<T>; start_, end_: integer):specialize TArray<T>;
@@ -883,6 +892,11 @@ end;
 function TIntArrayHelper.indexOf(element: integer): integer;
 begin
   result:= specialize getIndex<integer>(element,self);
+end;
+
+function TIntArrayHelper.lastIndexOf(element: integer): integer;
+begin
+  result:= specialize getLastIndex<integer>(element,self);
 end;
 
 function TIntArrayHelper.shift: integer;
