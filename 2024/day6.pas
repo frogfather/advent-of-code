@@ -16,11 +16,13 @@ type
   procedure turnGuardRight;
   procedure moveGuard;
   procedure markVisited;
+  procedure setObstruction(pos:TPoint);
   function inBounds:boolean;
   function nextSpaceIsClear:boolean;
   function alreadyVisited:boolean;
   function guardDirectionValue:integer;
-  function getUniqueVisitedTotal:integer;
+  function getUniqueVisitedPoints:TPointArray;
+  function runGuardPathAndFindIfItEnds:boolean;
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
   procedure runPartOne; override;
@@ -40,52 +42,29 @@ procedure TDaySix.loadMap;
 var
   index:integer;
 begin
+  map.clear;
+  visited.clear;
   for index:=0 to pred(puzzleinputLines.size) do
     map.push(puzzleInputLines[index]);
 end;
 
 procedure TDaySix.findAndSetGuardPos;
 var
-  index,gd:integer;
-  guardDirections:TStringArray;
+  index:integer;
   guardIndex:integer;
-  guardSymbol:string;
 begin
-  guardDirections:=TStringArray.create('^','>','<','v');
   for index:= 0 to pred(map.size) do
-    for gd:=0 to pred(guardDirections.size) do
+    begin
+    guardIndex:=map[index].indexOf('^');
+    if (guardIndex > -1) then
       begin
-      guardIndex:=map[index].indexOf(guardDirections[gd]);
-      if (guardIndex > -1) then
-        begin
-        //direction depends on what symbol the guard is
-        guardSymbol:=map[index].Substring(guardIndex,1);
-          case guardSymbol of
-          '^':
-            begin
-            guardDirection.X:=0;
-            guardDirection.Y:=-1;
-            end;
-          '>':
-            begin
-            guardDirection.X:=1;
-            guardDirection.Y:=0;
-            end;
-          '<':
-            begin
-            guardDirection.X:=-1;
-            guardDirection.Y:=0;
-            end;
-          'v':
-            begin
-            guardDirection.X:=0;
-            guardDirection.Y:=1;
-            end;
-          end;
-        guardPos.X:=guardIndex;
-        guardPos.Y:=index;
-        end;
+      guardDirection.X:=0;
+      guardDirection.Y:=-1;
+      guardPos.X:=guardIndex;
+      guardPos.Y:=index;
+      exit;
       end;
+    end;
 end;
 function TDaySix.inBounds: boolean;
 var
@@ -115,6 +94,11 @@ begin
   visited.AddOrSetData(guardDirectionValue, updatedPoints);
 end;
 
+procedure TDaySix.setObstruction(pos: TPoint);
+begin
+  map[pos.Y][pos.X+1]:='#';
+end;
+
 function TDaySix.alreadyVisited: boolean;
 var
   pointsInThisDirection:TPointArray;
@@ -139,25 +123,44 @@ begin
      then result:=3
 end;
 
-function TDaySix.getUniqueVisitedTotal: integer;
+function TDaySix.getUniqueVisitedPoints: TPointArray;
 var
   keyIndex,dataIndex:integer;
   visitedInThisDirection:TPointArray;
-  uniqueVisited:TPointArray;
 begin
-  result:=0;
-  uniqueVisited:=TPointArray.create;
+  result:=TPointArray.create;
   for keyIndex:=0 to pred(visited.KeySize) do
     begin
     visited.TryGetData(visited.Keys[keyIndex],visitedInThisDirection);
     if (visitedInThisDirection <> nil)
        then for dataIndex:=0 to pred(visitedInThisDirection.size) do
          begin
-         if (uniqueVisited.indexOf(visitedInThisDirection[dataIndex]) = -1)
-           then uniqueVisited.push(visitedInThisDirection[dataIndex]);
+         if (result.indexOf(visitedInThisDirection[dataIndex]) = -1)
+           then result.push(visitedInThisDirection[dataIndex]);
          end;
     end;
-  result:=uniqueVisited.size;
+end;
+
+function TDaySix.runGuardPathAndFindIfItEnds: boolean;
+begin
+  result:=true;
+  while inBounds do
+      begin
+      markVisited;
+      while not nextSpaceIsClear do
+        begin
+        turnGuardRight;
+        if alreadyVisited then
+          begin
+          result:=false;
+          exit;
+          end;
+        markVisited;
+        end;
+      moveGuard;
+      end;
+    //catch the last position before we went out of bounds;
+    markVisited;
 end;
 
 procedure TDaySix.turnGuardRight;
@@ -196,29 +199,38 @@ end;
 
 procedure TDaySix.runPartOne;
 begin
-
   results.Clear;
   loadMap;
   findAndSetGuardPos;
-  while inBounds do
-    begin
-    markVisited;
-    while not nextSpaceIsClear do
-      begin
-      turnGuardRight;
-      if alreadyVisited then exit; //Hopefully won't happen here
-      markVisited;
-      end;
-    moveGuard;
-    end;
-  //catch the last position before we went out of bounds;
-  markVisited;
-  results.add(getUniqueVisitedTotal.toString);
+  runGuardPathAndFindIfItEnds;
+  results.add(getUniqueVisitedPoints.size.toString);
 end;
 
 procedure TDaySix.runPartTwo;
+var
+  uniqueVisitedPoints:TPointArray;
+  index:integer;
+  loopedPathCount:integer;
+  pathEnds:boolean;
 begin
   results.Clear;
+  loopedPathCount:=0;
+  loadMap;
+  findAndSetGuardPos; //resets the starting position
+  runGuardPathAndFindIfItEnds; //runs the original path to get all the visited points
+  uniqueVisitedPoints:=getUniqueVisitedPoints;
+  for index:=0 to pred(uniqueVisitedPoints.size) do
+    begin
+    loadmap;
+    findAndSetGuardPos;
+    if (uniqueVisitedPoints[index] <> guardPos) then
+      begin
+      setObstruction(uniqueVisitedPoints[index]);
+      pathEnds:= runGuardPathAndFindIfItEnds;
+      if not pathEnds then loopedPathCount:=loopedPathCount + 1;
+      end;
+    end;
+  results.add('Obstructions resulting in loop '+loopedPathCount.toString);
 end;
 
 
