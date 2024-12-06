@@ -35,9 +35,7 @@ var
 begin
   result:=false;
   for index:=0 to pred(rules.Count) do
-    begin
     if not rulePasses(entry, rules[index]) then exit;
-    end;
   result:=true;
 end;
 
@@ -82,6 +80,12 @@ var
   revPt:TPoint;
   swap:Integer;
 begin
+  //basic idea here: ruleset is an array of TPoint (x,y pair)
+  //Create a point from the current two elements we're looking
+  //at but with the elements reversed. So if we're looking at 97,40
+  //our revPt is 40,97
+  //If we find this in the point array then the
+  //actual values must be the wrong way round
   revPt:=TPoint.create(0,0);
   values:=input.Split(',').toIntArray;
   index:=0;
@@ -153,18 +157,14 @@ end;
 procedure TDayFive.runPartTwo;
 var
   index:integer;
-  orderedData:TStringList;
   answer:integer;
 begin
   results.Clear;
   answer:=0;
   runPartOne;
-  orderedData:=TStringlist.Create;
   ruleset:=generateRuleSet;
   for index:=0 to pred(invalidData.Count) do
-      orderedData.Add(sortByRules(invalidData[index]));
-  for index:=0 to pred(orderedData.Count) do
-      answer:=answer + middleValue(orderedData[index]);
+      answer:=answer + middleValue(sortByRules(invalidData[index]));
   results.add('answer '+answer.toString);
 end;
 

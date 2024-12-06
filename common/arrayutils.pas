@@ -113,6 +113,13 @@ type
   function keyOfItem(itemToFind:string):integer;
   end;
 
+  { T2DStringArrayHelper }
+  T2DStringArrayHelper = type helper for T2DStringArray
+  function rows: integer;
+  function size(row:integer):integer;
+  procedure push(value:TStringArray);
+  end;
+
 
 function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
@@ -533,6 +540,26 @@ end;
 function TIntStringMapHelper.keyOfItem(itemToFind: string): integer;
 begin
   result:=self.IndexOfData(itemToFind);
+end;
+
+{ T2DStringArrayHelper }
+
+function T2DStringArrayHelper.rows: integer;
+begin
+  result:=length(self);
+end;
+
+function T2DStringArrayHelper.size(row:integer): integer;
+begin
+  if (row < 0) or (row > pred(self.rows)) then result:=0
+  else result:=length(self[row]);
+end;
+
+procedure T2DStringArrayHelper.push(value:TStringArray);
+begin
+  setLength(self,self.rows + 1);
+  self[self.rows - 1]:=value;
+
 end;
 
 { T2DIntMapHelper }

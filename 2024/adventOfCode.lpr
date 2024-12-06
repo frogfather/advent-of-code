@@ -10,8 +10,8 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, aoc24, day1, visualise, day2, day3, day4, day5, anysort, aocUtils,
-  arrayUtils, fileUtilities
+  Forms, aoc24, day1, visualise, day2, day3, day4, day5, day6, anysort,
+  aocUtils, arrayUtils, fileUtilities
   { you can add units after this };
 
 {$R *.res}
