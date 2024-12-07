@@ -47,6 +47,7 @@ type
   function indexOf(element:int64):integer;
   function shift:int64;
   function splice(index:integer; deleteCount:integer=0;newItems: TInt64Array=nil):TInt64Array;
+  function toString(separator: string):string;
   procedure clear;
   end;
 
@@ -59,6 +60,7 @@ type
   function longest:integer;
   function rotate(quadrants:integer;anticlockwise:boolean=true):TStringArray;
   function toIntArray:TIntArray;
+  function toInt64Array: TInt64Array;
   function toString(separator:string):String;
   procedure clear;
   end;
@@ -839,6 +841,22 @@ begin
     end;
 end;
 
+function TStringArrayHelper.toInt64Array: TInt64Array;
+var
+  index:integer;
+  output:TInt64Array;
+begin
+  result:=TInt64Array.create;
+  for index:=0 to pred(length(self)) do
+    begin
+      try
+      result.push(self[index].ToInt64)
+      except
+      //do nothing atm
+      end;
+    end;
+end;
+
 function TStringArrayHelper.toString(separator: string): String;
 var
   index:integer;
@@ -896,6 +914,18 @@ function TInt64ArrayHelper.splice(index: integer; deleteCount: integer;
   newItems: TInt64Array): TInt64Array;
 begin
   result:= specialize splice<int64>(self,index,deleteCount,newItems);
+end;
+
+function TInt64ArrayHelper.toString(separator: string): string;
+var
+  index:integer;
+begin
+ result:='';
+  for index:=0 to pred(self.size) do
+    begin
+    result:= result + self[index].toString;
+    if (index < pred(self.size)) then result:=result+separator;
+    end;
 end;
 
 procedure TInt64ArrayHelper.clear;
