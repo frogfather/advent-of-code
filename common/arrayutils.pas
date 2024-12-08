@@ -20,6 +20,7 @@ type
   T2DInt64Map = array of array of int64;
   T3DIntMap = array of array of array of integer;
   T2DStringArray = array of array of string;
+  T3DStringArray = array of array of array of string;
   TColours = array of TColor;
   TPointArray = array of TPoint;
   TIntPointMap = specialize TFPGMap<Integer,TPointArray>;
@@ -122,6 +123,18 @@ type
   procedure push(value:TStringArray);
   end;
 
+
+  { T3DStringArrayHelper }
+  T3DStringArrayHelper = type helper for T3DStringArray
+  function layers: integer;
+  function rows(layer:integer):integer;
+  function size(layer,row:integer):integer;
+  procedure push(layer:integer; data:TStringArray);
+  function getValue(x,y,z:integer):string;
+  function getValue(y,z:integer):TStringArray;
+  procedure setValue(x,y,z:integer; value:string);
+  procedure clear;
+  end;
 
 function removeBlankEntriesFromArray(arrInput: TIntArray):TIntArray;
 function toIntArray(arrInput: TStringArray):TIntArray;
@@ -562,6 +575,67 @@ begin
   setLength(self,self.rows + 1);
   self[self.rows - 1]:=value;
 
+end;
+
+{ T3DStringArrayHelper }
+
+function T3DStringArrayHelper.layers: integer;
+begin
+  result:=length(self);
+end;
+
+function T3DStringArrayHelper.rows(layer: integer): integer;
+begin
+  if (layer < 0 ) or (layer > pred(layers))then result:=0
+  else result:=length(self[layer]);
+end;
+
+function T3DStringArrayHelper.size(layer, row: integer): integer;
+begin
+  if (layer < 0) or (layer > pred(layers)) then result:=0
+  else if (row < 0) or (row > pred(rows(layer))) then result:=0
+    else result:=length(self[layer][row]);
+end;
+
+procedure T3DStringArrayHelper.push(layer: integer; data:TStringArray);
+begin
+  if (layer < 0) then exit;
+  if (layer > pred(layers)) then setLength(self, layer + 1);
+  setLength(self[layer],rows(layer)+1);
+  self[layer][rows(layer)] :=data;
+end;
+
+function T3DStringArrayHelper.getValue(x, y, z: integer): string;
+begin
+  if (z < 0) or (z > pred(layers)) then result:='Error - z out of range'
+  else if (y < 0) or (y > pred(rows(z))) then result:= 'Error - y out of range'
+  else if (x < 0) or (x > pred(size(z,y))) then result:= 'Error - x out of range'
+  else result:=self[z][y][x];
+end;
+
+function T3DStringArrayHelper.getValue(y, z: integer): TStringArray;
+begin
+  if (z < 0) or (z > pred(layers)) then result:=nil
+  else if (y < 0) or (y > pred(rows(z))) then result:= nil
+  else result:=self[z][y];
+end;
+
+procedure T3DStringArrayHelper.setValue(x, y, z: integer;value:string);
+begin
+  if (z < 0) then exit
+  else if (z > pred(layers)) then setLength(self, z+1);
+
+  if (y < 0) then exit
+  else if (y > pred(rows(z))) then setLength(self[z],y + 1);
+
+  if (x < 0) then exit
+  else if (x > pred(size(z,y))) then setLength(self[z][y],x+1);
+  self[z][y][x]:= value;
+end;
+
+procedure T3DStringArrayHelper.clear;
+begin
+  setLength(self,0);
 end;
 
 { T2DIntMapHelper }
