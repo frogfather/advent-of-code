@@ -110,6 +110,15 @@
         <Filename Value="day9.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="day10.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="pointvisitcount.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="pointVisitCount"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
