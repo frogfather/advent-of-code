@@ -120,6 +120,7 @@ type
   procedure addItem(item:TPoint);
   end;
 
+
   { TIntStringMapHelper }
   TIntStringMapHelper = type helper for TIntStringMap
   function included(itemToFind: string):boolean;
@@ -774,7 +775,6 @@ begin
   points.push(item);
   self.AddOrSetData(item.X,points);
 end;
-
 
 { T3DIntMapHelper }
 

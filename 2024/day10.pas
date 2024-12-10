@@ -5,7 +5,7 @@ unit day10;
 interface
 
 uses
-  Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics,arrayUtils;
+  Classes, SysUtils,  aocPuzzle,LazLogger,ExtCtrls,Graphics,arrayUtils, pointVisitCount;
 type
 
   { TDayTen}
@@ -16,6 +16,8 @@ type
   function findPathsFrom(trailhead:TPoint):integer;
   function validPath(current,offset:TPoint;value:integer):boolean;
   function atSummit(currentPoint:TPoint):boolean;
+  function findSumOfAllTrails:integer;
+  function findSumOfTrailsFrom(trailhead:TPoint):integer;
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
   procedure runPartOne; override;
@@ -29,6 +31,7 @@ var
   map:T3DIntMap;
   queue:TPointArray;
   seen: TPointArray;
+  seenCount:TPointVisitCountArray;
   trailHeads:TPointArray;
   offsets:TPointArray;
 procedure TDayTen.populateMapAndFindAllTrailheads;
@@ -96,12 +99,47 @@ begin
   result:=map.getValue(currentPoint.X,currentPoint.Y,0) = 9;
 end;
 
+function TDayTen.findSumOfAllTrails: integer;
+var
+  index:integer;
+begin
+  result:=0;
+  for index:=0 to pred(trailheads.size) do
+    result:=result + findSumOfTrailsFrom(trailheads[index]);
+end;
+
+function TDayTen.findSumOfTrailsFrom(trailhead: TPoint): integer;
+var
+  currentPoint,offsetPoint:TPoint;
+  offset:integer;
+begin
+  queue.clear;
+  seenCount.clear;
+  queue.push(trailhead);
+  seenCount.addToCount(trailhead,1);
+  result:=0;
+  while (queue.size > 0) do
+    begin
+    currentPoint:=queue.popLeft;
+    if (map.getValue(currentPoint.X,currentPoint.Y,0) = 9)
+      then result:=result + seenCount.countOf(currentPoint);
+    for offset:=0 to pred(offsets.size) do
+      if (validPath(currentPoint,offsets[offset],map.getValue(currentPoint.X,currentPoint.Y,0))) then
+        begin
+        offsetPoint:=TPoint.Create(currentPoint.X+offsets[offset].X, currentPoint.Y+offsets[offset].Y);
+        if (seenCount.indexOf(offsetPoint) = -1) then queue.push(offsetPoint);
+        seenCount.addToCount(offsetPoint, seenCount.countOf(currentPoint));
+        end;
+    end;
+end;
+
 constructor TDayTen.create(filename:string;paintbox_:TPaintbox);
 begin
 inherited create(filename,'Day 10',paintbox_);
 map:=T3DIntMap.create;
 queue:=TPointArray.create;
 seen:=TPointArray.create;
+seenCount:=TPointVisitCountArray.create;
 trailheads:=TPointArray.create;
 offsets:=TPointArray.create;
 offsets.push(TPoint.Create(0,-1));
@@ -124,10 +162,14 @@ begin
 end;
 
 procedure TDayTen.runPartTwo;
+var
+  sumOfAllTrails:integer;
 begin
   results.Clear;
-  //sum of rating of each trailhead
-  //rating is number of paths from each one
+  map.Clear;
+  populateMapAndFindAllTrailheads;
+  sumOfAllTrails:=findSumOfAllTrails;
+  results.add('total '+sumOfAllTrails.toString);
 end;
 
 
