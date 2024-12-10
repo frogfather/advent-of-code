@@ -68,6 +68,14 @@ type
 
   { T3DIntMapHelper }
   T3DIntMapHelper = type helper for T3DIntMap
+  function layers: integer;
+  function rows(layer:integer):integer;
+  function size(layer,row:integer):integer;
+  procedure push(layer:integer; data:TIntArray);
+  function getValue(x,y,z:integer):integer;
+  function getValue(y,z:integer):TIntArray;
+  procedure setValue(x,y,z:integer; value:integer);
+  procedure clear;
   function max(xStart,xEnd,yStart,yEnd,zStart,zEnd:integer):integer;
   function min(xStart,xEnd,yStart,yEnd,zStart,zEnd:integer):integer;
   end;
@@ -76,6 +84,7 @@ type
   T2DIntMapHelper = type helper for T2DIntMap
   function rows:integer;
   function size(row:integer):integer;
+  function push(value:TIntArray):integer;
   function push(row:integer;value:integer):integer;
   function getLast(row:integer):integer;
   function getFirst(row:integer):integer;
@@ -99,8 +108,10 @@ type
   TPointArrayHelper = type helper for TPointArray
   function size: integer;
   function push(element: TPoint):integer;
+  function popLeft:TPoint;
   function indexOf(element:TPoint):integer;
   function splice(index:integer; deleteCount: integer=0; newItems: TPointArray=nil):TPointArray;
+  procedure clear;
   end;
   
   { TIntPointMapHelper }
@@ -652,6 +663,13 @@ begin
   result:=length(self[row]);
 end;
 
+function T2DIntMapHelper.push(value: TIntArray): integer;
+begin
+  setLength(self,self.rows+1);
+  self[self.rows - 1]:=value;
+  result:=self.rows;
+end;
+
 function T2DIntMapHelper.push(row: integer; value: integer): integer;
 begin
   //if the number of rows does not match then create
@@ -760,6 +778,65 @@ end;
 
 { T3DIntMapHelper }
 
+function T3DIntMapHelper.layers: integer;
+begin
+  result:=length(self);
+end;
+
+function T3DIntMapHelper.rows(layer: integer): integer;
+begin
+  if (layer < 0 ) or (layer > pred(layers))then result:=0
+  else result:=length(self[layer]);
+end;
+
+function T3DIntMapHelper.size(layer, row: integer): integer;
+begin
+  if (layer < 0) or (layer > pred(layers)) then result:=0
+  else if (row < 0) or (row > pred(rows(layer))) then result:=0
+    else result:=length(self[layer][row]);
+end;
+
+procedure T3DIntMapHelper.push(layer: integer; data: TIntArray);
+begin
+  if (layer < 0) then exit;
+  if (layer > pred(layers)) then setLength(self, layer + 1);
+  setLength(self[layer],rows(layer)+1);
+  self[layer][rows(layer)] :=data;
+end;
+
+function T3DIntMapHelper.getValue(x, y, z: integer): integer;
+begin
+  if (z < 0) or (z > pred(layers)) or
+  ((y < 0) or (y > pred(rows(z))))
+  or ((x < 0) or (x > pred(self.size(z,y)))) then raise EArgumentOutOfRangeException.create('argument out of range');
+  result:=self[z][y][x];
+end;
+
+function T3DIntMapHelper.getValue(y, z: integer): TIntArray;
+begin
+  if (z < 0) or (z > pred(layers)) then result:=nil
+  else if (y < 0) or (y > pred(rows(z))) then result:= nil
+  else result:=self[z][y];
+end;
+
+procedure T3DIntMapHelper.setValue(x, y, z: integer; value: integer);
+begin
+  if (z < 0) then exit
+  else if (z > pred(layers)) then setLength(self, z+1);
+
+  if (y < 0) then exit
+  else if (y > pred(rows(z))) then setLength(self[z],y + 1);
+
+  if (x < 0) then exit
+  else if (x > pred(size(z,y))) then setLength(self[z][y],x+1);
+  self[z][y][x]:= value;
+end;
+
+procedure T3DIntMapHelper.clear;
+begin
+  setLength(self,0);
+end;
+
 function T3DIntMapHelper.max(xStart, xEnd, yStart, yEnd, zStart, zEnd: integer
   ): integer;
 var
@@ -805,6 +882,19 @@ begin
   result:=self.size;
 end;
 
+function TPointArrayHelper.popLeft: TPoint;
+var
+  index:integer;
+begin
+  if (self.size > 0) then
+    begin
+    result:= self[0];
+    for index:=0 to pred(self.size) do
+      if (index < pred(self.size)) then self[index]:=self[index+1];
+    setLength(self,self.size -1);
+    end;
+end;
+
 function TPointArrayHelper.indexOf(element: TPoint): integer;
 begin
   result:= specialize getIndex<TPoint>(element,self);
@@ -814,6 +904,11 @@ function TPointArrayHelper.splice(index: integer; deleteCount: integer;
   newItems: TPointArray): TPointArray;
 begin
   result:= specialize splice<TPoint>(self,index,deleteCount,newItems);
+end;
+
+procedure TPointArrayHelper.clear;
+begin
+  setLength(self,0);
 end;
 
 { TStringArrayHelper }
