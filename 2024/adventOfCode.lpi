@@ -119,6 +119,15 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="pointVisitCount"/>
       </Unit>
+      <Unit>
+        <Filename Value="day11.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="int64cache.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="int64Cache"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
