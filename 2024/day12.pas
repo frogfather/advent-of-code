@@ -12,14 +12,18 @@ type
   TDayTwelve = class(TAocPuzzle)
   private
   procedure populateMap;
-  function allPlotPrices:int64;
+  function allPlotPrices(sides:boolean=false):int64;
   function mapValue(point:TPoint):string;
-  function nextRegionPrice(startAt:TPoint):int64;
+  function nextRegionPrice(startAt:TPoint; sides:boolean=false):int64;
   function isOutOfRange(point:TPoint):boolean;
   function outsideEdges(point:TPoint):integer;
   function isDifferent(point:TPoint;value:string):boolean;
   function unvisitedNeighbours(point:TPoint):TPointArray;
   function regionPerimeter(region:TPointArray):int64;
+  function regionSides(region:TPointArray):int64;
+  function getLowLimit(region:TPointArray):TPoint;
+  function getHighLimit(region:TPointArray):TPoint;
+
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
   procedure runPartOne; override;
@@ -50,7 +54,7 @@ begin
 end;
 
 
-function TDayTwelve.allPlotPrices: int64;
+function TDayTwelve.allPlotPrices(sides:boolean=false): int64;
 var
   row,col:integer;
   currentPoint:TPoint;
@@ -63,14 +67,14 @@ begin
       currentPoint.Y:= row;
       if (pointsSeen.indexOf(currentPoint) = -1) then
         begin
-        result:=result+nextRegionPrice(currentPoint);
+        result:=result+nextRegionPrice(currentPoint,sides);
         end;
       end;
 end;
 
-function TDayTwelve.nextRegionPrice(startAt:TPoint):int64;
+function TDayTwelve.nextRegionPrice(startAt:TPoint; sides:boolean=false):int64;
 var
-  area,perimeter:int64;
+  area,perimeter,sideCount:int64;
   neighboursToVisit:TPointArray;
   index:integer;
   region:TPointArray;
@@ -94,8 +98,15 @@ begin
         queue.push(neighboursToVisit[index]);
         end;
     end;
-  perimeter:=regionPerimeter(region);
-  result:=region.size * perimeter
+  if sides then
+    begin
+    sideCount:=regionSides(region);
+    result:=region.size * sideCount;
+    end else
+    begin
+    perimeter:=regionPerimeter(region);
+    result:=region.size * perimeter
+    end;
 end;
 
 function TDayTwelve.isOutOfRange(point: TPoint): boolean;
@@ -163,6 +174,115 @@ begin
     result:=result + outsideEdges(region[index]);
 end;
 
+function TDayTwelve.regionSides(region: TPointArray): int64;
+var
+  lowLimit,highLimit,currentPos,northPos,southPos,westPos,eastPos:TPoint;
+  row,col:integer;
+  onNorthEdge,onSouthEdge,onWestEdge,onEastEdge:boolean;
+begin
+  result:=0;
+  lowLimit:=getLowLimit(region);
+  highLimit:=getHighLimit(region);
+  currentPos:=TPoint.create(0,0);
+  northPos:=TPoint.Create(0,0);
+  for row:=lowLimit.Y to highLimit.Y do
+    begin
+    onNorthEdge:=false;
+    onSouthEdge:=false;
+    for col:=lowLimit.X to highLimit.X do
+      begin
+      currentPos.X:=col;
+      currentPos.Y:=row;
+      northPos.X:=col;
+      northPos.Y:=row - 1;
+      southPos.X:=col;
+      southPos.Y:=row + 1;
+      //Is this coord in the list and is it on an edge looking north?
+      if (region.indexOf(currentPos) > -1)
+         and (isOutOfRange(northPos) or (isDifferent(northPos,mapValue(currentPos))))
+         then
+         begin
+         if not onNorthEdge then //If we're not already on a side then it's a new side
+           begin
+           onNorthEdge:=true;
+           result:=result+1;
+           end;
+         end else onNorthEdge:=false;
+      //Do the same looking south
+      if (region.indexOf(currentPos) > -1)
+         and (isOutOfRange(southPos) or (isDifferent(southPos,mapValue(currentPos))))
+         then
+         begin
+         if not onSouthEdge then //If we're not already on a side then it's a new side
+           begin
+           onSouthEdge:=true;
+           result:=result+1;
+           end;
+         end else onSouthEdge:=false;
+      end;
+    end;
+  //Now do the same thing looking west and east
+  for col:=lowLimit.X to highLimit.X do
+    begin
+    onWestEdge:=false;
+    onEastEdge:=false;
+    for row:= lowLimit.Y to highLimit.Y do
+      begin
+      currentPos.X:=col;
+      currentPos.Y:=row;
+      westPos.X:=col-1;
+      westPos.Y:=row;
+      eastPos.X:=col+1;
+      eastPos.Y:=row;
+      if (region.indexOf(currentPos) > -1)
+         and (isOutOfRange(westPos) or (isDifferent(westPos,mapValue(currentPos))))
+         then
+         begin
+         if not onWestEdge then //If we're not already on a side then it's a new side
+           begin
+           onWestEdge:=true;
+           result:=result+1;
+           end;
+         end else onWestEdge:=false;
+      //Do the same looking east
+      if (region.indexOf(currentPos) > -1)
+         and (isOutOfRange(eastPos) or (isDifferent(eastPos,mapValue(currentPos))))
+         then
+         begin
+         if not onEastEdge then //If we're not already on a side then it's a new side
+           begin
+           onEastEdge:=true;
+           result:=result+1;
+           end;
+         end else onEastEdge:=false;
+      end;
+    end;
+end;
+
+function TDayTwelve.getLowLimit(region: TPointArray): TPoint;
+var
+  index:integer;
+begin
+  result:=TPoint.Create(region[0].X,region[0].Y);
+  for index:=0 to pred(region.size) do
+    begin
+    if (region[index].X < result.X) then result.X:=region[index].X;
+    if (region[index].Y < result.Y) then result.Y:=region[index].Y;
+    end;
+end;
+
+function TDayTwelve.getHighLimit(region: TPointArray): TPoint;
+var
+  index:integer;
+begin
+  result:=TPoint.Create(region[0].X,region[0].Y);
+  for index:=0 to pred(region.size) do
+    begin
+    if (region[index].X > result.X) then result.X:=region[index].X;
+    if (region[index].Y > result.Y) then result.Y:=region[index].Y;
+    end;
+end;
+
 constructor TDayTwelve.create(filename:string;paintbox_:TPaintbox);
 begin
 inherited create(filename,'Day 12',paintbox_);
@@ -184,6 +304,10 @@ end;
 procedure TDayTwelve.runPartTwo;
 begin
   results.Clear;
+  map.clear;
+  populateMap;
+  pointsSeen.clear;
+  results.add('Total is '+allPlotPrices(true).toString);
 end;
 
 
