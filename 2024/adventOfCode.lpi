@@ -25,6 +25,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="LGenerics"/>
+      </Item>
+      <Item>
         <PackageName Value="dcpcrypt"/>
       </Item>
       <Item>
@@ -127,6 +130,10 @@
         <Filename Value="int64cache.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="int64Cache"/>
+      </Unit>
+      <Unit>
+        <Filename Value="day12.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
   </ProjectOptions>
