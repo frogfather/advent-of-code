@@ -133,6 +133,8 @@ type
   function rows: integer;
   function size(row:integer):integer;
   procedure push(value:TStringArray);
+  procedure push(value:String);
+  procedure clear;
   end;
 
 
@@ -587,6 +589,22 @@ begin
   setLength(self,self.rows + 1);
   self[self.rows - 1]:=value;
 
+end;
+
+procedure T2DStringArrayHelper.push(value: String);
+var
+  index:integer;
+  output:TStringArray;
+begin
+  output:=TStringArray.create;
+  for index:=0 to pred(value.Length) do
+    output.push(value.Substring(index,1));
+  self.push(output);
+end;
+
+procedure T2DStringArrayHelper.clear;
+begin
+  setLength(self,0);
 end;
 
 { T3DStringArrayHelper }
