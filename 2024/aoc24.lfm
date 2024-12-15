@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 177
+  Left = 289
   Height = 523
-  Top = 488
+  Top = 531
   Width = 1343
   Caption = 'MainForm'
   ClientHeight = 523
@@ -34,8 +34,13 @@ object MainForm: TMainForm
     Top = 56
     Width = 746
     Anchors = [akTop, akLeft, akRight, akBottom]
-    Font.Pitch = fpFixed
-    ItemHeight = 0
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -19
+    Font.Name = 'Arial'
+    Items.Strings = (
+      ''
+    )
+    ItemHeight = 16
     MultiSelect = True
     ParentFont = False
     TabOrder = 2
