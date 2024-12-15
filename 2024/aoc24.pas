@@ -106,11 +106,11 @@ begin
    7: fpuzzle:= TDaySeven.Create(fPuzzleFile);
    8: fpuzzle:= TDayEight.Create(fPuzzleFile);
    9: fpuzzle:= TDayNine.Create(fPuzzlefile);
-   10:fpuzzle:= TDayTen.Create(fPuzzleFile,fVisualise.PaintBox1);
+   10:fpuzzle:= TDayTen.Create(fPuzzleFile);
    11:fpuzzle:= TDayEleven.Create(fPuzzlefile);
    12:fpuzzle:= TDayTwelve.Create(fPuzzlefile);
    13:fpuzzle:= TDayThirteen.Create(fPuzzlefile);
-   14:fpuzzle:= TDayFourteen.Create(fPuzzlefile);
+   14:fpuzzle:= TDayFourteen.Create(fPuzzlefile,fVisualise.PaintBox1);
    15:fpuzzle:= TDayFifteen.Create(fPuzzlefile);
    16:fpuzzle:= TDaySixteen.Create(fPuzzlefile);
    17:fpuzzle:= TDaySeventeen.Create(fPuzzlefile);

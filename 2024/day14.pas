@@ -40,6 +40,9 @@ type
   procedure printRobots;
   function getQuadrant(quadrantNo:integer;grid:TRect):TRect;
   function findRobotsInQuadrant(quadrantNo:integer;grid:TRect):integer;
+  function noOverlaps:boolean;
+  procedure paintgrid(sender:TObject);
+  function robotAtPos(pos:TPoint):boolean;
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
   procedure runPartOne; override;
@@ -194,12 +197,61 @@ begin
     end;
 end;
 
+function TDayFourteen.noOverlaps: boolean;
+var
+  index:integer;
+  pointsSeen:TPointArray;
+begin
+  result:=false;
+  pointsSeen:=TPointArray.create;
+  for index:=0 to pred(robots.size) do
+    begin
+    if (pointsSeen.indexOf(robots[index].position) > -1) then exit;
+    pointsSeen.push(robots[index].position);
+    end;
+  result:=true;
+end;
+
+procedure TDayFourteen.paintgrid(sender:TObject);
+var
+  cellWidth,cellheight:integer;
+  col,row:integer;
+begin
+  if sender is TPaintbox then with sender as TPaintbox do
+    begin
+    canvas.Brush.Color:=clBlack;
+    canvas.Rectangle(paintbox.ClientRect);
+    cellHeight:=paintbox.ClientRect.Height div grid.Height;
+    cellWidth:=cellheight;
+    for row:=0 to pred(grid.Height) do
+      for col:=0 to pred(grid.Width) do
+        begin
+        if robotAtPos(TPoint.Create(col,row)) then
+          canvas.Brush.Color:=clGreen else canvas.brush.color:= clBlack;
+        canvas.FillRect(cellWidth*col,cellHeight*row,cellWidth*(col+1),cellheight*(row+1));
+        end;
+    end;
+end;
+
+function TDayFourteen.robotAtPos(pos: TPoint): boolean;
+var
+  index:integer;
+begin
+  result:=true;
+  for index:=0 to pred(robots.size) do
+    if (robots[index].position = pos) then exit;
+  result:=false;
+end;
+
+
+
 constructor TDayFourteen.create(filename:string;paintbox_:TPaintbox);
 begin
 inherited create(filename,'Day 14',paintbox_);
 robots:=TRobots.create;
 grid:=TRect.Create(0,0,100,102);
 testGrid:=TRect.Create(0,0,10,6);
+paintbox.OnPaint:=@paintGrid;
 //parent loads the file as a string and converts to string array;
 end;
 
@@ -223,8 +275,21 @@ begin
 end;
 
 procedure TDayFourteen.runPartTwo;
+var
+  steps:integer;
+  done:boolean;
 begin
   results.Clear;
+  loadRobots(grid);
+  done:=false;
+  steps:=0;
+  while not done do
+    begin
+    runRobots(1);
+    steps:=steps+1;
+    done:=noOverlaps or (steps > 10000);
+    end;
+  results.add('steps '+steps.ToString);
 end;
 
 

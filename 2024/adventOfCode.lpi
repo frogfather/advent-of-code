@@ -79,6 +79,7 @@
         <Filename Value="visualise.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="fVisualise"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
       <Unit>
@@ -136,6 +137,10 @@
       </Unit>
       <Unit>
         <Filename Value="day14.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="day15.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
