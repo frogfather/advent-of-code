@@ -79,6 +79,7 @@
         <Filename Value="visualise.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="fVisualise"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
       <Unit>
@@ -118,11 +119,6 @@
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="pointvisitcount.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="pointVisitCount"/>
-      </Unit>
-      <Unit>
         <Filename Value="day11.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
@@ -137,6 +133,14 @@
       </Unit>
       <Unit>
         <Filename Value="day13.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="day14.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="day15.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
