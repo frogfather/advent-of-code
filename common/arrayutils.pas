@@ -109,6 +109,7 @@ type
   function size: integer;
   function push(element: TPoint):integer;
   function popLeft:TPoint;
+  function pop:TPoint;
   function indexOf(element:TPoint):integer;
   function splice(index:integer; deleteCount: integer=0; newItems: TPointArray=nil):TPointArray;
   procedure clear;
@@ -909,6 +910,15 @@ begin
     result:= self[0];
     for index:=0 to pred(self.size) do
       if (index < pred(self.size)) then self[index]:=self[index+1];
+    setLength(self,self.size -1);
+    end;
+end;
+
+function TPointArrayHelper.pop: TPoint;
+begin
+  if (self.size > 0) then
+    begin
+    result:=self[pred(self.size)];
     setLength(self,self.size -1);
     end;
 end;
