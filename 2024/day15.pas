@@ -78,7 +78,7 @@ begin
     rString:=map[row];
     for col:=0 to pred(rString.Length) do
       begin
-      if (rString.Substring(col,1) = 'O') then result:=result+(row * 100)+col;
+      if ((rString.Substring(col,1) = 'O')or(rString.Substring(col,1) = '[')) then result:=result+(row * 100)+col;
       end;
     end;
 end;
@@ -106,6 +106,18 @@ begin
       begin
       if (currentRowData.Substring(0,1) = ']')then colLeft:=colLeft - 1;
       if (currentRowData.Substring(pred(currentRowData.Length),1) = '[') then colRight:=colRight+1;
+      //we're only interested in blocks
+      //adjust limits
+      while (currentRowData.Length > 0)and(currentRowData.substring(0,1) = '.')do
+        begin
+        currentRowData:=currentRowData.Substring(1);
+        colLeft:=colLeft+1;
+        end;
+      while (currentRowData.length > 0) and (currentRowData.Substring(pred(currentRowData.Length)-1,1) = '.')do
+        begin
+        currentRowData:=currentRowData.substring(0,pred(currentRowData.Length)-1);
+        colRight:=colRight-1;
+        end;
       end;
     //If the current row is clear we can move
     if (currentRowData.Replace('.','').Length = 0) then exit;
@@ -156,6 +168,7 @@ var
 begin
   for row:=0 to pred(map.size) do
     results.add(map[row]);
+
 end;
 
 function TDayFifteen.findRobotPos: TPoint;
@@ -269,7 +282,6 @@ begin
     robotOffset:=getRobotOffset(instruction);
     itemsToMove:=findItemsToMove(robotPosition,robotOffset);
     moveItems(itemsToMove,robotOffset);
-    drawPuzzle;
     end;
 
 end;
@@ -309,10 +321,14 @@ begin
 end;
 
 procedure TDayFifteen.runPartTwo;
+var
+  total:int64;
 begin
   results.Clear;
   loadPuzzle(true);
   runLargePuzzle;
+  total:= sumBoxCoordinates;
+  results.add('Total is '+total.ToString);
 end;
 
 
