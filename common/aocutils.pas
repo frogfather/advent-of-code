@@ -10,6 +10,7 @@ function getPuzzleInputAsStringArray(fileName: String; removeBlankLines: boolean
 function getPuzzleInputAsIntArray(fileName: String; removeBlankLines: boolean=true): TIntArray;
 function getPuzzleInputAsString(fileName:string):string;
 function stringOfBinaryToInteger(input: String): integer;
+function bitwiseXOR(arg1,arg2:string):string;
 function calculateCommonestValue(input: TStringArray; reverse:Boolean=false): TBits;
 function getUniqueEntry(input: TStringArray;reverse:boolean=false):String;
 function getMaxValue(input:TIntArray):integer;
@@ -65,6 +66,24 @@ begin
       if (input[index]='1') then output:=output + power(2,powerOf);
       end;
   result:=round(output);
+end;
+
+function bitwiseXOR(arg1, arg2: string): string;
+var
+ index,longest:integer;
+ a,b:string;
+begin
+ if (arg1.Length > arg2.Length)
+   then longest:=arg1.Length
+     else longest:=arg2.Length;
+ result:='';
+ for index:= 0 to pred(longest) do
+     begin
+     if (index < arg1.Length) then a:=arg1.Substring(index,1) else arg1:='0';
+     if (index < arg2.Length) then b:=arg2.Substring(index,1) else arg2:='0';
+     if (a=b)then result:=result+'0'else result:=result+'1';
+     end;
+
 end;
 
 //used in day 3
