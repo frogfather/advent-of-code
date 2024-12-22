@@ -15,6 +15,7 @@ type
   TStringMap = specialize TFPGMap<String,String>;
   TStringIntMap = specialize TFPGMap<String,Integer>;
   TStringInt64Map = specialize TFPGMap<String,Int64>;
+  TInt64Int64Map = specialize TFPGMap<Int64,Int64>;
   TIntStringMap = specialize TFPGMap<Integer,string>;
   T2DIntMap = array of array of integer;
   T2DInt64Map = array of array of int64;

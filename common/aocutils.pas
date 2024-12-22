@@ -10,6 +10,7 @@ function getPuzzleInputAsStringArray(fileName: String; removeBlankLines: boolean
 function getPuzzleInputAsIntArray(fileName: String; removeBlankLines: boolean=true): TIntArray;
 function getPuzzleInputAsString(fileName:string):string;
 function stringOfBinaryToInteger(input: String): integer;
+function stringOfBinaryToInt64(input:string):int64;
 function bitwiseXOR(arg1,arg2:string):string;
 function calculateCommonestValue(input: TStringArray; reverse:Boolean=false): TBits;
 function getUniqueEntry(input: TStringArray;reverse:boolean=false):String;
@@ -54,6 +55,21 @@ begin
 end;
 
 function stringOfBinaryToInteger(input: String): integer;
+var
+ index,powerOf,elementLength:Integer;
+ output:double;
+begin
+  elementLength:=length(input);
+  output:=0;
+  for index:= 1 to elementLength do
+      begin
+      powerOf:=elementLength - index;
+      if (input[index]='1') then output:=output + power(2,powerOf);
+      end;
+  result:=round(output);
+end;
+
+function stringOfBinaryToInt64(input: string): int64;
 var
  index,powerOf,elementLength:Integer;
  output:double;
