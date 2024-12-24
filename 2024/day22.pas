@@ -11,8 +11,6 @@ type
   { TDayTwentyTwo}
   TDayTwentyTwo = class(TAocPuzzle)
   private
-  function mix(arg1,arg2:int64):int64;
-  function prune(arg:int64):int64;
   function getNextSecret(secret:int64):int64;
   public
   constructor create(filename:string; paintbox_:TPaintbox = nil);
@@ -24,23 +22,13 @@ implementation
 
 { TDayTwentyTwo }
 
-function TDayTwentyTwo.mix(arg1, arg2: int64): int64;
-begin
-  result:=stringOfBinaryToInt64(bitwiseXOR(intToBin(arg1,64),intToBin(arg2,64)));
-end;
-
-function TDayTwentyTwo.prune(arg: int64): int64;
-begin
-  result:=arg mod 16777216;
-end;
-
 function TDayTwentyTwo.getNextSecret(secret: int64): int64;
 var
-  step1,step2:integer;
+  step1,step2:int64;
 begin
-  step1:=prune(mix(secret,secret * 64));
-  step2:=prune(mix(step1 div 32, step1));
-  result:=prune(mix(step2 * 2048,step2));
+  step1:=((secret shl 6) xor secret) mod 16777216;
+  step2:=((step1 shr 5) xor step1)  mod 16777216;
+  result:=((step2 shl 11) xor step2)  mod 16777216;
 end;
 
 constructor TDayTwentyTwo.create(filename:string;paintbox_:TPaintbox);
