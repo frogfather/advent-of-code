@@ -17,6 +17,7 @@ uses
 
 begin
   RequireDerivedFormResource:=True;
+  Application.Title:='aocgenerator';
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TAocgenerator, Aocgenerator);
