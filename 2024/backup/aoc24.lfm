@@ -1,0 +1,90 @@
+object MainForm: TMainForm
+  Left = 177
+  Height = 523
+  Top = 488
+  Width = 1343
+  Caption = 'MainForm'
+  ClientHeight = 523
+  ClientWidth = 1343
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  LCLVersion = '3.6.0.0'
+  object Memo1: TMemo
+    Left = 16
+    Height = 404
+    Top = 56
+    Width = 528
+    Anchors = [akTop, akLeft, akBottom]
+    TabOrder = 0
+  end
+  object cbSelect: TComboBox
+    Left = 80
+    Height = 20
+    Top = 8
+    Width = 196
+    ItemHeight = 19
+    TabOrder = 1
+    Text = 'Advent of code'
+    OnSelect = cbSelectSelect
+  end
+  object lbResults: TListBox
+    Left = 560
+    Height = 404
+    Top = 56
+    Width = 746
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    Font.Pitch = fpFixed
+    ItemHeight = 0
+    MultiSelect = True
+    ParentFont = False
+    TabOrder = 2
+    OnSelectionChange = lbResultsSelectionChange
+  end
+  object bExecute: TButton
+    Left = 24
+    Height = 25
+    Top = 480
+    Width = 96
+    Anchors = [akLeft, akBottom]
+    Caption = 'Run'
+    TabOrder = 3
+    OnClick = bExecuteClick
+  end
+  object bVisualise: TButton
+    Left = 1231
+    Height = 25
+    Top = 480
+    Width = 75
+    Anchors = [akTop, akRight]
+    Caption = 'Visual'
+    TabOrder = 4
+    OnClick = bVisualiseClick
+  end
+  object ckTest: TCheckBox
+    Left = 295
+    Height = 18
+    Top = 11
+    Width = 102
+    Caption = 'Use test data'
+    TabOrder = 5
+    OnChange = ckTestChange
+  end
+  object cbTestFile: TComboBox
+    Left = 425
+    Height = 20
+    Top = 10
+    Width = 231
+    ItemHeight = 19
+    TabOrder = 6
+    Visible = False
+  end
+  object ET: TEpikTimer
+    StringPrecision = 6
+    WantDays = True
+    TimebaseSource = SystemTimebase
+    CorrelationMode = OnTimebaseSelect
+    Left = 713
+    Top = 12
+  end
+end

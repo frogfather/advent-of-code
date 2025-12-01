@@ -1,0 +1,17 @@
+object fVisualise: TfVisualise
+  Left = 537
+  Height = 381
+  Top = 161
+  Width = 826
+  Caption = 'AOC'
+  ClientHeight = 381
+  ClientWidth = 826
+  LCLVersion = '2.2.2.0'
+  object PaintBox1: TPaintBox
+    Left = 0
+    Height = 381
+    Top = 0
+    Width = 826
+    Align = alClient
+  end
+end
