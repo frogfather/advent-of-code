@@ -8,6 +8,11 @@ interface
 uses
   Classes, SysUtils,anysort,graphics,fgl;
 type
+  TPoint64 = Packed Record
+   X: Int64;
+   Y: Int64;
+  end;
+
   //Looks like the built in TintegerArray is a static array
   //so let's define our own dynamic integer array
   TIntArray = specialize Tarray<Integer>;
@@ -24,6 +29,7 @@ type
   T3DStringArray = array of array of array of string;
   TColours = array of TColor;
   TPointArray = array of TPoint;
+  TPoint64Array = array of TPoint64;
   TIntPointMap = specialize TFPGMap<Integer,TPointArray>;
   TStringBoolMap = specialize TFPGMap<String,Boolean>;
 
@@ -115,6 +121,16 @@ type
   function splice(index:integer; deleteCount: integer=0; newItems: TPointArray=nil):TPointArray;
   procedure clear;
   end;
+
+  { TPoint64ArrayHelper }
+  TPoint64ArrayHelper = type helper for TPoint64Array
+  function size: int64;
+  function push(element: TPoint64):int64;
+  function popLeft:TPoint64;
+  function pop:TPoint64;
+  function splice(index:integer; deleteCount: integer=0; newItems: TPoint64Array=nil):TPoint64Array;
+  procedure clear;
+  end;
   
   { TIntPointMapHelper }
   TIntPointMapHelper = type helper for TIntPointMap
@@ -164,6 +180,7 @@ procedure sort(var arr: array of string; count: Integer; ascending:boolean=true)
 procedure sort(var str: string; count: Integer;ascending:boolean=true);
 procedure sort(var arr: array of char; count: Integer; ascending:boolean=true);
 procedure sort(var arr: array of TPoint;count: Integer;ascending:boolean=true);
+procedure sort(var arr: array of TPoint64;count: Int64;ascending:boolean=true);
 
 implementation
 
@@ -365,6 +382,30 @@ begin
     else result:= comparison div abs(comparison);
 end;
 
+function ComparePoint64Asc(const d1,d2):integer;
+var
+  s1: TPoint64 absolute d1;
+  s2: TPoint64 absolute d2;
+  comparison:int64;
+begin
+  comparison:= s1.X - s2.X;
+  if comparison = 0 then comparison:= s1.Y - s2.Y;
+  if comparison = 0 then result:=0
+    else result:= comparison div abs(comparison);
+end;
+
+function ComparePoint64Desc(const d1,d2):integer;
+var
+  s1: TPoint64 absolute d1;
+  s2: TPoint64 absolute d2;
+  comparison:int64;
+begin
+  comparison:= s2.X - s1.X;
+  if comparison = 0 then comparison:= s2.Y - s1.Y;
+  if comparison = 0 then result:=0
+    else result:= comparison div abs(comparison);
+end;
+
 function intArrayToCSV(input: TIntArray): string;
 var
   index:integer;
@@ -443,6 +484,14 @@ begin
     anysort.AnySort(arr, Count, sizeof(TPoint), @ComparePointAsc)
   else
     anysort.AnySort(arr, Count, sizeof(TPoint), @ComparePointDesc)
+end;
+
+procedure sort(var arr: array of TPoint64; count: Int64; ascending: boolean);
+begin
+  if ascending then
+    anysort.AnySort(arr, Count, sizeof(TPoint64), @ComparePoint64Asc)
+  else
+    anysort.AnySort(arr, Count, sizeof(TPoint64), @ComparePoint64Desc)
 end;
 
 procedure sort(var str: string; count: Integer; ascending: boolean);
@@ -936,6 +985,52 @@ begin
 end;
 
 procedure TPointArrayHelper.clear;
+begin
+  setLength(self,0);
+end;
+
+{ TPoint64ArrayHelper }
+
+function TPoint64ArrayHelper.size: int64;
+begin
+  result:=length(self);
+end;
+
+function TPoint64ArrayHelper.push(element: TPoint64): int64;
+begin
+  insert(element,self,length(self));
+  result:=self.size;
+end;
+
+function TPoint64ArrayHelper.popLeft: TPoint64;
+var
+  index:int64;
+begin
+  if (self.size > 0) then
+    begin
+    result:= self[0];
+    for index:=0 to pred(self.size) do
+      if (index < pred(self.size)) then self[index]:=self[index+1];
+    setLength(self,self.size -1);
+    end;
+end;
+
+function TPoint64ArrayHelper.pop: TPoint64;
+begin
+  if (self.size > 0) then
+    begin
+    result:=self[pred(self.size)];
+    setLength(self,self.size -1);
+    end;
+end;
+
+function TPoint64ArrayHelper.splice(index: integer; deleteCount: integer;
+  newItems: TPoint64Array): TPoint64Array;
+begin
+  result:= specialize splice<TPoint64>(self,index,deleteCount,newItems);
+end;
+
+procedure TPoint64ArrayHelper.clear;
 begin
   setLength(self,0);
 end;
