@@ -55,6 +55,26 @@ begin
   sort(ranges,ranges.size);
 end;
 
+function TDayFive.inRange(input: int64): boolean;
+var
+  index:integer;
+begin
+  result:=false;
+  for index:=0 to pred(ranges.size) do
+    begin
+    if (input >= ranges[index].X) and (input <= ranges[index].Y) then
+      begin
+      result:=true;
+      exit;
+      end;
+    if (input < ranges[index].Y) then exit;
+    end;
+end;
+
+//Method to check for overlapping ranges and combine these into
+//a single range which is usually larger but
+//not always because Eric Wastl is a sneaky fellow.
+
 function TDayFive.combineRanges: TPoint64Array;
 var
   index:integer;
@@ -72,22 +92,8 @@ begin
     end;
 end;
 
-function TDayFive.inRange(input: int64): boolean;
-var
-  index:integer;
-begin
-  result:=false;
-  for index:=0 to pred(ranges.size) do
-    begin
-    if (input >= ranges[index].X) and (input <= ranges[index].Y) then
-      begin
-      result:=true;
-      exit;
-      end;
-    if (input < ranges[index].Y) then exit;
-    end;
-end;
-
+//Does the supplied entry overlap in any way with an existing entry?
+//If so return the index of the existing entry
 function TDayFive.entryOverlap(input: TPoint64; arr: TPoint64Array): integer;
 var
   index:integer;
@@ -109,6 +115,7 @@ begin
       end;
 end;
 
+//Combine the two entries to give a combined value which covers both
 function TDayFive.adjustEntry(input, entryToBeAdjusted: TPoint64): TPoint64;
 begin
   //Combine these two numbers to give the largest range
