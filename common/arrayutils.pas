@@ -27,6 +27,7 @@ type
   T3DIntMap = array of array of array of integer;
   T2DStringArray = array of array of string;
   T3DStringArray = array of array of array of string;
+  T2DCharArray = array of array of char;
   TColours = array of TColor;
   TPointArray = array of TPoint;
   TPoint64Array = array of TPoint64;
@@ -152,6 +153,14 @@ type
   function size(row:integer):integer;
   procedure push(value:TStringArray);
   procedure push(value:String);
+  procedure clear;
+  end;
+
+  { T2DCharArrayHelper }
+  T2DCharArrayHelper = type helper for T2DCharArray
+  function rows: integer;
+  function size(row:integer):integer;
+  procedure push(value:TCharArray);
   procedure clear;
   end;
 
@@ -654,6 +663,30 @@ begin
 end;
 
 procedure T2DStringArrayHelper.clear;
+begin
+  setLength(self,0);
+end;
+
+{ T2DCharArrayHelper }
+
+function T2DCharArrayHelper.rows: integer;
+begin
+  result:=length(self);
+end;
+
+function T2DCharArrayHelper.size(row: integer): integer;
+begin
+  if (row < 0) or (row > pred(self.rows)) then result:=0
+  else result:=length(self[row]);
+end;
+
+procedure T2DCharArrayHelper.push(value: TCharArray);
+begin
+  setLength(self,self.rows + 1);
+  self[self.rows - 1]:=value;
+end;
+
+procedure T2DCharArrayHelper.clear;
 begin
   setLength(self,0);
 end;
