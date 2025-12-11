@@ -17,9 +17,7 @@ type
   fx:integer;
   fy:integer;
   fz:integer;
-  fCircuitId:integer;
   public
-  procedure setCircuit(id:integer);
   constructor create(xcoord,ycoord,zcoord,ident:integer);
   end;
 
@@ -50,7 +48,6 @@ type
   TBoxDistancesHelper = type helper for TBoxDistances
   function size: int64;
   function push(element: TBoxDistance):int64;
-  function findIndexOfSmallestAbove(limit:integer):Integer;
   procedure clear;
   function sortItems:TBoxDistances;
   end;
@@ -77,18 +74,12 @@ var
 
 { TJunctionBox }
 
-procedure TJunctionBox.setCircuit(id: integer);
-begin
-  fCircuitId:=id;
-end;
-
 constructor TJunctionBox.create(xcoord, ycoord, zcoord, ident: integer);
 begin
   fx:=Xcoord;
   fy:=Ycoord;
   fZ:=ZCoord;
   fId:=ident;
-  fCircuitId:=-1;
 end;
 
 { TBoxesHelper }
@@ -126,26 +117,6 @@ begin
   setLength(self,self.size + 1);
   self[self.size - 1]:=element;
   result:=self.size;
-end;
-
-function TBoxDistancesHelper.findIndexOfSmallestAbove(limit: integer): Integer;
-var
-  index:integer;
-  distance,smallest:integer;
-begin
-  if (self.size = 0) then exit;
-  //Set to the first element for now
-  smallest:=-1;
-  result:=-1;
-  for index:=0 to pred(self.size) do
-    begin
-    distance:=self[index].fDistance;
-    if (distance > limit)and((distance < smallest)or(smallest = -1)) then
-      begin
-      smallest:=self[index].fDistance;
-      result:=index;
-      end;
-    end;
 end;
 
 procedure TBoxDistancesHelper.clear;
