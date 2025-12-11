@@ -189,7 +189,7 @@ procedure sort(var arr: array of string; count: Integer; ascending:boolean=true)
 procedure sort(var str: string; count: Integer;ascending:boolean=true);
 procedure sort(var arr: array of char; count: Integer; ascending:boolean=true);
 procedure sort(var arr: array of TPoint;count: Integer;ascending:boolean=true);
-procedure sort(var arr: array of TPoint64;count: Int64;ascending:boolean=true);
+procedure sort(var arr: array of TPoint64;count: Int64;ascending:boolean=true;sortOnX:boolean=true);
 
 implementation
 
@@ -415,6 +415,28 @@ begin
     else result:= comparison div abs(comparison);
 end;
 
+function ComparePoint64OnYAsc(const d1,d2):integer;
+var
+  s1: TPoint64 absolute d1;
+  s2: TPoint64 absolute d2;
+  comparison:int64;
+begin
+  comparison:= s1.Y - s2.Y;
+  if comparison = 0 then result:=0
+    else result:= comparison div abs(comparison);
+end;
+
+function ComparePoint64OnYDesc(const d1,d2):integer;
+var
+  s1: TPoint64 absolute d1;
+  s2: TPoint64 absolute d2;
+  comparison:int64;
+begin
+  comparison:= s2.Y - s1.Y;
+  if comparison = 0 then result:=0
+    else result:= comparison div abs(comparison);
+end;
+
 function intArrayToCSV(input: TIntArray): string;
 var
   index:integer;
@@ -495,12 +517,20 @@ begin
     anysort.AnySort(arr, Count, sizeof(TPoint), @ComparePointDesc)
 end;
 
-procedure sort(var arr: array of TPoint64; count: Int64; ascending: boolean);
+procedure sort(var arr: array of TPoint64; count: Int64; ascending: boolean;sortOnX:boolean=true);
 begin
   if ascending then
-    anysort.AnySort(arr, Count, sizeof(TPoint64), @ComparePoint64Asc)
+    begin
+    if sortOnX then
+       anysort.AnySort(arr, Count, sizeof(TPoint64), @ComparePoint64Asc)
+    else anysort.AnySort(arr, Count, sizeof(TPoint64), @ComparePoint64OnYAsc);
+    end
   else
-    anysort.AnySort(arr, Count, sizeof(TPoint64), @ComparePoint64Desc)
+    begin
+    if sortOnX then
+       anysort.AnySort(arr, Count, sizeof(TPoint64), @ComparePoint64Desc)
+    else anysort.AnySort(arr, Count, sizeof(TPoint64), @ComparePoint64OnYDesc);
+    end;
 end;
 
 procedure sort(var str: string; count: Integer; ascending: boolean);
