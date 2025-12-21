@@ -792,7 +792,7 @@ end;
 function T2DIntMapHelper.size(row: integer): integer;
 begin
   result:=0;
-  if (self.rows <= row) then exit;
+  if (self.rows <= row)or(row < 0) then exit;
   result:=length(self[row]);
 end;
 
