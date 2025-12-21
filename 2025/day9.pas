@@ -13,8 +13,8 @@ type
   private
   procedure loadTiles;
   function getLargestArea:int64;
-  function getSortedCoords(arr:TPointArray;xs,ys:TIntArray;index:integer):TIntArray;
-  function getSortedCoords(arr:T2DIntMap;xs,ys:TIntArray;x1,y1,x2,y2:integer):TIntArray;
+  function getSortedCoords(arr:TPointArray;xs,ys:TIntArray;index:integer):TRect;
+  function getSortedCoords(arr:T2DIntMap;xs,ys:TIntArray;x1,y1,x2,y2:integer):TRect;
   function getXs:TIntArray;
   function getYs:TIntArray;
   function createEmptyGrid(x,y:integer):T2DIntMap;
@@ -61,43 +61,71 @@ begin
       end;
 end;
 
-function TDayNine.getSortedCoords(arr: TPointArray;xs,ys:TIntArray; index: integer): TIntArray;
+function TDayNine.getSortedCoords(arr: TPointArray;xs,ys:TIntArray; index: integer): TRect;
 var
-  cY: TIntArray;
+  startX,startY,endX,endY:integer;
 begin
-result:=TIntArray.create;
-cy:=TIntArray.create;
-result.push(xs.indexOf(arr[index].X) * 2);
-result.push(xs.indexOf(arr[index+1].X) * 2);
-sort(result,result.size);
-cY.push(ys.indexOf(arr[index].Y) * 2);
-cY.push(ys.indexOf(arr[index+1].Y) * 2);
-sort(cY,cY.size);
-result.push(cY[0]);
-result.push(cY[1]);
-writeln('Coords for '+arr[index].X.toString+':'+arr[index].Y.ToString+' '+arr[index+1].X.toString+':'+arr[index+1].Y.ToString+' is '+result[0].toString+':'+result[2].toString+' '+result[1].toString+':'+result[3].toString);
+startX:=xs.indexOf(arr[index].X) * 2;
+endX:= xs.indexOf(arr[index+1].X) * 2;
+if StartX > EndX then
+  begin
+  result.Left:=EndX;
+  result.Right:=StartX;
+  end else
+  begin
+  result.Left:=StartX;
+  result.Right:=EndX;
+  end;
+
+startY:=ys.indexOf(arr[index].Y) * 2;
+endY:=ys.indexOf(arr[index+1].Y) * 2;
+if StartY > EndY then
+  begin
+  result.Top:=EndY;
+  result.Bottom:=StartY;
+  end else
+  begin
+  result.Top:=StartY;
+  result.Bottom:=EndY;
+  end;
 end;
 
-function TDayNine.getSortedCoords(arr: T2DIntMap; xs, ys: TIntArray;x1,y1,x2,y2:integer): TIntArray;
+function TDayNine.getSortedCoords(arr: T2DIntMap; xs, ys: TIntArray;x1,y1,x2,y2:integer): TRect;
 var
-  cy:TIntArray;
+  startX,startY,endX,endY:integer;
 begin
-  result:=TIntArray.create;
-  cy:=TIntArray.create;
-  result.push(xs.indexOf(x1)*2);
-  result.push(xs.indexOf(x2)*2);
-  sort(result,result.size);
-  cy.push(ys.indexOf(y1)*2);
-  cy.push(ys.indexOf(y2)*2);
-  sort(cy,cy.size);
-  result.push(cy[0]);
-  result.push(cy[1]);
+  startX:=xs.indexOf(x1)*2;
+  endX:= xs.indexOf(x2)*2;
+
+  if StartX > EndX then
+  begin
+  result.Left:=EndX;
+  result.Right:=StartX;
+  end else
+  begin
+  result.Left:=StartX;
+  result.Right:=EndX;
+  end;
+
+  startY:=ys.indexOf(y1)*2;
+  endY:=ys.indexOf(y2)*2;
+
+  if StartY > EndY then
+  begin
+  result.Top:=EndY;
+  result.Bottom:=StartY;
+  end else
+  begin
+  result.Top:=StartY;
+  result.Bottom:=EndY;
+  end;
 end;
 
 function TDayNine.getXs: TIntArray;
 var
   index:integer;
 begin
+  //Very slow!
   result:=TIntArray.create;
   for index:= 0 to pred(redTiles.size) do
     if(result.indexOf(redTiles[index].X) = -1) then result.push(redTiles[index].X);
@@ -130,7 +158,7 @@ function TDayNine.createCompressedGrid: T2DIntMap;
 var
   allPoints:TPointArray;
   xs,ys:TIntArray;
-  coords:TIntArray;
+  coords:TRect;
   cx1,cx2,cy1,cy2:integer;
   xSizes,ySizes:TIntArray;
   index,indexX,indexY:integer;
@@ -144,8 +172,6 @@ begin
   //xs is a list of the x coordinates of the red tiles in ascending order
   //ys is a list of the y coordinates of the red tiles in ascending order
   result:=createEmptyGrid((xs.size * 2) -1,(ys.size * 2) - 1);
-  writeln('Grid width '+result.size(0).toString);
-  writeln('Grid height '+result.rows.toString);
   for index:= 0 to pred(pred(xs.size)) do
     xSizes.push(xs[index+1]-xs[index]-1);
   for index:= 0 to pred(pred(ys.size)) do
@@ -154,11 +180,10 @@ begin
   for index:=0 to pred(pred(allPoints.size)) do
     begin
     coords:=getSortedCoords(allPoints,xs,ys,index);
-    cx1:=coords[0];
-    cx2:=coords[1];
-    cy1:=coords[2];
-    cy2:=coords[3];
-
+    cx1:=coords.Left;
+    cx2:=coords.Right;
+    cy1:=coords.Top;
+    cy2:=coords.Bottom;
     //For each pair of coordinates
     for indexX:=cx1 to cx2 do
       for indexY:= cy1 to cy2 do
@@ -171,15 +196,17 @@ end;
 
 function TDayNine.floodFillGrid(grid: T2DIntMap): T2DIntMap;
 var
-  outside,queue:TPointArray;
+  queue:TPointArray;
+  Outside:TIntPointMap;
   currentPoint,testPoint:TPoint;
   xIndex,yIndex:integer;
 begin
   result:=grid;
-  outside:=TPointArray.create;
+  outside:=TIntPointMap.Create;
+  outside.sorted:=true;
   queue:=TPointArray.create;
-  outside.push(TPoint.create(-1,-1));
-  queue.push(outside[0]);
+  outside.addItem(TPoint.create(-1,-1));
+  queue.push(TPoint.create(-1,-1));
   while queue.size > 0 do
     begin
     currentPoint:=queue.popLeft;
@@ -190,10 +217,9 @@ begin
         testPoint.Y:=yIndex;
         if (xIndex < -1)or(yIndex < -1)or(xIndex > result.rows)or(yIndex > result.size(yIndex))then continue;
         if (result.inRange(yIndex,xIndex)) and (result[yIndex][xIndex] = 1) then continue;
-        if (outside.indexOf(testPoint) > -1) then continue;
-        outside.push(testPoint);
+        if outside.included(testPoint) then continue;
+        outside.addItem(testPoint);
         queue.push(testPoint);
-        //results.add('point '+xIndex.toString+' '+yIndex.toString+' added to queue')
         end;
     end;
   //Now fill everything that isn't in the queue with 1s
@@ -202,7 +228,7 @@ begin
       begin
       currentPoint.X:=xIndex;
       currentPoint.Y:=yIndex;
-      if (outside.indexOf(currentPoint) = -1) then
+      if not outside.included(currentPoint) then
         grid[yIndex][xIndex]:=1;
       end;
 end;
@@ -231,17 +257,17 @@ end;
 function TDayNine.validPoints(psa: T2DIntMap; x1, x2, y1, y2: integer):Boolean;
 var
   xs,ys:TIntArray;
-  coords:TIntArray;
+  coords:TRect;
   cx1,cx2,cy1,cy2,left,top,topLeft,count:integer;
   isValid:boolean;
 begin
   xs:=getXs;
   ys:=getYs;
   coords:=getSortedCoords(psa,xs,ys,x1,y1,x2,y2);
-  cx1:=coords[0];
-  cx2:=coords[1];
-  cy1:=coords[2];
-  cy2:=coords[3];
+  cx1:=coords.left;
+  cx2:=coords.right;
+  cy1:=coords.top;
+  cy2:=coords.bottom;
   if (cx1 > 0) then left:= psa[cx1-1][cy2] else left:=0;
   if (cy1 > 0) then top:= psa[cx2][cy1-1] else top := 0;
   if (cx1 > 0)and(cy1 > 0) then topLeft:= psa[cx1-1][cy1-1] else topLeft:=0;
@@ -284,23 +310,15 @@ end;
 procedure TDayNine.runPartTwo;
 var
   compGrid,psa:T2DIntMap;
-  areas:TInt64Array;
   x1,x2:integer;
   area,maxArea:int64;
-  x,y:integer;
-  sOut:string;
 begin
-  areas:=TInt64Array.create;
   results.Clear;
   loadTiles;
   maxArea := 0;
-  //optimisations
-  //create a grid where even entries are the coordinates of the red tiles
-  //and odd entries are the spaces between them
   compGrid:=createCompressedGrid;
   compGrid:=floodFillGrid(compGrid);
   psa:=constructPsa(compGrid);
-
   for x1:=0 to pred((redTiles.size)) do
     begin
     for x2:=0 to pred(x1) do
@@ -308,16 +326,11 @@ begin
       if (validPoints(psa,redTiles[x1].X,redTiles[x2].X,redTiles[x1].Y,redTiles[x2].Y)) then
         begin
         area:=(abs(redTiles[x1].X - redTiles[x2].X) + 1) * (abs(redTiles[x1].Y - redTiles[x2].Y) + 1);
-        if (area > maxArea) then
-          begin
-          maxArea:=area;
-          areas.push(area);
-          end;
+        if (area > maxArea) then maxArea:=area;
         end;
       end;
     end;
-  sort(areas,areas.size,false);
-  results.Add('largest area  is '+areas[0].ToString);
+  results.Add('largest area  is '+maxArea.ToString);
 
 end;
 
